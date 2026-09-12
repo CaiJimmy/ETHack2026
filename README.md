@@ -41,7 +41,8 @@ data/build_master.py  -> joins tmp/ sources onto the spine, writes web/data/mast
 web/index.html        -> four tabs: Explore, Net-Zero Fund, Quiz, Methods & Sources
 web/app.js            -> scoring (sector percentiles, pillar weights), scatter, fund model, curated quiz
 web/style.css
-run.sh                -> rebuilds the master (if .venv exists) and serves on http://localhost:8000
+serve.py              -> static server with caching disabled (plain reload always shows the latest files)
+run.sh                -> rebuilds the master (if .venv exists) and runs serve.py on http://localhost:8000
 ```
 
 Run: `./run.sh` then open http://localhost:8000

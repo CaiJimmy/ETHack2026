@@ -88,3 +88,6 @@ table#fundTable img{vertical-align:middle;margin-right:4px}
 #flatMap path{stroke:#111;stroke-width:.4;cursor:pointer}
 #flatMap path:hover{stroke:#fff;stroke-width:1}
 #flatMap image{cursor:pointer}
+.banner{background:var(--bad);color:#000;padding:10px 20px;font-size:14px}.banner code{background:#0003;padding:1px 4px;border-radius:3px}
+.diag{white-space:pre-wrap;font-size:10px;color:var(--muted);background:var(--bg);padding:6px;border-radius:4px;user-select:all}
+#globeFail{position:relative;z-index:2}

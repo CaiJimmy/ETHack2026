@@ -288,7 +288,6 @@ function colorScale(key) {
   const good = key === "renew_elec_pct" || key === "elec_access_pct" || key === "gdp_pc" || key === "life_exp";
   return { lo, hi, color: v => { if (v == null) return "rgba(60,60,70,.6)"; const x = good ? 1 - t(v) : t(v); return `hsl(${120 - 120 * x},70%,${35 + 15 * x}%)`; } };
 }
-let mapMode = "3d";
 async function loadGlobeData() {
   if (COUNTRIES) return;
   [COUNTRIES, GEO, HQ] = await Promise.all([fetch("data/countries.json").then(r => r.json()).then(j => j.countries), fetch("data/countries.geojson").then(r => r.json()), fetch("data/hq.json").then(r => r.json()).catch(() => ({}))]);
@@ -298,12 +297,14 @@ async function loadGlobeData() {
 async function initGlobe() {
   await loadGlobeData();
   const want = document.querySelector('input[name="mapView"]:checked').value;
-  if (want === "2d" || mapMode === "2d-forced") { showFlat(); return; }
+  if (want === "2d") { showFlat(); return; }
   $("#flatMap").classList.add("hidden"); $("#globeDiv").classList.remove("hidden");
   if (G) { G.width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight); return; }
   try {
-    const test = document.createElement("canvas").getContext("webgl2") || document.createElement("canvas").getContext("webgl");
-    if (!test) throw new Error("no WebGL");
+    const info = webglInfo(); DIAG.webgl = info;
+    if (!info.ok) throw new Error("no WebGL (" + info.reason + ")");
+    if (typeof Globe !== "function") throw new Error("globe.gl library did not load (lib/globe.gl.min.js)");
+    DIAG.step = "creating globe";
     G = Globe()($("#globeDiv"))
       .width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight)
       .globeImageUrl("lib/earth-dark.jpg").backgroundImageUrl("lib/night-sky.png")
@@ -317,12 +318,44 @@ async function initGlobe() {
     G.controls().autoRotate = true; G.controls().autoRotateSpeed = 0.4;
     $("#globeDiv").addEventListener("pointerdown", () => G.controls().autoRotate = false);
     paintGlobe(); placeLogos();
+    DIAG.step = "globe running"; DIAG.error = null; $("#webglNote").textContent = ""; $("#globeFail").classList.add("hidden");
   } catch (e) {
-    G = null; mapMode = "2d-forced";
-    $("#webglNote").textContent = "3D needs WebGL, which this browser has turned off. Showing the flat map instead.";
+    G = null; $("#globeDiv").innerHTML = ""; DIAG.error = (e.stack || e.message || String(e));
+    $("#webglNote").textContent = `The 3D globe could not start: ${e.message || e}.`;
+    $("#globeFail").innerHTML = `<b>3D globe could not start.</b> ${e.message || e}.<br>This browser has no working WebGL. VS Code's preview browser and some remote desktops do not have it. Open <a href="http://localhost:8000">http://localhost:8000</a> in Chrome, Safari or Firefox. The flat map below has the same data.`;
+    $("#globeFail").classList.remove("hidden");
     document.querySelector('input[name="mapView"][value="2d"]').checked = true;
     showFlat();
   }
+  renderDiag();
+}
+/* ---- Diagnostics shown on the World Map tab, so a failure can be reported ---- */
+const DIAG = { step: "not started", error: null, webgl: null };
+window.addEventListener("error", e => { DIAG.error = (e.error && e.error.stack) || e.message; renderDiag(); });
+window.addEventListener("unhandledrejection", e => { DIAG.error = (e.reason && e.reason.stack) || String(e.reason); renderDiag(); });
+function webglInfo() {
+  for (const kind of ["webgl2", "webgl"]) {
+    const cv = document.createElement("canvas"); let gl = null;
+    try { gl = cv.getContext(kind, { failIfMajorPerformanceCaveat: false }); } catch (e) { return { ok: false, reason: e.message }; }
+    if (gl) {
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      const renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+      const lose = gl.getExtension("WEBGL_lose_context"); if (lose) lose.loseContext();   // do not leak a context per click
+      return { ok: true, kind, renderer };
+    }
+  }
+  return { ok: false, reason: "getContext returned null for webgl2 and webgl" };
+}
+function renderDiag() {
+  const el = $("#diag"); if (!el) return;
+  el.textContent = [
+    `browser: ${navigator.userAgent}`,
+    `webgl: ${DIAG.webgl ? (DIAG.webgl.ok ? DIAG.webgl.kind + " · " + DIAG.webgl.renderer : "NO · " + DIAG.webgl.reason) : "not tested yet"}`,
+    `globe.gl loaded: ${typeof Globe === "function"}`,
+    `data: ${ALL.length} companies · ${COUNTRIES ? Object.keys(COUNTRIES).length : 0} countries · ${GEO ? GEO.features.length : 0} polygons · ${HQ ? Object.keys(HQ).length : 0} head offices`,
+    `globe step: ${DIAG.step}${G ? " · canvas " + $("#globeDiv").querySelectorAll("canvas").length : ""}`,
+    `last error: ${DIAG.error || "none"}`,
+  ].join("\n");
 }
 /* ---- Flat map: equirectangular SVG, same colours, same click behaviour ---- */
 function showFlat() {
@@ -348,6 +381,7 @@ function showFlat() {
   svg.querySelectorAll("path").forEach(p => p.onclick = () => showCountry(GEO.features[+p.dataset.i]));
   svg.querySelectorAll(".flogo").forEach(el => el.onclick = () => openExplore(byT(el.dataset.t)));
   $("#globeLegend").innerHTML = `<span>${METRIC_FMT[k](sc.lo)}</span><i></i><span>${METRIC_FMT[k](sc.hi)}</span>`;
+  renderDiag();
 }
 function paintGlobe() {
   const k = $("#globeMetric").value, sc = colorScale(k);
@@ -436,6 +470,9 @@ fetch("data/icons.json").then(r => r.json()).then(j => { ICONS = j; }).catch(() 
   $("#tickers").innerHTML = DATA.map(c => `<option value="${c.ticker} — ${c.name}">`).join("");
   $("#dataBadge").textContent = `${ALL.length} companies · EPA 2023 · Sustainalytics 2024 · prices Sep 2026`;
   fillMethods(); drawScatter();
+}).catch(e => {
+  $("#dataBadge").textContent = "Data did not load";
+  document.body.insertAdjacentHTML("afterbegin", `<div class="banner">The data files did not load (${e.message}). The local server is probably not running, or the page was opened as a file. In a terminal run <code>./run.sh</code> in the project folder, then open <a href="http://localhost:8000">http://localhost:8000</a>.</div>`);
 });
 
 /* Logo domains for names that do not map cleanly to a .com */
