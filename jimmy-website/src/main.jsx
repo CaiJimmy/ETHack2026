@@ -78,9 +78,13 @@ function MapView({records, onSelect, selection, fitKey}) {
 function Field({label,children}){return <label className="field"><span>{label}</span>{children}</label>;}
 function Metric({label,value,unit}){return <div className="metric"><span>{label}</span><strong>{value}<small>{unit}</small></strong></div>;}
 function EvidenceDrawer({item,onClose,onAsk}){
-  const dialog=useRef(),[details,setDetails]=useState(null),[error,setError]=useState(''),[showScore,setShowScore]=useState(false);
+  const [details,setDetails]=useState(null),[error,setError]=useState(''),[showScore,setShowScore]=useState(false);
   const plume=Boolean(item?.plume_id);
-  useEffect(()=>{dialog.current.showModal();const before=document.activeElement;return ()=>before?.focus?.();},[]);
+  useEffect(()=>{
+    const onKey=e=>{if(e.key==='Escape')onClose();};
+    window.addEventListener('keydown',onKey);
+    return ()=>window.removeEventListener('keydown',onKey);
+  },[onClose]);
   useEffect(()=>{
     if(plume)return;
     const controller=new AbortController();setDetails(null);setError('');
@@ -88,7 +92,7 @@ function EvidenceDrawer({item,onClose,onAsk}){
     return ()=>controller.abort();
   },[item,plume]);
   const e=details?.emissions||item,a=details?.assessments||item;
-  return <dialog className="evidence-dialog" ref={dialog} onCancel={onClose} onClick={event=>{if(event.target===dialog.current)onClose();}} aria-labelledby="evidence-title"><div className="drawer-content">
+  return <aside className="evidence-sidebar" aria-labelledby="evidence-title"><div className="drawer-content">
     <div className="drawer-top"><span className="eyebrow">{plume?'OBSERVATION RECORD':'COMPANY EVIDENCE'}</span><button className="icon-button" onClick={onClose} aria-label="Close evidence"><X/></button></div>
     <div className={`record-icon ${plume?'':'company-record-icon'}`}>{plume?<Crosshair/>:<CompanyLogo company={{...item,gics_sector:item.gics_sector||details?.listing.gics_sector}} size="large"/>}</div><h2 id="evidence-title">{plume?(item.place||item.region||'Plume observation'):item.company_name||item.ticker}</h2><p className="subtle">{plume?[item.region,item.country].filter(Boolean).join(', '):`${item.ticker} · ${item.gics_sector||details?.listing.gics_sector||''}`}</p>
     {plume?<>
@@ -127,7 +131,7 @@ function EvidenceDrawer({item,onClose,onAsk}){
       <button className="primary full" onClick={()=>{onClose();onAsk(`Investigate ${item.ticker}: what should I know before trusting its climate score? Retrieve its detailed company evidence and, where supported, compare its target gap with sector peers. State the strongest supported finding, the supporting records, reasons for caution, and the specific evidence to verify next. Check reporting periods and boundaries, target basis, missing data, and rank uncertainty. Distinguish measured facts from modeled estimates and interpretation. Do not infer misconduct or invent score contributions. If a comparison is unavailable, explain that limitation.`);}}><Sparkles size={16}/> Investigate this company</button>
       <p className="micro">Compare evidence, identify limitations, and find what to verify next.</p>
     </>}
-  </div></dialog>;
+  </div></aside>;
 }
 
 function CompanyChart({rows,onSelect}){
@@ -288,7 +292,7 @@ function App(){
       </div>
     </header>
 
-    <main className="workspace">
+    <main className={`workspace ${selected?'has-sidebar':''}`}>
       <section className="explorer" aria-label="Data explorer">
         {view==='treemap'&&<div className="finding-banner">
           <div className="finding-main">
@@ -362,6 +366,8 @@ function App(){
           <span>Snapshot: September 2026</span>
         </div>
       </section>
+
+      {selected&&<EvidenceDrawer key={selected.plume_id||selected.ticker} item={selected} onClose={()=>setSelected(null)} onAsk={ask}/>}
     </main>
 
     <aside className={`insight-panel ${assistantOpen?'open':'collapsed'}`} aria-label="Dataset query assistant">
@@ -404,8 +410,6 @@ function App(){
         </form>
       </>}
     </aside>
-
-    {selected&&<EvidenceDrawer key={selected.plume_id||selected.ticker} item={selected} onClose={()=>setSelected(null)} onAsk={ask}/>}
   </div>;
 }
 createRoot(document.getElementById('root')).render(<App/>);
