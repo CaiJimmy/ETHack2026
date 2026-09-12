@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "bytes": 788233,
+      "file": "data/raw/wba/WBA Data/companies.csv",
+      "note": "2000 rows as parsed",
+      "sha256": "a03bc29f9d7298e1ac290fb3e2192810da7b39aed5350019bf502e0d53b58f2a"
+    },
+    {
+      "bytes": 3530766,
+      "file": "data/raw/wba/WBA Data/climateprofiles.csv",
+      "note": "2000 rows as parsed",
+      "sha256": "b2c3096561efa11edd6140b5cb82cc7dab037eae5bf9876231762a032fd47682"
+    },
+    {
+      "bytes": 10219813,
+      "file": "data/raw/wba/WBA Data/emissions.csv",
+      "note": "45509 rows as parsed",
+      "sha256": "bdbaf6e5b6eb5f9b8c13686b1ed76cdd8f54421b2cb8eb1a052f06f98fc3c727"
+    },
+    {
+      "bytes": 4141703,
+      "file": "data/raw/wba/WBA Data/targets.csv",
+      "note": "8000 rows as parsed",
+      "sha256": "32362499b5f71497889b670d8b63e321e71c955159e2f1bc01ef61b7faa3d7d1"
+    },
+    {
+      "bytes": 9431476,
+      "file": "data/raw/wba/WBA Data/sources.csv",
+      "note": "38185 rows as parsed",
+      "sha256": "2a72281eadfd4442cb9514f2613fdc0685537f066fc8e6910475f2d54f11f1c9"
+    }
+  ],
+  "licence": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0), the terms WBA states on its fair-use-donation page for its methodologies, benchmarks, scorecards, rankings and underlying benchmark data. WBA also asks for a voluntary donation from anyone who derives financial benefit from the work. The export was supplied to us as a zip rather than downloaded.",
+  "limitations": [
+    "Voluntary. Every tonne here is a company-disclosed figure that WBA assessed. It is not comparable in standing to the EPA GHGRP and CAMD filings and must never be merged into a mandatory column.",
+    "The climate profile and the emissions timeseries disagree on Scope 1+2 for a large minority of companies and the profile figure is the higher one in 128 of the 134 disagreements, median ratio 1.26. Apple is the clean illustration: the profile Scope 2 is its location-based 1,224,500 tCO2e while the timeseries total implies a market-based figure near 3,300. Scope 3 disagrees in both directions, so category coverage differs too and no single rule explains all of it. Both readings are kept in wba_emissions with a source_table column and the timeseries row is flagged preferred, because it is the one the pathways are anchored on.",
+    "Scope 1 and Scope 2 separately exist only in the climate profile, for its single assessment year. The timeseries carries Scope 1+2 and Scope 3 only.",
+    "The pathway columns are WBA's modelled trajectories, not disclosure. Every row of wba_pathway carries is_modelled = True for that reason. See pathway_columns below.",
+    "247 of the 500 S&P 500 companies are in WBA at all. The gap is WBA's coverage, not the join: an exhaustive prefix scan of the 255 unmatched index members against the 1,755 unmatched WBA companies returned three candidate pairs, two of which were real and are now matched, and one of which was Cooper Companies against a Brazilian dairy cooperative. Caterpillar, UnitedHealth, RTX, Thermo Fisher, Deere, Abbott, Union Pacific, Lockheed Martin, Medtronic and Altria are simply not in the SDG2000."
+  ],
+  "method": "Airtable CSV export of six tables, five of which are used; footprintattributes.csv, 19,291 named company attributes with evidence text, is read by no lane yet. Brace-wrapped cells are parsed as lists; a cell holding several values where the schema expects one is nulled and counted rather than truncated. Companies are joined to S&P 500 tickers best key first: ISIN through the free OpenFIGI mapping API, then LEI through GLEIF to an ISIN and back through OpenFIGI, then an exact match on normalised company names against the universe lane's alias map, which carries former SEC registrant names. A name match is vetoed when the company's ISIN resolves to a US listing that is not in the index, which is what stops Toronto-Dominion landing on TransDigm and Merck KGaA on Merck & Co.",
+  "pathway_columns": {
+    "confirmed": "WBA publishes no field-level gloss for the spcp and cpcp suffixes that we could find, so the raw names are kept. What the two series are was established arithmetically from the data instead. The shape claim below holds without exception on every company whose two series diverge at all, 630 of 630 on Scope 1+2 and 402 of 402 on Scope 3. The size claim reproduces the offset exactly for 575 of those 630.",
+    "identity_shape": "The two series are identical from the base year to the company's last reported year. From the year after that, cpcp = max(spcp - k, floor) for a constant k that does not vary with the year. Verified on every diverging company, 630 of 630 on Scope 1+2 and 402 of 402 on Scope 3. The floor is 9 per cent of the base-year value for 766 of 1,210 companies and 10.5 per cent for 273 more.",
+    "identity_size": "k equals the company's cumulative reported emissions above spcp over its reported history, floored at zero, divided by the number of years from the last shared year to 2050. Exact for 575 of the 630 diverging companies on Scope 1+2; for the other 55 the reconstruction is within a few tenths of a per cent but not exact. Because the overshoot is floored at zero, underperformance is charged and outperformance is not credited.",
+    "raw_names": [
+      "emissions_s1x2_spcp",
+      "emissions_s1x2_cpcp",
+      "emissions_s3_spcp",
+      "emissions_s3_cpcp"
+    ],
+    "reading": "spcp is the pathway as allocated, and cpcp is the same pathway re-cut so that the company gives back the budget it has already overspent, subject to a residual floor of 9 per cent of the base year. cpcp is therefore never above spcp before the floor binds: at 2030 it is below spcp for 630 companies, equal for 576 and above for none. This is consistent with the ACT framework, which derives a company pathway from a sectoral pathway and assesses the company against the remaining budget, but the letters s-p and c-p have not been confirmed against a WBA document and no gloss has been invented for them."
+  },
+  "provenance_class": "voluntary",
+  "redistribution": "NonCommercial and NoDerivatives, so this is the most restrictive licence in the project. Cite WBA and link the benchmark; publish findings and charts, not a redistributed or adapted copy of the underlying tables. The derived parquet files here are an internal join, not a public release of WBA data.",
+  "retrieved_at": "2026-09-12T15:05:02.691862+00:00",
+  "source": "World Benchmarking Alliance, Climate and Energy Benchmark (SDG2000)"
+}

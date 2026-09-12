@@ -1,0 +1,447 @@
+/* FILED design system.
+   Four agents write into this page. Everything below is the shared vocabulary:
+   use these tokens and these class names, do not invent a second palette.
+
+   PALETTE
+     --bg --bg-1 --bg-2 --bg-sunk   page, panel, raised/hover, chart plot ground
+     --rule --rule-2                hairlines, the heavier one for panel edges
+     --ink --ink-2 --ink-3          primary, secondary, smallest legible text
+     --accent                       the single accent. Findings only: a company
+                                    missing its promise, an active nav item, a
+                                    number the argument turns on. Never decoration.
+     --cool                         the counterpart state (beating the promise,
+                                    EPA-measured data). Pairs with accent and
+                                    stays apart from it under GIF compression.
+
+   COVERAGE TIERS  (the honesty colours, identical in every section)
+     --tier-measured      EPA GHGRP tonnage, filed under 40 CFR Part 98
+     --tier-reported      voluntary self-report only, no mandatory tonnage
+     --tier-unmeasurable  no mandatory tonnage at all
+     --muted              == tier-unmeasurable. Use for any "we cannot measure
+                          this" mark anywhere on the site. It is a declared
+                          state, so it gets a colour, never a gap and never a 0.
+     --muted-ink          text tone for that same category (the fill tone is too
+                          dark to read as type)
+
+   TYPE
+     --font-sans body, --font-mono every figure without exception.
+     --fs-fig 56px headline figures, --fs-h1 40, --fs-h2 26, --fs-h3 19,
+     --fs-body 16, --fs-sm 15 (floor for prose), --fs-tick 14 (axis ticks only).
+
+   SPACE   --s1 4 --s2 8 --s3 12 --s4 16 --s5 24 --s6 32 --s7 48 --s8 64
+
+   LAYOUT  fixed left nav (--nav-w) + .main. One <section class="section"> per
+           anchor, each opening with .sec-head. Content sits in .panel blocks.
+
+   COMPONENTS  .panel .panel-head .panel-title .panel-n .stat .tbl .chip
+               .legend .note .kv .bar-stack .card
+   SVG         class the elements: .grid-line .axis-line .tick-label .axis-label
+               .ref-line .pt .pt-label .tier-measured/.tier-reported/
+               .tier-unmeasurable set fill from the tier tokens.
+
+   RULE: every chart states its n in .panel-n, and every panel that hides a
+   caveat in its JSON meta prints it in a .note underneath. */
+
+:root {
+  --bg:        #0b0d10;
+  --bg-1:      #111419;
+  --bg-2:      #171b22;
+  --bg-sunk:   #08090c;
+  --rule:      #212730;
+  --rule-2:    #2f3742;
+
+  --ink:       #eceef1;
+  --ink-2:     #aab3bf;
+  --ink-3:     #79838f;
+
+  --accent:    #ff7a45;
+  --accent-2:  #ffa877;
+  --accent-dim: rgba(255,122,69,0.14);
+  --cool:      #4fc3d9;
+  --cool-dim:  rgba(79,195,217,0.14);
+
+  /* The three tiers have to stay apart at 1px and after GIF compression, so
+     they are set by contrast against the plot ground #08090c, not by taste:
+     measured 9.6:1, reported 7.3:1, unmeasurable 3.3:1. The old unmeasurable
+     (#4a545f) sat at 2.6:1 and vanished in the rank wall, which made the 273
+     companies we cannot measure look like missing data rather than a declared
+     category. Tiers are drawn at full opacity everywhere. */
+  --tier-measured:     #4fc3d9;
+  --tier-reported:     #939eae;
+  --tier-unmeasurable: #5a6470;
+  --muted:             #5a6470;
+  --muted-ink:         #8b95a2;
+
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "DejaVu Sans Mono", Menlo, Consolas, ui-monospace, monospace;
+
+  --fs-fig:   56px;
+  --fs-h1:    40px;
+  --fs-h2:    26px;
+  --fs-h3:    19px;
+  --fs-body:  16px;
+  --fs-sm:    15px;
+  --fs-tick:  14px;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+  --s6: 32px; --s7: 48px; --s8: 64px;
+
+  --nav-w: 206px;
+  --pad-x: 40px;
+  --maxw:  1040px;
+}
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------- numerals ---------- */
+.mono, .fig, .tbl td, .tbl th, .panel-n, .stat-fig, .kv-v {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---------- nav ---------- */
+.nav {
+  position: fixed; inset: 0 auto 0 0; width: var(--nav-w);
+  background: var(--bg-sunk);
+  border-right: 1px solid var(--rule);
+  padding: var(--s5) 0 var(--s5) 0;
+  display: flex; flex-direction: column;
+  z-index: 10;
+}
+.brand {
+  font-family: var(--font-mono);
+  font-size: 22px; letter-spacing: 0.22em; font-weight: 600;
+  padding: 0 var(--s5) var(--s2) var(--s5);
+}
+.brand-sub {
+  font-size: 13px; color: var(--ink-3); line-height: 1.45;
+  padding: 0 var(--s5) var(--s6) var(--s5);
+}
+.nav-list { list-style: none; margin: 0; padding: 0; }
+.nav-list a {
+  display: block; padding: 9px var(--s5) 9px 20px;
+  font-size: var(--fs-sm); color: var(--ink-3); white-space: nowrap;
+  border-left: 2px solid transparent;
+}
+.nav-list a:hover { color: var(--ink-2); }
+.nav-list a.is-active { color: var(--ink); border-left-color: var(--accent); background: #0e1115; }
+.nav-list .nav-num {
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
+  margin-right: var(--s2);
+}
+.nav-foot {
+  margin-top: auto; padding: var(--s5) var(--s5) 0 var(--s5);
+  font-size: 13px; color: var(--ink-3); line-height: 1.5;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- layout ---------- */
+.main { margin-left: var(--nav-w); }
+.section {
+  padding: var(--s5) var(--pad-x) var(--s7) var(--pad-x);
+  border-top: 1px solid var(--rule);
+  scroll-margin-top: 0;
+}
+.section > * { max-width: var(--maxw); }
+.sec-head { margin-bottom: var(--s3); }
+.sec-kicker {
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--s2);
+}
+.sec-title { font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; }
+.sec-lede { font-size: var(--fs-body); color: var(--ink-2); margin-top: var(--s2); max-width: 88ch; }
+
+/* ---------- hero ---------- */
+.hero { padding-top: var(--s5); padding-bottom: var(--s6); border-top: 0; }
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.hero-eyebrow .sep { color: var(--rule-2); margin: 0 var(--s2); }
+.hero h1 {
+  font-size: var(--fs-h1); font-weight: 600; line-height: 1.12;
+  letter-spacing: -0.02em; margin: var(--s3) 0 var(--s3) 0; max-width: 830px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-lede { font-size: 17px; color: var(--ink-2); max-width: 104ch; }
+
+.stat-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: var(--s6); margin: var(--s4) 0 var(--s4) 0;
+}
+.stat { border-top: 2px solid var(--rule-2); padding-top: var(--s3); }
+.stat:first-child { border-top-color: var(--accent); }
+.stat-fig {
+  font-size: var(--fs-fig); line-height: 1.0; letter-spacing: -0.03em;
+  font-weight: 600; color: var(--ink); white-space: nowrap;
+}
+.stat-fig .unit { font-size: 26px; color: var(--ink-2); letter-spacing: 0; }
+.stat-fig .of { color: var(--ink-3); font-size: 30px; letter-spacing: 0; }
+.stat-label {
+  font-size: var(--fs-sm); font-weight: 600; margin-top: var(--s3);
+  letter-spacing: 0.01em;
+}
+.stat-sub { font-size: var(--fs-sm); color: var(--ink-3); margin-top: var(--s2); line-height: 1.45; }
+.stat-src {
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
+  margin-top: var(--s2); letter-spacing: 0.02em;
+}
+/* Each headline figure is the link to the section that proves it, so the hero
+   doubles as the contents page. */
+a.stat { display: block; }
+.stat-go {
+  font-size: 13px; color: var(--ink-3); margin-top: var(--s2);
+  letter-spacing: 0.02em;
+}
+.stat-go::after { content: " \2192"; }
+a.stat:hover .stat-go { color: var(--accent); }
+a.stat:hover .stat-fig { color: var(--accent-2); }
+.hero-lede cite { font-style: italic; color: var(--ink); }
+
+.hero-foot {
+  border-top: 1px solid var(--rule); padding-top: var(--s4);
+  display: flex; gap: var(--s6); flex-wrap: wrap; align-items: baseline;
+  font-size: var(--fs-sm); color: var(--ink-2);
+}
+.hero-foot b { color: var(--ink); font-weight: 600; }
+.hero-foot .no-vendor { color: var(--accent); font-weight: 600; }
+
+/* ---------- panels ---------- */
+.panel {
+  background: var(--bg-1); border: 1px solid var(--rule);
+  padding: var(--s5);
+}
+.panel + .panel { margin-top: var(--s5); }
+.panel-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s4); margin-bottom: var(--s4);
+  border-bottom: 1px solid var(--rule); padding-bottom: var(--s3);
+}
+.panel-title { font-size: var(--fs-h3); font-weight: 600; }
+.panel-sub { font-size: var(--fs-sm); color: var(--ink-3); margin-top: 2px; }
+.panel-n {
+  font-size: var(--fs-sm); color: var(--ink-3); white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.panel-n b { color: var(--ink-2); font-weight: 600; }
+
+.note {
+  font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.5;
+  border-left: 2px solid var(--rule-2); padding-left: var(--s3);
+}
+.note + .note { margin-top: var(--s2); }
+.note-list { list-style: none; margin: 0; padding: 0; }
+.note-list li {
+  font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.45;
+  padding-left: var(--s4); position: relative; margin-bottom: var(--s2);
+}
+.note-list li::before {
+  content: ""; position: absolute; left: 0; top: 10px;
+  width: 7px; height: 1px; background: var(--rule-2);
+}
+
+/* ---------- chips, legend, keys ---------- */
+.chip {
+  display: inline-block; font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 7px; border: 1px solid currentColor; color: var(--ink-3);
+  white-space: nowrap;
+}
+.chip--measured     { color: var(--tier-measured); }
+.chip--reported     { color: var(--tier-reported); }
+.chip--unmeasurable { color: var(--muted-ink); }
+
+.legend { display: flex; gap: var(--s5); flex-wrap: wrap; align-items: center; }
+.legend-item {
+  display: flex; align-items: center; gap: var(--s2);
+  font-size: var(--fs-sm); color: var(--ink-2);
+}
+.swatch { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+.swatch--sq { border-radius: 0; }
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px var(--s4); }
+.kv-k { font-size: var(--fs-sm); color: var(--ink-3); }
+.kv-v { font-size: var(--fs-sm); color: var(--ink); text-align: right; }
+
+/* ---------- tables ---------- */
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+.tbl th {
+  text-align: right; font-weight: 600; color: var(--ink-3);
+  font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0 var(--s3) var(--s2) var(--s3); border-bottom: 1px solid var(--rule-2);
+  white-space: nowrap;
+}
+.tbl th:first-child, .tbl td:first-child { text-align: left; padding-left: 0; }
+.tbl td { text-align: right; padding: 6px var(--s3); border-bottom: 1px solid var(--rule); color: var(--ink); }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl .t-dim { color: var(--ink-3); }
+.tbl .t-name { font-family: var(--font-sans); }
+
+/* ---------- stacked proportion bar ---------- */
+.bar-stack { display: flex; height: 10px; width: 100%; gap: 2px; }
+.bar-stack > span { display: block; height: 100%; }
+
+/* ---------- svg conventions ---------- */
+svg { display: block; overflow: visible; }
+svg text { font-family: var(--font-mono); fill: var(--ink-3); font-size: var(--fs-tick); }
+.grid-line { stroke: var(--rule); stroke-width: 1; shape-rendering: crispEdges; }
+.axis-line { stroke: var(--rule-2); stroke-width: 1; shape-rendering: crispEdges; }
+.tick-label { fill: var(--ink-3); font-size: var(--fs-tick); }
+.axis-label { fill: var(--ink-2); font-size: var(--fs-sm); font-family: var(--font-sans); }
+.ref-line { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 5 4; }
+.leader { stroke: var(--ink-3); stroke-width: 1; opacity: 0.65; }
+.hover-ring { fill: none; stroke: var(--ink); stroke-width: 1.5; pointer-events: none; }
+.pt { stroke: var(--bg-1); stroke-width: 1; }
+.pt-label {
+  fill: var(--ink); font-size: var(--fs-tick); paint-order: stroke;
+  stroke: var(--bg-sunk); stroke-width: 3.5px; stroke-linejoin: round;
+}
+.tier-measured     { fill: var(--tier-measured); }
+.tier-reported     { fill: var(--tier-reported); }
+.tier-unmeasurable { fill: var(--muted); }
+
+/* ---------- tooltip (shared singleton from data.js) ---------- */
+.tip {
+  position: fixed; z-index: 50; pointer-events: none;
+  background: var(--bg-2); border: 1px solid var(--rule-2);
+  padding: var(--s2) var(--s3); font-size: var(--fs-sm);
+  color: var(--ink); max-width: 280px; line-height: 1.4;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+.tip[hidden] { display: none; }
+.tip .tip-t { font-family: var(--font-mono); font-weight: 600; }
+
+/* ---------- say-do section ---------- */
+.saydo-grid {
+  display: grid; grid-template-columns: 1fr 340px; gap: var(--s5);
+  align-items: stretch;
+}
+.chart-wrap { background: var(--bg-1); border: 1px solid var(--rule); padding: var(--s3) var(--s4) var(--s3) var(--s4); }
+.chart-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: var(--s4); margin-top: var(--s2); flex-wrap: wrap;
+}
+.chart-foot .size-key { font-size: var(--fs-sm); color: var(--ink-3); }
+
+/* The company card sits in a fixed slot. min-height is the tallest state any
+   company produces, so hovering swaps content without moving the page. */
+.card {
+  background: var(--bg-1); border: 1px solid var(--rule);
+  padding: var(--s4); min-height: 604px;
+  display: flex; flex-direction: column;
+}
+.card.is-pinned { border-color: var(--accent); }
+.card-head { border-bottom: 1px solid var(--rule); padding-bottom: var(--s3); }
+.card-tick {
+  font-family: var(--font-mono); font-size: 28px; font-weight: 600;
+  letter-spacing: 0.02em; line-height: 1.1;
+}
+.card-name { font-size: var(--fs-sm); color: var(--ink-2); margin-top: 2px; }
+.card-meta { display: flex; gap: var(--s2); align-items: center; margin-top: var(--s3); flex-wrap: wrap; }
+.card-sector { font-size: 13px; color: var(--ink-3); }
+.card-trio {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2);
+  margin: var(--s4) 0; text-align: left;
+}
+.card-trio .ct-k {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.card-trio .ct-v {
+  font-family: var(--font-mono); font-size: 24px; font-weight: 600;
+  letter-spacing: -0.02em; margin-top: 2px;
+}
+.card-trio .ct-u { font-size: 12px; color: var(--ink-3); }
+.ct-gap-miss { color: var(--accent); }
+.ct-gap-beat { color: var(--cool); }
+.card-verdict {
+  font-size: var(--fs-sm); padding: var(--s2) var(--s3);
+  border-left: 2px solid var(--rule-2); margin-bottom: var(--s4);
+}
+.card-verdict.is-miss { border-left-color: var(--accent); color: var(--accent-2); }
+.card-verdict.is-beat { border-left-color: var(--cool); color: var(--cool); }
+.card-rows { border-top: 1px solid var(--rule); padding-top: var(--s3); }
+.card-row {
+  display: flex; justify-content: space-between; gap: var(--s3);
+  font-size: var(--fs-sm); padding: 5px 0; border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.card-row:last-child { border-bottom: 0; }
+.card-row .k { color: var(--ink-3); flex: none; }
+.card-row .v { font-family: var(--font-mono); color: var(--ink); text-align: right; }
+.card-row .v small { font-family: var(--font-sans); color: var(--ink-3); font-size: 13px; }
+.card-hint {
+  font-size: 13px; color: var(--ink-3); margin-top: var(--s3);
+  border-top: 1px solid var(--rule); padding-top: var(--s2);
+}
+/* The card is as tall as the chart beside it, and no company fills that.
+   The closing line sits on the card floor so the slack reads as a margin
+   rather than as content that failed to load. Every card state ends in either
+   a .card-hint or a short note, so this always lands on a footer. */
+.card > :last-child { margin-top: auto; }
+.card-band { margin-top: var(--s2); }
+
+/* the four declared chart states */
+.states { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s4); }
+.state-cell { border-top: 2px solid var(--rule-2); padding-top: var(--s2); }
+.state-cell.is-plotted { border-top-color: var(--accent); }
+.state-cell.is-muted { border-top-color: var(--muted); }
+.state-n { font-family: var(--font-mono); font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+.state-k { font-size: var(--fs-sm); font-weight: 600; margin-top: 2px; }
+.state-d { font-size: 13px; color: var(--ink-3); line-height: 1.4; margin-top: 3px; }
+.state-cell.is-muted .state-n { color: var(--muted-ink); }
+
+/* ---------- placeholder shells for sections other agents own ---------- */
+.awaiting {
+  border: 1px dashed var(--rule-2); padding: var(--s6);
+  color: var(--ink-3); font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+}
+
+/* ---------- load failure ---------- */
+.loadfail {
+  margin: var(--s6) auto; max-width: 680px; padding: var(--s5);
+  border: 1px solid var(--accent); background: var(--bg-1);
+}
+.loadfail h2 { font-size: var(--fs-h3); margin-bottom: var(--s3); }
+.loadfail p { font-size: var(--fs-sm); color: var(--ink-2); margin-bottom: var(--s3); }
+.loadfail code {
+  display: block; font-family: var(--font-mono); font-size: var(--fs-sm);
+  background: var(--bg-sunk); border: 1px solid var(--rule); padding: var(--s3);
+  color: var(--cool);
+}
+
+.u-dim { color: var(--ink-3); }
+.u-accent { color: var(--accent); }
+.u-cool { color: var(--cool); }
+.u-muted { color: var(--muted-ink); }
+.u-mt5 { margin-top: var(--s5); }
+.u-mt4 { margin-top: var(--s4); }
+.u-row { display: flex; gap: var(--s5); flex-wrap: wrap; }
+
+/* The recording frame is 1280 wide, where 1040 of measure fills the content
+   area exactly. On a 1920 projector that same 1040 leaves a third of the
+   screen empty to the right, so the column takes some of it back. The charts
+   read their own container width, so they follow. */
+@media (min-width: 1560px) {
+  :root { --maxw: 1300px; --pad-x: 56px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-list a, .card { transition: border-color 120ms linear, color 120ms linear; }
+}

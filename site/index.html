@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FILED: the S&amp;P 500 scored on mandatory filings only</title>
+<meta name="description" content="Every indicator is something a company files under legal penalty. No vendor ESG input. The result is a rank interval, not a rank.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/allocate.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand">FILED</div>
+  <div class="brand-sub">The S&amp;P 500 scored only on what it files under legal penalty</div>
+  <ul class="nav-list">
+    <li><a href="#allocate"><span class="nav-num">01</span>Allocate $1bn</a></li>
+    <li><a href="#hero"><span class="nav-num">02</span>The argument</a></li>
+    <li><a href="#saydo"><span class="nav-num">03</span>Say and do</a></li>
+    <li><a href="#ranks"><span class="nav-num">04</span>Rank intervals</a></li>
+    <li><a href="#portfolio"><span class="nav-num">05</span>The $1bn fund</a></li>
+    <li><a href="#coverage"><span class="nav-num">06</span>What we cannot see</a></li>
+  </ul>
+  <div class="nav-foot" id="nav-foot"></div>
+</nav>
+
+<main class="main">
+
+  <!-- ============ 01 allocate: the control surface, filled by js/allocate.js ============ -->
+  <section id="allocate" class="section">
+    <div class="al-top">
+      <div class="sec-kicker">The bonus question</div>
+      <div class="al-title">The world commits to net zero. You manage $1bn.</div>
+      <p class="al-lede">Every control recomputes all 500 companies live. The carbon price moves every
+        number here except the allocation. <b>The missing data moves the money.</b></p>
+    </div>
+    <div id="allocate-body"><div class="awaiting">js/allocate.js has not rendered into #allocate-body</div></div>
+  </section>
+
+  <!-- ============ hero: the whole argument on one screen ============ -->
+  <section id="hero" class="section hero">
+    <div class="hero-eyebrow">
+      S&amp;P 500<span class="sep">/</span>mandatory filings only<span class="sep">/</span><span id="hero-build">build</span>
+    </div>
+
+    <h1>The index has no identified sustainability&nbsp;<em>ranking</em>.</h1>
+
+    <p class="hero-lede">
+      Commercial ESG ratings run on numbers a company chooses to publish about itself. 74% of the
+      S&amp;P 500 later revised those numbers (Cohen, Rouen and Sachdeva,
+      <cite>Nature Climate Change</cite>, 2026). So we scored the index only on what it files under
+      legal penalty, ran every defensible modelling choice at once, and kept what held.
+    </p>
+
+    <div class="stat-row">
+      <a class="stat" href="#ranks">
+        <div class="stat-fig" id="stat-band"></div>
+        <div class="stat-label">ranks wide, 5th to 95th percentile</div>
+        <div class="stat-sub" id="stat-band-sub"></div>
+        <div class="stat-src" id="stat-band-src"></div>
+        <div class="stat-go">Rank intervals</div>
+      </a>
+      <a class="stat" href="#saydo">
+        <div class="stat-fig" id="stat-saydo"></div>
+        <div class="stat-label">miss their own emissions promise</div>
+        <div class="stat-sub" id="stat-saydo-sub"></div>
+        <div class="stat-src" id="stat-saydo-src"></div>
+        <div class="stat-go">Say and do</div>
+      </a>
+      <a class="stat" href="#portfolio">
+        <div class="stat-fig" id="stat-pab"></div>
+        <div class="stat-label">of a Paris-Aligned fund’s carbon cut is reallocation</div>
+        <div class="stat-sub" id="stat-pab-sub"></div>
+        <div class="stat-src" id="stat-pab-src"></div>
+        <div class="stat-go">The $1bn fund</div>
+      </a>
+    </div>
+
+    <div class="hero-foot">
+      <div id="hero-data"></div>
+      <div class="no-vendor">Zero vendor ESG inputs.</div>
+    </div>
+  </section>
+
+  <!-- ============ 03 say and do ============ -->
+  <section id="saydo" class="section">
+    <div class="sec-head">
+      <div class="sec-kicker">Finding 01<span class="u-dim"> / credibility</span></div>
+      <h2 class="sec-title" id="saydo-title">Say and do</h2>
+      <p class="sec-lede" id="saydo-lede"></p>
+    </div>
+
+    <div class="saydo-grid">
+      <div class="chart-wrap">
+        <div id="saydo-chart"></div>
+        <div class="chart-foot">
+          <div class="legend" id="saydo-legend"></div>
+          <div class="size-key" id="saydo-sizekey"></div>
+        </div>
+      </div>
+      <aside class="card" id="saydo-card"></aside>
+    </div>
+
+    <div class="panel u-mt5">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Every listing is accounted for</div>
+          <div class="panel-sub">A company we cannot measure is a declared state, never a zero and never a deletion.</div>
+        </div>
+        <div class="panel-n" id="saydo-states-n"></div>
+      </div>
+      <div class="states" id="saydo-states"></div>
+      <div class="bar-stack u-mt4" id="saydo-bar"></div>
+      <div class="u-mt5">
+        <div class="panel-sub" style="margin-bottom:8px">What this chart cannot tell you</div>
+        <ul class="note-list" id="saydo-caveats"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 rank intervals: filled by js/ranks.js ============ -->
+  <section id="ranks" class="section">
+    <div class="sec-head">
+      <div class="sec-kicker">Finding 02<span class="u-dim"> / uncertainty</span></div>
+      <h2 class="sec-title">There is no identified ranking, and the weights are not the reason</h2>
+      <p class="sec-lede">Ten thousand draws over normalisation, winsorisation, pillar inclusion,
+        the missing-data assumption, aggregation, sector framing and the weights themselves.</p>
+    </div>
+    <div id="ranks-body"><div class="awaiting">js/ranks.js has not rendered into #ranks-body</div></div>
+  </section>
+
+  <!-- ============ 05 portfolio: filled by js/portfolio.js ============ -->
+  <section id="portfolio" class="section">
+    <div class="sec-head">
+      <div class="sec-kicker">Finding 03<span class="u-dim"> / reallocation</span></div>
+      <h2 class="sec-title">A Paris-Aligned fund sells the decarbonisers</h2>
+      <p class="sec-lede">Three books built against Commission Delegated Regulation (EU) 2020/1818,
+        article by article, against a fourth that applies the position cap and no carbon rule at all.
+        Then a Brinson decomposition, to find out who actually did the cutting.</p>
+    </div>
+    <div id="portfolio-body"><div class="awaiting">js/portfolio.js has not rendered into #portfolio-body</div></div>
+  </section>
+
+  <!-- ============ 06 coverage: filled by js/coverage.js ============ -->
+  <section id="coverage" class="section">
+    <div class="sec-head">
+      <div class="sec-kicker">Honesty<span class="u-dim"> / coverage</span></div>
+      <h2 class="sec-title">What we cannot see, stated as a number</h2>
+      <p class="sec-lede">Where the mandatory record stops, the score stops with it.</p>
+    </div>
+    <div id="coverage-body"><div class="awaiting">js/coverage.js has not rendered into #coverage-body</div></div>
+  </section>
+
+</main>
+
+<script src="js/data.js"></script>
+<script src="js/allocate.js"></script>
+<script src="js/saydo.js"></script>
+<script src="js/ranks.js"></script>
+<script src="js/portfolio.js"></script>
+<script src="js/coverage.js"></script>
+</body>
+</html>

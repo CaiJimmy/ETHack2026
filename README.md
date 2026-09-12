@@ -50,7 +50,7 @@ reproducible by anyone with the two free API keys listed in `data/README.md`.
 | source | what it gives | S&P 500 covered |
 |---|---|---|
 | EPA GHGRP | facility-level Scope 1, mandatory, with parent company and lat/lon, 2010-2023 | 142 matched, carrying 44.8% of all US regulated direct emissions |
-| EPA CAMD | Part 75 stack-monitor CO2, instrument-measured, through 2026 | 49 tickers, 54.0% of US measured power CO2 |
+| EPA CAMD | Part 75 stack-monitor CO2, instrument-measured, through 2026 | 48 tickers, 40 of them in 2025, carrying 54.0% of 2025 US measured power CO2 |
 | EIA + EPA eGRID | net generation and grid emission factors, for gCO2e/kWh | 15,757 plants |
 | SEC XBRL | revenue, operating income, assets, capex, shares | 503 / 503 |
 | Net Zero Tracker + SBTi | climate targets, years, baselines, validation status | 461 / 503 |

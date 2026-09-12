@@ -1,0 +1,137 @@
+name,unit,definition,source,provenance_class,dq_typical,non_null_count,script
+ticker,,"S&P 500 listing, uppercase, dots not dashes",universe.parquet,mandatory,1,503,src/build_master.py
+company_name,,Index constituent name,universe.parquet,mandatory,1,503,src/build_master.py
+cik,,"SEC central index key, zero padded",universe.parquet,mandatory,1,503,src/build_master.py
+gics_sector,,"GICS sector, 11 values",universe.parquet,mandatory,1,503,src/build_master.py
+gics_sub_industry,,GICS sub-industry,universe.parquet,mandatory,1,503,src/build_master.py
+nace_section,,"NACE section, the PAB high-impact-sector test. Taken from the sibling listing, or from the sector mode, on the four listings portfolio.parquet does not carry",portfolio.parquet,modelled,3,503,src/build_master.py
+is_primary_listing,bool,"False on GOOG, FOX and NWS; filter this before summing anything",universe.parquet,mandatory,1,503,src/build_master.py
+share_class_siblings,,"The other listing of the same registrant, where one exists",universe.parquet,mandatory,1,6,src/build_master.py
+hq_country_iso,,Headquarters country or US state as the index publishes it,universe.parquet,mandatory,2,503,src/build_master.py
+date_added,date,Date the listing entered the index,universe.parquet,mandatory,1,503,src/build_master.py
+scope1_measured_us_t,tCO2e,"EPA GHGRP Scope 1, fossil only, equity apportioned, net of perimeter changes",ghgrp_ticker_year.parquet,mandatory,1,146,src/build_master.py
+scope1_measured_us_year,year,Reporting year of scope1_measured_us_t,ghgrp_ticker_year.parquet,mandatory,1,146,src/build_master.py
+scope1_measured_allgas_t,tCO2e,"The same roll-up including biogenic CO2, for reconciliation only, never a headline",ghgrp_ticker_year.parquet,mandatory,1,146,src/build_master.py
+scope1_biogenic_t,tCO2e,"Biogenic CO2, gas_id 8, reported separately as the GHG Protocol requires",ghgrp_ticker_year.parquet,mandatory,1,146,src/build_master.py
+scope1_ar6_t,tCO2e,"scope1_measured_us_t with CH4 and N2O restated from AR4 to AR6 GWPs, a band not a fix",ghgrp_ticker_year.parquet,modelled,2,132,src/build_master.py
+scope1_lookahead_excluded_t,tCO2e,Tonnes removed because the facility was not inside the perimeter that year,ghgrp_ticker_year.parquet + PERIMETER_CHANGES,modelled,2,146,src/build_master.py
+scope1_facility_count,count,Distinct GHGRP facilities behind scope1_measured_us_t,ghgrp_ticker_year.parquet,mandatory,1,146,src/build_master.py
+ghgrp_matched_zero_fossil,bool,"Matched to GHGRP facilities and measured zero fossil tonnes in every year: checked and found zero, not missing",ghgrp_ticker_year.parquet,mandatory,1,503,src/build_master.py
+scope1_current_signal_t,tCO2e,"Latest CAMD stack-measured CO2. A currency check only: its boundary is Acid Rain and CSAPR combustion units, not the company, so it never sets a level",emissions_by_ticker.parquet,mandatory,1,48,src/build_master.py
+scope1_current_signal_year,year,Year of scope1_current_signal_t,emissions_by_ticker.parquet,mandatory,1,48,src/build_master.py
+scope1_selfreported_t,tCO2e,"Company-declared global Scope 1, WBA climate profile first, PDF report second","wba_emissions.parquet, scope23.parquet",voluntary,2,288,src/build_master.py
+scope1_selfreported_year,year,Fiscal year of scope1_selfreported_t,"wba_emissions.parquet, scope23.parquet",voluntary,2,288,src/build_master.py
+scope1_selfreported_source,,wba or report_pdf,"wba_emissions.parquet, scope23.parquet",voluntary,2,288,src/build_master.py
+scope1_modelled_t,tCO2e,"Climate TRACE equity share, an asset inventory with no corporate boundary. Equity, not gross: gross double counts joint ventures",climatetrace_company.parquet,modelled,4,73,src/build_master.py
+scope1_modelled_year,year,Release year of scope1_modelled_t,climatetrace_company.parquet,modelled,4,73,src/build_master.py
+scope1_t,tCO2e,"The decided Scope 1: self-report where it clears the EPA-measured floor, else GHGRP fossil equity, else Climate TRACE, else null",precedence over the three above,mixed,2,322,src/build_master.py
+scope1_year,year,Fiscal or reporting year of scope1_t,precedence over the three above,mixed,2,322,src/build_master.py
+scope1_basis,,self_reported | ghgrp_fossil | ghgrp_fossil_floor | climatetrace_equity,precedence over the three above,mixed,2,322,src/build_master.py
+scope1_dq,1-5,"PCAF data quality of scope1_t: 1 verified mandatory, 2 reported, 4 modelled",precedence over the three above,mixed,2,322,src/build_master.py
+scope1_below_measured_floor,bool,"The company reported a global Scope 1 below what EPA measured on its US sites alone, so the mandatory figure won",precedence over the three above,mixed,1,503,src/build_master.py
+scope2_market_t,tCO2e,"Scope 2. WBA does not label market against location basis, so scope2_basis says which table spoke rather than which accounting basis","wba_emissions.parquet, scope23.parquet",voluntary,2,284,src/build_master.py
+scope2_basis,,wba (basis unlabelled) or report_pdf (market),"wba_emissions.parquet, scope23.parquet",voluntary,2,284,src/build_master.py
+scope2_dq,1-5,PCAF data quality of scope2_market_t,"wba_emissions.parquet, scope23.parquet",voluntary,2,284,src/build_master.py
+scope2_location_t,tCO2e,Location-based Scope 2 where a report stated it separately,scope23.parquet,voluntary,3,10,src/build_master.py
+scope2_year,year,Fiscal year of scope2_market_t,"wba_emissions.parquet, scope23.parquet",voluntary,2,284,src/build_master.py
+scope3_total_t,tCO2e,Total Scope 3 as declared. Not summable across the index: one company's Scope 3 is another's Scope 1,"wba_emissions.parquet, scope23.parquet",voluntary,3,259,src/build_master.py
+scope3_basis,,wba or report_pdf,"wba_emissions.parquet, scope23.parquet",voluntary,3,259,src/build_master.py
+scope3_dq,1-5,PCAF data quality of scope3_total_t,"wba_emissions.parquet, scope23.parquet",voluntary,3,259,src/build_master.py
+scope3_year,year,Fiscal year of scope3_total_t,"wba_emissions.parquet, scope23.parquet",voluntary,3,259,src/build_master.py
+scope12_t,tCO2e,"WBA combined Scope 1+2, the only voluntary series with a multi-year history. For a trend only, never into a Scope-1-only column",wba_emissions.parquet,voluntary,2,246,src/build_master.py
+scope12_year,year,Fiscal year of scope12_t,wba_emissions.parquet,voluntary,2,246,src/build_master.py
+grid_factor_hq_g_per_kwh,gCO2e/kWh,eGRID subregion emission factor for the HQ region,scope23.parquet,mandatory,3,502,src/build_master.py
+power_intensity_g_per_kwh,gCO2e/kWh,"Generation-weighted intensity of the company's own plants, the Article 12(1)(g) test",plant_intensity.parquet via portfolio.parquet,modelled,2,36,src/build_master.py
+power_gen_mwh,MWh,Net generation behind power_intensity_g_per_kwh,eia_plant_totals.parquet via portfolio.parquet,mandatory,1,36,src/build_master.py
+delivered_pct_yr,%/yr,"OBSERVED annual change in measured tonnage, OLS on the longest clean window. Negative is falling. This is the model's abatement input, never the promised rate",say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_basis,,Which measured series the fit ran on; ghgrp on all 134,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_dq,1-5,"PCAF data quality of delivered_pct_yr: 2, an OLS on mandatory tonnage",say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_se_pct_yr,%/yr,Bootstrap standard error of delivered_pct_yr,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_r2,,R squared of the log-linear fit,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_n_years,count,Years in the fitted window,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_year_start,year,First year of the fitted window,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_year_end,year,Last year of the fitted window,say_do_gap.parquet,modelled,2,134,src/build_master.py
+delivered_camd_pct_yr,%/yr,"The same fit on CAMD stack data, which runs to 2025 where GHGRP stops at 2023",say_do_gap.parquet,modelled,2,46,src/build_master.py
+promised_pct_yr,%/yr,"Implied annual reduction from the company's own target, negative is falling. Ours first, WBA for the 17 it covers and we do not","say_do_gap.parquet, wba_targets.parquet",voluntary,2,358,src/build_master.py
+promised_basis,,sbti_s12_absolute | nzt_interim | netzero_inferred | sbti_combined | wba,"say_do_gap.parquet, wba_targets.parquet",voluntary,2,358,src/build_master.py
+promised_dq,1-5,PCAF data quality of promised_pct_yr,"say_do_gap.parquet, wba_targets.parquet",voluntary,2,358,src/build_master.py
+promised_target_year,year,Target year the promised rate was implied from,targets_company.parquet,voluntary,2,341,src/build_master.py
+promised_baseline_year,year,Baseline year of the target,targets_company.parquet,voluntary,2,341,src/build_master.py
+gap_pct_yr,%/yr,delivered minus promised. Positive means the company is cutting more slowly than it said,say_do_gap.parquet,modelled,2,108,src/build_master.py
+sbti_near_term_status,,SBTi near-term target status,targets_company.parquet,voluntary,1,261,src/build_master.py
+sbti_near_term_classification,,SBTi temperature classification of the near-term target,targets_company.parquet,voluntary,1,227,src/build_master.py
+sbti_net_zero_status,,SBTi net-zero target status,targets_company.parquet,voluntary,1,118,src/build_master.py
+sbti_net_zero_year,year,Stated net-zero year,targets_company.parquet,voluntary,1,78,src/build_master.py
+revenue_musd,USD millions,"SEC XBRL revenue, latest fiscal year carrying the field. Their sec_revenue is rejected: it takes the contract-revenue tag, which is a crumb for a bank or a REIT",financials.parquet,mandatory,1,503,src/build_master.py
+revenue_basis,,sec_xbrl on every row that has one,financials.parquet,mandatory,1,503,src/build_master.py
+revenue_dq,1-5,PCAF data quality of revenue_musd,financials.parquet,mandatory,1,503,src/build_master.py
+revenue_fy,year,Fiscal year of revenue_musd,financials.parquet,mandatory,1,503,src/build_master.py
+revenue_period_end,date,Fiscal year end. 119 of 502 FY2023 rows end outside December,financials.parquet,mandatory,1,503,src/build_master.py
+ebit_musd,USD millions,"SEC XBRL operating income, latest fiscal year carrying the field",financials.parquet,mandatory,1,502,src/build_master.py
+ebit_basis,,sec_xbrl on every row that has one,financials.parquet,mandatory,1,502,src/build_master.py
+ebit_dq,1-5,PCAF data quality of ebit_musd,financials.parquet,mandatory,1,502,src/build_master.py
+ebit_fy,year,Fiscal year of ebit_musd,financials.parquet,mandatory,1,502,src/build_master.py
+capex_musd,USD millions,"SEC XBRL capital expenditure, latest fiscal year carrying the field",financials.parquet,mandatory,1,481,src/build_master.py
+capex_fy,year,Fiscal year of capex_musd,financials.parquet,mandatory,1,481,src/build_master.py
+da_musd,USD millions,"Depreciation and amortisation. The only D&A anywhere in the project, taken from the teammate's extraction rather than our own",data/raw/master_dataset.csv sec_dep_amort_*,vendor,3,364,src/build_master.py
+da_basis,,sec_secondhand: an SEC figure we did not extract ourselves,data/raw/master_dataset.csv,vendor,3,364,src/build_master.py
+da_fy,year,Calendar year of da_musd,data/raw/master_dataset.csv,vendor,3,364,src/build_master.py
+ebitda_musd,USD millions,"Our SEC operating income at the D&A's own year plus that D&A, else Yahoo's trailing twelve months. Their sec_ebitda is rejected: it inherits their EBIT","financials.parquet + master_dataset.csv, else yh_ebitda_ttm",mixed,2,494,src/build_master.py
+ebitda_basis,,sec_ebit_plus_secondhand_da | yahoo_ttm,financials.parquet + master_dataset.csv,mixed,2,494,src/build_master.py
+ebitda_dq,1-5,PCAF data quality of ebitda_musd,financials.parquet + master_dataset.csv,mixed,2,494,src/build_master.py
+ebitda_fy,year,Fiscal year of ebitda_musd; null where the basis is a trailing twelve months,financials.parquet,mixed,2,364,src/build_master.py
+total_debt_musd,USD millions,"SEC XBRL total debt, Yahoo where SEC has none","financials.parquet, yh_total_debt",mixed,2,503,src/build_master.py
+total_debt_basis,,sec_xbrl | yahoo,"financials.parquet, yh_total_debt",mixed,2,503,src/build_master.py
+total_debt_dq,1-5,PCAF data quality of total_debt_musd,"financials.parquet, yh_total_debt",mixed,2,503,src/build_master.py
+total_debt_fy,year,Fiscal year of total_debt_musd where the basis is sec_xbrl,financials.parquet,mandatory,1,466,src/build_master.py
+total_cash_musd,USD millions,Cash and equivalents. New to the project; our XBRL pull has none,master_dataset.csv yh_total_cash,vendor,3,501,src/build_master.py
+market_cap_musd,USD millions,"SEC cover-page shares times the 2026-09-11 price, with four up-C names taken from Yahoo because the cover page counts one share class","market_cap.parquet, yh_market_cap",mixed,1,503,src/build_master.py
+market_cap_basis,,sec_shares_x_price | yahoo_override_upc | yahoo,"market_cap.parquet, yh_market_cap",mixed,1,503,src/build_master.py
+market_cap_dq,1-5,PCAF data quality of market_cap_musd,"market_cap.parquet, yh_market_cap",mixed,1,503,src/build_master.py
+market_cap_shares_stale,bool,"Share count is from a cover page filed before 2026, while the price is 2026-09-11. This is the 10 to 25 per cent band against Yahoo, a staleness to flag not a bug",market_cap.parquet,mandatory,2,503,src/build_master.py
+evic_musd,USD millions,"Enterprise value including cash, market cap plus total debt, as PAB Article 5 defines it. Deliberately gross of cash: it is the financed-emissions denominator",market_cap_musd + total_debt_musd,mixed,2,503,src/build_master.py
+evic_debt_observed,bool,False where evic_musd is market cap alone because no debt figure exists,"financials.parquet, yh_total_debt",mixed,2,503,src/build_master.py
+ev_musd,USD millions,"Enterprise value net of cash, for the valuation leg. We have none of our own",master_dataset.csv yh_enterprise_value,vendor,3,500,src/build_master.py
+ev_ebitda_x,x,"EV/EBITDA multiple, winsorised to the sector 5th and 95th percentile then clamped to [4, 40], with the sector median where Yahoo publishes no positive EBITDA",master_dataset.csv yh_ev_ebitda,vendor,3,503,src/build_master.py
+ev_ebitda_basis,,yahoo | yahoo_winsorised | sector_median,master_dataset.csv yh_ev_ebitda,vendor,3,503,src/build_master.py
+ev_ebitda_dq,1-5,PCAF data quality of ev_ebitda_x,master_dataset.csv yh_ev_ebitda,vendor,3,503,src/build_master.py
+ev_ebitda_raw_x,x,"The unguarded vendor multiple, kept so the guard is visible: three are negative and eleven exceed 60x",master_dataset.csv yh_ev_ebitda,vendor,4,471,src/build_master.py
+fcf_musd,USD millions,"Free cash flow. New to the project, not used by the model chain",master_dataset.csv yh_fcf,vendor,3,470,src/build_master.py
+beta_x,x,Equity beta. Needed only if the reweight is risk adjusted,master_dataset.csv yh_beta,vendor,3,497,src/build_master.py
+revenue_ttm_musd_check,USD millions,Yahoo trailing-twelve-month revenue. A cross-check only: TTM and fiscal year are different periods and must not be mixed,master_dataset.csv yh_revenue_ttm,vendor,3,502,src/build_master.py
+index_weight_pct,%,Market cap share of the 500 primary listings. Secondary listings carry 0 so the column sums to 100,market_cap_musd,mixed,1,503,src/build_master.py
+price_usd2010_per_t,US$2010/tCO2,"NGFS Net Zero 2050, Downscaling[GCAM 6.0 NGFS], USA, 2030, exactly as published. Not averaged across models: GCAM says 98.6 and REMIND 283.7 for the same scenario",ngfs_scenarios.parquet,modelled,3,503,src/build_master.py
+price_sector_usd_per_t,USD/tCO2,"The stored default carbon penalty, price_usd2010_per_t deflated by 1.44. The UI overwrites this per sector; NGFS itself publishes no sector differentiation",ngfs_scenarios.parquet x a hard deflator,modelled,4,503,src/build_master.py
+coverage_scope1_pct,%,Share of Scope 1 the penalty touches. Settable,assumption,modelled,5,503,src/build_master.py
+coverage_scope2_pct,%,Share of Scope 2 the penalty touches. Settable,assumption,modelled,5,503,src/build_master.py
+coverage_scope3_pct,%,Share of Scope 3 the penalty touches. Zero by default: pricing Scope 3 across a 500-company index charges the same tonne several times,assumption,modelled,5,503,src/build_master.py
+passthrough_pct,%,"Share of the carbon cost pushed to customers. NO EMPIRICAL SOURCE EXISTS IN THIS REPO. A sector assumption with a default, settable, and labelled modelled everywhere","assumption, PASSTHROUGH_DEFAULT in src/build_master.py",modelled,5,503,src/build_master.py
+carbon_cost_musd,USD millions,"Priced tonnes times the penalty, before abatement. Null where no scope is known; a scope that is null inside a company that has another contributes nothing","scope1_t, scope2_market_t, scope3_total_t x price_sector_usd_per_t",mixed,3,327,src/build_master.py
+abatement_factor,,"(1 + delivered_pct_yr/100) ^ (2030 - scope1_year). 1.0 where no observed rate exists, which is the conservative reading: no credit for an unmeasured cut",delivered_pct_yr,modelled,3,503,src/build_master.py
+carbon_cost_abated_musd,USD millions,carbon_cost_musd after the company's OBSERVED reduction rate is run to 2030,carbon_cost_musd x abatement_factor,mixed,3,327,src/build_master.py
+d_ebit_musd,USD millions,"Abated carbon cost that lands on earnings, after the passthrough assumption",carbon_cost_abated_musd x (1 - passthrough_pct),mixed,4,327,src/build_master.py
+d_ebit_pct_of_ebit,%,"Earnings at risk. Null where operating income is zero or negative, never a ratio against a negative denominator",d_ebit_musd / ebit_musd,mixed,4,307,src/build_master.py
+d_ev_musd,USD millions,"Change in enterprise value, the earnings hit capitalised at the company's own multiple",d_ebit_musd x ev_ebitda_x,mixed,4,327,src/build_master.py
+d_ev_pct_of_ev,%,Value at risk. This is the reweighting input,d_ev_musd / ev_musd,mixed,4,322,src/build_master.py
+model_dq,1-5,Worst PCAF grade among the inputs that fed d_ev_musd. Never better than 5 because passthrough is an assumption,the columns above,modelled,5,327,src/build_master.py
+excl_12g,bool,The Article 12(1)(g) test: a power generator above 100 gCO2e/kWh,plant_intensity.parquet via portfolio.parquet,modelled,2,503,src/build_master.py
+excluded,bool,Any EU 2020/1818 Article 12 exclusion fires,revenue_exclusions.parquet + excl_12g,mixed,2,503,src/build_master.py
+excl_articles,,"Which articles fire, semicolon separated",revenue_exclusions.parquet + excl_12g,mixed,2,67,src/build_master.py
+excl_basis,,"Which screen decided the exclusion: sec_segment (measured segment revenue tested against the article threshold), gics_proxy, nbim_exclusion, or power_intensity_12g where only the 100 gCO2e/kWh test fires. Null where nothing fires","revenue_exclusions.parquet, plant_intensity.parquet",mixed,2,67,src/build_master.py
+excl_dq,1-5,"PCAF data quality of the exclusion decision: 1 where measured segment revenue was tested against the article's own threshold, 4 or 5 for a sector proxy",revenue_exclusions.parquet,mixed,3,503,src/build_master.py
+high_impact_nace,bool,"NACE high-impact sector under the PAB rules, derived from nace_section on the four listings portfolio.parquet does not carry",portfolio.parquet,modelled,3,503,src/build_master.py
+penalty_usd_environment,USD,"Violation Tracker environmental penalties, 2000-2026",violations_summary.parquet,mandatory,1,468,src/build_master.py
+case_count_environment,count,Environmental enforcement cases behind that total,violations_summary.parquet,mandatory,1,468,src/build_master.py
+penalty_usd_total,USD,"All Violation Tracker penalties, every offence group",violations_summary.parquet,mandatory,1,468,src/build_master.py
+conduct_measured_zero,bool,"Searched and found no environmental penalty. A measured zero, not a missing value",violations_summary.parquet,mandatory,1,503,src/build_master.py
+vendor_percentile,percentile,"Consensus percentile across six free ESG datasets. VENDOR: a benchmark for our score, never an input to it",esg_vendor_consensus.parquet,vendor,4,470,src/build_master.py
+vendor_n_sources,count,How many vendor datasets carry the company,esg_vendor_consensus.parquet,vendor,4,489,src/build_master.py
+our_percentile,percentile,"Our score as a percentile, built from mandatory and voluntary data only",scores.parquet,modelled,2,503,src/build_master.py
+rank_median,rank,"Median rank over the uncertainty draws, 1 is best",scores.parquet,modelled,2,503,src/build_master.py
+rank_p05,rank,5th percentile of the rank distribution,scores.parquet,modelled,2,503,src/build_master.py
+rank_p95,rank,95th percentile of the rank distribution. rank_p95 minus rank_p05 is the honest width of the answer,scores.parquet,modelled,2,503,src/build_master.py
+coverage_tier,,"measured (mandatory tonnage), reported (voluntary only) or unmeasurable",scores.parquet,modelled,1,503,src/build_master.py
+score_mirrored_from,,The primary listing whose score this secondary listing copies,scores.parquet,modelled,1,3,src/build_master.py
+provenance_class,,"Provenance of scope1_t: mandatory where EPA measured it, voluntary where the company declared it, modelled where Climate TRACE inferred it, null where nobody knows. Never vendor, by construction and by assertion",this script,modelled,1,322,src/build_master.py
+financial_provenance_class,,"Worst class among the four financial facts we extracted ourselves: revenue, EBIT, debt and market cap. EBITDA and the multiple are excluded because they are vendor by design and carry their own _basis",this script,modelled,1,503,src/build_master.py
+generated_at,timestamp,When this row was built,this script,modelled,1,503,src/build_master.py

@@ -1,0 +1,73 @@
+{
+  "source": "aqueduct",
+  "description": "WRI Aqueduct 4.0 water risk indicators, July 2023 release, HydroBASINS level 6, joined to EPA GHGRP facility coordinates by point in polygon.",
+  "provenance_class": "modelled",
+  "provenance_note": "The water indicators are a WRI hydrological model, not a company disclosure. The facility coordinates they are joined to come from mandatory EPA GHGRP filings. No self-reported figure is used.",
+  "url": "https://www.wri.org/data/aqueduct-global-maps-40-data",
+  "data_dictionary_url": "https://github.com/wri/Aqueduct40/blob/master/data_dictionary_water-risk-atlas.md",
+  "retrieved_at": "2026-09-12T17:08:12.383736+00:00",
+  "bytes": 261527511,
+  "sha256": "bd3ed2bce88d6ff1b89191632ad134a2436e1e1d49599382f23a04d513624fc3",
+  "local_path": "data/raw/aqueduct-4-0-water-risk-data.zip",
+  "licence": "CC BY 4.0. Cite: Kuzma, S., M.F.P. Bierkens, S. Lakshman, T. Luo, L. Saccoccia, E. H. Sutanudjaja, and R. Van Beek. 2023. 'Aqueduct 4.0: Updated decision-relevant global water risk indicators.' Technical Note. Washington, DC: World Resources Institute. doi.org/10.46830/writn.23.00061",
+  "redistribution": "CC BY 4.0 permits redistribution of derived tables and charts with attribution to the World Resources Institute and a link to the licence.",
+  "attribution_required": "World Resources Institute, Aqueduct 4.0 (2023), CC BY 4.0",
+  "layer_used": "baseline_annual",
+  "layer_choice_reason": "The only GDB layer whose geometry is the basin x province x aquifer union that string_id keys. baseline_monthly and future_annual are basin only.",
+  "future_scenario": "bau business as usual, SSP3 RCP7.0",
+  "future_years": [
+    "2030",
+    "2050"
+  ],
+  "fleet_year": 2023,
+  "indicator_codebook": {
+    "bws": "Baseline water stress: withdrawals as a share of available renewable surface and groundwater supply. Extremely High is >80%.",
+    "bwd": "Baseline water depletion: the share of available water consumed, not merely withdrawn. Extremely High is >75%.",
+    "iav": "Interannual variability: year to year variation in water supply.",
+    "sev": "Seasonal variability: within-year variation in water supply.",
+    "gtd": "Groundwater table decline: rate of decline of the water table in cm per year. Extremely High is >8 cm/y.",
+    "rfr": "Riverine flood risk: expected annual share of population affected by river flooding.",
+    "cfr": "Coastal flood risk: expected annual share of population affected by coastal flooding.",
+    "drr": "Drought risk: composite of drought hazard, exposure and vulnerability, 0 to 1.",
+    "ucw": "Untreated connected wastewater: share of collected wastewater that is not treated.",
+    "cep": "Coastal eutrophication potential: nutrient loading delivered to coastal waters.",
+    "udw": "Unimproved or no drinking water: share of population without improved drinking water.",
+    "usa": "Unimproved or no sanitation: share of population without improved sanitation.",
+    "rri": "Peak RepRisk country ESG risk index.",
+    "w_awr_def_tot": "Weighted aggregated water risk, default weighting, overall. A 0 to 5 composite of the 13 indicators."
+  },
+  "suffixes": {
+    "_raw": "raw value, units per indicator",
+    "_score": "indicator mapped to a 0 to 5 scale",
+    "_cat": "integer category -1 to 4 (-1 and -9999 are special, see notes)",
+    "_label": "human readable category with its threshold"
+  },
+  "category_traps": {
+    "bws_cat = -1": "Arid and Low Water Use. bws_score is 5.0, the maximum, but the label is not 'Extremely High'. Counted separately here, never folded into the high stress share.",
+    "gtd_cat = -9999": "Insignificant Trend, which is a real finding and not missing data. 60,244 of 68,510 basin rows. gtd_score is also -9999 there, so it must be masked before any mean.",
+    "other -9999": "No Data. Masked everywhere."
+  },
+  "join_diagnostics": {
+    "facilities_total": 11358,
+    "coord_unusable": 0,
+    "matched_within": 11176,
+    "matched_nearest_le_10km": 24,
+    "unassigned": 158,
+    "lon_sign_corrected": 2
+  },
+  "resolution_check": {
+    "us_basins": 1254,
+    "us_basins_single_bws_category": 1254,
+    "facilities_in_single_category_basin": 11093,
+    "facilities_checked": 11093
+  },
+  "national_share_high_or_extremely_high_water_stress": {
+    "baseline": 0.2774,
+    "bau2030": 0.3223,
+    "bau2050": 0.3354
+  },
+  "outputs": [
+    "data/interim/water_facility.parquet",
+    "data/interim/water_by_ticker.parquet"
+  ]
+}

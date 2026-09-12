@@ -1,0 +1,41 @@
+{
+  "year": 2025,
+  "generated_at": "2026-09-12T15:02:43+00:00",
+  "stack_structure": {
+    "rows": 3989,
+    "facilities": 1311,
+    "distinct_stack_ids": 79,
+    "rows_naming_a_stack": 397,
+    "co2_share_of_rows_naming_a_stack_pct": 8.03,
+    "unit_ids_that_are_stack_ids": [],
+    "stack_rows_at_same_facility": 0,
+    "duplicate_unit_keys": 0,
+    "no_double_count": true
+  },
+  "epa_cross_check": {
+    "epa_by_facility_short_tons": 1635128267.87,
+    "epa_by_state_short_tons": 1635128267.8700004,
+    "our_unit_sum_short_tons": 1635128267.87,
+    "our_minus_epa_short_tons": 0.0,
+    "epa_facility_rows": 1311,
+    "our_facility_count": 1311,
+    "facilities_where_we_exceed_epa": 0
+  },
+  "share": {
+    "national_short_tons": 1635128267.87,
+    "national_tonnes": 1483363412.5542965,
+    "attributed_tonnes": 801644835.2060473,
+    "attributed_short_tons": 883662169.1917429,
+    "attributed_tickers": 40,
+    "unattributed_tonnes": 681718577.3482491,
+    "closure_gap_tonnes": 0.0,
+    "share_pct_correct": 54.04237615822308,
+    "share_pct_tonnes_over_short_tons": 49.02641896407981
+  },
+  "verdict": {
+    "correct_share_pct": 54.0,
+    "wrong_share_pct": 49.0,
+    "error": "metric tonnes in the numerator divided by short tons in the denominator",
+    "double_counting_found": false
+  }
+}

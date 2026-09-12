@@ -1,0 +1,305 @@
+/* Section 01, the control surface. Scoped to #allocate so nothing here can
+   reach the other four sections.
+
+   The whole thing is one screen: height is 100vh and the section never
+   scrolls, because the recording frame is 1280x720 and a control surface that
+   scrolls is not a control surface. Every size below is a share of that
+   budget, so read them as a layout, not as taste.
+
+   It reuses the app.css vocabulary: tokens, .panel-n, .note, .chip, .bar-stack,
+   .card-row, .tbl. What is new here is the control row (.ac-*), the treemap
+   (.tm-*) and the advice panel (.av-*), because none of those existed. */
+
+#allocate {
+  height: 100vh; min-height: 660px;
+  padding: 10px 18px 9px 18px;
+  border-top: 0; border-bottom: 1px solid var(--rule);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+#allocate > * { max-width: none; }
+#allocate-body {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+}
+
+/* ---------- header strip ---------- */
+.al-top { display: flex; align-items: baseline; gap: 14px; flex: none; }
+.al-top .sec-kicker { margin-bottom: 0; flex: none; font-size: 11px; }
+.al-title {
+  font-size: 19px; font-weight: 600; letter-spacing: -0.01em; flex: none;
+  white-space: nowrap;
+}
+.al-lede {
+  font-size: 11px; color: var(--ink-2); line-height: 1.4;
+  margin-left: auto; text-align: right; max-width: 480px;
+}
+.al-lede b { color: var(--ink); font-weight: 600; }
+
+/* ---------- three columns ---------- */
+.al-grid {
+  flex: 1 1 auto; min-height: 0; margin-top: 7px;
+  display: grid; grid-template-columns: 268px minmax(0, 1fr) 282px; gap: 9px;
+}
+.al-col {
+  background: var(--bg-1); border: 1px solid var(--rule);
+  padding: 8px 10px; min-height: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.al-col-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 8px; border-bottom: 1px solid var(--rule-2);
+  padding-bottom: 4px; margin-bottom: 6px; flex: none;
+}
+.al-col-t {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-2);
+  /* "THE ADVICE" broke across two lines in the 282px column while the other
+     two headers held one, which read as a layout fault rather than a choice.
+     The note beside it is the part allowed to wrap. */
+  white-space: nowrap; flex: none;
+}
+.al-col-n { text-align: right; }
+.al-col-t .n { color: var(--ink-3); margin-right: 6px; }
+.al-col-n { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+
+/* ---------- control rows ---------- */
+.ac-group { margin-bottom: 4px; }
+.ac-group:last-child { margin-bottom: 0; }
+.ac-label {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 6px; font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 2px; white-space: nowrap;
+}
+.ac-label > span:first-child { overflow: hidden; text-overflow: ellipsis; }
+/* the share of the advice this control actually owns, measured, not guessed */
+.ac-share {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.01em;
+  text-transform: none; padding: 0 3px; border: 1px solid currentColor;
+  color: var(--ink-3); white-space: nowrap; flex: none;
+}
+.ac-share.is-big { color: var(--accent); }
+.ac-share.is-nil { color: var(--tier-measured); }
+
+.ac-row { display: flex; align-items: center; gap: 5px; height: 15px; }
+.ac-row--wide .ac-name { width: 104px; }
+.ac-name {
+  font-size: 11px; color: var(--ink-2); flex: none; width: 76px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ac-val {
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink);
+  flex: none; width: 36px; text-align: right; font-variant-numeric: tabular-nums;
+}
+.ac-val.is-off { color: var(--ink-3); }
+
+/* One slider style everywhere. The thumb is the only thing the accent is
+   spent on in this column, so the eye finds what is grabbable. */
+.ac-range { -webkit-appearance: none; appearance: none; flex: 1 1 auto; min-width: 0;
+  height: 14px; background: transparent; margin: 0; cursor: pointer; }
+.ac-range::-webkit-slider-runnable-track { height: 3px; background: var(--rule-2); }
+.ac-range::-moz-range-track { height: 3px; background: var(--rule-2); }
+.ac-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 9px; height: 13px;
+  background: var(--accent-2); border: 0; margin-top: -5px; border-radius: 1px;
+}
+.ac-range::-moz-range-thumb {
+  width: 9px; height: 13px; background: var(--accent-2); border: 0; border-radius: 1px;
+}
+.ac-range:disabled::-webkit-slider-thumb { background: var(--rule-2); }
+.ac-range:disabled::-moz-range-thumb { background: var(--rule-2); }
+.ac-range:focus-visible { outline: 1px solid var(--ink-3); outline-offset: 2px; }
+
+/* exempt: the control that matters second most, so it is a real button */
+.ac-ex {
+  flex: none; width: 15px; height: 15px; padding: 0; line-height: 1;
+  font-family: var(--font-mono); font-size: 10px;
+  background: transparent; color: var(--ink-3);
+  border: 1px solid var(--rule-2); cursor: pointer;
+}
+.ac-ex:hover { color: var(--ink); border-color: var(--ink-3); }
+.ac-ex.is-on { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+
+.ac-sel {
+  width: 100%; font-family: var(--font-mono); font-size: 11px;
+  background: var(--bg-2); color: var(--ink); border: 1px solid var(--rule-2);
+  padding: 1px 4px; cursor: pointer;
+}
+.ac-sel:focus-visible { outline: 1px solid var(--ink-3); outline-offset: 1px; }
+
+/* the missing-data control. Four options, each with what it does to the money */
+.ac-treat { display: flex; flex-direction: column; gap: 2px; }
+.ac-opt {
+  display: grid; grid-template-columns: 1fr auto; align-items: baseline;
+  gap: 6px; text-align: left; width: 100%;
+  background: transparent; border: 1px solid var(--rule);
+  border-left: 2px solid var(--rule-2);
+  padding: 1px 6px; cursor: pointer; color: var(--ink-2);
+  font-family: var(--font-sans); font-size: 11.5px; line-height: 1.3;
+}
+.ac-opt:hover { border-color: var(--rule-2); color: var(--ink); }
+.ac-opt.is-on { border-left-color: var(--accent); background: var(--bg-2); color: var(--ink); }
+.ac-opt .o-w {
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.ac-opt.is-on .o-w { color: var(--accent); }
+.ac-opt .o-d { grid-column: 1 / -1; font-size: 10.5px; color: var(--ink-3); }
+
+.ac-hint { font-size: 10px; color: var(--ink-3); line-height: 1.35; margin-top: 3px; }
+.ac-rule { border-top: 1px solid var(--rule); margin: 5px 0 4px 0; }
+/* the mini header that names the 11 sector rows, chip and all */
+.ac-sub {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ink-3); margin: 2px 0 1px 0; white-space: nowrap;
+}
+
+/* ---------- centre: the treemap ---------- */
+.tm-wrap { flex: 1 1 auto; min-height: 0; position: relative; background: var(--bg-sunk); }
+.tm-wrap svg { position: absolute; inset: 0; }
+.tm-tile { cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  /* 400ms: long enough to follow a tile from one sector block to another,
+     short enough that a scenario change still feels like a switch. */
+  .tm-tile { transition: transform 400ms cubic-bezier(.4,0,.2,1); }
+  .tm-tile rect, .tm-tile image {
+    transition: width 400ms cubic-bezier(.4,0,.2,1),
+                height 400ms cubic-bezier(.4,0,.2,1),
+                x 400ms cubic-bezier(.4,0,.2,1),
+                y 400ms cubic-bezier(.4,0,.2,1),
+                fill 260ms linear;
+  }
+}
+.tm-sec-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; fill: var(--ink);
+  paint-order: stroke; stroke: var(--bg-sunk); stroke-width: 3px;
+  stroke-linejoin: round; pointer-events: none;
+}
+.tm-badge {
+  font-family: var(--font-mono); font-size: 9px; fill: var(--ink);
+  paint-order: stroke; stroke: rgba(8,9,12,0.8); stroke-width: 2.5px;
+  stroke-linejoin: round; pointer-events: none;
+}
+.tm-hi { fill: none; stroke: var(--ink); stroke-width: 1.5; pointer-events: none; }
+.tm-foot {
+  flex: none; display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-top: 6px; font-size: 10.5px; color: var(--ink-3);
+}
+/* nowrap is load-bearing, not tidiness: the treemap svg is inset:0 inside a
+   flex item, so a second line of legend shortens the map and cuts its last
+   row of tiles. Worst case the key ellipses, the map never loses height. */
+.tm-ramp { display: flex; align-items: center; gap: 5px; white-space: nowrap; flex: none; }
+.tm-ramp-bar { width: 92px; height: 8px; flex: none; }
+.tm-key { display: flex; align-items: center; gap: 4px; white-space: nowrap;
+  min-width: 0; overflow: hidden; }
+.tm-key span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.tm-key .sw { width: 9px; height: 9px; flex: none; }
+.tm-key .sw-un { border: 1px solid var(--muted-ink); background: transparent; }
+
+.al-toggle { display: flex; border: 1px solid var(--rule-2); }
+.al-toggle button {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 2px 7px; cursor: pointer;
+  background: transparent; border: 0; color: var(--ink-3);
+}
+.al-toggle button + button { border-left: 1px solid var(--rule-2); }
+.al-toggle button.is-on { background: var(--bg-2); color: var(--ink); }
+
+/* the pinned company card, over the treemap, the site's card pattern at
+   one-screen size */
+.tm-card {
+  position: absolute; left: 8px; bottom: 8px; width: 208px; z-index: 4;
+  background: var(--bg-1); border: 1px solid var(--accent); padding: 7px 9px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+}
+.tm-card[hidden] { display: none; }
+.tm-card .card-tick { font-size: 15px; }
+.tm-card .card-name { font-size: 10.5px; }
+.tm-card .card-meta { margin-top: 4px; gap: 6px; }
+.tm-card .card-sector { font-size: 10.5px; }
+.tm-card .chip { font-size: 9.5px; padding: 1px 4px; }
+.tm-card .card-rows { margin-top: 5px; padding-top: 4px; }
+.tm-card .card-row { font-size: 10.5px; padding: 1px 0; }
+.tm-card .card-row .v { font-size: 10.5px; }
+.tm-card .card-row .v small { font-size: 9.5px; }
+.tm-card-x {
+  position: absolute; top: 4px; right: 5px; background: transparent; border: 0;
+  color: var(--ink-3); font-family: var(--font-mono); font-size: 13px;
+  cursor: pointer; line-height: 1; padding: 2px;
+}
+.tm-card-x:hover { color: var(--accent); }
+
+/* ---------- right: the advice ---------- */
+.av-fig { display: flex; align-items: flex-end; gap: 10px; }
+.av-fig .f {
+  font-family: var(--font-mono); font-size: 30px; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1; color: var(--ink);
+}
+.av-fig .f small { font-size: 14px; color: var(--ink-2); letter-spacing: 0; }
+.av-fig .s { font-size: 10.5px; color: var(--ink-3); line-height: 1.3; padding-bottom: 2px; }
+
+.av-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.av-cell { border-top: 2px solid var(--rule-2); padding-top: 4px; }
+.av-cell.is-book { border-top-color: var(--accent); }
+.av-cell .k {
+  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+}
+.av-cell .v {
+  font-family: var(--font-mono); font-size: 19px; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+.av-cell .u { font-size: 10.5px; color: var(--ink-3); }
+
+/* the price-invariance line. It is not a status message, it is the finding. */
+.av-inv {
+  border: 1px solid var(--rule-2); border-left-width: 2px;
+  padding: 5px 7px; font-size: 11px; line-height: 1.35; color: var(--ink-2);
+  /* The "unchanged" verdict is one line longer than the "moved" one, so without
+     a floor the whole column shifts every time a control is touched. Held at
+     the tallest state instead: the reader's eye stays where it was. */
+  min-height: 88px;
+}
+.av-inv.is-still { border-left-color: var(--tier-measured); }
+.av-inv.is-moved { border-left-color: var(--accent); }
+.av-inv b { font-family: var(--font-mono); font-weight: 600; color: var(--ink); }
+.av-inv .verdict { display: block; font-weight: 600; color: var(--ink); }
+.av-inv.is-still .verdict { color: var(--tier-measured); }
+.av-inv.is-moved .verdict { color: var(--accent); }
+
+.av-sub {
+  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 3px;
+}
+.av-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.av-line {
+  display: flex; justify-content: space-between; gap: 4px;
+  font-family: var(--font-mono); font-size: 11px; line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.av-line .t { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; }
+.av-line .m { flex: none; }
+.av-line.up .m { color: var(--cool); }
+.av-line.dn .m { color: var(--accent); }
+
+.av-split { display: flex; justify-content: space-between; font-size: 11px; margin-top: 3px; }
+.av-split span { color: var(--ink-2); }
+.av-split b { font-family: var(--font-mono); font-weight: 600; color: var(--ink); }
+
+.al-spacer { flex: 1 1 auto; min-height: 0; }
+.al-foot {
+  flex: none; margin-top: 6px; font-size: 10px; color: var(--ink-3);
+  line-height: 1.35; display: flex; gap: 14px;
+}
+.al-foot span { flex: 1 1 0; }
+.al-foot b { color: var(--ink-2); font-weight: 600; }
+
+/* the site's .kv, at one-screen size */
+#allocate .kv { gap: 2px 8px; }
+#allocate .kv-k, #allocate .kv-v { font-size: 10.5px; }
+
+/* The shared tooltip singleton lives on <body>, so it cannot be reached by an
+   #allocate rule. This class rides inside it instead and only ever applies to
+   a tooltip this section wrote: 500 tiles want a small tooltip, and the other
+   sections' charts do not. */
+.tm-tip { font-size: 11.5px; line-height: 1.4; min-width: 186px; }
+.tm-tip .tip-t { font-size: 12.5px; }
