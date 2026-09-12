@@ -16,19 +16,19 @@
   /* the three selectable books, in the order they get harder */
   var BOOKS = [
     {
-      key: 'naive_exclusion', num: '01', name: 'Naive exclusion',
+      key: 'naive_exclusion', name: 'Naive exclusion',
       wf: 'w_naive',
       sub: 'Drop the fossil producers and the high carbon power. Renormalise. Nothing else.'
     },
     {
-      key: 'pab_compliant', num: '02', name: 'PAB compliant',
+      key: 'pab_compliant', name: 'Paris-aligned',
       wf: 'w_pab',
       sub: 'Every Article 12 exclusion, the 5% position cap, the Article 3 sector floor.'
     },
     {
-      key: 'transition_leader', num: '03', name: 'Transition leader',
+      key: 'transition_leader', name: 'Transition leader',
       wf: 'w_lead',
-      sub: 'The PAB book, tilted toward companies whose filed emissions are actually falling.'
+      sub: 'The Paris-aligned book, tilted toward companies whose filed emissions are falling.'
     }
   ];
 
@@ -43,7 +43,7 @@
     { kind: 'step', key: 'improvement', t1: 'Improvement', t2: 'what companies did' },
     { kind: 'step', key: 'reallocation', t1: 'Reallocation', t2: 'what the manager did' },
     { kind: 'step', key: 'selection', t1: 'Selection', t2: 'picks inside a sector' },
-    { kind: 'step', key: 'interaction', t1: 'Interaction', t2: 'the cross term' },
+    { kind: 'step', key: 'interaction', t1: 'Interaction', t2: 'weight off the improvers' },
     { kind: 'anchor', key: 'waci', t1: 'The book 2023', t2: 'what $1bn finances' }
   ];
 
@@ -62,9 +62,9 @@
   };
 
   var BASIS_SHORT = {
-    measured_mandatory: 'EPA filed',
-    ghgrp_threshold_bound: 'sub-threshold',
-    sector_median_imputed: 'sector median'
+    measured_mandatory: 'EPA filing',
+    ghgrp_threshold_bound: 'below the limit',
+    sector_median_imputed: 'our estimate'
   };
 
   var REDUCED = window.matchMedia &&
@@ -81,9 +81,36 @@
     D = data.portfolio;
     P = D.portfolios;
     injectCss();
+    registerDrawer();
     build();
     select('pab_compliant', true);
   });
+
+  /* the regulation, the decomposition and the two acronyms, written once */
+  function registerDrawer() {
+    F.drawer.add('rulebook', 'The rulebook the fund is built from',
+      '<p>' + D.meta.regulation_title + '</p>' +
+      '<p class="mono">EUR-Lex CELEX ' + D.meta.regulation + ', retrieved ' +
+      String(D.meta.regulation_retrieved).slice(0, 10) + '.</p>' +
+      '<p>' + D.meta.attribution + '.</p>' +
+      '<p>' + fmt.int(D.rules_used.length) + ' rules are encoded from the operative text, ' +
+      'each one with its article number. The article table quotes every one of them.</p>');
+
+    F.drawer.add('decomposition', 'How the carbon cut is split',
+      '<p>The waterfall is a Brinson decomposition, the standard way to split a change ' +
+      'into the part that came from picking names and the part that came from moving ' +
+      'weight between sectors. Four terms:</p>' +
+      '<dl><dt>Improvement</dt><dd>the same companies, cleaner. Measured at base-year ' +
+      'weights, so it is the same figure in every book.</dd>' +
+      '<dt>Reallocation</dt><dd>the same year, different companies. Money leaving one ' +
+      'sector for another.</dd>' +
+      '<dt>Selection</dt><dd>picks inside a sector.</dd>' +
+      '<dt>Interaction</dt><dd>the overlap between the two, which is positive here ' +
+      'because the book sold the companies that were improving fastest.</dd></dl>' +
+      '<p>Carbon intensity is Scope 1 tonnes divided by EVIC, enterprise value including ' +
+      'cash, which is what the regulation uses. A sector median is imputed at PCAF data ' +
+      'quality 5, the weakest grade there is.</p>');
+  }
 
   /* ================= state ================= */
 
@@ -150,19 +177,30 @@
 
   /* ================= build ================= */
 
+  /* The argument is three objects: the three books, the waterfall, and who kept
+     the improvement. Everything else is evidence for it and sits behind a bar
+     that names what is inside. Nothing was deleted, and every panel below is
+     still in the DOM, so the figures update whichever book is selected. */
   function build() {
     var host = document.getElementById('portfolio-body');
+    var x = D.exclusions;
     host.innerHTML = '';
     host.appendChild(mandate());
     host.appendChild(picker());
-    host.appendChild(bookPanel());
-    host.appendChild(articlePanel());
-    host.appendChild(holdingsPanel());
-    host.appendChild(exclusionPanel());
     host.appendChild(revealPanel());
     host.appendChild(evidenceRow());
-    host.appendChild(riskRow());
-    host.appendChild(notesPanel());
+    host.appendChild(F.details('The book in six figures', '<b id="pf-book-name2"></b>',
+      bookPanel()));
+    host.appendChild(F.details('Article by article', ARTICLES.length + ' tests',
+      articlePanel()));
+    host.appendChild(F.details('Largest holdings',
+      'top <b>12</b> of <span id="pf-hold-n"></span>', holdingsPanel()));
+    host.appendChild(F.details('What Article 12 takes out',
+      '<b>' + fmt.int(x.n_excluded) + '</b> names, <b>' + fmt.share(x.w_excluded, 2) +
+      '</b> of index weight', exclusionPanel()));
+    host.appendChild(F.details('Tracking error, and the cut under four missing-data rules',
+      '2 panels', riskRow()));
+    host.appendChild(F.details('What this is not', '<b>8</b> caveats', notesPanel()));
   }
 
   /* ---- the mandate strip ---- */
@@ -172,16 +210,17 @@
     var u = D.universe;
     return F.el('div', { class: 'pf-mandate' }, [
       F.el('div', { class: 'pf-aum' }, [
-        F.el('div', { class: 'pf-aum-fig mono', text: '$' + fmt.int(m.aum_usd) }),
-        F.el('div', { class: 'pf-aum-k', text: 'allocated across the S&P 500 on ' + m.latest_year + ' weights' })
+        F.el('div', { class: 'pf-aum-fig mono', text: '$1bn' }),
+        F.el('div', { class: 'pf-aum-k', text: 'allocated across the S&P 500 on ' +
+          m.latest_year + ' weights' })
       ]),
       F.el('div', { class: 'pf-mandate-kv' }, [
         kv('Share of index market cap', fmt.share(m.aum_share_of_index, 5)),
         kv('Index market cap', fmt.usd(u.market_cap_usd)),
         kv('Investable universe', fmt.int(u.n_companies) + ' names'),
-        kv('EUR-Lex CELEX', m.regulation),
         kv('Base year to latest', m.base_year + ' to ' + m.latest_year),
-        kv('Intensity', 'Scope 1 / EVIC')
+        kvHtml('Carbon intensity', 'tonnes per $m of ' + F.g('EVIC')),
+        kvHtml('The regulation', F.drawer.linkHTML('rulebook', 'EU 2020/1818'))
       ])
     ]);
   }
@@ -190,6 +229,13 @@
     return F.el('div', { class: 'pf-kv' }, [
       F.el('div', { class: 'pf-kv-k', text: k }),
       F.el('div', { class: 'pf-kv-v mono', text: v })
+    ]);
+  }
+
+  function kvHtml(k, v) {
+    return F.el('div', { class: 'pf-kv' }, [
+      F.el('div', { class: 'pf-kv-k', text: k }),
+      F.el('div', { class: 'pf-kv-v mono', html: v })
     ]);
   }
 
@@ -205,12 +251,11 @@
         onclick: function () { select(b.key); }
       }, [
         F.el('div', { class: 'pf-card-top' }, [
-          F.el('span', { class: 'pf-card-num mono', text: b.num }),
           F.el('span', { class: 'pf-card-name', text: b.name })
         ]),
         F.el('div', { class: 'pf-card-sub', text: b.sub }),
         F.el('div', { class: 'pf-card-figs' }, [
-          cardFig(fmt.share(p.cut_vs_universe, 1), 'intensity cut'),
+          cardFig(fmt.share(p.cut_vs_universe, 1), 'carbon cut'),
           cardFig(fmt.share(p.tracking_error.te, 2), 'tracking error'),
           cardFig(fmt.int(p.names), 'names')
         ]),
@@ -221,12 +266,13 @@
     var w = F.el('div', {}, [wrap, F.el('div', { class: 'pf-pick-note note' })]);
     /* the obvious question, answered before anyone has to ask it */
     var na = P.naive_exclusion, pa = P.pab_compliant;
-    w.lastChild.textContent =
+    w.lastChild.innerHTML =
       'A deeper cut is not a better book. Naive exclusion cuts ' + fmt.share(na.cut_vs_universe, 1) +
-      ' against the universe, more than the Paris-aligned book\'s ' + fmt.share(pa.cut_vs_universe, 1) +
+      ' against the whole index, more than the Paris-aligned book\'s ' + fmt.share(pa.cut_vs_universe, 1) +
       ', and still fails two articles: it keeps ' + fmt.int(na.art12_names_held) +
       ' of the ' + fmt.int(D.exclusions.n_excluded) + ' names Article 12 bars, and it drops its ' +
-      'high impact sector exposure to ' + fmt.share(na.art3_high_impact, 2) + ' when Article 3 requires ' +
+      'exposure to the ' + F.g('high impact sectors') + ' to ' +
+      fmt.share(na.art3_high_impact, 2) + ' when Article 3 requires ' +
       fmt.share(na.art3_universe, 2) + '. Compliance is a set of constraints, not a leaderboard.';
     return w;
   }
@@ -248,17 +294,19 @@
     if (!p.art12_pass) fails.push('12');
     return F.el('span', {
       class: 'pf-vchip ' + (fails.length ? 'is-fail' : 'is-pass'),
-      text: fails.length ? 'fails Art ' + fails.join(', ') : 'passes 3, 9, 11, 12'
+      text: fails.length
+        ? 'fails Article' + (fails.length > 1 ? 's ' : ' ') + fails.join(' and ')
+        : 'passes all four tests'
     });
   }
 
   /* ---- panel 1: the selected book in six figures ---- */
 
   var TILES = [
-    { id: 'waci', k: 'Weighted average carbon intensity',
-      u: function () { return 'tCO2e / $m EVIC'; },
+    { id: 'waci', k: 'Carbon intensity of the book',
+      u: function () { return 'tonnes per $m of company value'; },
       f: function (s) { return fmt.num(s.waci, 2); } },
-    { id: 'cut', k: 'Cut against the investable universe', cool: true,
+    { id: 'cut', k: 'Cut against the whole index', cool: true,
       u: function () {
         return 'Article 11 asks for ' +
           fmt.num(D.thresholds.pab_baseline_reduction.min_reduction_vs_universe_pct, 0) + '%';
@@ -270,8 +318,8 @@
     { id: 'wexcl', k: 'Index weight not held',
       u: function () { return 'dropped or capped away'; },
       f: function (s) { return fmt.share(s.wExcl, 2); } },
-    { id: 'te', k: 'Realised tracking error',
-      u: function () { return '5th to 95th percentile'; },
+    { id: 'te', k: 'Tracking error',
+      u: function () { return 'how far its returns drift from the index'; },
       f: function (s) { return fmt.share(s.te, 2); } },
     { id: 'fin', k: 'Tonnes financed by the $1bn',
       u: function () { return 'index finances ' + fmt.int(D.universe.financed_tonnes_per_bn); },
@@ -280,8 +328,7 @@
 
   function bookPanel() {
     var p = F.el('div', { class: 'panel' });
-    p.appendChild(panelHead('The book', 'Precomputed, then read back. Switching rebuilds every figure on this page.',
-      '<b id="pf-book-name"></b> / $1bn'));
+    p.appendChild(panelHead('', '', '<b id="pf-book-name"></b> / $1bn'));
     var row = F.el('div', { class: 'pf-tiles' });
     TILES.forEach(function (t) {
       row.appendChild(F.el('div', { class: 'pf-tile' + (t.cool ? ' is-cool' : '') }, [
@@ -309,35 +356,38 @@
   var ARTICLES = [
     {
       id: 'art3', rule: 'equity_allocation_constraint', label: 'Article 3',
-      test: 'Sector floor. Exposure to the high impact NACE sections must be at least the universe\'s.',
+      test: 'Sector floor. The book must hold at least as much of the high-emitting ' +
+        'industries as the index does.',
       req: function () { return 'at least ' + fmt.share(P[SEL].art3_universe, 2); },
       got: function (s) { return fmt.share(s.art3, 2); },
       pass: function (k) { return P[k].art3_pass; }
     },
     {
       id: 'art7', rule: 'decarbonisation_trajectory_equity', label: 'Article 7',
-      test: 'Decarbonisation trajectory. At least 7% intensity reduction a year, geometrically, from the base year.',
+      test: 'Falling every year. At least 7% off the carbon intensity a year, compounding, ' +
+        'from the base year.',
       req: function () { return fmt.num(D.thresholds.decarbonisation_trajectory_equity.min_annual_reduction_pct, 1) + '%/yr'; },
-      got: function () { return 'by construction'; },
+      got: function () { return 'we do not claim this one'; },
       pass: function () { return null; }
     },
     {
       id: 'art9', rule: 'ctb_baseline_reduction', label: 'Article 9',
-      test: 'Climate Transition Benchmark baseline. At least 30% below the investable universe.',
+      test: 'The lower bar, the Climate Transition Benchmark. At least 30% below the whole index.',
       req: function () { return 'at least ' + fmt.num(D.thresholds.ctb_baseline_reduction.min_reduction_vs_universe_pct, 0) + '%'; },
       got: function (s) { return fmt.share(s.cut, 1); },
       pass: function (k) { return P[k].art9_pass; }
     },
     {
       id: 'art11', rule: 'pab_baseline_reduction', label: 'Article 11',
-      test: 'Paris-aligned baseline. At least 50% below the investable universe.',
+      test: 'The Paris bar. At least 50% below the whole index.',
       req: function () { return 'at least ' + fmt.num(D.thresholds.pab_baseline_reduction.min_reduction_vs_universe_pct, 0) + '%'; },
       got: function (s) { return fmt.share(s.cut, 1); },
       pass: function (k) { return P[k].art11_pass; }
     },
     {
       id: 'art12', rule: 'pab_exclusion_power_generation', label: 'Article 12',
-      test: 'Exclusions, tests (a) to (g). We built (g) ourselves from CAMD plant data, which is why it is quoted here.',
+      test: 'Exclusions, tests (a) to (g). We built (g) ourselves from the EPA\u2019s ' +
+        'stack monitors on power plants, which is why it is quoted here.',
       req: function () { return 'hold 0 of ' + fmt.int(D.exclusions.n_excluded); },
       got: function (s) { return fmt.num(s.art12, 0) + ' held'; },
       pass: function (k) { return P[k].art12_pass; }
@@ -346,8 +396,7 @@
 
   function articlePanel() {
     var p = F.el('div', { class: 'panel' });
-    p.appendChild(panelHead(
-      'Article by article',
+    p.appendChild(panelHead('',
       D.meta.regulation_title.split(' supplementing')[0] + '. Quoted from the operative text.',
       'EUR-Lex <b>' + D.meta.regulation + '</b>'));
 
@@ -391,13 +440,14 @@
 
   function holdingsPanel() {
     var p = F.el('div', { class: 'panel' });
-    p.appendChild(panelHead('Largest holdings', 'Weight against the index, and where each intensity came from.',
-      'top <b>12</b> of <span id="pf-hold-n"></span>'));
+    p.appendChild(panelHead('', 'Weight against the index, and where each intensity ' +
+      'came from. 100 bp is 1%.', 'top <b>12</b> of <span id="pf-hold-n2"></span>'));
     var t = F.el('table', { class: 'tbl pf-hold' });
     t.appendChild(colgroup([72, 196, 130, 88, 124, 92, 112, 130]));
     t.appendChild(F.el('thead', {}, F.el('tr', {}, [
       th('Ticker', 'left'), th('Company', 'left'), th('Sector', 'left'),
-      th('Intensity'), th('Basis', 'left'), th('Index wt'), th('Book wt'), th('Change')
+      th('Intensity'), th('Where it came from', 'left'), th('Index wt'), th('Book wt'),
+      th('Change (bp)')
     ])));
     t.appendChild(F.el('tbody', { id: 'pf-hold-body' }));
     p.appendChild(t);
@@ -410,9 +460,8 @@
   function exclusionPanel() {
     var p = F.el('div', { class: 'panel' });
     var x = D.exclusions;
-    p.appendChild(panelHead('What Article 12 takes out',
-      'Seven revenue and conduct tests. A name can fail more than one.',
-      '<b>' + fmt.int(x.n_excluded) + '</b> names / <b>' + fmt.share(x.w_excluded, 2) + '</b> of index weight'));
+    p.appendChild(panelHead('', 'Seven revenue and conduct tests. A name can fail more ' +
+      'than one.', ''));
 
     var grid = F.el('div', { class: 'pf-excl-grid' });
 
@@ -439,7 +488,9 @@
     });
     t.appendChild(tb);
     grid.appendChild(F.el('div', {}, [t,
-      F.el('div', { class: 'note u-mt4', text: D.meta.power_test_note }),
+      F.el('div', { class: 'note u-mt4', text:
+        D.meta.power_test_note.replace('revenue_exclusions.parquet',
+          'the revenue screen') }),
       F.el('div', { class: 'note', id: 'pf-power-note' })
     ]));
 
@@ -498,8 +549,8 @@
   function revealPanel() {
     var p = F.el('div', { class: 'panel pf-reveal' });
     p.appendChild(panelHead('Where the carbon cut actually comes from',
-      'A Brinson decomposition of the move from the ' + D.meta.base_year +
-      ' universe intensity to the book\'s ' + D.meta.latest_year + ' intensity.',
+      'We split the fall in carbon intensity into the part companies delivered and the ' +
+      'part the manager bought by changing who they own.',
       'base <b>' + D.meta.base_year + '</b> to <b>' + D.meta.latest_year + '</b>'));
 
     p.appendChild(F.el('div', { class: 'pf-verdict' }, [
@@ -519,9 +570,12 @@
       legendItem('var(--cool)', 'Improvement: the same companies, cleaner'),
       legendItem('var(--accent)', 'Reallocation: the same year, different companies'),
       legendItem('var(--muted)', 'Selection: picks inside a sector'),
-      legendItem('var(--accent-dim)', 'Interaction: weight moved off the improvers', 'var(--accent)')
+      legendItem('var(--accent-dim)', 'Interaction: weight moved off the companies that improved',
+        'var(--accent)')
     ]));
     p.appendChild(F.el('div', { class: 'pf-plot-note', id: 'pf-plot-note' }));
+    p.appendChild(F.el('div', { class: 'pf-plot-note', html:
+      F.drawer.linkHTML('decomposition', 'How the four terms are worked out') }));
 
     p.appendChild(F.el('div', { class: 'pf-reveal-say', id: 'pf-reveal-say' }));
     return p;
@@ -616,7 +670,10 @@
           lo = Math.min(run, run + dv);
           hi = Math.max(run, run + dv);
           label = fmt.signed(dv, 2);
-          sub = fmt.share(dv / st.total, 1) + ' of the cut';
+          /* the interaction term adds intensity back, so as a share of a cut it
+             is negative. Drawn as a positive bar, "-17.8% of the cut" reads as
+             an error. It is said as what it is instead. */
+          sub = fmt.share(Math.abs(dv / st.total), 1) + (dv > 0 ? ' back' : ' of the cut');
           run = run + dv;
         }
         var ytop = y(hi);
@@ -659,11 +716,11 @@
 
     var b = F.el('div', { class: 'panel' });
     b.appendChild(panelHead('Who kept the improvement',
-      'Improvement plus interaction: the organic cut measured at each book\'s own weights.',
+      'Improvement plus interaction: the cut companies delivered, measured at each book\'s own weights.',
       'of <span id="pf-avail" class="mono"></span> available'));
     var t = F.el('table', { class: 'tbl pf-keep' });
     t.appendChild(F.el('thead', {}, F.el('tr', {}, [
-      th('Book', 'left'), th('Kept'), th('Share of the organic cut')
+      th('Book', 'left'), th('Kept'), th('Share of what companies delivered')
     ])));
     t.appendChild(F.el('tbody', { id: 'pf-keep-body' }));
     b.appendChild(t);
@@ -679,7 +736,8 @@
 
     var a = F.el('div', { class: 'panel' });
     a.appendChild(panelHead('What the tracking error is made of',
-      'Bootstrap over weekly returns, 5th to 95th percentile.',
+      'How far each book drifts from the index. Bootstrap over weekly returns, ' +
+      '5th to 95th percentile.',
       '<b>' + fmt.int(P[CONTROL].tracking_error.filled_cells) + '</b> return cells filled'));
     a.appendChild(F.el('div', { class: 'pf-te', id: 'pf-te' }));
     a.appendChild(F.el('div', { class: 'note u-mt4', id: 'pf-te-note' }));
@@ -699,8 +757,8 @@
 
   function notesPanel() {
     var p = F.el('div', { class: 'panel' });
-    p.appendChild(panelHead('What this is not', 'The caveats the file carries with it.',
-      '<b>' + D.rules_used.length + '</b> rules read from the text'));
+    p.appendChild(panelHead('', '', '<b>' + D.rules_used.length +
+      '</b> rules read from the regulation'));
     var ul = F.el('ul', { class: 'note-list' });
 
     /* the file's own note ends with a rounded share of market cap that does not
@@ -721,18 +779,15 @@
         ', is out of the universe because we could not read a market cap for it.'
     }));
     p.appendChild(ul);
-    p.appendChild(F.el('div', { class: 'pf-attrib mono', text: D.meta.attribution +
-      '. Retrieved ' + String(D.meta.regulation_retrieved).slice(0, 10) + '.' }));
     return p;
   }
 
   function panelHead(title, sub, nHtml) {
-    return F.el('div', { class: 'panel-head' }, [
-      F.el('div', {}, [
-        F.el('div', { class: 'panel-title', text: title }),
-        F.el('div', { class: 'panel-sub', text: sub })
-      ]),
-      F.el('div', { class: 'panel-n', html: nHtml })
+    var left = F.el('div');
+    if (title) left.appendChild(F.el('div', { class: 'panel-title', text: title }));
+    if (sub) left.appendChild(F.el('div', { class: 'panel-sub', html: sub }));
+    return F.el('div', { class: 'panel-head' + (title ? '' : ' is-quiet') }, [
+      left, F.el('div', { class: 'panel-n', html: nHtml })
     ]);
   }
 
@@ -768,13 +823,15 @@
     });
 
     setHtml('pf-book-name', b.name);
+    setHtml('pf-book-name2', b.name);
     setText('pf-hold-n', fmt.int(p.names));
+    setText('pf-hold-n2', fmt.int(p.names));
 
     setText('pf-book-note',
       b.name + ' finances ' + fmt.int(p.financed_tonnes) + ' tonnes of Scope 1 a year for the $1bn, ' +
       'against ' + fmt.int(D.universe.financed_tonnes_per_bn) + ' for the index. It holds ' +
-      fmt.int(p.names) + ' names but its effective breadth is ' + fmt.num(p.effective_n, 0) +
-      ', because the position cap still leaves the five largest at ' +
+      fmt.int(p.names) + ' names but it behaves like ' + fmt.num(p.effective_n, 0) +
+      ' equal positions, because the position cap still leaves the five largest at ' +
       fmt.share(D.meta.position_limits.max_absolute, 0) + ' each. Active share ' +
       fmt.share(p.active_share, 1) + '.');
 
@@ -843,10 +900,11 @@
     var held = D.companies.filter(function (c) { return c[b.wf] > 0; });
     var nMeasured = held.filter(function (c) { return c.measured; }).length;
     var wMeasured = held.reduce(function (a, c) { return a + (c.measured ? c[b.wf] : 0); }, 0);
-    setText('pf-hold-note',
-      'Basis: EPA filed is a mandatory GHGRP tonnage, sub-threshold means the company sits under the ' +
-      '25 000 tonne reporting floor so its intensity is an upper bound, sector median is imputed at PCAF ' +
-      'data quality 5. This book holds ' + fmt.int(nMeasured) + ' of the ' + fmt.int(D.universe.n_measured) +
+    setHtml('pf-hold-note',
+      'An EPA filing is a mandatory tonnage. Below the limit means the company sits under the ' +
+      '25 000 tonne reporting floor, so its intensity is an upper bound. Our estimate is the ' +
+      'sector median, which is the weakest input there is, a ' + F.g('PCAF data quality 5') +
+      '. This book holds ' + fmt.int(nMeasured) + ' of the ' + fmt.int(D.universe.n_measured) +
       ' companies in the index whose emissions are measured at all, ' + fmt.share(wMeasured, 1) +
       ' of the money. It dropped ' + fmt.int(D.universe.n_measured - nMeasured) +
       ' of them. Everything else is imputed the same way inside the universe, so the ratio Article 11 ' +
@@ -978,7 +1036,8 @@
     var idx = P[CONTROL].decomposition.improvement_held;
     setText('pf-keep-note',
       'Improvement is measured at base-year weights, so it is the same ' + fmt.num(avail, 2) +
-      ' in every book. What separates them is improvement plus interaction: the organic cut still in the ' +
+      ' in every book. What separates them is improvement plus interaction: the cut companies ' +
+      'delivered that is still in the ' +
       'book once the money has moved. The index, holding everything, keeps ' + fmt.num(idx, 2) +
       ', slightly more than the base-weighted figure because the position cap happens to push weight ' +
       'toward names that improved. The Paris-aligned book keeps ' + fmt.num(pab, 2) + ', which is ' +
@@ -1032,9 +1091,9 @@
   /* --- the four missing data rules --- */
 
   var SCHEME_LABEL = {
-    imputed: 'Sector median imputed (headline)',
-    threshold: 'Bounded by the GHGRP threshold',
-    available_case: 'Measured names only, renormalised',
+    imputed: 'Sector median, which is what we publish',
+    threshold: 'Just under the reporting limit',
+    available_case: 'Measured companies only',
     zerofill: 'Non-disclosers scored zero'
   };
 
@@ -1088,7 +1147,7 @@
       'of the intensity cut in <b>' + b.name + '</b> is reallocation between sectors. ' +
       'The money moved. The factories did not. Improvement, which is the same companies ' +
       'emitting less than they did in ' + D.meta.base_year + ', is <b class="u-cool">' +
-      fmt.share(s.improvement / s.total, 1) + '</b> of it, and the cross term hands ' +
+      fmt.share(s.improvement / s.total, 1) + '</b> of it. The overlap between the two gives ' +
       fmt.share(Math.abs(s.interaction / s.total), 1) + ' of that straight back.');
 
     setText('pf-plot-note',
@@ -1110,11 +1169,11 @@
     }));
     el.appendChild(F.el('p', {
       class: 'u-mt4',
-      html: 'The cross term is positive because a Paris-aligned book sells the fastest ' +
+      html: 'Interaction is positive because a Paris-aligned book sells the fastest ' +
         'decarbonisers. The companies cutting hardest are utilities and heavy industry, which ' +
         'are exactly the names Article 12 and the intensity constraint throw out, so the ' +
-        'improvement they deliver leaves the book with them. Nothing here changes a single tonne. ' +
-        '<span class="mono">$' + fmt.int(D.meta.aum_usd) + '</span> is <span class="mono">' +
+        'improvement they deliver leaves the book with them. Nothing here changes a single ' +
+        'tonne. The <span class="mono">$1bn</span> is <span class="mono">' +
         fmt.share(D.meta.aum_share_of_index, 5) + '</span> of the index.'
     }));
   }
@@ -1159,7 +1218,6 @@
       '.pf-card:hover { background:var(--bg-2); }',
       '.pf-card.is-on { border-top-color:var(--accent); background:var(--bg-2); border-color:var(--rule-2); }',
       '.pf-card-top { display:flex; align-items:baseline; gap:var(--s2); }',
-      '.pf-card-num { font-size:13px; color:var(--ink-3); letter-spacing:0.1em; }',
       '.pf-card-name { font-size:var(--fs-h3); font-weight:600; }',
       '.pf-card.is-on .pf-card-name { color:var(--accent-2); }',
       '.pf-card-sub { font-size:var(--fs-sm); color:var(--ink-3); line-height:1.4; min-height:42px; }',

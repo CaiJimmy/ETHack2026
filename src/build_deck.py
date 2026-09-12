@@ -228,11 +228,23 @@ def furniture(slide, number: str):
 
 
 def source_line(slide, text: str, number: str, width=CW, x=MX, bottom=SRC_BOTTOM):
-    """The 8pt provenance line. It is the reason a judge can check us, so it is
-    set at the size the spec asks for and never shortened to make a slide tidy."""
-    h = block_height([Para(text, 8, "sans", False, INK3, 1.25)], width)
-    textbox(slide, x, bottom - h, width, h,
-            [Para(text, 8, "sans", False, INK3, 1.25)],
+    """The 8pt provenance line, and it has to be exactly one line.
+
+    A judge who notices primary sources is worth real points, so every slide
+    keeps one. A judge who sees a paragraph at the foot of a slide reads none of
+    it, so the rule is one line: name the regulation, the dataset or the file in
+    the repo, and let that document restate itself. The build fails if a line
+    wraps, which is the only way the rule survives an edit at 2am."""
+    para = Para(text, 8, "sans", False, INK3, 1.25)
+    lines = wrap(text, "sans", False, 8.0, width)
+    if len(lines) != 1:
+        raise SystemExit(
+            f"SOURCE LINE WRAPS on slide {number}: {len(lines)} lines, "
+            f"{width_pt(text, 'sans', False, 8.0):.0f}pt in {width * 72:.0f}pt. "
+            f"Cut it.\n  {text}"
+        )
+    h = block_height([para], width)
+    textbox(slide, x, bottom - h, width, h, [para],
             label=f"{number} source line", limit=None)
 
 
@@ -259,45 +271,33 @@ def notes(slide, paras: list[tuple[str, float, bool]]):
 
 
 # ---------------------------------------------------------------- sources
+# One line each, 8pt, and source_line() fails the build if one wraps. The job
+# of these is to let a judge go and check us, not to restate the method on the
+# slide: where a document in the repo already says it, the document is named
+# and the sentence is deleted.
 SRC1 = ("n=108 S&P 500 companies with a numeric target and 4+ years of filed Scope 1. "
-        "Trend: log-linear OLS with a perimeter-break rule. Holds on the flag-free subset "
-        "the site shows: 46 companies, 36 missing, 78.3%. Sources: EPA GHGRP, 40 CFR Part 98, "
-        "RY2010-2023; Net Zero Tracker; SBTi. Premise, not our result: Cohen, Rouen & Sachdeva, "
-        "Nature Climate Change, Jan 2026.")
+        "EPA GHGRP, 40 CFR Part 98, RY2010-2023; Net Zero Tracker; SBTi. Premise, not our "
+        "result: Cohen, Rouen and Sachdeva, Nature Climate Change 2026.")
 
-SRC2 = ("10,000 Monte Carlo draws varying normalisation, winsorisation, pillar inclusion, "
-        "imputation, aggregation, weights and the sector-relative toggle simultaneously "
-        "(OECD/JRC composite indicator handbook). Median band width 312.5 ranks. Sobol "
-        "first-order indices on the same design. Inputs: EPA GHGRP 40 CFR Part 98, EPA CAMD "
-        "Part 75, SEC XBRL. No vendor ESG score is an input to anything.")
+SRC2 = ("10,000 draws varying normalisation, trimming, pillar inclusion, missing data, "
+        "aggregation, weights and the sector lens at once (OECD/JRC handbook). Band: 5th to "
+        "95th percentile, median 312.5 ranks. EPA GHGRP, EPA CAMD, SEC XBRL.")
 
-SRC3 = ("site/data/penalty.json, recomputed in the browser for all 500 companies: price x deflator "
-        "-> coverage -> abatement at the observed rate -> cost -> dEBIT after sector pass-through "
-        "-> dEV at the company's own EV/EBITDA -> value at risk -> RANK -> weight. The chain is "
-        "linear in price and the tilt runs on the rank, so a uniform reprice provably cannot move "
-        "a weight: the zero is an identity, stated as one. Price DISPERSION across sectors does "
-        "move it. NGFS Phase 5 REMIND, Net Zero 2050, US, 2030, US$2010/t. Allocation sensitivity "
-        "at a fixed tilt: missing data 0.201, sector exemptions 0.051, Scope 3 coverage 0.007, "
-        "price level 0.000.")
+SRC3 = ("site/data/penalty.json, all 500 recomputed live: price -> cost -> earnings -> "
+        "company value -> rank -> weight. The tilt runs on rank, so a uniform reprice cannot "
+        "move a weight: the zero is an identity. NGFS Phase 5, Net Zero 2050, US 2030.")
 
 SRC4 = ("Commission Delegated Regulation (EU) 2020/1818, articles 6, 11 and 12, encoded as 24 "
-        "rules. Brinson-style decomposition of the change in portfolio carbon intensity. Article "
-        "12 exclusions alone put the book 63.1% below the universe against Article 11's 50% "
-        "requirement, so the bisection solver returned lambda = 0.")
+        "rules. Brinson decomposition of the intensity cut. Article 12 exclusions alone put the "
+        "book 63.1% below the index, so the solver returned no tilt.")
 
-SRC5 = ("Score lane: 139 of 500 carry a mandatory measured tonne, 361 do not (88 reported, 273 "
-        "unmeasurable) and are never imputed. Master table: 319 of 500 carry a Scope 1 from some "
-        "source, 181 carry none. Foreign exposure on the 25 companies with material foreign "
-        "assets, sized with Climate TRACE, a model, never an input: Chevron 9.1x, ExxonMobil 4.3x. "
-        "Entity resolution audited at 98% precision, Wilson 95% CI 89.5-99.6%, on a "
-        "tonnes-stratified random sample of 50. docs/coverage_and_validation.md, "
-        "docs/entity_resolution_audit.md.")
+SRC5 = ("139 of 500 carry a mandatory measured tonne. The other 361 are a declared category, "
+        "never a zero: 88 self-reported, 273 with no source. Matching audited at 98% precision. "
+        "docs/coverage_and_validation.md, docs/entity_resolution_audit.md.")
 
-SRCA = ("site/data/water.json. WRI Aqueduct 4.0 baseline annual water stress, July 2023 release, "
-        "CC BY 4.0, joined to EPA GHGRP facility coordinates: 11,200 of 11,358 facilities, 98.6%, "
-        "142 of 503 tickers scored. Aqueduct is a hydrological model and is labelled modelled "
-        "wherever it appears; it is never an input to a score or a weight. Spearman rho against "
-        "carbon intensity 0.058, p=0.51, n=135. docs/water_risk.md.")
+SRCA = ("site/data/water.json. WRI Aqueduct 4.0 annual water stress, July 2023, CC BY 4.0, joined "
+        "to EPA GHGRP facility coordinates: 11,200 of 11,358 facilities, 142 of 503 tickers. "
+        "A model, labelled as one, never an input. docs/water_risk.md.")
 
 
 # ---------------------------------------------------------------- slide 1
@@ -309,7 +309,11 @@ def slide_1(prs):
     # cropped away: the plot, the legend and the n, and nothing else.
     src = Image.open(os.path.join(IMG, "01_saydo_scatter_nolabels.png")).convert("RGB")
     buf = io.BytesIO()
-    src.crop((33, 345, 2127, 2031)).save(buf, format="PNG")
+    # Measured off the capture, not hardcoded: the panel's own title and lede are
+    # the top 345px and its source line is the last 21. The capture got 138px
+    # shorter when the site's chart footer lost a line, and a fixed bottom edge
+    # then ran past the image and padded the slide with a black band.
+    src.crop((33, 345, src.width - 33, src.height - 21)).save(buf, format="PNG")
     buf.seek(0)
 
     left_w = 5.00
@@ -331,9 +335,10 @@ def slide_1(prs):
     textbox(s, MX, y, left_w, sh, sub, label="01 figure sub")
     y += sh + 0.40
 
+    # "%/yr" is a unit nobody reads at ten feet. Same three numbers, said out.
     lines = [
-        Para("promised, median 5.92 %/yr cut", 18, "mono", False, INK2, 1.45),
-        Para("delivered, median 1.87 %/yr cut", 18, "mono", False, INK2, 1.45),
+        Para("promised, median   5.92% a year", 18, "mono", False, INK2, 1.45),
+        Para("delivered, median  1.87% a year", 18, "mono", False, INK2, 1.45),
         Para("33 of the 84 are emitting more", 18, "mono", False, ACCENT, 1.45),
     ]
     lh = block_height(lines, left_w)
@@ -374,7 +379,10 @@ def slide_2(prs):
 
     band_bottom = 1.95
 
-    head = [Para("There is no identified ranking. Ours included.", 36, "sans", True, INK, 1.16)]
+    # "identified" is an econometrics word, and a judge reads it as "we have not
+    # found one yet", which is the opposite of the claim. The spoken line keeps
+    # the term of art; the slide says it in one syllable.
+    head = [Para("There is no one ranking. Ours included.", 36, "sans", True, INK, 1.16)]
     head_w = 6.33
     hh = block_height(head, head_w)
     textbox(s, MX, band_bottom - hh, head_w, hh, head, label="02 headline")
@@ -384,7 +392,7 @@ def slide_2(prs):
     fh = block_height(fig, fig_w)
     textbox(s, fig_x, band_bottom - fh, fig_w, fh, fig, label="02 figure")
 
-    cap = [Para("ranks wide, 5th to 95th percentile, median company", 18, "sans", False, INK2, 1.30)]
+    cap = [Para("ranks wide, out of 500, for the median company", 18, "sans", False, INK2, 1.30)]
     cap_x = fig_x + 2.60
     cap_w = SLIDE_W - MX - cap_x
     ch = block_height(cap, cap_w)
@@ -392,11 +400,15 @@ def slide_2(prs):
 
     # Two panels. The wall is the argument, so it takes the left. Both are
     # flush to their own margin; the dark ground between them is the gutter.
-    chart_top, chart_h = 2.08, 4.12
+    # The variance panel is the relabelled capture from src/capture_sobol.py:
+    # the site's own bars and shares under words a judge can read. Its rows wrap
+    # to two lines, so it is wider than the one the site shows and the two
+    # pictures are sized off their measured aspects, not guessed.
+    chart_top, chart_h = 2.08, 4.00
     wall_w = chart_h * 1.526
     picture(s, os.path.join(IMG, "02a_rank_wall.png"), MX, chart_top, wall_w, chart_h, align="l")
-    sob_w = chart_h * 1.020
-    picture(s, os.path.join(IMG, "02b_sobol_bars.png"), SLIDE_W - MX - sob_w, chart_top,
+    sob_w = chart_h * 1.346
+    picture(s, os.path.join(IMG, "02b_sobol_bars_plain.png"), SLIDE_W - MX - sob_w, chart_top,
             sob_w, chart_h, align="r")
 
     wall_line = [Para("497 of 500 companies have a band wider than 100 ranks", 18, "mono",
@@ -419,6 +431,10 @@ def slide_2(prs):
         ("STAGE: pause after \"ours included\". That sentence is what separates us from the five "
          "pitches before ours, and it needs air.", 11, False),
         ("", 11, False),
+        ("WORDING: the slide reads \"There is no one ranking\" and you say \"no identified "
+         "ranking\". Same claim. A judge who hears the term of art gets it; a judge who only "
+         "reads the screen gets it too. If you prefer, say \"one\" and the two match exactly.", 11, False),
+        ("", 11, False),
         ("CLOCK: start the demo on 0:48, on the word \"live\".", 11, False),
         ("", 11, False),
         ("ON SCREEN, left: 500 companies, one band each, sorted by median rank, coloured by "
@@ -430,6 +446,10 @@ def slide_2(prs):
         ("IF ASKED why we still have weights: someone has to choose them, and the industry argues "
          "about weights while never mentioning imputation. On the 139 we can measure, weights rise "
          "to 12.7 percent and become the largest single factor. We publish that too.", 11, False),
+        ("", 11, False),
+        ("SAY IT IF THERE IS ROOM: no vendor ESG score is an input to anything in this deck. It "
+         "used to be the last sentence of the 8pt source line, where nobody read it. Inputs are "
+         "EPA GHGRP under 40 CFR Part 98, EPA CAMD Part 75 and SEC XBRL.", 11, False),
     ])
 
 
@@ -437,11 +457,23 @@ def slide_2(prs):
 def slide_3(prs):
     s = new_slide(prs, "03")
 
+    # One band of type across the top, then nothing but the recording. The
+    # footnote used to float under the video, which put two text objects on a
+    # slide whose whole job is to be a screen.
     strip = [Para("THE BONUS QUESTION: $1bn under a carbon price", 14, "mono",
                   False, INK2, 1.30, spc=90)]
-    textbox(s, MX, 0.14, 9.0, block_height(strip, 9.0), strip, label="03 strip")
+    textbox(s, MX, 0.16, 7.0, block_height(strip, 7.0), strip, label="03 strip")
 
-    vx, vy, vw, vh = 1.42, 0.46, 10.49, 5.90   # 16:9, the recording's own ground
+    # The most important caveat we own, and until now it was only inside a
+    # screenshot. It gets 9pt of its own on the deck, on the slide the whole
+    # model runs on.
+    foot = [Para("An exposure model, not a forecast. $1bn is 0.00144% of the index.",
+                 9, "sans", False, INK3, 1.30, align="r")]
+    fw = 4.60
+    textbox(s, SLIDE_W - MX - 1.35 - fw, 0.21, fw, block_height(foot, fw), foot,
+            label="03 foot note")
+
+    vx, vy, vw, vh = 1.19, 0.52, 10.95, 6.16   # 16:9, the recording's own ground
     # The GIF goes down first so it sits underneath the movie. If the movie
     # object does not survive the conference laptop, the animation is still on
     # the slide and still plays in slideshow.
@@ -452,25 +484,21 @@ def slide_3(prs):
                        poster_frame_image=os.path.join(DOCS, "demo_poster.png"),
                        mime_type="video/mp4")
 
-    extra = [Para("$1bn is 0.00144% of the index. The method does not depend on the size of "
-                  "the book.", 9, "sans", False, INK3, 1.30, align="r")]
-    eh = block_height(extra, 8.0)
-    textbox(s, SLIDE_W - MX - 8.0, 6.40, 8.0, eh, extra, label="03 extra line")
-
     source_line(s, SRC3, "03")
 
     notes(s, [
-        ("BEAT 3 - THE DEMO          [0:48 - 1:38]   50.08 s   44 words spoken, 30 s silent", 13, True),
+        ("BEAT 3 - THE DEMO          [0:48 - 1:38]   50.00 s   50 words spoken, 33 s silent", 13, True),
         ("Click the video to start it. Start it on the word \"live\".", 11, False),
         ("", 11, False),
-        ("SAY over the opening frames  [0:48 - 0:53]:", 12, True),
+        ("SAY over the opening frames  [0:48 - 0:51]:", 12, True),
         ("The bonus question, live. Watch the price. Then watch the weights.", 16, True),
         ("", 11, False),
-        ("[0:53 - 1:02]  SILENT. HANDS STILL. Nine seconds. The interface says it in its own "
-         "words: the price moves nothing, the missing-data switch moves the money. Do not talk "
-         "over it.", 12, True),
+        ("[0:51 - 1:08]  SILENT. HANDS STILL. Seventeen seconds, the longest silence in the "
+         "talk and the one that earns the rest of it. The interface says it in its own words: "
+         "the price moves nothing, the missing-data switch moves the money. Do not talk over it.",
+         12, True),
         ("", 11, False),
-        ("SAY over the say-do chart and the rank wall  [1:02 - 1:17]:", 12, True),
+        ("SAY over the last missing-data click and the tour  [1:08 - 1:22]:", 12, True),
         ("284 dollars a tonne to a thousand. Value at risk triples. Not one weight moves, because "
          "the allocation runs on rank. Switch how the 181 non-filers are treated and 123 million "
          "dollars moves.", 16, True),
@@ -479,32 +507,51 @@ def slide_3(prs):
          "panel says the same thing on screen, and it takes the deck's one killable claim off the "
          "table before a judge can raise it.", 11, False),
         ("", 11, False),
-        ("[1:17 - 1:38]  SILENT TO THE END. Twenty-one seconds of rank wall, weight audit and the "
-         "Paris-aligned waterfall with no voice on them. Everything from 1:17 has already been "
-         "said out loud. A demo that has to be explained is not a demo.", 12, True),
+        ("[1:22 - 1:38]  SILENT TO THE END. Sixteen seconds of the rank wall, the Paris-aligned "
+         "waterfall and the coverage tiers, with no voice on them. Everything from 1:22 has "
+         "already been said out loud. A demo that has to be explained is not a demo.",
+         12, True),
         ("", 11, False),
         ("IF THE VIDEO DOES NOT PLAY:", 12, True),
         ("1. The animation is on this slide underneath the movie. Send the movie object behind, or "
          "delete it, and the GIF plays in slideshow on its own. It is also in the repo at "
          "docs/demo.gif, and docs/demo.mp4 will open in any player full screen.", 11, False),
         ("2. The site is live. Go to section 01 Allocate. The two states are one drag and one "
-         "dropdown apart: drag every sector price to 1000, nothing moves; switch 181 WITH NO "
-         "TONNAGE to Abstain, the money moves.", 11, False),
+         "click apart: drag the carbon price to 1000 and nothing moves; click Leave them "
+         "unscored under the 181 and the money moves.", 11, False),
         ("3. Play the file on the venue machine before the session, with the deck open behind it. "
          "A demo that will not start costs more than any slide.", 11, False),
         ("", 11, False),
-        ("WHAT IS ON SCREEN, in order: 0:00 Allocate on Current Policies, every sector at 22. "
-         "The scenario goes to Net Zero 2050, 284 a tonne, then every sector price is dragged to "
-         "1000. The advice panel prints \"Weights unchanged\", largest weight change 0.00 bp, and "
-         "its own sentence: the allocation runs on the rank of value at risk, and a scalar cannot "
-         "reorder a ranking. Book at risk goes 1.47% to 4.41%, which is the tripling you say out "
-         "loud. Then the 181 control switches to Abstain: \"Weights moved\", largest weight change "
-         "30 bp, money on the 181 falls $141m to $121m, n priced falls 500 to 319. 0:14 say and "
-         "do. 0:24 rank intervals and the weight audit. 0:34 the Brinson waterfall. 0:47 the "
-         "three-stat band.", 11, False),
+        ("WHAT IS ON SCREEN, in order: 0:00 Allocate on Current Policies, 22 a tonne, under the "
+         "question and the line that answers it. 0:03 the scenario goes to Net Zero 2050, 284 a "
+         "tonne: the treemap lights up, share of value at risk goes 0.12% to 1.47%, and the "
+         "panel prints \"Weights unchanged\", value at risk x12.61, largest weight change 0.00 "
+         "bp. 0:07 the price is dragged to the floor and back to 284, the treemap goes dark and "
+         "lights again, and the holdings never move. 0:11 one step to 1000 and the panel prints "
+         "\"Weights unchanged\", value at risk x3.52, 0.00 bp, and its own sentence: the "
+         "allocation runs on the rank of value at risk, and a scalar cannot reorder a ranking. "
+         "Our book goes 1.47% to 5.20%, which is the tripling you say out loud. 0:16 the "
+         "missing-data rule, three clicks: Treat them as zero, $141m to $244m and \"Weights "
+         "moved\", 121 bp; Leave them unscored, $121m and priced falls 500 to 319; back to the "
+         "sector median, $141m. 0:26 the argument and the three headline numbers. 0:29 say and "
+         "do. 0:33 the rank wall. 0:38 the carbon-cut waterfall. 0:43 what we cannot see. 0:47 "
+         "back to the opening frame, so the file loops.", 11, False),
+        ("", 11, False),
+        ("IF ASKED WHY $1bn: because it is the number the bonus question names. It is 0.00144% "
+         "of the index, the book takes no price impact, and the method does not depend on the "
+         "size of the book: every figure on the advice panel is a weight or a share.", 11, False),
         ("", 11, False),
         ("SAY THE $123m PRECISELY: what the 181 get moves by 123 million. Never \"123 million of "
          "the billion moves\". One-way turnover at the extreme is $107m, a different number.", 11, False),
+        ("", 11, False),
+        ("THE NUMBERS BEHIND THE CLAIM, which came off the 8pt line so it could be one line. "
+         "Allocation sensitivity at a fixed tilt, over 3,000 runs: missing data 0.201, sector "
+         "exemptions 0.051, Scope 3 coverage 0.007, price level 0.000. Prices are NGFS Phase 5 "
+         "REMIND, Net Zero 2050, US, 2030, in US$2010 a tonne, deflated by 1.44. The full chain "
+         "is price x deflator -> coverage -> abatement at the observed rate -> cost -> change in "
+         "EBIT after sector pass-through -> change in EV at the company's own EV/EBITDA -> value "
+         "at risk -> rank -> weight. Price DISPERSION across sectors does move weights; a uniform "
+         "reprice cannot. slides/qa.md.", 11, False),
     ])
 
 
@@ -518,34 +565,44 @@ def slide_4(prs):
 
     top = 0.58 + hh + 0.30
     left_w = 4.25
+    chart_bottom = 6.30
 
-    y = top
+    # Centre the left column on the chart beside it. Top-aligning the figure
+    # with the panel head left a quarter of the slide empty under the words
+    # once the lambda line came off.
+    fig_h = block_height([Para("97.4%", 96, "mono", True, ACCENT, 1.10)], left_w)
+    cap_h = block_height([Para("of the carbon cut is money moving, not companies cutting",
+                               19, "sans", False, INK2, 1.30)], left_w)
+    l1_h = block_height([Para("Article 6 invites overweighting 19 companies cutting 7% a year. "
+                              "Article 12 bans 9 of them.", 18, "mono", False, INK, 1.40)], left_w)
+    left_h = fig_h + 0.06 + cap_h + 0.38 + l1_h
+
+    y = top + (chart_bottom - top - left_h) / 2
     fig = [Para("97.4%", 96, "mono", True, ACCENT, 1.10)]
     fh = block_height(fig, left_w)
     textbox(s, MX, y, left_w, fh, fig, label="04 figure")
     y += fh + 0.06
 
-    cap = [Para("of the carbon cut is reallocation", 19, "sans", False, INK2, 1.30)]
+    cap = [Para("of the carbon cut is money moving, not companies cutting",
+                19, "sans", False, INK2, 1.30)]
     ch = block_height(cap, left_w)
     textbox(s, MX, y, left_w, ch, cap, label="04 figure caption")
-    y += ch + 0.34
+    y += ch + 0.38
 
     # The one claim on this slide with no counter-example in it. It is what the
     # spoken script carries, so it is set at reading size, not as a footnote.
-    l1 = [Para("Article 6 invites overweighting 19 companies cutting 7%/yr. "
+    l1 = [Para("Article 6 invites overweighting 19 companies cutting 7% a year. "
                "Article 12 bans 9 of them.", 18, "mono", False, INK, 1.40)]
     l1h = block_height(l1, left_w)
     textbox(s, MX, y, left_w, l1h, l1, label="04 mono line 1")
-    y += l1h + 0.16
+    assert y + l1h < 6.40, f"slide 4 left column runs to {y + l1h:.2f}"
 
-    l2 = [Para("at lambda 120, an active share of 70.5%, still 82.3% reallocation",
-               16, "mono", False, INK3, 1.40)]
-    l2h = block_height(l2, left_w)
-    textbox(s, MX, y, left_w, l2h, l2, label="04 mono line 2")
-    assert y + l2h < 6.40, f"slide 4 left column runs to {y + l2h:.2f}"
+    # The second mono line used to read "at lambda 120, an active share of
+    # 70.5%, still 82.3% reallocation". Nobody in the room can read lambda 120.
+    # It is a robustness answer and it lives in slides/qa.md, where it is asked.
 
     picture(s, os.path.join(IMG, "04_pab_waterfall_plain.png"),
-            MX + left_w + 0.45, top, CW - left_w - 0.45, 6.30 - top, align="r")
+            MX + left_w + 0.45, top, CW - left_w - 0.45, chart_bottom - top, align="r")
 
     source_line(s, SRC4, "04")
 
@@ -560,6 +617,10 @@ def slide_4(prs):
         ("", 11, False),
         ("CUT LINE: if you are behind at 1:38, drop the bracketed pair. It costs 8 seconds and "
          "nothing else, and the slide still carries it in print.", 12, True),
+        ("", 11, False),
+        ("IF ASKED whether the 97.4% survives a harder tilt: at lambda 120 the active share is "
+         "70.5% and reallocation is still 82.3%. That line used to sit on the slide and nobody "
+         "could read it at ten feet. It is in slides/qa.md.", 11, False),
         ("", 11, False),
         ("DO NOT SAY that the cross term is positive because a PAB sells the fastest cutters. It "
          "is true of the decomposition and it is the one sentence on this slide a judge can turn "
@@ -586,59 +647,65 @@ def slide_4(prs):
 def slide_5(prs):
     s = new_slide(prs, "05")
 
-    band_bottom = 1.66
+    band_bottom = 1.78
 
-    head = [Para("What we cannot see, stated as a number.", 36, "sans", True, INK, 1.16)]
-    head_w = 5.55
+    # The old headline read "What we cannot see, stated as a number." The number
+    # is already set at 96pt beside it, so half that sentence described the
+    # layout. Four words, and they are the four the speaker says.
+    head = [Para("What we cannot see.", 36, "sans", True, INK, 1.16)]
+    head_w = 5.20
     hh = block_height(head, head_w)
     textbox(s, MX, band_bottom - hh, head_w, hh, head, label="05 headline")
 
     fig = [Para("361", 96, "mono", True, MUTED, 1.10)]
-    fig_x, fig_w = 6.85, 2.50
+    fig_x, fig_w = 5.95, 2.50
     fh = block_height(fig, fig_w)
     textbox(s, fig_x, band_bottom - fh, fig_w, fh, fig, label="05 figure")
 
-    cap = [Para("companies with no mandatory tonnage. We impute nothing for them",
-                19, "sans", False, INK2, 1.28)]
-    cap_x = fig_x + 2.62
+    cap = [Para("companies file no emissions figure the law requires. We never invent one, "
+                "and we never call it zero", 19, "sans", False, INK2, 1.28)]
+    cap_x = fig_x + 2.71   # "361" at 96pt mono is 2.41 in wide
     cap_w = SLIDE_W - MX - cap_x
     ch = block_height(cap, cap_w)
     textbox(s, cap_x, band_bottom - ch, cap_w, ch, cap, label="05 figure caption")
 
+    # Four rows, one per blind spot: the reporting floor, the border, the last
+    # year of data, and the index churn. A fifth row used to repeat 361 of 500
+    # under the 96pt 361, which is a slide restating itself.
     rows = [
-        ("25,000 t", "the EPA reporting floor. Below it, a facility files nothing"),
-        ("582.8 MMT", "held abroad by 25 companies, against 375.7 MMT we measure here"),
-        ("2023", "last GHGRP reporting year. RY2025 is due 30 Oct 2026"),
-        ("62 of 503", "left the index since Aug 2023. 37 of them still file with the SEC"),
-        ("361 of 500", "no mandatory tonnage. Never imputed, always tiered"),
+        ("25,000 t", "below this, a US facility files nothing"),
+        ("582.8", "million tonnes estimated abroad at 25 companies. We measure 375.7 here"),
+        ("2023", "the last year EPA data covers. The next filing lands Oct 2026"),
+        ("62 of 503", "left the index since Aug 2023. 37 still file with the SEC"),
     ]
-    num_w, gap = 3.42, 0.32
+    # The figures are right-aligned so the gutter is one width instead of four.
+    num_w, gap = 3.05, 0.34
     lab_x = MX + num_w + gap
     lab_w = SLIDE_W - MX - lab_x
-    y = 1.80
-    row_h = 0.66
+    y = 2.06
+    row_h = 0.76
     for fign, label in rows:
-        np_ = [Para(fign, 40, "mono", True, INK, 1.15)]
+        np_ = [Para(fign, 40, "mono", True, INK, 1.15, align="r")]
         nh = block_height(np_, num_w)
         textbox(s, MX, y, num_w, nh, np_, label=f"05 row figure {fign}")
-        lp = [Para(label, 19, "sans", False, INK2, 1.32)]
+        lp = [Para(label, 18, "sans", False, INK2, 1.32)]
         lh = block_height(lp, lab_w)
-        textbox(s, lab_x, y, lab_w, max(lh, nh), lp, anchor="bottom",
+        textbox(s, lab_x, y, lab_w, max(lh, nh), lp, anchor="mid",
                 label=f"05 row label {fign}")
         y += row_h
 
-    y += 0.12
-    rule(s, MX, y, CW)
     y += 0.22
+    rule(s, MX, y, CW)
+    y += 0.30
 
     close = [Para("median rank 344 if we can measure you, 224 if we cannot", 26, "sans",
                   True, INK, 1.24)]
     clh = block_height(close, CW)
     textbox(s, MX, y, CW, clh, close, label="05 closing line")
-    y += clh + 0.10
+    y += clh + 0.14
 
-    sub = [Para("being measurable is a penalty in our index. That is the inverse of the vendor "
-                "incentive, and it is what refusing to impute costs.", 18, "sans", False, INK2, 1.32)]
+    sub = [Para("Rank 1 is best, so being measurable makes you look worse. That is the "
+                "opposite of what vendors reward.", 18, "sans", False, INK2, 1.32)]
     sbh = block_height(sub, CW)
     textbox(s, MX, y, CW, sbh, sub, label="05 closing sub")
     assert y + sbh < 6.66, f"slide 5 runs to {y + sbh:.2f}"
@@ -669,6 +736,15 @@ def slide_5(prs):
         ("", 11, False),
         ("ROW 4 IS ABOUT THE INDEX, NOT ABOUT EXISTING. 62 of 503 left the index since Aug 2023 "
          "and 37 of them still file with the SEC. An overstated caveat is still a wrong number.", 11, False),
+        ("", 11, False),
+        ("THE AUDIT, IF PRESSED: 49 of 50 hand-checked matches correct, 98.0%, Wilson 95% "
+         "interval 89.5% to 99.6%, on a tonnes-stratified random sample drawn with a fixed seed "
+         "so a judge can redraw it. docs/entity_resolution_audit.md.", 11, False),
+        ("", 11, False),
+        ("ROW 2 IS AN ESTIMATE AND THE SLIDE SAYS SO. The 582.8 million tonnes abroad is sized "
+         "with Climate TRACE, which is a model. It is never an input to a score or a weight, and "
+         "it is on this slide only to size what we cannot see. The 375.7 beside it is measured. "
+         "Chevron 9.1x, ExxonMobil 4.3x. docs/coverage_and_validation.md.", 11, False),
     ])
 
 
@@ -686,25 +762,37 @@ def slide_a(prs):
     textbox(s, MX, 0.96, CW, hh, head, label="A headline")
 
     top = 0.96 + hh + 0.36
-    left_w = 5.30
+    left_w = 7.55
 
     body = [
-        Para("rho 0.058, p = 0.51, n = 135", 18, "mono", False, ACCENT, 1.40, space_after=8),
-        Para("Carbon explains 0.3% of the water ranking.", 18, "sans", False, INK2, 1.34,
-             space_after=18),
-        Para("Broadcom   7th percentile on carbon. Its one US reporting facility sits in an "
-             "Extremely High stress basin.", 18, "sans", False, INK, 1.34, space_after=12),
-        Para("Evergy   99th percentile on carbon, the most carbon-intense company we cover. "
-             "Zero of its 24 facilities sit in a High or Extremely High basin.",
-             18, "sans", False, INK, 1.34, space_after=18),
-        Para("Any score that reduces both to one number puts them in the same place. It is not "
-             "in the score, and it is held for questions.", 18, "sans", False, INK3, 1.34),
+        Para("Carbon explains 0.3% of the water ranking.", 20, "sans", False, INK, 1.34,
+             space_after=4),
+        Para("rank correlation 0.058, p = 0.51, n = 135", 16, "mono", False, ACCENT, 1.40,
+             space_after=22),
+        Para("Broadcom   7th percentile on carbon. Its one US facility sits in an Extremely "
+             "High stress basin.", 18, "sans", False, INK2, 1.34, space_after=14),
+        Para("Evergy   99th percentile on carbon, our most carbon-intense company. None of its "
+             "24 facilities sit in a stressed basin.", 18, "sans", False, INK2, 1.34,
+             space_after=22),
+        Para("One number would put them in the same place. So water is a separate axis in the "
+             "interface, and it is not in the score.", 18, "sans", False, INK3, 1.34),
     ]
     bh = block_height(body, left_w)
-    textbox(s, MX, top, left_w, bh, body, label="A body")
+    # The crop is taller than the words, so the words sit on its middle rather
+    # than leaving a quarter of the slide empty under them.
+    textbox(s, MX, top + (CONTENT_BOTTOM - top - bh) / 2, left_w, bh, body, label="A body")
 
-    picture(s, os.path.join(DOCS, "water_axis.png"), MX + left_w + 0.50, top,
-            CW - left_w - 0.50, bh, align="r")
+    # The full-page capture is a grey smear at slide size. Crop it to the one
+    # thing a questioner asked about: the treemap with its CARBON / WATER
+    # toggle and the high-stress ramp above it. The box is the bounding box of
+    # the middle column in the 1280x720 capture, measured, not guessed. It moved
+    # left and grew when the nav became a 48px rail.
+    shot = Image.open(os.path.join(DOCS, "water_axis.png")).convert("RGB")
+    buf = io.BytesIO()
+    shot.crop((343, 70, 971, 682)).save(buf, format="PNG")
+    buf.seek(0)
+    pic_w = CW - left_w - 0.50
+    picture(s, buf, SLIDE_W - MX - pic_w, top, pic_w, CONTENT_BOTTOM - top, align="r")
 
     source_line(s, SRCA, "A")
 
@@ -723,8 +811,12 @@ def slide_a(prs):
          "companies with 5 or more facilities, 25 have a water percentile and a carbon percentile "
          "more than 40 points apart.", 11, False),
         ("", 11, False),
-        ("The picture is the site's own allocate view with the treemap switched from CARBON to "
-         "WATER, which is the control a questioner can watch us move live.", 11, False),
+        ("The picture is the site's own treemap with the CARBON / WATER toggle set to WATER, "
+         "cropped out of the allocate view. It is the control a questioner can watch us move "
+         "live, at #allocate.", 11, False),
+        ("", 11, False),
+        ("THE JOIN: 11,200 of 11,358 EPA reporting facilities matched an Aqueduct basin by "
+         "point-in-polygon, 98.6%, giving 142 of 503 tickers a water score.", 11, False),
         ("", 11, False),
         ("Do companies that talk about water manage it better? No measurable difference: the 34 "
          "companies that name water most have 34.5 percent of facilities stressed, the quietest 34 "

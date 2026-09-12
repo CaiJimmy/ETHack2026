@@ -30,7 +30,8 @@
 
    SPACE   --s1 4 --s2 8 --s3 12 --s4 16 --s5 24 --s6 32 --s7 48 --s8 64
 
-   LAYOUT  fixed left nav (--nav-w) + .main. One <section class="section"> per
+   LAYOUT  fixed left nav: a --rail-w rail that opens to --nav-w over the page.
+           .main is always offset by the rail. One <section class="section"> per
            anchor, each opening with .sec-head. Content sits in .panel blocks.
 
    COMPONENTS  .panel .panel-head .panel-title .panel-n .stat .tbl .chip
@@ -87,6 +88,7 @@
   --s6: 32px; --s7: 48px; --s8: 64px;
 
   --nav-w: 206px;
+  --rail-w: 48px;
   --pad-x: 40px;
   --maxw:  1040px;
 }
@@ -114,44 +116,82 @@ a { color: inherit; text-decoration: none; }
   font-feature-settings: "tnum" 1;
 }
 
-/* ---------- nav ---------- */
+/* ---------- nav ----------
+   A 48px rail, closed. It is a chapter list for a page most people scroll once,
+   so it costs 48px of the 1280 recording frame instead of 206, and the 158px it
+   gives back goes to the control surface, the screen that needs it.
+
+   It opens on hover, on focus and on the control at its foot, and the pinned
+   state is remembered. Opening it never reflows the page: .main is offset by
+   the rail, not by the panel, so the open nav lies over the content.
+
+   The order in the markup is load-bearing. Everything that exists only in the
+   open state sits below the number list, so opening the rail cannot move a
+   number the reader is aiming at. */
 .nav {
-  position: fixed; inset: 0 auto 0 0; width: var(--nav-w);
+  position: fixed; inset: 0 auto 0 0; width: var(--rail-w);
   background: var(--bg-sunk);
   border-right: 1px solid var(--rule);
-  padding: var(--s5) 0 var(--s5) 0;
+  padding: var(--s5) 0 30px 0;
   display: flex; flex-direction: column;
-  z-index: 10;
+  z-index: 10; overflow: hidden;
 }
+/* the three ways it opens, and the only three */
+.nav.is-open, .nav:focus-within { width: var(--nav-w); }
+@media (hover: hover) { .nav:hover { width: var(--nav-w); } }
+
 .brand {
   font-family: var(--font-mono);
   font-size: 22px; letter-spacing: 0.22em; font-weight: 600;
-  padding: 0 var(--s5) var(--s2) var(--s5);
+  padding: 0 0 var(--s4) 20px; white-space: nowrap;
 }
 .brand-sub {
   font-size: 13px; color: var(--ink-3); line-height: 1.45;
-  padding: 0 var(--s5) var(--s6) var(--s5);
+  padding: var(--s4) var(--s5) 0 var(--s5);
 }
 .nav-list { list-style: none; margin: 0; padding: 0; }
 .nav-list a {
-  display: block; padding: 9px var(--s5) 9px 20px;
+  display: flex; align-items: baseline; gap: var(--s2);
+  padding: 9px var(--s5) 9px 18px; line-height: 22px;
   font-size: var(--fs-sm); color: var(--ink-3); white-space: nowrap;
   border-left: 2px solid transparent;
 }
 .nav-list a:hover { color: var(--ink-2); }
 .nav-list a.is-active { color: var(--ink); border-left-color: var(--accent); background: #0e1115; }
 .nav-list .nav-num {
-  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3);
-  margin-right: var(--s2);
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); flex: none;
 }
+.nav-list a.is-active .nav-num { color: var(--accent-2); }
+/* The label, the tagline and the build stamp are the open state. They keep
+   their open-width box in both, so appearing is the only thing they do. */
+.nav-t { opacity: 0; }
+.nav-tail { margin-top: auto; width: var(--nav-w); flex: none; opacity: 0; }
 .nav-foot {
-  margin-top: auto; padding: var(--s5) var(--s5) 0 var(--s5);
+  padding: var(--s5) var(--s5) 0 var(--s5); margin-top: var(--s4);
   font-size: 13px; color: var(--ink-3); line-height: 1.5;
   border-top: 1px solid var(--rule);
 }
+.nav.is-open .nav-t,    .nav:focus-within .nav-t,
+.nav.is-open .nav-tail, .nav:focus-within .nav-tail { opacity: 1; }
+@media (hover: hover) {
+  .nav:hover .nav-t, .nav:hover .nav-tail { opacity: 1; }
+}
+
+/* The control at the foot. It is the click half of the rail, and it is what
+   tells a reader there is more here than six numerals. */
+.nav-x {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 30px;
+  background: var(--bg-sunk); border: 0; border-top: 1px solid var(--rule);
+  color: var(--ink-3); font-family: var(--font-mono); font-size: 15px;
+  cursor: pointer; text-align: center; padding: 0; line-height: 30px;
+}
+.nav-x::before { content: "\00bb"; }
+.nav.is-open .nav-x::before { content: "\00ab"; }
+.nav-x:hover { color: var(--accent); background: var(--bg-1); }
+.nav-x:focus-visible { outline: 1px solid var(--ink-3); outline-offset: -3px; }
 
 /* ---------- layout ---------- */
-.main { margin-left: var(--nav-w); }
+.main { margin-left: var(--rail-w); }
 .section {
   padding: var(--s5) var(--pad-x) var(--s7) var(--pad-x);
   border-top: 1px solid var(--rule);
@@ -444,4 +484,120 @@ svg text { font-family: var(--font-mono); fill: var(--ink-3); font-size: var(--f
 
 @media (prefers-reduced-motion: no-preference) {
   .nav-list a, .card { transition: border-color 120ms linear, color 120ms linear; }
+  .nav, .nav-drawer { transition: width 150ms cubic-bezier(.4,0,.2,1); }
+  .nav-t, .nav-tail { transition: opacity 110ms linear; }
 }
+
+/* ---------- progressive disclosure ----------
+   One control for the whole site. Native <details>, so it needs no script, it
+   takes focus, it opens in print and it cannot break over file://. The summary
+   is a row, not a word: label on the left, what is inside it on the right. */
+.dd { border: 1px solid var(--rule); background: var(--bg-1); }
+.dd + .dd, .panel + .dd, .dd + .panel, .chart-wrap + .dd { margin-top: var(--s5); }
+.dd > summary {
+  display: flex; align-items: baseline; justify-content: space-between; gap: var(--s4);
+  padding: var(--s3) var(--s5); cursor: pointer; list-style: none;
+  border-left: 2px solid var(--rule-2);
+}
+.dd > summary::-webkit-details-marker { display: none; }
+.dd > summary:hover { background: var(--bg-2); }
+.dd > summary:focus-visible { outline: 1px solid var(--ink-3); outline-offset: -2px; }
+.dd .dd-t {
+  font-size: var(--fs-sm); font-weight: 600; color: var(--ink-2);
+  display: flex; align-items: baseline; gap: var(--s2);
+}
+.dd .dd-t::before {
+  content: "+"; font-family: var(--font-mono); color: var(--accent);
+  font-weight: 400; width: 10px; display: inline-block;
+}
+.dd[open] > summary { border-left-color: var(--accent); background: var(--bg-2); }
+.dd[open] .dd-t::before { content: "\2212"; }
+.dd[open] .dd-t { color: var(--ink); }
+.dd .dd-n {
+  font-family: var(--font-mono); font-size: 13px; color: var(--ink-3);
+  white-space: nowrap; text-align: right;
+}
+.dd .dd-n b { color: var(--ink-2); font-weight: 600; }
+.dd-body { padding: var(--s4) var(--s5) var(--s5) var(--s5); border-top: 1px solid var(--rule); }
+.dd-body > .panel { border: 0; background: none; padding: 0; }
+.dd-body > .panel + .panel { margin-top: var(--s5); }
+.dd-body > .pf-row2 > .panel { border: 0; background: none; padding: 0; }
+.dd-body > .note:first-child { margin-top: 0; }
+
+/* ---------- glossary ----------
+   The dotted underline is the discoverability. A definition nobody can see is
+   not disclosure, which is what the old variance chips proved. */
+.gl {
+  border-bottom: 1px dotted var(--ink-3); cursor: help; position: relative;
+  color: inherit;
+}
+.gl:hover, .gl:focus { border-bottom-color: var(--accent); outline: none; }
+.gl::after {
+  /* no box at all until it is asked for: an absolutely positioned tooltip that
+     is merely invisible still widens every ancestor's scroll width, which put a
+     4px horizontal scrollbar on the page. */
+  content: none;
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 60;
+  width: max-content; max-width: 300px;
+  background: var(--bg-2); border: 1px solid var(--rule-2);
+  padding: var(--s2) var(--s3); font-size: 13px; line-height: 1.4;
+  font-family: var(--font-sans); font-weight: 400; letter-spacing: 0;
+  text-transform: none; color: var(--ink);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.gl:hover::after, .gl:focus::after {
+  content: attr(data-gl); opacity: 1; visibility: visible;
+}
+
+/* ---------- the how-this-works drawer ---------- */
+.nav-drawer {
+  margin: var(--s5) 0 0 20px; padding: 5px 8px 5px 0;
+  /* closed it is the glyph and its box, so the rail does not show a button with
+     its right edge cut off */
+  width: 26px; overflow: hidden;
+  background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2);
+  font-family: var(--font-sans); font-size: 13px; cursor: pointer; text-align: left;
+  display: flex; align-items: baseline; gap: var(--s1); white-space: nowrap;
+}
+.nav.is-open .nav-drawer, .nav:focus-within .nav-drawer { width: calc(var(--nav-w) - 42px); }
+@media (hover: hover) { .nav:hover .nav-drawer { width: calc(var(--nav-w) - 42px); } }
+.nav-drawer .nd-i {
+  font-family: var(--font-mono); width: 18px; text-align: center; flex: none;
+}
+.nav-drawer:hover { border-color: var(--ink-3); color: var(--ink); }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 480px; max-width: 92vw;
+  z-index: 80; background: var(--bg-1); border-left: 1px solid var(--rule-2);
+  box-shadow: -12px 0 40px rgba(0,0,0,0.55);
+  display: flex; flex-direction: column;
+}
+.drawer[hidden] { display: none; }
+.dr-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--s4) var(--s5); border-bottom: 1px solid var(--rule);
+}
+.dr-title { font-size: var(--fs-h3); font-weight: 600; }
+.dr-x {
+  background: transparent; border: 0; color: var(--ink-3);
+  font-family: var(--font-mono); font-size: 22px; line-height: 1; cursor: pointer;
+}
+.dr-x:hover { color: var(--accent); }
+.dr-body { overflow-y: auto; padding: 0 var(--s5) var(--s6) var(--s5); }
+.dr-h {
+  font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0.02em;
+  color: var(--ink); margin: var(--s5) 0 var(--s2) 0;
+  padding-top: var(--s4); border-top: 1px solid var(--rule);
+}
+.dr-body > .dr-h:first-child { border-top: 0; padding-top: var(--s4); }
+.dr-sec, .dr-sec p { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.5; }
+.dr-sec .mono { font-size: 13px; }
+.dr-sec dl { margin: 0; }
+.dr-sec dt { font-weight: 600; color: var(--ink); margin-top: var(--s3); }
+.dr-sec dd { margin: 2px 0 0 0; color: var(--ink-3); }
+.dr-go {
+  background: transparent; border: 0; border-bottom: 1px dotted var(--ink-3);
+  color: var(--ink-2); font-family: inherit; font-size: inherit; padding: 0;
+  cursor: pointer;
+}
+.dr-go:hover { color: var(--accent); border-bottom-color: var(--accent); }

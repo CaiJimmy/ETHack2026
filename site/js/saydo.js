@@ -35,10 +35,28 @@
     var day = String(m.built).slice(0, 10);
     document.getElementById('hero-build').textContent = 'build ' + day;
     document.getElementById('nav-foot').innerHTML =
-      '<div class="mono">' + day + ' &middot; seed ' + m.seed + '</div>' +
+      '<div class="mono">' + day + '</div>' +
       '<div style="margin-top:6px">' + fmt.int(m.n_draws) + ' draws over ' +
       Object.keys(m.trigger_factors).length + ' modelling choices</div>' +
       '<div style="margin-top:6px">EPA GHGRP &middot; SEC XBRL &middot; NGFS &middot; EU 2020/1818</div>';
+
+    /* the file names, the seed and the build stamp: one place, once */
+    F.drawer.add('build', 'The build, and where the numbers live',
+      '<p class="mono">' + day + ' &middot; seed ' + m.seed + ' &middot; ' +
+      fmt.int(m.n_draws) + ' draws</p>' +
+      '<dl>' +
+      '<dt>scores.json</dt><dd>the rank intervals, the variance decomposition, ' +
+      'the coverage tiers. ' + fmt.int(m.n_draws) + ' draws over ' +
+      Object.keys(m.trigger_factors).length + ' modelling choices.</dd>' +
+      '<dt>say_do.json</dt><dd>the promise against the EPA-measured trend.</dd>' +
+      '<dt>portfolio.json</dt><dd>the three books, the article tests and the ' +
+      'decomposition of the carbon cut, built against EU 2020/1818.</dd>' +
+      '<dt>ear.json</dt><dd>the carbon price path and earnings at risk.</dd>' +
+      '<dt>bias.json</dt><dd>the disclosure regressions and the vendor comparison.</dd>' +
+      '<dt>penalty.json</dt><dd>everything the control surface on screen one ' +
+      'recomputes in the browser.</dd>' +
+      '</dl><p>Every figure on the site is read out of those files. Nothing is ' +
+      'typed into the markup, and the seed is fixed so the draws reproduce.</p>');
   }
 
   /* ---------------- hero ---------------- */
@@ -61,7 +79,7 @@
     set('stat-band-sub',
       fmt.int(h.n_wider_than_100) + ' of ' + meta.n_companies +
       ' companies span more than 100 ranks. The honest output is an interval, not a rank.');
-    set('stat-band-src', 'scores.json &middot; ' + fmt.int(meta.n_draws) + ' draws');
+    set('stat-band-src', '5th to 95th percentile over ' + fmt.int(meta.n_draws) + ' draws');
 
     set('stat-saydo', fmt.int(st.missing) +
       '<span class="of"> / ' + fmt.int(st.n_plotted) + '</span>');
@@ -70,22 +88,22 @@
       fmt.int(st.missing) + ' emit more than they said they would. Median promised cut ' +
       fmt.num(st.median_promised_cut_pct_yr, 2) + '%/yr, delivered ' +
       fmt.num(st.median_delivered_cut_pct_yr, 2) + '%/yr.');
-    set('stat-saydo-src', 'say_do.json &middot; EPA GHGRP against the company&rsquo;s own target');
+    set('stat-saydo-src', 'EPA-measured tonnes against the company&rsquo;s own target');
 
     set('stat-pab', fmt.share(reallocShare, 1));
     set('stat-pab-sub',
-      'A $' + fmt.compact(D.portfolio.meta.aum_usd, 0) + ' Paris-Aligned portfolio cuts financed ' +
-      'intensity ' + fmt.share(pab.cut_vs_universe, 1) + ' against the index. Selling high-intensity ' +
-      'sectors does ' + fmt.share(reallocShare, 1) + ' of that. Companies actually cutting emissions do ' +
-      fmt.share(improveShare, 1) + '.');
-    set('stat-pab-src', 'portfolio.json &middot; Brinson decomposition, EU 2020/1818');
+      'A $' + fmt.compact(D.portfolio.meta.aum_usd, 0) + ' Paris-aligned fund finances ' +
+      fmt.share(pab.cut_vs_universe, 1) + ' fewer tonnes per dollar than the index. Selling the ' +
+      'highest-emitting sectors does ' + fmt.share(reallocShare, 1) + ' of that. Companies actually cutting ' +
+      'emissions do ' + fmt.share(improveShare, 1) + '.');
+    set('stat-pab-src', 'built from EU 2020/1818, article by article');
 
     set('hero-data',
       '<b>' + D.say_do.meta.n_listings + ' listings, ' + meta.n_companies + ' companies.</b> ' +
-      fmt.int(cov.measured) + ' with EPA-measured Scope 1, ' +
+      fmt.int(cov.measured) + ' measured by the EPA, ' +
       fmt.int(cov.reported) + ' self-reported only, ' +
-      '<span class="u-muted">' + fmt.int(cov.unmeasurable) + ' with no mandatory tonnage</span>. ' +
-      'SEC XBRL financials throughout.');
+      '<span class="u-muted">' + fmt.int(cov.unmeasurable) +
+      ' with no mandatory number at all</span>. Financials from SEC filings throughout.');
   }
 
   function set(id, html) {
@@ -109,8 +127,7 @@
       ' companies emit more than they promised';
 
     document.getElementById('saydo-lede').textContent =
-      'Promised on the horizontal, EPA-measured on the vertical. ' +
-      'Above the line is ' + spec.above_line + '.';
+      'Promised on the horizontal, EPA-measured on the vertical.';
 
     drawChart(plotted, spec, D);
     showDefaultCard(D);
@@ -395,9 +412,8 @@
       item('var(--accent)', 'missing the promise (' + fmt.int(st.missing) + ')') +
       item('var(--cool)', 'beating it (' + fmt.int(st.beating) + ')');
     document.getElementById('saydo-sizekey').innerHTML =
-      'Point size: measured Scope 1 tonnes, log scale. ' +
-      'All ' + fmt.int(plotted.length) + ' plotted companies are coverage tier ' +
-      '<span class="u-cool">measured</span>. ' +
+      'Point size: ' + F.g('Scope 1') + ' tonnes, log scale. ' +
+      'All ' + fmt.int(plotted.length) + ' plotted are companies the EPA measures directly. ' +
       (offFrame.length
         ? '<span class="u-dim">' + offFrame.length + ' sit outside the frame (' +
           offFrame.map(function (c) { return c.t; }).join(', ') +
@@ -452,9 +468,8 @@
     var card = document.getElementById('saydo-card');
     card.innerHTML =
       '<div class="card-head">' +
-        '<div class="card-tick">ALL PLOTTED</div>' +
-        '<div class="card-name">Median of the companies carrying both a published target ' +
-          'and an EPA-measured emissions trend</div>' +
+        '<div class="card-tick">THE MEDIAN COMPANY</div>' +
+        '<div class="card-name">of the ' + fmt.int(st.n_plotted) + ' plotted here</div>' +
         '<div class="card-meta"><span class="chip chip--measured">measured</span>' +
           '<span class="card-sector">n = ' + fmt.int(st.n_plotted) + ' of ' +
           fmt.int(D.say_do.meta.n_listings) + ' listings</span></div>' +
@@ -467,10 +482,7 @@
         ' emit more than their own target implies.</div>' +
       '<div class="card-rows">' +
         row('Beating their target', fmt.int(st.beating)) +
-        row('Rising in absolute terms', fmt.int(st.rising_absolute)) +
-        row('Flag-free subset', fmt.int(st.n_plotted_clean) + ' cos, ' +
-            fmt.int(st.missing_clean) + ' missing') +
-        row('Median gap, flag-free', fmt.signed(st.median_gap_pct_yr_clean, 2) + ' <small>%/yr</small>') +
+        row('Emitting more than they used to', fmt.int(st.rising_absolute)) +
       '</div>' +
       '<div class="card-hint">Hover any point for the company. Click to pin it.</div>';
   }
@@ -509,7 +521,7 @@
             ' yrs ' + c.y0 + '&ndash;' + c.y1 + '</small>') +
         row('Scope 1', fmt.compact(c.tonnes, 1) + ' <small>tCO&#8322;e' +
             (ea && ea.emissions_year ? ' &middot; ' + ea.emissions_year : '') + '</small>') +
-        row('EaR at $300/t',
+        row('Carbon cost at $300 a tonne',
             ear300 === null || ear300 === undefined
               ? '<span class="u-muted">not measurable</span>'
               : fmt.num(ear300, 1) + '% <small>of op income</small>') +
@@ -596,11 +608,29 @@
     }).join('');
   }
 
+  /* The five caveats are the honesty and they stay verbatim. They sit one click
+     down, behind a bar that says how many there are, so the chart and the four
+     declared states get the screen. */
   function renderCaveats(D) {
-    var ul = document.getElementById('saydo-caveats');
-    ul.innerHTML = (D.say_do.meta.caveats || []).map(function (c) {
-      return '<li>' + c + '</li>';
-    }).join('');
+    var host = document.getElementById('saydo-caveat-slot');
+    if (!host) return;
+    var cav = D.say_do.meta.caveats || [];
+    host.innerHTML =
+      F.detailsHTML('What this chart cannot tell you', String(cav.length),
+        '<ul class="note-list" id="saydo-caveats">' +
+        cav.map(function (c) { return '<li>' + c + '</li>'; }).join('') + '</ul>') +
+      F.detailsHTML('How the trend is measured', '',
+        '<p class="note">Each company\u2019s delivered rate is a straight line fitted to the ' +
+        'Scope 1 tonnes it filed with the EPA, year by year. The promise is its own published ' +
+        'target, put on the same annual basis. A fit flag means the record moves under the ' +
+        'line: ' + Object.keys(FLAGS).map(function (k) { return FLAGS[k]; }).join(', ') + '.</p>' +
+        '<div class="kv u-mt4">' +
+        '<span class="kv-k">Cleanest subset, no fit flags</span><span class="kv-v">' +
+        fmt.int(st().n_plotted_clean) + ' companies, ' + fmt.int(st().missing_clean) +
+        ' of them missing their promise</span>' +
+        '<span class="kv-k">Median gap in that subset</span><span class="kv-v">' +
+        fmt.signed(st().median_gap_pct_yr_clean, 2) + ' %/yr</span></div>');
+    function st() { return D.say_do.stats; }
   }
 
 }());

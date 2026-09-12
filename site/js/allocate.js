@@ -1,4 +1,4 @@
-/* Section 01: the control surface.
+/* Allocate $1bn: the control surface.
 
    One screen that answers the bonus question. Set a carbon price assumption on
    the left, read the index in the middle, read the $1bn advice on the right.
@@ -47,12 +47,14 @@
     'Real Estate': 'Real Estate',
     'Utilities': 'Utilities'
   };
+  /* repo_sector_table is not offered: penalty.json says in its own preset_notes
+     that it has no empirical source, and we will not ship a control we would
+     not defend. */
   var PT_PRESETS = [
-    ['default_two_grounded', 'Two grounded, nine flat'],
-    ['repo_sector_table', 'Repo sector table'],
-    ['flat_0', 'Nobody passes it on'],
-    ['flat_50', 'Everybody passes half'],
-    ['flat_100', 'Everybody passes it all']
+    ['default_two_grounded', 'Measured where known, 50% elsewhere'],
+    ['flat_0', 'Companies absorb all of it'],
+    ['flat_50', 'Half passed on, everywhere'],
+    ['flat_100', 'All passed on, everywhere']
   ];
   /* Value at risk is coloured on a fixed domain, never on the current range,
      so that repricing visibly brightens the map while the layout holds still.
@@ -60,6 +62,15 @@
   var VAR_TOP = 35;
   var RAMP_CARBON = [[0, 41, 47, 57], [0.35, 114, 63, 48], [0.7, 197, 93, 53], [1, 255, 122, 69]];
   var RAMP_WATER = [[0, 35, 43, 51], [0.5, 47, 127, 146], [1, 79, 195, 217]];
+  /* The file's own labels are the law's words. These are the same four rules in
+     the words a reader can act on. The full rule and its bias stay on the
+     button as its title, and both are in the drawer. */
+  var TREAT_LABEL = {
+    sector_median: 'Charge their sector\u2019s median',
+    threshold_bound: 'Just under the reporting limit',
+    neutral_rank: 'Leave them unscored',
+    zerofill: 'Treat them as zero'
+  };
   var MUTED = '#5a6470';
   var MUTED_INK = '#8b95a2';
 
@@ -83,11 +94,75 @@
     if (WATER) WATER.companies.forEach(function (w) { waterBy[w.ticker] = w; });
 
     S = initialState();
+    registerDrawer();
     build();
     setColor('carbon');
     verify();
     recompute(true);
   });
+
+  /* The material five places on this page point at, written once. */
+  /* penalty.json states each rule in the model's own variable names. The rule
+     is what a reader of this drawer came for, so it is said in words here and
+     nothing is dropped: every quantity below is the same quantity. */
+  var RULE_PLAIN = {
+    sector_median:
+      'We charge the sector\u2019s median tonnes per $m of company value, taken over the ' +
+      'companies in that sector that do file, times this company\u2019s own value. Scope 2 the ' +
+      'same way. A sector with fewer than 5 filers falls back to the reporting-limit rule ' +
+      'below; on this data that is 0 sectors for Scope 1.',
+    threshold_bound:
+      'We charge every company that files nothing 25 000 tonnes of Scope 1, and nothing for ' +
+      'Scope 2.',
+    neutral_rank:
+      'No tonnage is invented. The carbon cost, the hit to profit and the hit to company ' +
+      'value are left blank, not set to zero.',
+    zerofill:
+      'We charge nothing at all. Scope 1, 2 and 3 are set to zero.'
+  };
+
+  function registerDrawer() {
+    var rules = '<dl>' + P.missing_treatments.options.map(function (o) {
+      return '<dt>' + (TREAT_LABEL[o.key] || o.label) + '</dt><dd>' +
+        (RULE_PLAIN[o.key] || o.rule) +
+        '<div class="u-dim" style="margin-top:6px">' + o.bias + '</div></dd>';
+    }).join('') + '</dl>';
+    FILED.drawer.add('missing', 'The four rules for a company we cannot measure',
+      '<p>181 of the 500 file no Scope 1 figure at all. Every rule below is a ' +
+      'different honest answer to that, and the money on those 181 moves by $' +
+      (P.missing_treatments.measured_effect.zerofill.dollars_unmeasurable -
+       P.missing_treatments.measured_effect.neutral_rank.dollars_unmeasurable).toFixed(0) +
+      'm between them. The US reporting rule (40 CFR Part 98) makes a facility report only ' +
+      'once it passes 25 000 tonnes a year, which is where the second rule gets its number.</p>' +
+      rules);
+
+    var keys = ['treatment', 'sectors_exempt', 'coverage_scope3', 'var_denominator',
+      'coverage_scope2', 'passthrough_level', 'price_level', 'horizon'];
+    var names = {
+      treatment: 'the missing-data rule', sectors_exempt: 'exempting a sector',
+      coverage_scope3: 'Scope 3 coverage', var_denominator: 'the value denominator',
+      coverage_scope2: 'Scope 2 coverage', passthrough_level: 'cost passed to customers',
+      price_level: 'the carbon price', horizon: 'the year'
+    };
+    FILED.drawer.add('controls', 'How much each control moves the $1bn',
+      '<p>Measured over 3000 runs at a fixed tilt strength, in ' +
+      '<span class="mono">src/penalty_model.py</span>. The figure is the share of the ' +
+      'variance in the 500 advised weights that the control explains on its own.</p>' +
+      '<dl>' + keys.map(function (k) {
+        return '<dt>' + names[k] + ' <span class="mono">' +
+          P.sensitivity.shares[k].allocation_fixed_lambda.toFixed(3) + '</span></dt>';
+      }).join('') + '</dl>' +
+      '<p>The price is the control everyone reaches for and it moves no money at all, ' +
+      'because the allocation runs on the rank of value at risk and a scalar cannot ' +
+      'reorder a ranking.</p>');
+
+    FILED.drawer.add('passthrough', 'Cost passed on to customers',
+      '<p>Pass-through is the share of a carbon bill a company pushes onto its ' +
+      'customers through prices, so it never reaches its own earnings. Two of the ' +
+      'eleven sectors have a published estimate we will stand behind: Utilities at ' +
+      '80% (Fabra and Reguant 2014), Materials at 70% (Ganapati, Shapiro and Walker ' +
+      '2020). The other nine have none, so all nine get one flat 50%.</p>');
+  }
 
   function fail(msg) {
     host.innerHTML = '';
@@ -434,27 +509,28 @@
     host.appendChild(buildFoot());
   }
 
-  function colShell(num, title, nHtml) {
+  function colShell(title, nHtml) {
     var col = FILED.el('div', { class: 'al-col' });
     var head = FILED.el('div', { class: 'al-col-head' }, [
-      FILED.el('div', { class: 'al-col-t', html: '<span class="n">' + num + '</span>' + title }),
+      FILED.el('div', { class: 'al-col-t', text: title }),
       FILED.el('div', { class: 'al-col-n', html: nHtml })
     ]);
     col.appendChild(head);
     return col;
   }
 
-  /* the share of allocation variance this control owns, at a fixed tilt
-     strength, measured over 3000 draws in src/penalty_model.py. Accent means
-     it moves the money, cool means it provably does not. */
+  /* The share of allocation variance a control owns, measured over 3000 draws
+     in src/penalty_model.py. It used to print as a bare decimal, which reads as
+     a price. It prints in words now, and only on the two controls the whole
+     contrast is about. The measured numbers are in the drawer. */
   function share(key) {
     var v = P.sensitivity.shares[key].allocation_fixed_lambda;
-    var cls = 'ac-share' + (v >= 0.05 ? ' is-big' : v < 0.001 ? ' is-nil' : '');
+    var big = v >= 0.05;
     return FILED.el('span', {
-      class: cls, text: v.toFixed(3) + ' of advice',
-      title: 'Share of the variance in the 500 advised weights that this ' +
-        'control explains on its own, over 3000 draws. 1.000 would mean it ' +
-        'decides the allocation by itself.'
+      class: 'ac-share' + (big ? ' is-big' : ' is-nil'),
+      text: big ? 'moves the money' : 'moves no money',
+      title: 'Measured over 3000 runs: on its own this control explains ' +
+        v.toFixed(3) + ' of the variance in the 500 advised weights.'
     });
   }
 
@@ -476,17 +552,46 @@
 
   /* ---------- left: the assumption ---------- */
 
-  /* The column reads in the order the sensitivity analysis ranks the controls,
-     most influential first, so the layout itself says which knob matters. Each
-     group carries its measured share of allocation variance at a fixed tilt
-     strength, from penalty.json sensitivity.shares. */
+  /* Three things are visible: the companies we cannot measure, the price, and
+     the scenario. Everything else is a modelling assumption and sits behind one
+     disclosure, because a judge will not drag eleven sliders in thirty seconds
+     and at rest all eleven read the same number. */
   function buildLeft() {
-    var col = colShell('01', 'The assumption', '');
+    var col = colShell('What you assume', '');
     dom.leftN = col.querySelector('.al-col-n');
-    var wrap = FILED.el('div');
+    var wrap = FILED.el('div', { class: 'ac-wrap' });
     col.appendChild(wrap);
 
-    /* the framing: which NGFS scenario, and in which year */
+    /* the control that moves money, first, because it does */
+    var box = FILED.el('div', { class: 'ac-treat' });
+    dom.treatBtn = {};
+    P.missing_treatments.options.forEach(function (o) {
+      var me = P.missing_treatments.measured_effect[o.key];
+      var b = FILED.el('button', {
+        class: 'ac-opt' + (o.key === S.treatment ? ' is-on' : ''), type: 'button',
+        title: o.rule + '\n\n' + o.bias,
+        onclick: function () { S.treatment = o.key; syncTreat(); recompute(); }
+      }, [
+        FILED.el('span', { text: TREAT_LABEL[o.key] || o.label }),
+        FILED.el('span', { class: 'o-w', text: '$' + me.dollars_unmeasurable.toFixed(0) + 'm' })
+      ]);
+      dom.treatBtn[o.key] = b;
+      box.appendChild(b);
+    });
+    var spread = P.missing_treatments.measured_effect.zerofill.dollars_unmeasurable -
+      P.missing_treatments.measured_effect.neutral_rank.dollars_unmeasurable;
+    wrap.appendChild(group('181 companies file no emissions figure. Pick a rule.', 'treatment', [
+      box,
+      FILED.el('div', { class: 'ac-hint', text:
+        'Each figure is what those 181 pay under that rule.' }),
+      FILED.el('div', { class: 'ac-spread', html:
+        '<b>$' + spread.toFixed(0) + 'm moves</b> between the cheapest and the dearest of ' +
+        'these four rules, on the same 500 companies.' })
+    ]));
+
+    wrap.appendChild(FILED.el('div', { class: 'ac-rule' }));
+
+    /* the price: a scenario, one slider, and the unit said once */
     var sel = FILED.el('select', { class: 'ac-sel', onchange: function () {
       S.scenario = this.value;
       if (S.scenario !== 'custom') applyScenario();
@@ -498,13 +603,32 @@
     sel.appendChild(FILED.el('option', { value: 'custom', text: 'Custom' }));
     sel.value = S.scenario;
     dom.scenario = sel;
-    wrap.appendChild(group('NGFS scenario', null, sel));
+
+    dom.allVal = FILED.el('span', { class: 'ac-val', text: fmtPrice(S.price[SECTORS[0]]) });
+    dom.allRange = slider(0, 1000, 1, S.price[SECTORS[0]], function () {
+      var v = +this.value;
+      SECTORS.forEach(function (s) { S.price[s] = v; });
+      S.scenario = 'custom'; dom.scenario.value = 'custom';
+      syncPrices();
+      recompute();
+    });
+    wrap.appendChild(group('Carbon price', 'price_level', [
+      sel,
+      FILED.el('div', { class: 'ac-row', style: { 'margin-top': '3px' } }, [
+        FILED.el('span', { class: 'ac-name', text: 'every sector' }),
+        dom.allRange, dom.allVal
+      ]),
+      FILED.el('div', { class: 'ac-hint', text: 'US dollars a tonne, 2010 money.' })
+    ]));
+
+    /* everything below is an assumption, not a finding */
+    var ass = FILED.el('div');
 
     dom.horizonVal = FILED.el('span', { class: 'ac-val', text: String(S.horizon) });
-    wrap.appendChild(group('Horizon', 'horizon', FILED.el('div', { class: 'ac-row ac-row--wide' }, [
-      FILED.el('span', { class: 'ac-name', text: 'price + abatement',
-        title: 'One year drives both: the NGFS price is read off the scenario ' +
-          'path at this year, and the observed abatement rate is compounded to it.' }),
+    ass.appendChild(group('Year', null, FILED.el('div', { class: 'ac-row ac-row--wide' }, [
+      FILED.el('span', { class: 'ac-name', text: 'price and abatement',
+        title: 'One year drives both: the scenario price is read off its path at ' +
+          'this year, and the observed abatement rate is compounded to it.' }),
       slider(2026, 2050, 1, S.horizon, function () {
         S.horizon = +this.value;
         dom.horizonVal.textContent = this.value;
@@ -514,54 +638,7 @@
       dom.horizonVal
     ])));
 
-    wrap.appendChild(FILED.el('div', { class: 'ac-rule' }));
-
-    /* the control that moves money */
-    var box = FILED.el('div', { class: 'ac-treat' });
-    dom.treatBtn = {};
-    P.missing_treatments.options.forEach(function (o) {
-      var me = P.missing_treatments.measured_effect[o.key];
-      var b = FILED.el('button', {
-        class: 'ac-opt' + (o.key === S.treatment ? ' is-on' : ''), type: 'button',
-        title: o.rule + '\n\n' + o.bias,
-        onclick: function () { S.treatment = o.key; syncTreat(); recompute(); }
-      }, [
-        FILED.el('span', { text: o.label }),
-        FILED.el('span', { class: 'o-w', text: '$' + me.dollars_unmeasurable.toFixed(0) + 'm' })
-      ]);
-      dom.treatBtn[o.key] = b;
-      box.appendChild(b);
-    });
-    var spread = P.missing_treatments.measured_effect.zerofill.dollars_unmeasurable -
-      P.missing_treatments.measured_effect.neutral_rank.dollars_unmeasurable;
-    wrap.appendChild(group('181 with no tonnage', 'treatment', [
-      box,
-      FILED.el('div', { class: 'ac-hint', text:
-        'Each figure is that option\'s money on the 181. Spread $' +
-        spread.toFixed(0) + 'm.' })
-    ]));
-
-    wrap.appendChild(FILED.el('div', { class: 'ac-rule' }));
-
-    /* the price. Level does nothing to the advice, exemption does. Both chips
-       sit on the control they belong to rather than in a footnote. */
-    dom.allVal = FILED.el('span', { class: 'ac-val', text: fmtPrice(S.price[SECTORS[0]]) });
-    dom.allRange = slider(0, 1000, 1, S.price[SECTORS[0]], function () {
-      var v = +this.value;
-      SECTORS.forEach(function (s) { S.price[s] = v; });
-      S.scenario = 'custom'; dom.scenario.value = 'custom';
-      syncPrices();
-      recompute();
-    });
-    var priceBody = [
-      FILED.el('div', { class: 'ac-row' }, [
-        FILED.el('span', { class: 'ac-name', text: 'every sector' }),
-        dom.allRange, dom.allVal
-      ]),
-      FILED.el('div', { class: 'ac-sub' }, [
-        FILED.el('span', { text: 'By sector, 0 exempts' }), share('sectors_exempt')
-      ])
-    ];
+    var perSec = FILED.el('div');
     dom.secRange = {}; dom.secVal = {}; dom.secEx = {};
     SECTORS.forEach(function (s) {
       var val = FILED.el('span', { class: 'ac-val', text: fmtPrice(S.price[s]) });
@@ -572,25 +649,24 @@
         recompute();
       });
       var ex = FILED.el('button', {
-        class: 'ac-ex', type: 'button', text: '0',
-        title: 'exempt ' + s + ' from the carbon price',
+        class: 'ac-ex', type: 'button', text: 'off',
+        title: 'charge ' + s + ' nothing',
         onclick: function () { S.exempt[s] = !S.exempt[s]; syncPrices(); recompute(); }
       });
       dom.secRange[s] = rng; dom.secVal[s] = val; dom.secEx[s] = ex;
-      priceBody.push(FILED.el('div', { class: 'ac-row' }, [
+      perSec.appendChild(FILED.el('div', { class: 'ac-row' }, [
         FILED.el('span', { class: 'ac-name', text: SHORT[s], title: s }), rng, val, ex
       ]));
     });
-    wrap.appendChild(group('Carbon price, $2010/t', 'price_level', priceBody));
+    ass.appendChild(group('Set a price per sector, or none at all', 'sectors_exempt', perSec));
 
-    wrap.appendChild(FILED.el('div', { class: 'ac-rule' }));
-
-    /* scope coverage */
     var cov = FILED.el('div');
-    [['s1', 'Scope 1'], ['s2', 'Scope 2'], ['s3', 'Scope 3']].forEach(function (k) {
+    [['s1', 'Scope 1', 'a company\u2019s own sites'],
+     ['s2', 'Scope 2', 'the power it buys'],
+     ['s3', 'Scope 3', 'its supply chain']].forEach(function (k) {
       var v = FILED.el('span', { class: 'ac-val', text: pct(S.cov[k[0]]) });
       cov.appendChild(FILED.el('div', { class: 'ac-row' }, [
-        FILED.el('span', { class: 'ac-name', text: k[1] }),
+        FILED.el('span', { class: 'ac-name', text: k[1], title: k[2] }),
         slider(0, 100, 1, S.cov[k[0]] * 100, function () {
           S.cov[k[0]] = +this.value / 100;
           v.textContent = pct(S.cov[k[0]]);
@@ -599,9 +675,12 @@
         v
       ]));
     });
-    wrap.appendChild(group('Scope coverage', 'coverage_scope3', cov));
+    ass.appendChild(group('How much of each scope we charge for', null, [
+      FILED.el('div', { class: 'ac-hint', text:
+        'own sites  \u00b7  bought power  \u00b7  supply chain' }),
+      cov
+    ]));
 
-    /* pass-through */
     var ps = FILED.el('select', { class: 'ac-sel', onchange: function () {
       S.ptPreset = this.value; recompute();
     } });
@@ -609,8 +688,10 @@
       ps.appendChild(FILED.el('option', { value: p[0], text: p[1] }));
     });
     ps.value = S.ptPreset;
-    wrap.appendChild(group('Pass-through', 'passthrough_level', ps));
+    ass.appendChild(group('Cost passed on to customers', null, ps));
 
+    wrap.appendChild(FILED.el('div', { class: 'al-spacer' }));
+    wrap.appendChild(FILED.details('Model assumptions', '4', ass, 'dd--tight'));
     return col;
   }
 
@@ -658,7 +739,7 @@
   /* ---------- centre: the index ---------- */
 
   function buildMid() {
-    var col = colShell('02', 'The index', 'n=<b>500</b>, sized by market cap');
+    var col = colShell('The index', 'n=<b>500</b>, sized by market cap');
     var tog = FILED.el('div', { class: 'al-toggle' }, [
       FILED.el('button', { class: 'is-on', type: 'button', text: 'Carbon',
         onclick: function () { setColor('carbon'); } }),
@@ -676,12 +757,15 @@
     col.appendChild(wrap);
     dom.tmWrap = wrap;
 
+    /* The two keys used to sit along the bottom edge at 10px, which made the
+       map decorative: colour meant nothing and the hatched cells meant nothing.
+       They ride at the top of the map now, at a size a judge can read. */
     dom.rampBar = FILED.el('div', { class: 'tm-ramp-bar' });
-    dom.rampK = FILED.el('span', { text: 'value at risk' });
+    dom.rampK = FILED.el('span', { html: FILED.g('value at risk') });
     dom.rampLo = FILED.el('span', { text: '0' });
     dom.rampHi = FILED.el('span', { text: '35%+' });
-    dom.keyText = FILED.el('span', { text: '181 with no measured tonnage' });
-    var foot = FILED.el('div', { class: 'tm-foot' }, [
+    dom.keyText = FILED.el('span', { text: '181 we cannot measure' });
+    var keys = FILED.el('div', { class: 'tm-keys' }, [
       FILED.el('div', { class: 'tm-ramp' }, [
         dom.rampK, dom.rampLo, dom.rampBar, dom.rampHi
       ]),
@@ -689,7 +773,12 @@
         FILED.el('span', { class: 'sw sw-un' }), dom.keyText
       ])
     ]);
-    col.appendChild(foot);
+    col.insertBefore(keys, col.querySelector('.tm-wrap'));
+
+    col.appendChild(FILED.el('div', { class: 'tm-foot' }, [
+      FILED.el('span', { html: '<b>An exposure model, not a forecast.</b> It prices ' +
+        'a carbon bill against filings that exist. It predicts nothing.' })
+    ]));
 
     dom.svg.addEventListener('mousemove', onHover);
     dom.svg.addEventListener('mouseleave', function () {
@@ -707,13 +796,13 @@
        absolutely positioned inside a flex item, so a wrapped legend steals
        height from the map and clips its bottom row of tiles. Water words are
        longer than carbon ones, so they are cut to fit rather than left to wrap. */
-    dom.rampK.textContent = mode === 'water'
-      ? 'high-stress sites' : 'value at risk';
+    if (mode === 'water') dom.rampK.textContent = 'high-stress sites';
+    else dom.rampK.innerHTML = FILED.g('value at risk');
     dom.rampLo.textContent = mode === 'water' ? 'none' : '0';
     dom.rampHi.textContent = mode === 'water' ? 'all' : '35%+';
     dom.keyText.textContent = mode === 'water'
       ? (500 - Object.keys(waterBy).length) + ' with no US facility'
-      : '181 with no measured tonnage';
+      : '181 we cannot measure';
     dom.rampBar.style.background = 'linear-gradient(90deg,' +
       (mode === 'water'
         ? ramp(RAMP_WATER, 0) + ',' + ramp(RAMP_WATER, 0.5) + ',' + ramp(RAMP_WATER, 1)
@@ -724,14 +813,16 @@
   /* ---------- right: the advice ---------- */
 
   function buildRight() {
-    var col = colShell('03', 'The advice', '$1bn, <b>daily</b> liquidity assumed');
+    var col = colShell('What you hold', '<b>$1bn</b>');
+    col.classList.add('al-col--advice');
     dom.avHeld = FILED.el('div', { class: 'av-fig' });
     col.appendChild(dom.avHeld);
 
     dom.avBook = FILED.el('div', { class: 'av-cell is-book' });
     dom.avIdx = FILED.el('div', { class: 'av-cell' });
-    col.appendChild(FILED.el('div', { class: 'av-pair', style: { 'margin-top': '6px' } },
-      [dom.avBook, dom.avIdx]));
+    col.appendChild(FILED.el('div', { class: 'av-sub', style: { 'margin-top': '7px' },
+      html: 'Share of ' + FILED.g('value at risk') }));
+    col.appendChild(FILED.el('div', { class: 'av-pair' }, [dom.avBook, dom.avIdx]));
 
     dom.avInv = FILED.el('div', { class: 'av-inv', style: { 'margin-top': '6px' } });
     col.appendChild(dom.avInv);
@@ -743,26 +834,28 @@
     dom.avUp = FILED.el('div');
     dom.avDn = FILED.el('div');
     lists.appendChild(FILED.el('div', null, [
-      FILED.el('div', { class: 'av-sub', text: 'Largest adds' }), dom.avUp]));
+      FILED.el('div', { class: 'av-sub', text: 'Largest adds, $m' }), dom.avUp]));
     lists.appendChild(FILED.el('div', null, [
-      FILED.el('div', { class: 'av-sub', text: 'Largest cuts' }), dom.avDn]));
+      FILED.el('div', { class: 'av-sub', text: 'Largest cuts, $m' }), dom.avDn]));
     col.appendChild(lists);
 
     dom.avDec = FILED.el('div', { style: { 'margin-top': '7px' } });
     col.appendChild(dom.avDec);
 
-    dom.avBook2 = FILED.el('div', { class: 'kv', style: { 'margin-top': '8px' } });
-    col.appendChild(dom.avBook2);
-
+    dom.avBook2 = FILED.el('div', { class: 'kv' });
     col.appendChild(FILED.el('div', { class: 'al-spacer' }));
+    col.appendChild(FILED.details('How this book is built', '3', dom.avBook2, 'dd--tight'));
     col.appendChild(FILED.el('div', { class: 'ac-hint', text:
-      'A tilt inside a rulebook, not an optimisation of returns. No expected ' +
-      'return, no covariance matrix, no alpha claim. $1bn is 0.00144% of the index.' }));
+      'We reweight inside a rulebook. We do not try to beat the market: no ' +
+      'expected return, no covariance matrix, no alpha claim. Daily liquidity ' +
+      'assumed. $1bn is 0.00144% of the index.' }));
     return col;
   }
 
+  /* The three caveats are verbatim, one click down, and the bar that holds them
+     names them. Nothing here was cut, only moved off a 720px screen. */
   function buildFoot() {
-    return FILED.el('div', { class: 'al-foot' }, [
+    var body = FILED.el('div', { class: 'al-foot-body' }, [
       FILED.el('span', { html: '<b>An exposure model, not a forecast.</b> No pass-through ' +
         'elasticity, no demand response, no free allocation, no competitor reaction.' }),
       FILED.el('span', { html: '<b>The units differ.</b> NGFS prices are US$2010 a tonne, SEC ' +
@@ -772,6 +865,8 @@
         ' companies ran an operating loss.</b> Their cost against earnings is null. ' +
         P.ebit_guard.n_over_100pct_of_ebit_at_default + ' more owe over 100% of it.' })
     ]);
+    return FILED.el('div', { class: 'al-foot' },
+      FILED.details('What this model is not', '3', body, 'dd--tight dd--up'));
   }
 
   /* ================= paint ================= */
@@ -963,7 +1058,7 @@
     var w = waterBy[c.t];
     var html = '<div class="tm-tip"><div class="tip-t">' + c.t + '  ' + esc(c.n) + '</div>' +
       '<div class="u-dim">' + SECTORS[c.sec] + '  ' + FILED.tier(c.tier).label + '</div>' +
-      row('Value at risk', o.r.have[i] ? FILED.fmt.num(o.r.varr[i], 2) + '% of EVIC' : 'not priced') +
+      row('Value at risk', o.r.have[i] ? FILED.fmt.num(o.r.varr[i], 2) + '% of company value' : 'not priced') +
       row('Index weight', FILED.fmt.num(c.w0 * 100, 3) + '%') +
       row('Advised', FILED.fmt.num(o.W[i] * 100, 3) + '%' +
         (c.ex ? ' <span class="u-accent">excluded</span>' : '')) +
@@ -1005,16 +1100,17 @@
       ]));
     }
     r('Scope 1', c.s1 === null ? 'none filed' : FILED.fmt.compact(c.s1, 1), c.s1 === null ? '' : 't');
-    r('Priced tonnes', o.r.have[i] ? FILED.fmt.compact(o.r.tonnes[i], 1) : 'not priced', 't');
+    r('Tonnes we charge for', o.r.have[i] ? FILED.fmt.compact(o.r.tonnes[i], 1) : 'not priced', 't');
     r('Carbon cost', o.r.have[i] ? '$' + FILED.fmt.num(o.r.cost[i], 0) : '—', 'm');
-    r('Hit to EV', o.r.have[i] ? '$' + FILED.fmt.num(o.r.dev[i], 0) : '—', 'm');
-    r('Value at risk', o.r.have[i] ? FILED.fmt.num(o.r.varr[i], 2) + '%' : '—', 'of EVIC');
+    r('Hit to company value', o.r.have[i] ? '$' + FILED.fmt.num(o.r.dev[i], 0) : '—', 'm');
+    r('Share of value at risk', o.r.have[i] ? FILED.fmt.num(o.r.varr[i], 2) + '%' : '—',
+      'of company value');
     r('Cost vs operating income',
       c.earflag === 'loss' ? 'null' : c.earflag === 'none' ? 'no filing'
         : o.r.have[i] && c.ebit > 0 ? FILED.fmt.num(100 * o.r.debit[i] / c.ebit, 1) + '%' : '—',
       c.earflag === 'loss' ? 'operating loss' : '');
     r('Index weight', FILED.fmt.num(c.w0 * 100, 3), '%');
-    r('Advised weight', c.ex ? 'excluded' : FILED.fmt.num(o.W[i] * 100, 3) + '%',
+    r('Our weight', c.ex ? 'excluded' : FILED.fmt.num(o.W[i] * 100, 3) + '%',
       c.ex ? 'Article 12' : '');
     r('Position', '$' + FILED.fmt.num(o.W[i] * AUM / 1e6, 2), 'm');
     if (w) r('Water stress', FILED.fmt.num(w.share_high * 100, 0) + '%',
@@ -1029,19 +1125,19 @@
        is willing to price, because that is the number the rest depends on */
     var priced = 0;
     for (var q = 0; q < N; q++) if (out.r.have[q]) priced++;
-    dom.leftN.innerHTML = 'n=<b>' + priced + '</b> priced';
+    dom.leftN.innerHTML = 'priced: <b>' + priced + '</b> of 500';
 
     var nEx = P.constraints.article_12_excluded;
     set(dom.avHeld, '<div class="f">' + out.held + '<small> held</small></div>' +
-      '<div class="s">' + nEx + ' excluded by Article 12<br>' +
+      '<div class="s">' + nEx + ' barred by the EU rulebook, Article 12<br>they are ' +
       FILED.fmt.num(P.constraints.article_12_excluded_cap_share * 100, 1) +
-      '% of index cap, before any tilt</div>');
+      '% of the index</div>');
 
     var bookUsd = out.bookVar / 100 * AUM, idxUsd = out.idxVar / 100 * AUM;
-    set(dom.avBook, '<div class="k">Book at risk</div><div class="v">' +
+    set(dom.avBook, '<div class="k">Our book</div><div class="v">' +
       FILED.fmt.num(out.bookVar, 2) + '%</div><div class="u">$' +
       FILED.fmt.num(bookUsd / 1e6, 1) + 'm of $1bn</div>');
-    set(dom.avIdx, '<div class="k">Index at risk</div><div class="v u-dim">' +
+    set(dom.avIdx, '<div class="k">The index</div><div class="v u-dim">' +
       FILED.fmt.num(out.idxVar, 2) + '%</div><div class="u">$' +
       FILED.fmt.num(idxUsd / 1e6, 1) + 'm, cap weighted</div>');
 
@@ -1063,8 +1159,7 @@
     } else {
       inv.className = 'av-inv is-still';
       inv.innerHTML = '<span class="verdict">Move the price slider.</span>' +
-        'A uniform reprice scales value at risk and moves no weight at all. ' +
-        'This line measures it every time you change a control.';
+        'This line reports what your last change did to the weights.';
     }
 
     /* the 181 */
@@ -1089,9 +1184,9 @@
     var eff = 0;
     for (var e = 0; e < N; e++) eff += out.W[e] * out.W[e];
     set(dom.avBook2,
-      '<span class="kv-k">Active share vs the index</span><span class="kv-v">' +
+      '<span class="kv-k">How far this book sits from the index</span><span class="kv-v">' +
       FILED.fmt.num(out.active * 100, 1) + '%</span>' +
-      '<span class="kv-k">Effective number of names</span><span class="kv-v">' +
+      '<span class="kv-k">It behaves like this many equal positions</span><span class="kv-v">' +
       FILED.fmt.num(1 / eff, 0) + '</span>' +
       '<span class="kv-k">Tilt strength, solved to a ' +
       FILED.fmt.num(P.defaults.tilt_budget * 100, 0) + '% budget</span><span class="kv-v">' +
@@ -1100,13 +1195,13 @@
     /* reallocation against selection */
     var tot = Math.abs(out.alloc) + Math.abs(out.sel) || 1;
     var aShare = Math.abs(out.alloc) / tot;
-    set(dom.avDec, '<div class="av-sub">Where the cut in value at risk comes from</div>' +
+    set(dom.avDec, '<div class="av-sub">Where the risk cut comes from</div>' +
       '<div class="bar-stack"><span style="width:' + (aShare * 100).toFixed(1) +
       '%;background:var(--accent)"></span><span style="width:' + ((1 - aShare) * 100).toFixed(1) +
       '%;background:var(--tier-measured)"></span></div>' +
-      '<div class="av-split"><span>Sector reallocation</span><b>' +
+      '<div class="av-split"><span>Moving money between sectors</span><b>' +
       FILED.fmt.num(aShare * 100, 1) + '%</b></div>' +
-      '<div class="av-split"><span>Picking inside a sector</span><b>' +
+      '<div class="av-split"><span>Picking names inside a sector</span><b>' +
       FILED.fmt.num((1 - aShare) * 100, 1) + '%</b></div>');
   }
 

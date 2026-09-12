@@ -1,4 +1,4 @@
-/* Section 01, the control surface. Scoped to #allocate so nothing here can
+/* Allocate $1bn, the control surface. Scoped to #allocate so nothing here can
    reach the other four sections.
 
    The whole thing is one screen: height is 100vh and the section never
@@ -12,7 +12,7 @@
 
 #allocate {
   height: 100vh; min-height: 660px;
-  padding: 10px 18px 9px 18px;
+  padding: 6px 18px 6px 18px;
   border-top: 0; border-bottom: 1px solid var(--rule);
   display: flex; flex-direction: column; overflow: hidden;
 }
@@ -21,22 +21,30 @@
   flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
 }
 
-/* ---------- header strip ---------- */
-.al-top { display: flex; align-items: baseline; gap: 14px; flex: none; }
+/* ---------- header strip ----------
+   Question, then answer, in that order and on two lines. The answer is the
+   reason the screen exists, so it is set at the size of one: it used to be 11px
+   in the top right corner, under four dollar figures that were each larger than
+   it. The width it needs is the width the collapsed nav gave back. */
+.al-head { flex: none; }
+.al-top { display: flex; align-items: baseline; gap: 14px; }
 .al-top .sec-kicker { margin-bottom: 0; flex: none; font-size: 11px; }
 .al-title {
   font-size: 19px; font-weight: 600; letter-spacing: -0.01em; flex: none;
   white-space: nowrap;
 }
 .al-lede {
-  font-size: 11px; color: var(--ink-2); line-height: 1.4;
-  margin-left: auto; text-align: right; max-width: 480px;
+  font-size: 20px; color: var(--ink-2); line-height: 1.3;
+  letter-spacing: -0.005em; margin-top: 3px;
 }
+/* inline-block on both halves: if the line ever has to break, it breaks
+   between the two sentences and never inside one */
+.al-lede > span, .al-lede b { display: inline-block; }
 .al-lede b { color: var(--ink); font-weight: 600; }
 
 /* ---------- three columns ---------- */
 .al-grid {
-  flex: 1 1 auto; min-height: 0; margin-top: 7px;
+  flex: 1 1 auto; min-height: 0; margin-top: 6px;
   display: grid; grid-template-columns: 268px minmax(0, 1fr) 282px; gap: 9px;
 }
 .al-col {
@@ -51,29 +59,36 @@
 }
 .al-col-t {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--ink-2);
+  text-transform: uppercase; color: var(--ink-3);
   /* "THE ADVICE" broke across two lines in the 282px column while the other
      two headers held one, which read as a layout fault rather than a choice.
      The note beside it is the part allowed to wrap. */
   white-space: nowrap; flex: none;
 }
-.al-col-n { text-align: right; }
-.al-col-t .n { color: var(--ink-3); margin-right: 6px; }
-.al-col-n { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.al-col-n {
+  text-align: right; font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-3); white-space: nowrap; flex: none;
+}
 
 /* ---------- control rows ---------- */
+.ac-wrap { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+.ac-wrap::-webkit-scrollbar { width: 6px; }
+.ac-wrap::-webkit-scrollbar-thumb { background: var(--rule-2); }
 .ac-group { margin-bottom: 4px; }
 .ac-group:last-child { margin-bottom: 0; }
 .ac-label {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: 6px; font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 2px; white-space: nowrap;
+  gap: 6px; font-size: 11.5px; color: var(--ink); margin-bottom: 3px;
+  white-space: nowrap; font-weight: 600;
 }
-.ac-label > span:first-child { overflow: hidden; text-overflow: ellipsis; }
-/* the share of the advice this control actually owns, measured, not guessed */
+.ac-label { white-space: normal; }
+.ac-label > span:first-child { line-height: 1.3; }
+/* the share of the advice this control actually owns, measured, not guessed,
+   and said in words because a bare decimal beside a price reads as a price */
 .ac-share {
-  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.01em;
-  text-transform: none; padding: 0 3px; border: 1px solid currentColor;
+  font-size: 10px; letter-spacing: 0.02em; font-weight: 400;
+  text-transform: none; padding: 1px 5px; border: 0; border-radius: 2px;
+  background: color-mix(in srgb, currentColor 13%, transparent);
   color: var(--ink-3); white-space: nowrap; flex: none;
 }
 .ac-share.is-big { color: var(--accent); }
@@ -110,8 +125,8 @@
 
 /* exempt: the control that matters second most, so it is a real button */
 .ac-ex {
-  flex: none; width: 15px; height: 15px; padding: 0; line-height: 1;
-  font-family: var(--font-mono); font-size: 10px;
+  flex: none; width: 22px; height: 15px; padding: 0; line-height: 1;
+  font-family: var(--font-mono); font-size: 9.5px;
   background: transparent; color: var(--ink-3);
   border: 1px solid var(--rule-2); cursor: pointer;
 }
@@ -126,31 +141,36 @@
 .ac-sel:focus-visible { outline: 1px solid var(--ink-3); outline-offset: 1px; }
 
 /* the missing-data control. Four options, each with what it does to the money */
-.ac-treat { display: flex; flex-direction: column; gap: 2px; }
+.ac-treat { display: flex; flex-direction: column; gap: 3px; }
 .ac-opt {
   display: grid; grid-template-columns: 1fr auto; align-items: baseline;
   gap: 6px; text-align: left; width: 100%;
   background: transparent; border: 1px solid var(--rule);
   border-left: 2px solid var(--rule-2);
-  padding: 1px 6px; cursor: pointer; color: var(--ink-2);
-  font-family: var(--font-sans); font-size: 11.5px; line-height: 1.3;
+  padding: 4px 7px; cursor: pointer; color: var(--ink-2);
+  font-family: var(--font-sans); font-size: 12.5px; line-height: 1.35;
 }
 .ac-opt:hover { border-color: var(--rule-2); color: var(--ink); }
 .ac-opt.is-on { border-left-color: var(--accent); background: var(--bg-2); color: var(--ink); }
 .ac-opt .o-w {
-  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3);
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3);
   font-variant-numeric: tabular-nums;
 }
 .ac-opt.is-on .o-w { color: var(--accent); }
 .ac-opt .o-d { grid-column: 1 / -1; font-size: 10.5px; color: var(--ink-3); }
 
-.ac-hint { font-size: 10px; color: var(--ink-3); line-height: 1.35; margin-top: 3px; }
+.ac-hint { font-size: 10.5px; color: var(--ink-3); line-height: 1.35; margin-top: 3px; }
+/* the finding, promoted out of the footnote it used to be */
+.ac-spread {
+  font-size: 12px; line-height: 1.35; color: var(--ink-2); margin-top: 4px;
+  border-left: 2px solid var(--accent); padding-left: 6px;
+}
+.ac-spread b { font-family: var(--font-mono); color: var(--accent); font-weight: 600; }
 .ac-rule { border-top: 1px solid var(--rule); margin: 5px 0 4px 0; }
 /* the mini header that names the 11 sector rows, chip and all */
 .ac-sub {
   display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
-  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--ink-3); margin: 2px 0 1px 0; white-space: nowrap;
+  font-size: 11px; color: var(--ink-3); margin: 2px 0 1px 0; white-space: nowrap;
 }
 
 /* ---------- centre: the treemap ---------- */
@@ -182,14 +202,20 @@
 }
 .tm-hi { fill: none; stroke: var(--ink); stroke-width: 1.5; pointer-events: none; }
 .tm-foot {
-  flex: none; display: flex; align-items: center; justify-content: space-between;
-  gap: 8px; margin-top: 6px; font-size: 10.5px; color: var(--ink-3);
+  flex: none; margin-top: 6px; font-size: 11px; color: var(--ink-3); line-height: 1.35;
+}
+.tm-foot b { color: var(--ink-2); font-weight: 600; }
+/* the colour ramp and the hatch key, at the top of the map where the eye
+   lands, at a size that can be read rather than 10px along the bottom edge */
+.tm-keys {
+  flex: none; display: flex; align-items: center; gap: 18px;
+  font-size: 11px; color: var(--ink-2); margin-bottom: 5px;
 }
 /* nowrap is load-bearing, not tidiness: the treemap svg is inset:0 inside a
    flex item, so a second line of legend shortens the map and cuts its last
    row of tiles. Worst case the key ellipses, the map never loses height. */
 .tm-ramp { display: flex; align-items: center; gap: 5px; white-space: nowrap; flex: none; }
-.tm-ramp-bar { width: 92px; height: 8px; flex: none; }
+.tm-ramp-bar { width: 76px; height: 9px; flex: none; }
 .tm-key { display: flex; align-items: center; gap: 4px; white-space: nowrap;
   min-width: 0; overflow: hidden; }
 .tm-key span:last-child { overflow: hidden; text-overflow: ellipsis; }
@@ -232,6 +258,7 @@
 /* ---------- right: the advice ---------- */
 .av-fig { display: flex; align-items: flex-end; gap: 10px; }
 .av-fig .f {
+  white-space: nowrap; flex: none;
   font-family: var(--font-mono); font-size: 30px; font-weight: 600;
   letter-spacing: -0.02em; line-height: 1; color: var(--ink);
 }
@@ -241,9 +268,7 @@
 .av-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .av-cell { border-top: 2px solid var(--rule-2); padding-top: 4px; }
 .av-cell.is-book { border-top-color: var(--accent); }
-.av-cell .k {
-  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
-}
+.av-cell .k { font-size: 11px; color: var(--ink-3); }
 .av-cell .v {
   font-family: var(--font-mono); font-size: 19px; font-weight: 600;
   letter-spacing: -0.02em; line-height: 1.15;
@@ -266,10 +291,7 @@
 .av-inv.is-still .verdict { color: var(--tier-measured); }
 .av-inv.is-moved .verdict { color: var(--accent); }
 
-.av-sub {
-  font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 3px;
-}
+.av-sub { font-size: 11px; color: var(--ink-3); margin-bottom: 3px; }
 .av-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .av-line {
   display: flex; justify-content: space-between; gap: 4px;
@@ -286,12 +308,6 @@
 .av-split b { font-family: var(--font-mono); font-weight: 600; color: var(--ink); }
 
 .al-spacer { flex: 1 1 auto; min-height: 0; }
-.al-foot {
-  flex: none; margin-top: 6px; font-size: 10px; color: var(--ink-3);
-  line-height: 1.35; display: flex; gap: 14px;
-}
-.al-foot span { flex: 1 1 0; }
-.al-foot b { color: var(--ink-2); font-weight: 600; }
 
 /* the site's .kv, at one-screen size */
 #allocate .kv { gap: 2px 8px; }
@@ -303,3 +319,35 @@
    sections' charts do not. */
 .tm-tip { font-size: 11.5px; line-height: 1.4; min-width: 186px; }
 .tm-tip .tip-t { font-size: 12.5px; }
+
+/* ---------- disclosure, at one-screen size ---------- */
+.dd--tight { border-color: var(--rule); background: transparent; }
+.dd--tight > summary { padding: 3px 6px; border-left-width: 2px; }
+.dd--tight .dd-t { font-size: 11px; }
+.dd--tight .dd-t::before { width: 9px; }
+.dd--tight .dd-n { font-size: 10px; }
+.dd--tight .dd-body { padding: 6px; }
+#allocate .ac-group { margin-bottom: 6px; }
+#allocate .dd--tight .ac-group:last-child { margin-bottom: 0; }
+
+/* The foot bar sits on a screen that never scrolls, so it opens upward over
+   the map instead of pushing the layout off the bottom of the viewport. */
+.al-foot { flex: none; margin-top: 6px; position: relative; }
+.dd--up .dd-body {
+  position: absolute; bottom: 100%; left: 0; right: 0; z-index: 30;
+  background: var(--bg-2); border: 1px solid var(--rule-2);
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+}
+.al-foot-body { display: flex; gap: 14px; font-size: 11px; color: var(--ink-3); line-height: 1.4; }
+.al-foot-body span { flex: 1 1 0; }
+.al-foot-body b { color: var(--ink-2); font-weight: 600; }
+
+/* the advice column's own disclosure sits on the floor of the column */
+#allocate .kv { gap: 3px 8px; }
+#allocate .gl::after { font-size: 12px; }
+
+/* The advice column can grow past the screen when its disclosure is open, and
+   a caveat that cannot be reached is a caveat that is gone. */
+.al-col--advice { overflow-y: auto; }
+.al-col--advice::-webkit-scrollbar { width: 6px; }
+.al-col--advice::-webkit-scrollbar-thumb { background: var(--rule-2); }

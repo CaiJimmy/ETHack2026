@@ -7,15 +7,15 @@ actually hits, not the 150 a rehearsal in your own head suggests.
 |---|---|
 | Spoken words, off the demo | 214 |
 | Speech at 130 wpm | 98.8 s |
-| `docs/demo.mp4`, measured | 50.08 s |
+| `docs/demo.mp4`, measured | 50.00 s |
 | Slide changes, 4 at half a second | 2 s |
-| **Total** | **150.9 s = 2:31** |
+| **Total** | **150.8 s = 2:31** |
 
-A further 44 words are spoken *inside* the demo's 50 seconds, not on top of
-them, which leaves 29.8 seconds of silence over the recording, in two blocks.
+A further 50 words are spoken *inside* the demo's 50 seconds, not on top of
+them, which leaves 33 seconds of silence over the recording, in two blocks.
 
-Even at a very slow 120 wpm this lands at 159 s, still 21 seconds inside the
-hard stop. At 140 it lands at 144.
+Even at 120 wpm this lands at 159 s, still 21 seconds inside the hard stop. At
+140 it lands at 144.
 
 29 seconds of cushion under the hard stop. If you are behind at 1:38, cut the
 bracketed pair in beat 4: it costs 8.8 seconds and nothing else, and the slide
@@ -67,12 +67,17 @@ Land it. The first number out of your mouth is about companies, not method.
 Stage: pause after "ours included". That sentence is what separates us from the
 five pitches before ours, and it needs air.
 
+Stage: the slide reads **"There is no one ranking. Ours included."** and you say
+"no identified ranking". Same claim, and the screen glosses the term of art for
+a judge who only reads it. Say "one" instead if you prefer the two to match
+exactly; it is the same syllable count and the timing does not move.
+
 ---
 
 ## Beat 3. The demo
 
-**[0:48 to 1:38]  50 s  44 words spoken, 30 seconds silent in two blocks**  Slide 3 is
-`docs/demo.mp4`, full bleed, no slide furniture. Measured duration **50.08 s**.
+**[0:48 to 1:38]  50 s  50 words spoken, 33 seconds silent in two blocks**  Slide 3 is
+`docs/demo.mp4`, full bleed, no slide furniture. Measured duration **50.00 s**.
 Start it on the word "live".
 
 This is the timeline of the file that exists, checked frame by frame. It is a
@@ -81,36 +86,41 @@ copy is the caption. Nothing needs to be burned in.
 
 | demo.mp4 | Deck clock | What is on screen |
 |---|---|---|
-| 0:00 to 0:03 | 0:48 | 01 Allocate. Three columns: the assumption, the 500-company treemap, the $1bn advice. Opens on **Current Policies, every sector at 22** |
-| 0:03 to 0:05 | 0:51 | The scenario dropdown switches to **Net Zero 2050**, every sector to 284. The treemap recolours, the advice rebuilds |
-| 0:05 to 0:09 | 0:53 | Every sector price dragged to 1000. The advice panel prints `Weights unchanged. Value at risk x3.52, largest weight change 0.00 bp. The allocation runs on the rank of value at risk, and a scalar cannot reorder a ranking.` |
-| 0:09 to 0:14 | 0:57 | The `181 WITH NO TONNAGE` control switched to Abstain. `Weights moved. Largest weight change 30 bp.` Money on the 181 falls from $141m to $121m, n priced falls 500 to 319 |
-| 0:14 to 0:24 | 1:02 | 03 Say and do. `84 of 108 companies emit more than they promised`. Promised -5.92, delivered -1.87, gap +2.91 |
-| 0:24 to 0:34 | 1:12 | 04 Rank intervals. `Every company is an interval, not a rank`. Median band 312.5 of 500. Tier chips: measured 139, reported 88, unmeasurable 273. Then the d_m weight audit |
-| 0:34 to 0:47 | 1:22 | 05 The $1bn fund. The Brinson waterfall: 15.62 in 2018, improvement -2.18, reallocation -10.38, selection +0.01, interaction +1.90, book 4.96. Then Article by article |
-| 0:47 to 0:50 | 1:35 | 02 The argument. The three-stat band: 312.5/500, 84/108, 97.4% |
+| 0:00 to 0:03 | 0:48 | 01 Allocate. Three columns: what you assume, the 500-company treemap, what you hold. Opens on **Current Policies, 22 a tonne**, under the question and the line that answers it: the carbon price moves every number here except the allocation |
+| 0:03 to 0:07 | 0:51 | The scenario goes to **Net Zero 2050, 284 a tonne**. The treemap lights up, share of value at risk 0.12% to 1.47%, and the panel prints `Weights unchanged. Since the last change, value at risk ×12.61, largest weight change 0.00 bp.` |
+| 0:07 to 0:11 | 0:55 | The carbon price is dragged to the floor and back to 284. The treemap goes dark and lights again. The holdings do not move |
+| 0:11 to 0:16 | 0:59 | One step to 1000. The panel prints `Weights unchanged. Since the last change, value at risk ×3.52, largest weight change 0.00 bp. The allocation runs on the rank of value at risk, and a scalar cannot reorder a ranking.` Our book 1.47% to 5.20% |
+| 0:16 to 0:26 | 1:04 | The missing-data rule, three clicks. **Treat them as zero**: $141m to $244m, `Weights moved. Largest weight change 121 bp.` **Leave them unscored**: $121m, priced falls 500 to 319. Back to **the sector median**: $141m |
+| 0:26 to 0:29 | 1:14 | 02 The argument. The three-stat band: 312.5/500, 84/108, 97.4% |
+| 0:29 to 0:33 | 1:17 | 03 Say and do. `84 of 108 companies emit more than they promised`. Promised -5.92, delivered -1.87, gap +2.91 |
+| 0:33 to 0:38 | 1:21 | 04 Rank intervals. `Every company is an interval, not a rank`. Median band 312.5 of 500. Measured 139, reported 88, not measurable 273 |
+| 0:38 to 0:43 | 1:26 | 05 The $1bn fund. The waterfall: 15.62 in 2018, improvement -2.18, reallocation -10.38, selection +0.01, interaction +1.90, the book at 4.96 |
+| 0:43 to 0:47 | 1:31 | 06 What we cannot see. `361 of 500 file no legally required emissions figure`, then the three tiers: 139 measured, 88 reported, 273 not measurable |
+| 0:47 to 0:50 | 1:35 | Back to 01 with every control where it started, so the file loops |
 
-**[0:48 to 0:53]  spoken over the opening frames**
+**[0:48 to 0:51]  spoken over the opening frames**
 
 > The bonus question, live. Watch the price. Then watch the weights.
 
-**[0:53 to 1:02]  SILENT. Hands still.** These nine seconds are the whole
-argument and the interface says it in its own words: the price moves nothing,
-the missing-data switch moves the money. Do not talk over it.
+**[0:51 to 1:08]  SILENT. Hands still.** Seventeen seconds, the longest silence
+in the talk and the one that earns the rest of it. This is the whole argument
+and the interface says it in its own words: the price moves nothing, the
+missing-data switch moves the money. Do not talk over it.
 
-**[1:02 to 1:17]  spoken over the say-do chart and the rank wall**
+**[1:08 to 1:22]  spoken over the last missing-data click and the tour**
 
 > 284 dollars a tonne to a thousand. Value at risk triples. Not one weight
 > moves, because the allocation runs on rank. Switch how the 181 non-filers are
 > treated and 123 million dollars moves.
 
-**[1:17 to 1:38]  SILENT to the end.** Twenty-one seconds of rank wall, weight
-audit and the Paris-aligned waterfall, with no voice on them. A demo that has to
-be explained is not a demo.
+**[1:22 to 1:38]  SILENT to the end.** Sixteen seconds of the rank wall, the
+Paris-aligned waterfall and the coverage tiers, with no voice on them. A demo
+that has to be explained is not a demo.
 
-Stage: the spoken "284 dollars a tonne" is the Net Zero 2050 level the recording
-switches to at 0:03, not the opening frame. The opening is Current Policies at 22.
-The x3.52 the panel prints is 1000/284, so the words and the screen agree.
+Stage: the recording opens at Current Policies, 22 a tonne, and goes to Net Zero
+2050 at 0:03. That puts 284 on the slider, which is the level the spoken "284
+dollars a tonne" names, and the x3.52 the panel prints is 1000/284, so the words
+and the screen agree.
 
 Stage: **"because the allocation runs on rank" is not optional.** It is eight
 words, the product's own advice panel says the same thing on screen, and it
@@ -120,7 +130,7 @@ See `qa.md`, the weakest point.
 **The recording re-shows slides 1, 2 and 4 in its back half.** That is
 deliberate as a recap and it is the strongest single piece of evidence for the
 technical-execution criterion, so keep it. The cost is that you must not narrate
-those segments: everything from 1:17 has already been said out loud.
+those segments: everything from 1:22 has already been said out loud.
 
 If the file will not play, the fallback is the live site at `#allocate`, and the
 two states are one drag and one dropdown apart. Play it on the venue machine

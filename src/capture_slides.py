@@ -132,32 +132,10 @@ TARGETS = [
                 "median rank, coloured by coverage tier, with the 312.5-rank "
                 "median band drawn to the same scale above them.",
     },
-    {
-        'name': '02b_sobol_bars',
-        'slide': 2,
-        'width': 620,
-        'scale': 3,
-        'hide': ['#rk-seg', '#rk-weights', '#rk-sobol-note'],
-        'css': '#ranks .rk-two { grid-template-columns: 1fr !important; }',
-        'trim': [],
-        'pick': "document.getElementById('rk-sobol').closest('.panel')",
-        'what': "Sobol first-order variance shares, one bar per modelling "
-                "choice, the weights bar in accent and every other bar muted. "
-                "The effective-weight audit that sits beside it on the site is "
-                "hidden, per outline.md.",
-    },
-    {
-        'name': '02b_sobol_bars_wide',
-        'slide': 2,
-        'width': 916,
-        'scale': 2,
-        'hide': ['#rk-seg', '#rk-weights', '#rk-sobol-note'],
-        'css': '#ranks .rk-two { grid-template-columns: 1fr !important; }',
-        'trim': [],
-        'pick': "document.getElementById('rk-sobol').closest('.panel')",
-        'what': "The same bars in a landscape frame, if the two slide-2 panels "
-                "end up stacked rather than side by side.",
-    },
+    # 02b_sobol_bars and 02b_sobol_bars_wide used to live here. The variance
+    # panel is now inside a disclosure, so #rk-sobol has no .panel to close on,
+    # and the deck takes that image from src/capture_sobol.py instead, which
+    # opens the disclosure and rewrites the eight row labels into plain words.
     {
         'name': '04_pab_waterfall',
         'slide': 4,

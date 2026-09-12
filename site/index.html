@@ -11,29 +11,45 @@
 </head>
 <body>
 
-<nav class="nav">
-  <div class="brand">FILED</div>
-  <div class="brand-sub">The S&amp;P 500 scored only on what it files under legal penalty</div>
+<!-- The nav is a 48px rail. It holds the section numbers and nothing else until
+     a pointer, a click or the keyboard opens it. Order matters here: everything
+     that only exists in the open state sits below the list, so opening the rail
+     never moves a number the reader was aiming at. -->
+<nav class="nav" id="nav">
+  <div class="brand">F<span class="nav-t">ILED</span></div>
   <ul class="nav-list">
-    <li><a href="#allocate"><span class="nav-num">01</span>Allocate $1bn</a></li>
-    <li><a href="#hero"><span class="nav-num">02</span>The argument</a></li>
-    <li><a href="#saydo"><span class="nav-num">03</span>Say and do</a></li>
-    <li><a href="#ranks"><span class="nav-num">04</span>Rank intervals</a></li>
-    <li><a href="#portfolio"><span class="nav-num">05</span>The $1bn fund</a></li>
-    <li><a href="#coverage"><span class="nav-num">06</span>What we cannot see</a></li>
+    <li><a href="#allocate"><span class="nav-num">01</span><span class="nav-t">Allocate $1bn</span></a></li>
+    <li><a href="#hero"><span class="nav-num">02</span><span class="nav-t">The argument</span></a></li>
+    <li><a href="#saydo"><span class="nav-num">03</span><span class="nav-t">Say and do</span></a></li>
+    <li><a href="#ranks"><span class="nav-num">04</span><span class="nav-t">Rank intervals</span></a></li>
+    <li><a href="#portfolio"><span class="nav-num">05</span><span class="nav-t">The $1bn fund</span></a></li>
+    <li><a href="#coverage"><span class="nav-num">06</span><span class="nav-t">What we cannot see</span></a></li>
   </ul>
-  <div class="nav-foot" id="nav-foot"></div>
+  <button class="nav-drawer" type="button" data-dr="" title="How this works">
+    <span class="nd-i" aria-hidden="true">?</span><span class="nav-t">How this works</span>
+  </button>
+  <div class="nav-tail">
+    <div class="brand-sub">The S&amp;P 500 scored only on what it files under legal penalty</div>
+    <div class="nav-foot" id="nav-foot"></div>
+  </div>
+  <button class="nav-x" id="nav-x" type="button" aria-expanded="false" aria-controls="nav"
+          aria-label="Open the section list"></button>
 </nav>
 
 <main class="main">
 
   <!-- ============ 01 allocate: the control surface, filled by js/allocate.js ============ -->
   <section id="allocate" class="section">
-    <div class="al-top">
-      <div class="sec-kicker">The bonus question</div>
-      <div class="al-title">The world commits to net zero. You manage $1bn.</div>
-      <p class="al-lede">Every control recomputes all 500 companies live. The carbon price moves every
-        number here except the allocation. <b>The missing data moves the money.</b></p>
+    <div class="al-head">
+      <div class="al-top">
+        <div class="sec-kicker">The bonus question</div>
+        <div class="al-title">The world commits to net zero. You manage $1bn.</div>
+      </div>
+      <!-- The answer to the question above it, at the size of an answer. The two
+           halves are inline-block, so if the line ever has to break it breaks
+           between them and not inside a sentence. -->
+      <p class="al-lede"><span>The carbon price moves every number here except the allocation.</span>
+        <b>The missing data moves the money.</b></p>
     </div>
     <div id="allocate-body"><div class="awaiting">js/allocate.js has not rendered into #allocate-body</div></div>
   </section>
@@ -44,7 +60,7 @@
       S&amp;P 500<span class="sep">/</span>mandatory filings only<span class="sep">/</span><span id="hero-build">build</span>
     </div>
 
-    <h1>The index has no identified sustainability&nbsp;<em>ranking</em>.</h1>
+    <h1>There is no one sustainability&nbsp;<em>ranking</em> of the S&amp;P 500. Ours included.</h1>
 
     <p class="hero-lede">
       Commercial ESG ratings run on numbers a company chooses to publish about itself. 74% of the
@@ -56,7 +72,7 @@
     <div class="stat-row">
       <a class="stat" href="#ranks">
         <div class="stat-fig" id="stat-band"></div>
-        <div class="stat-label">ranks wide, 5th to 95th percentile</div>
+        <div class="stat-label">ranks wide, for the median company</div>
         <div class="stat-sub" id="stat-band-sub"></div>
         <div class="stat-src" id="stat-band-src"></div>
         <div class="stat-go">Rank intervals</div>
@@ -70,7 +86,7 @@
       </a>
       <a class="stat" href="#portfolio">
         <div class="stat-fig" id="stat-pab"></div>
-        <div class="stat-label">of a Paris-Aligned fund’s carbon cut is reallocation</div>
+        <div class="stat-label">of the carbon cut is money moving, not companies cutting</div>
         <div class="stat-sub" id="stat-pab-sub"></div>
         <div class="stat-src" id="stat-pab-src"></div>
         <div class="stat-go">The $1bn fund</div>
@@ -86,7 +102,7 @@
   <!-- ============ 03 say and do ============ -->
   <section id="saydo" class="section">
     <div class="sec-head">
-      <div class="sec-kicker">Finding 01<span class="u-dim"> / credibility</span></div>
+      <div class="sec-kicker">Finding<span class="u-dim"> / credibility</span></div>
       <h2 class="sec-title" id="saydo-title">Say and do</h2>
       <p class="sec-lede" id="saydo-lede"></p>
     </div>
@@ -112,20 +128,18 @@
       </div>
       <div class="states" id="saydo-states"></div>
       <div class="bar-stack u-mt4" id="saydo-bar"></div>
-      <div class="u-mt5">
-        <div class="panel-sub" style="margin-bottom:8px">What this chart cannot tell you</div>
-        <ul class="note-list" id="saydo-caveats"></ul>
-      </div>
+      <div class="u-mt5" id="saydo-caveat-slot"></div>
     </div>
   </section>
 
   <!-- ============ 04 rank intervals: filled by js/ranks.js ============ -->
   <section id="ranks" class="section">
     <div class="sec-head">
-      <div class="sec-kicker">Finding 02<span class="u-dim"> / uncertainty</span></div>
-      <h2 class="sec-title">There is no identified ranking, and the weights are not the reason</h2>
-      <p class="sec-lede">Ten thousand draws over normalisation, winsorisation, pillar inclusion,
-        the missing-data assumption, aggregation, sector framing and the weights themselves.</p>
+      <div class="sec-kicker">Finding<span class="u-dim"> / uncertainty</span></div>
+      <h2 class="sec-title">Every company is an interval, not a rank</h2>
+      <p class="sec-lede">We rebuilt the ranking ten thousand times, changing every modelling choice a
+        defensible method could make. The order fell apart. The weights, which is the thing everyone
+        argues about, came fifth.</p>
     </div>
     <div id="ranks-body"><div class="awaiting">js/ranks.js has not rendered into #ranks-body</div></div>
   </section>
@@ -133,11 +147,11 @@
   <!-- ============ 05 portfolio: filled by js/portfolio.js ============ -->
   <section id="portfolio" class="section">
     <div class="sec-head">
-      <div class="sec-kicker">Finding 03<span class="u-dim"> / reallocation</span></div>
+      <div class="sec-kicker">Finding<span class="u-dim"> / reallocation</span></div>
       <h2 class="sec-title">A Paris-Aligned fund sells the decarbonisers</h2>
-      <p class="sec-lede">Three books built against Commission Delegated Regulation (EU) 2020/1818,
-        article by article, against a fourth that applies the position cap and no carbon rule at all.
-        Then a Brinson decomposition, to find out who actually did the cutting.</p>
+      <p class="sec-lede">We built the EU’s Paris-aligned fund from the regulation itself, article by
+        article, plus a control book with no carbon rule in it at all. Then we split the carbon cut to
+        find out who did the cutting.</p>
     </div>
     <div id="portfolio-body"><div class="awaiting">js/portfolio.js has not rendered into #portfolio-body</div></div>
   </section>
@@ -146,8 +160,8 @@
   <section id="coverage" class="section">
     <div class="sec-head">
       <div class="sec-kicker">Honesty<span class="u-dim"> / coverage</span></div>
-      <h2 class="sec-title">What we cannot see, stated as a number</h2>
-      <p class="sec-lede">Where the mandatory record stops, the score stops with it.</p>
+      <h2 class="sec-title" id="cov-title">What we cannot see, stated as a number</h2>
+      <p class="sec-lede" id="cov-lede">Where the mandatory record stops, the score stops with it.</p>
     </div>
     <div id="coverage-body"><div class="awaiting">js/coverage.js has not rendered into #coverage-body</div></div>
   </section>

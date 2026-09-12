@@ -26,6 +26,23 @@ Every figure on every slide is read from the site's own JSON, which is read from
 the fetch scripts in `src/`. If a number here cannot be found in
 `site/data/*.json`, it does not go on the slide.
 
+Two rules the copy is cut to, and `src/build_deck.py` fails the build on the
+second of them.
+
+**Plain words on the slide, the term of art in the notes.** A slide is read in
+the three to eight seconds the speaker stands on it, by a judge who has seen
+five pitches today and knows what a portfolio is. "Company value" on the slide,
+`EVIC, Article 1(d)` in the speaker notes. "Trimming the extremes" on the slide,
+`winsorisation` in the notes. Nothing is deleted; it moves to where there is
+time to read it.
+
+**Every source line is one line.** They exist so a judge can go and check us,
+which is worth real points, and a paragraph at the foot of a slide is read by
+nobody. So each one names the regulation, the dataset or the file in the repo
+and stops: `docs/entity_resolution_audit.md` beats three sentences describing
+the audit. `source_line()` measures the string against the content width in the
+real face and raises if it wraps.
+
 ---
 
 ## Slide 1. Say and do
@@ -51,15 +68,20 @@ promise is ABOVE the identity line, not below. `saydo.js` prints
 - 84 points sit ABOVE that line. Those are in `--accent`, hollow.
 - 33 of the 84 sit above zero on y: promising cuts, emitting more. Same accent,
   filled. Shade the band above y=0 and label it once, `33 emitting more`.
-- Two mono lines under the plot: `promised, median 5.92 %/yr cut` and
-  `delivered, median 1.87 %/yr cut`.
+- Two mono lines under the plot: `promised, median   5.92% a year` and
+  `delivered, median  1.87% a year`. The unit is said out; `%/yr` is not read
+  at ten feet. The two labels are the same character count, so the figures
+  column in the mono face.
 
 **Not on this slide.** No company names. No vendor comparison. No mention of the
 Nature paper in the body text: it is the premise, and it lives in the source
 line where it cannot be mistaken for our result.
 
 **Source line, 8pt.**
-`n=108 S&P 500 companies with a numeric target and 4+ years of filed Scope 1. Trend: log-linear OLS with a perimeter-break rule. Holds on the flag-free subset the site shows: 46 companies, 36 missing, 78.3%. Sources: EPA GHGRP, 40 CFR Part 98, RY2010-2023; Net Zero Tracker; SBTi. Premise, not our result: Cohen, Rouen & Sachdeva, Nature Climate Change, Jan 2026.`
+`n=108 S&P 500 companies with a numeric target and 4+ years of filed Scope 1. EPA GHGRP, 40 CFR Part 98, RY2010-2023; Net Zero Tracker; SBTi. Premise, not our result: Cohen, Rouen and Sachdeva, Nature Climate Change 2026.`
+
+The trend method and the flag-free subset (46 companies, 36 missing, 78.3%) are
+in the speaker notes, where there is room for them.
 
 ---
 
@@ -67,11 +89,16 @@ line where it cannot be mistaken for our result.
 
 **Claim.** Rank the index every defensible way at once and no company has a rank.
 
-**The number.** `312` at 96pt mono, with `ranks wide, 5th to 95th percentile,
-median company` beneath in 19pt. The measured value is 312.5; the big figure
-reads 312 and the source line carries the exact number.
+**The number.** `312` at 96pt mono, with `ranks wide, out of 500, for the median
+company` beneath in 19pt. The measured value is 312.5; the big figure reads 312
+and the source line carries the exact number and what the band is (5th to 95th
+percentile of the 10,000 draws).
 
-**Headline.** There is no identified ranking. Ours included.
+**Headline.** There is no one ranking. Ours included.
+
+`identified` is the econometrics word and it is what the speaker says. On the
+screen it reads as "we have not found one yet", which is the opposite of the
+claim, so the slide says `one` and the notes say so.
 
 **Rendered.** Two panels on one grid, 2:1.
 
@@ -79,17 +106,42 @@ reads 312 and the source line carries the exact number.
   company, sorted by median rank, x axis 1 to 500. The point is the overlap, so
   do not thin the bands and do not sort by sector. One mono line beneath:
   `497 of 500 companies have a band wider than 100 ranks`.
-- Right, Sobol first-order variance shares as six horizontal bars, labelled and
-  ordered as measured: missing-data assumption 20.1, pillar inclusion 11.3,
-  sector-relative 7.0, normalisation 6.9, **weights 5.9**, aggregation 1.3. Only
-  the weights bar is in `--accent`. Everything else `--muted`. Header over the
-  bars: `share of the variance in a company's rank`.
+- Right, Sobol first-order variance shares as horizontal bars, ordered as
+  measured, with every label in plain words. Only the weights bar is in
+  `--accent`; everything else `--muted`. The panel keeps its own head,
+  `What moves a rank is not the weights`, and its own n.
+
+  | Bar | Share | Was called |
+  |---|---|---|
+  | what we assume about missing data | 20.1% | the missing-data assumption |
+  | which pillars are in | 11.3% | unchanged |
+  | judged against its sector, or against everyone | 7.0% | sector-relative or absolute |
+  | how scores are put on one scale | 6.9% | normalisation |
+  | **the weights** | **5.9%** | `Dirichlet(1,1,1,1) over the four pillars` under it |
+  | how the four pillars are combined | 1.3% | the aggregation rule |
+  | trimming the extremes | 0.004% | winsorisation |
+  | choices acting together, and what no one choice explains | 47.5% | interactions and what no single choice explains |
+
+  Sub over the bars: `How much of a rank's movement each choice explains on its
+  own.` The residual keeps the honest half of its name: "choices acting
+  together" alone would claim attribution the number does not have.
+
+  The picture is `slides/img/02b_sobol_bars_plain.png`, written by
+  `src/capture_sobol.py`. It is not redrawn: the script loads the site, lets the
+  site's own JS paint the panel out of `scores.json`, rewrites the row labels in
+  the DOM and photographs the result. Every bar, every share and the n are the
+  page's own.
 
 **Not on this slide.** The effective weight audit (0.325 / 0.231 / 0.312 /
 0.132, d_m 0.595). It is the right answer to a question, not a thing to show.
 
 **Source line, 8pt.**
-`10,000 Monte Carlo draws varying normalisation, winsorisation, pillar inclusion, imputation, aggregation, weights and the sector-relative toggle simultaneously (OECD/JRC composite indicator handbook). Median band width 312.5 ranks. Sobol first-order indices on the same design. Inputs: EPA GHGRP 40 CFR Part 98, EPA CAMD Part 75, SEC XBRL. No vendor ESG score is an input to anything.`
+`10,000 draws varying normalisation, trimming, pillar inclusion, missing data, aggregation, weights and the sector lens at once (OECD/JRC handbook). Band: 5th to 95th percentile, median 312.5 ranks. EPA GHGRP, EPA CAMD, SEC XBRL.`
+
+`No vendor ESG score is an input to anything` moved to the speaker notes, where
+it is a sentence to say rather than 8pt grey nobody reads. So did `EPA CAMD Part
+75` and `40 CFR Part 98`, which the slide-1 and slide-5 source lines still carry
+in full.
 
 ---
 
@@ -105,23 +157,24 @@ prints it at 0:05, next to the reason it is zero.
 **Headline.** A 40px strip at the top, nothing more: `03  THE BONUS QUESTION:
 $1bn under a carbon price`. Everything else is the recording.
 
-**Rendered.** `docs/demo.mp4`, full bleed, measured at **50.08 seconds**. It
-already exists and it is not what this section originally specified: it is a
-tour of the whole site, not a recording of `#allocate` alone. Ship the file that
-exists. Do not re-record it the night before.
+**Rendered.** `docs/demo.mp4`, full bleed, measured at **50.00 seconds**,
+rebuilt by `src/record_demo.py` after the site was rewritten in plainer words
+and the navigation collapsed to a rail. It is a tour of the whole site, not a
+recording of `#allocate` alone, and it ends on its opening frame so it loops.
 
 No captions need burning in. The interface's own copy is the caption, and it is
-better than anything we would write over it. At 0:05 the advice panel prints
-`Weights unchanged. Value at risk x3.52, largest weight change 0.00 bp. The
-allocation runs on the rank of value at risk, and a scalar cannot reorder a
-ranking.` At 0:09 the missing-data control moves and it prints `Weights moved.
-Largest weight change 30 bp.` with the money on the 181 falling from $141m to
-$121m. That contrast is the slide.
+better than anything we would write over it. At 0:11 the third column prints
+`Weights unchanged. Since the last change, value at risk ×3.52, largest weight
+change 0.00 bp. The allocation runs on the rank of value at risk, and a scalar
+cannot reorder a ranking.` At 0:16 the missing-data control moves and it prints
+`Weights moved. Largest weight change 121 bp.` with the money on the 181 going
+$141m to $244m to $121m. That contrast is the slide.
 
 Verified timeline, spoken cues and the two silent blocks are in `script.md`,
-beat 3. In one line: the price goes 284 to 1000 $2010/t and nothing moves, the
-missing-data control moves and the money moves, then 36 seconds of silent tour
-through say-do, the rank wall, the weight audit and the PAB waterfall.
+beat 3. In one line: the scenario goes Current Policies to Net Zero 2050 and the
+price 284 to 1000 $2010/t and nothing moves, the missing-data control moves and
+the money moves, then 24 seconds of silent tour through the argument, say-do,
+the rank wall, the carbon-cut waterfall and the coverage tiers.
 
 The back half re-shows slides 1, 2 and 4. Keep it: it is the strongest evidence
 for the technical-execution criterion, and it costs nothing as long as nobody
@@ -130,10 +183,20 @@ narrates over it.
 Ship the deck as a PDF and the demo as a separate full screen file. Play it on
 the venue machine before the session, with the deck open behind it. A demo that
 will not start costs more than any slide on this list. The fallback is the live
-site at `#allocate`: the two states are one drag and one dropdown apart.
+site at `#allocate`: the two states are one drag and one click apart.
 
-**One extra line, 9pt, bottom right, always visible.**
-`$1bn is 0.00144% of the index. The method does not depend on the size of the book.`
+**One extra line, 9pt, top right, always visible.**
+`An exposure model, not a forecast. $1bn is 0.00144% of the index.`
+
+The first sentence is the most important caveat the project owns and until this
+pass it existed only inside a screenshot, where it was 8 pixels tall. It gets
+9pt of its own, on the slide the whole model runs on. `The method does not
+depend on the size of the book` moved to the speaker notes under IF ASKED WHY
+$1bn.
+
+The line sits on the same band as the strip rather than under the video, so the
+slide carries one row of type and then nothing but the recording. The video grew
+to fill what that left: 10.95 x 6.16 in, centred.
 
 **The $123m, stated precisely.** The page prints `Spread $123m` under the four
 treatment options and it means the swing in the dollars allocated to the 181
@@ -144,7 +207,14 @@ Say "what the 181 get moves by 123 million", never "123 million of the billion
 moves".
 
 **Source line, 8pt.**
-`site/data/penalty.json, recomputed in the browser for all 500 companies: price x deflator -> coverage -> abatement at the observed rate -> cost -> dEBIT after sector pass-through -> dEV at the company's own EV/EBITDA -> value at risk -> RANK -> weight. The chain is linear in price and the tilt runs on the rank, so a uniform reprice provably cannot move a weight: the zero is an identity, stated as one. Price DISPERSION across sectors does move it. NGFS Phase 5 REMIND, Net Zero 2050, US, 2030, US$2010/t. Allocation sensitivity at a fixed tilt: missing data 0.201, sector exemptions 0.051, Scope 3 coverage 0.007, price level 0.000.`
+`site/data/penalty.json, all 500 recomputed live: price -> cost -> earnings -> company value -> rank -> weight. The tilt runs on rank, so a uniform reprice cannot move a weight: the zero is an identity. NGFS Phase 5, Net Zero 2050, US 2030.`
+
+The identity is the one claim on this slide a judge can attack, so it stays on
+the slide. The deflator, the pass-through step, the EV/EBITDA step and the
+sensitivity table (missing data 0.201, exemptions 0.051, Scope 3 0.007, price
+0.000) are in the speaker notes and in `qa.md`. The recording prints the third
+column's own version of the identity on screen at 0:08, which is better than any
+sentence we would set under it.
 
 ---
 
@@ -153,8 +223,10 @@ moves".
 **Claim.** The standard rulebook does not decarbonise companies, it reshuffles
 the ones you hold, and it sells the fastest cutters.
 
-**The number.** `97.4%` at 96pt mono, with `of the carbon cut is reallocation`
-beneath.
+**The number.** `97.4%` at 96pt mono, with `of the carbon cut is money moving,
+not companies cutting` beneath. "Reallocation" is the decomposition's own word
+and it is in the chart's bar label, where the legend defines it; the caption
+says what it means.
 
 **Headline.** A Paris-aligned fund sells the decarbonisers.
 
@@ -171,10 +243,16 @@ portfolio's carbon intensity cut`:
 Print the signs. Do not describe the interaction term as positive or negative in
 words anywhere on the slide: the convention is a trap and the bar shows it.
 
-One mono line beneath, and it is the line the spoken script carries because it
-is the one claim on this slide with no counter-example in it:
-`Article 6 invites overweighting 19 companies cutting 7%/yr. Article 12 bans 9 of them.`
-One more, smaller: `at lambda 120, an active share of 70.5%, still 82.3% reallocation`.
+One mono line beneath, and one only. It is the line the spoken script carries,
+because it is the one claim on this slide with no counter-example in it:
+`Article 6 invites overweighting 19 companies cutting 7% a year. Article 12 bans 9 of them.`
+
+The second mono line, `at lambda 120, an active share of 70.5%, still 82.3%
+reallocation`, is cut. Nobody in the room can read `lambda 120` at ten feet. It
+is an answer to a hard follow-up, it is in `qa.md`, and it is now in the speaker
+notes under IF ASKED. The left column is centred on the waterfall beside it rather
+than top-aligned, because with that line gone the top alignment left a quarter
+of the slide empty.
 
 **Do not add** a line reading the cross term as "a PAB sells the decarbonisers".
 It is a fair reading of the decomposition and it has a counter-example on the
@@ -185,7 +263,10 @@ against the index at -5.03. The waterfall shows the sign; let it.
 weights. They are in the site's section 05 and they are a Q&A answer.
 
 **Source line, 8pt.**
-`Commission Delegated Regulation (EU) 2020/1818, articles 6, 11 and 12, encoded as 24 rules. Brinson-style decomposition of the change in portfolio carbon intensity. Article 12 exclusions alone put the book 63.1% below the universe against Article 11's 50% requirement, so the bisection solver returned lambda = 0.`
+`Commission Delegated Regulation (EU) 2020/1818, articles 6, 11 and 12, encoded as 24 rules. Brinson decomposition of the intensity cut. Article 12 exclusions alone put the book 63.1% below the index, so the solver returned no tilt.`
+
+`universe` became `index`, `bisection solver` became `solver` and `lambda = 0`
+became `no tilt`. Same three numbers, same claim, one line.
 
 ---
 
@@ -194,8 +275,10 @@ weights. They are in the site's section 05 and they are a Q&A answer.
 **Claim.** Here is the boundary of the measurement, as numbers, and here is what
 refusing to impute costs us.
 
-**The number.** `361` at 96pt mono in `--muted`, with `companies with no
-mandatory tonnage. We impute nothing for them` beneath.
+**The number.** `361` at 96pt mono in `--muted`, with `companies file no
+emissions figure the law requires. We never invent one, and we never call it
+zero` beneath. `no mandatory tonnage` is the repo's phrase and it is two nouns a
+judge does not own; the caption says the same thing in the law's own effect.
 
 The number changed from `181`. Both are real and they are different lanes.
 `181 of 500` carry no Scope 1 from **any** source, mandatory, voluntary or
@@ -205,18 +288,36 @@ modelled: that is the allocation lane, and it is the number in the demo caption.
 computed on. Putting 181 above a line computed on 361 was the trap. One number
 per slide, and the other in the source line.
 
-**Headline.** What we cannot see, stated as a number.
+**Headline.** What we cannot see.
 
-**Rendered.** Five rows. Number left, 40pt mono, label right, 19pt. Nothing else
-until the rule.
+The headline used to read `What we cannot see, stated as a number`. The number
+is already set at 96pt beside it, so half that sentence described the layout.
+Four words, and they are the four the speaker opens the beat with.
+
+**Rendered.** Four rows. Figure **right-aligned** in a 3.05 in column, 40pt
+mono; label left, 18pt, vertically centred on the figure. Right-aligning the
+figures makes the gutter one width instead of four, which is what made the old
+five-row block read as a wall. Nothing else until the rule.
 
 | | |
 |---|---|
-| `25,000 t` | the EPA reporting floor. Below it, a facility files nothing |
-| `582.8 MMT` | held abroad by 25 companies, against 375.7 MMT we measure here |
-| `2023` | last GHGRP reporting year. RY2025 is due 30 Oct 2026 |
-| `62 of 503` | left the index since Aug 2023. 37 of them still file with the SEC |
-| `361 of 500` | no mandatory tonnage. Never imputed, always tiered |
+| `25,000 t` | below this, a US facility files nothing |
+| `582.8` | million tonnes estimated abroad at 25 companies. We measure 375.7 here |
+| `2023` | the last year EPA data covers. The next filing lands Oct 2026 |
+| `62 of 503` | left the index since Aug 2023. 37 still file with the SEC |
+
+Four rows, four blind spots, and between them they carry every boundary the
+model has: the reporting threshold, the border, the last year of data, and the
+index churn.
+
+A fifth row, `361 of 500  no mandatory tonnage. Never imputed, always tiered`,
+is cut. It repeated the 96pt `361` directly above it, which is a slide restating
+itself. `MMT` is cut too: the unit is written into the label so the figure can
+be the figure.
+
+Row 2 is **modelled** and the slide says `estimated`. The 582.8 is sized with
+Climate TRACE, which is never an input to a score or a weight; the 375.7 beside
+it is measured. The tool's name is in the speaker notes.
 
 Row 4 said "no longer exist". They left the **index**; 37 are still SEC
 registrants (`universe_turnover.json`, `left_but_still_an_sec_registrant: 37`).
@@ -226,15 +327,53 @@ Then a hairline rule, then one line at 26pt across the width, in `--ink`:
 
 `median rank 344 if we can measure you, 224 if we cannot`
 
-and under it, 19pt `--ink-2`: `being measurable is a penalty in our index. That
-is the inverse of the vendor incentive, and it is what refusing to impute costs.`
+and under it, 18pt `--ink-2`: `Rank 1 is best, so being measurable makes you
+look worse. That is the opposite of what vendors reward.`
+
+The rank convention used to be in the speaker notes only, which left the closing
+line unreadable to anyone who did not already know that 344 is worse than 224.
+"What refusing to impute costs" is spoken in beat 5; the slide does not need to
+say it twice.
 
 Rank 1 is best (`scores.json meta.rank_convention`), so 344 is the worse
 position. Both the `reported` and `unmeasurable` tiers sit at a median rank of
 224, which is why "if we cannot" is fair across the whole 361.
 
 **Source line, 8pt.**
-`Score lane: 139 of 500 carry a mandatory measured tonne, 361 do not (88 reported, 273 unmeasurable) and are never imputed. Master table: 319 of 500 carry a Scope 1 from some source, 181 carry none. Foreign exposure on the 25 companies with material foreign assets, sized with Climate TRACE, a model, never an input: Chevron 9.1x, ExxonMobil 4.3x. Entity resolution audited at 98% precision, Wilson 95% CI 89.5-99.6%, on a tonnes-stratified random sample of 50. docs/coverage_and_validation.md, docs/entity_resolution_audit.md.`
+`139 of 500 carry a mandatory measured tonne. The other 361 are a declared category, never a zero: 88 self-reported, 273 with no source. Matching audited at 98% precision. docs/coverage_and_validation.md, docs/entity_resolution_audit.md.`
+
+Both documents are named, so the Wilson interval, the sampling design, the
+181/361 reconciliation and the Climate TRACE multiples are one click away
+instead of three sentences at 8pt. The claim that must never leave the slide is
+the one that stayed: the 361 are **a declared category, never a zero**.
+
+---
+
+## Appendix slide. Water, held for questions
+
+Not part of the 2:30 and the kicker says so: `APPENDIX   Q&A BACKUP   NOT PART
+OF THE 2:30`, in `--accent` mono. Do not advance to it during the pitch.
+
+**Headline.** Water is a second axis, not a restatement of carbon.
+
+**The number, in words first.** `Carbon explains 0.3% of the water ranking.` at
+20pt, and the statistic under it at 16pt mono in `--accent`:
+`rank correlation 0.058, p = 0.51, n = 135`. The plain sentence leads; a judge
+who wants the test gets it on the next line. `rho` is spelled out.
+
+**Two companies, two lines each.** Broadcom at the 7th percentile on carbon with
+its one US facility in an Extremely High stress basin; Evergy at the 99th with
+none of its 24 in a stressed basin. Then the close: `One number would put them
+in the same place. So water is a separate axis in the interface, and it is not
+in the score.`
+
+**Rendered.** The site's own treemap with the `CARBON / WATER` toggle set to
+WATER, cropped out of the allocate view at build time. The full-page capture was
+a grey smear at slide size; the crop keeps the toggle, the basin colouring and
+the `358 with no US facility` key, which is the honest part of the picture.
+
+**Source line, 8pt.**
+`site/data/water.json. WRI Aqueduct 4.0 annual water stress, July 2023, CC BY 4.0, joined to EPA GHGRP facility coordinates: 11,200 of 11,358 facilities, 142 of 503 tickers. A model, labelled as one, never an input. docs/water_risk.md.`
 
 ---
 
@@ -282,3 +421,53 @@ after the GIF states it. Spending a slide on it would cost 25 seconds to say
 what 6 seconds of recording already shows. The sensitivity table behind it
 (missing data 0.201, exemptions 0.051, Scope 3 0.007, price 0.000) stays in the
 Q&A card.
+
+---
+
+## The legibility pass
+
+Measured off the built `.pptx` with `python-pptx`, words that render on the
+slide, furniture included. The speaker notes are not counted and they grew: the
+detail did not leave the deck, it moved to where the speaker can read it.
+
+| Slide | Before | After | |
+|---|---|---|---|
+| 01 Say and do | 104 | 82 | source line 60 words to 38 |
+| 02 There is no one ranking | 97 | 76 | eight bar labels in plain words |
+| 03 The demo | 148 | 78 | source line 108 words to 43, video 5% bigger |
+| 04 The Paris-aligned fund | 100 | 85 | the lambda line cut |
+| 05 What we cannot see | 211 | 149 | five rows to four, headline 8 words to 4 |
+| A Water | 177 | 144 | picture cropped to the control |
+| **Total** | **837** | **614** | **-27%** |
+
+Nothing on the "must not be lost" list left the deck. Every one of them is still
+in the default view of the slide it belongs to:
+
+- companies we cannot measure are a declared category, never a zero: slide 5
+  caption, `We never invent one, and we never call it zero`, at 19pt
+- every chart states how many companies it covers: the captured panels carry
+  their own n (`n = 500 companies`, `n = 108 plotted`, `n = 500 x 10 000 draws`)
+- the model is an exposure estimate, not a forecast: **added** to slide 3 at
+  9pt, top right, where it used to exist only inside the screenshot
+- US facilities only, above a reporting threshold, and stopping in 2023: slide
+  5, rows 1, 2 and 3, at 40pt
+
+Numbers did move. Every figure that came off a slide landed in that slide's
+speaker notes or in a document the source line names, and none of them was a
+caveat:
+
+| Moved off the slide | To |
+|---|---|
+| `at lambda 120, an active share of 70.5%, still 82.3% reallocation` | slide 4 notes, IF ASKED, and `qa.md` |
+| flag-free subset, 46 companies, 36 missing, 78.3% | slide 1 notes, IF ATTACKED |
+| sensitivity 0.201 / 0.051 / 0.007 / 0.000, `US$2010/t`, the deflator 1.44, the full model chain | slide 3 notes |
+| Wilson 95% CI 89.5-99.6% on 50 hand-checked matches | slide 5 notes, and `docs/entity_resolution_audit.md` |
+| Chevron 9.1x, ExxonMobil 4.3x; Climate TRACE as the tool | slide 5 notes |
+| `361 of 500` as a row | nowhere: the 96pt `361` above it already said it |
+| the 98.6% Aqueduct join rate | appendix notes, and `docs/water_risk.md` |
+
+Two things were **added** to a slide rather than taken off one. `Rank 1 is best`
+on slide 5, which was in the notes only and left the closing line unreadable to
+anyone who did not already know that 344 is worse than 224. And `An exposure
+model, not a forecast.` on slide 3, which is the caveat this project is built on
+and which had never been set in type anywhere in the deck.

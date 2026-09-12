@@ -1,4 +1,4 @@
-/* Section 05: coverage, disclosure bias, limitations, provenance.
+/* What we cannot see: coverage, disclosure bias, limitations, provenance.
 
    Coverage is a judged criterion, so it is built as a finding rather than an
    apology: the partition of the index is the first chart, and the reason the
@@ -80,16 +80,57 @@
     injectCss();
     var host = document.getElementById('coverage-body');
     if (!host) return;
+    sectionHead(D);
+    registerDrawer(D);
     host.innerHTML = '';
     host.appendChild(partitionPanel(D));
     host.appendChild(biasPanel(D));
     host.appendChild(examplePanel(D));
     host.appendChild(limitsPanel(D));
-    host.appendChild(provenancePanel(D));
+    host.appendChild(F.details('Where every number on this site comes from',
+      '<b>' + fmt.int(D.scores.meta.indicators.length) + '</b> scored series, <b>7</b> reference series',
+      provenancePanel(D)));
     wireWaffle(D);
     wireBiasCharts(D);
     wireLedgerFilter();
   });
+
+  /* The heading carries the number, the reconciliation of the two counts a
+     reader will otherwise trip over, and the three limits of the source. */
+  function sectionHead(D) {
+    var cov = D.scores.coverage.by_tier;
+    var noMandatory = cov.reported + cov.unmeasurable;
+    var t = document.getElementById('cov-title');
+    var l = document.getElementById('cov-lede');
+    if (t) t.textContent = fmt.int(noMandatory) + ' of ' + fmt.int(D.scores.meta.n_companies) +
+      ' file no legally required emissions figure';
+    if (l) l.innerHTML = 'We invent nothing for them. That is ' + fmt.int(cov.unmeasurable) +
+      ' companies with no emissions number anywhere, plus ' + fmt.int(cov.reported) +
+      ' whose only number is one they published themselves. What we do have is US ' +
+      'facilities above 25 000 tonnes a year, and it stops at reporting year 2023.';
+  }
+
+  function registerDrawer(D) {
+    F.drawer.add('tiers', 'The three coverage tiers',
+      '<p>Every company sits in exactly one. A company we cannot measure is a declared ' +
+      'state, never a zero and never a deletion.</p><dl>' +
+      F.tierOrder.map(function (t) {
+        return '<dt>' + F.tier(t).label + ' <span class="mono">' +
+          fmt.int(D.scores.coverage.by_tier[t]) + '</span></dt><dd>' + F.tier(t).desc + '</dd>';
+      }).join('') + '</dl>' +
+      '<p>Two counts of the same idea run on this site and they are not the same number. ' +
+      fmt.int(D.scores.coverage.by_tier.unmeasurable) + ' companies have no mandatory tonnage ' +
+      'in the score. ' + fmt.int(D.scores.coverage.by_tier.reported +
+      D.scores.coverage.by_tier.unmeasurable) + ' have none once the self-reporters are ' +
+      'counted with them, which is the figure the fund uses. The control surface on screen ' +
+      'one works on a third: the 181 that carry no Scope 1 figure from any source at all.</p>');
+
+    F.drawer.add('classes', 'The four kinds of source',
+      '<p>Only one of them is allowed to move a score.</p><dl>' +
+      ['mandatory', 'voluntary', 'vendor', 'modelled'].map(function (c) {
+        return '<dt>' + c + '</dt><dd>' + CLASS_DESC[c] + '</dd>';
+      }).join('') + '</dl>');
+  }
 
   /* ============================ 1. the partition ============================ */
 
@@ -185,10 +226,15 @@
       '<span class="mono">' + fmt.int(cov.all_four_pillars) + '</span> companies carry all four pillars. ' +
       '<span class="mono">' + fmt.int(cov.one_pillar_only) + '</span> carry one only, which is the penalty ' +
       'record every listed company files. That imbalance is why a single rank cannot be defended, and it is ' +
-      'the reason section 03 publishes an interval.';
+      'the reason we publish an interval rather than a rank.';
     panel.appendChild(pill);
 
-    panel.appendChild(note(D.scores.meta.coverage_note));
+    panel.appendChild(note(D.scores.meta.coverage_note
+      .replace('coverage_tier unmeasurable', 'the not-measurable tier')));
+    panel.appendChild(el2('div', 'u-mt4', F.drawer.linkHTML('tiers',
+      'Three different counts of what we cannot measure appear on this site. ' +
+      'Here is how 181, 273 and ' + fmt.int(D.scores.coverage.by_tier.reported +
+      D.scores.coverage.by_tier.unmeasurable) + ' relate.')));
     panel.appendChild(prov('scores.json', 'coverage.by_tier, coverage.by_indicator', 'mandatory'));
     return panel;
   }
@@ -291,7 +337,8 @@
     panel.id = 'cv-bias';
     panel.appendChild(head(
       spec.title,
-      spec.subtitle,
+      /* GICS is the sector classification; the reader needs the sector, not its vendor */
+      spec.subtitle.replace('own GICS sector mean', 'own sector average'),
       '<b>n = ' + fmt.int(spec.panels[0].annotation.n) + '</b> rated, <b>' +
         fmt.int(spec.panels[1].annotation.n) + '</b> measured'
     ));
@@ -307,13 +354,14 @@
       var host = el('div', 'cv-chart');
       host.id = 'cv-chart-' + p.key;
       col.appendChild(host);
-      col.appendChild(statLine(p.annotation, i === 0));
       col.appendChild(el2('div', 'cv-read', i === 0
         ? 'Filing the whole checklist instead of none of it is worth ' +
           fmt.signed(p.annotation.beta, 1) + ' percentile points of vendor standing, inside the ' +
           'company’s own sector.'
         : 'The same move is worth ' + fmt.signed(p.annotation.beta, 1) + ' points in ours, which is not ' +
           'distinguishable from zero. Nothing here is bought by filing.'));
+      col.appendChild(el2('div', 'cv-reg u-mt4', F.detailsHTML('The regression', '',
+        statLine(p.annotation, i === 0).outerHTML)));
       two.appendChild(col);
     });
     panel.appendChild(two);
@@ -324,23 +372,22 @@
 
     panel.appendChild(chain(D));
 
-    panel.appendChild(note(D.bias.note));
-    panel.appendChild(note('Reported as it ran. The vendor consensus does not load on market cap ' +
-      'directly either: ' + regText(D, '1') + '. The mechanism is disclosure, not size, and with both ' +
-      'terms in one model size turns negative and insignificant (t = ' +
-      fmt.num(D.bias.multivariate.t_log_market_cap, 2) + ') while disclosure holds (t = ' +
-      fmt.num(D.bias.multivariate.t_disclosure_coverage, 2) + ', n = ' +
-      fmt.int(D.bias.multivariate.n) + ').'));
-    panel.appendChild(note('The benchmark is not six independent raters. Three of the six public ' +
-      'sources are re-uploads of one dead pull, one is generated by a language model, and one appears ' +
-      'to measure disclosure volume rather than performance. The disagreement survives all of that. ' +
-      'Any claim about one vendor’s method does not.'));
-
-    var cites = el('ul', 'note-list u-mt4');
-    D.bias.citations.forEach(function (c) {
-      cites.appendChild(el2('li', '', c.text));
-    });
-    panel.appendChild(cites);
+    var defence = '<div class="note">' + D.bias.note + '</div>' +
+      '<div class="note u-mt4">Reported as it ran. The vendor consensus does not load on ' +
+      'market cap directly either: ' + regText(D, '1') + '. The mechanism is disclosure, ' +
+      'not size, and with both terms in one model size turns negative and insignificant ' +
+      '(t = ' + fmt.num(D.bias.multivariate.t_log_market_cap, 2) + ') while disclosure holds ' +
+      '(t = ' + fmt.num(D.bias.multivariate.t_disclosure_coverage, 2) + ', n = ' +
+      fmt.int(D.bias.multivariate.n) + ').</div>' +
+      '<div class="note u-mt4">The benchmark is not six independent raters. Three of the six ' +
+      'public sources are re-uploads of one dead pull, one is generated by a language model, ' +
+      'and one appears to measure disclosure volume rather than performance. The disagreement ' +
+      'survives all of that. Any claim about one vendor’s method does not.</div>' +
+      '<ul class="note-list u-mt4">' + D.bias.citations.map(function (c) {
+        return '<li>' + c.text + '</li>';
+      }).join('') + '</ul>';
+    panel.appendChild(el2('div', 'u-mt4', F.detailsHTML(
+      'What we checked before publishing this', '4 notes', defence)));
 
     panel.appendChild(prov('bias.json', 'regressions A, B, 1, 7 and multivariate, ' +
       fmt.int(D.bias.bootstrap_draws) + ' bootstrap draws', 'voluntary and vendor material, tested, never scored'));
@@ -381,9 +428,9 @@
     wrap.innerHTML =
       '<div class="cv-chain-h">The mechanism is a chain, not a size effect</div>' +
       '<div class="cv-chain-row">' +
-        node('Market cap', 'log' + sub10() + ' USD') +
-        arrow(r7, 'coverage per decade of market cap', 3) +
-        node('Disclosure coverage', D.bias.components.length + '-item voluntary checklist') +
+        node('Market cap', 'how big the company is') +
+        arrow(r7, 'checklist items per 10&times; of market cap', 3) +
+        node('Voluntary disclosure', D.bias.components.length + '-item checklist') +
         '<div class="cv-forks">' +
           '<div class="cv-fork">' + arrow(rA, 'percentile points, within sector', 1) +
             node('Vendor ESG rating', 'what the market reads', 'accent') + '</div>' +
@@ -407,7 +454,10 @@
       '<div class="cv-arrow-v mono">' + fmt.signed(r.beta, dec) + '</div>' +
       '<div class="cv-arrow-l">' + unit + '</div>' +
       '<div class="cv-arrow-line"></div>' +
-      '<div class="cv-arrow-s mono">t ' + fmt.signed(r.t, 2) + ' · n ' + fmt.int(r.n) + '</div>' +
+      /* the verdict in words first, then the statistic it rests on. A bare
+         "t +6.89" is the same species of jargon as a Sobol index. */
+      '<div class="cv-arrow-s mono">' + (r.p < 0.05 ? 'holds up' : 'not distinguishable from zero') +
+        ' · t ' + fmt.signed(r.t, 2) + ' · n ' + fmt.int(r.n) + '</div>' +
       '</div>';
   }
 
@@ -530,7 +580,7 @@
     var panel = el('div', 'panel');
     panel.appendChild(head(
       'What that buys, on two companies',
-      'Both are coverage tier measured, so both are scored on filed tonnes. Only one of them files the paperwork.',
+      'The EPA measures both of them, so both are scored on filed tonnes. Only one of them files the paperwork.',
       '<b>n = 2</b> of ' + fmt.int(D.bias.counts.with_measured_intensity) + ' with a measured intensity'
     ));
 
@@ -615,8 +665,8 @@
            fmt.int(DOC_FACTS.trace_named.v) + ' of ' + fmt.int(DOC_FACTS.trace_named.of) +
            ' listings; the ' + fmt.int(DOC_FACTS.trace_companies.v) +
            ' holding at least a quarter million tonnes abroad file ' +
-           fmt.num(DOC_FACTS.us_mmt.v, 1) + ' MMT with the EPA and carry ' +
-           fmt.num(DOC_FACTS.nonus_mmt.v, 1) + ' MMT outside it. Remove the three names where the ' +
+           fmt.num(DOC_FACTS.us_mmt.v, 1) + ' million tonnes with the EPA and carry ' +
+           fmt.num(DOC_FACTS.nonus_mmt.v, 1) + ' million tonnes outside it. Remove the three names where the ' +
            'ownership layer cannot see US assets either and the visible share is ' +
            fmt.share(DOC_FACTS.visible_share_adj.v, 0) + '. A company whose plants sit abroad looks ' +
            'clean on this spine. That is a limit of the source, not a finding about the company.',
@@ -635,7 +685,7 @@
       {
         fig: fmt.int(ec.measured_emissions_year_2023 + ec.measured_emissions_year_older),
         unit: 'measured companies, ' + fmt.int(ec.measured_emissions_year_older) + ' on an older year',
-        t: 'GHGRP stops at reporting year 2023',
+        t: 'The EPA record stops at reporting year 2023',
         p: fmt.int(ec.measured_emissions_year_2023) + ' of the measured set are on 2023 and ' +
            fmt.int(ec.measured_emissions_year_older) + ' sit on an earlier year, the latest each one ' +
            'filed. Reporting year ' + DOC_FACTS.ghgrp_next_year.v + ' is not due until ' +
@@ -656,7 +706,7 @@
       {
         fig: fmt.int(DOC_FACTS.survivors_gone.v),
         unit: 'of ' + fmt.int(DOC_FACTS.survivors_gone.of) + ' tickers have left the index',
-        t: 'Survivorship is measured, not corrected',
+        t: 'Companies that left the index are counted, not corrected for',
         p: 'Today’s membership is applied to historical emissions. Of the tickers in the index on ' +
            DOC_FACTS.index_asof.s + ', ' + fmt.int(DOC_FACTS.survivors_gone.v) +
            ' are gone, and the departed set is energy-heavy, which flatters every trend on this site.',
@@ -666,9 +716,9 @@
         fig: fmt.share(DOC_FACTS.audit_precision.v, 1),
         unit: 'precision, ' + fmt.int(DOC_FACTS.audit_correct.v) + ' of ' +
               fmt.int(DOC_FACTS.audit_sample.v) + ' hand-checked',
-        t: 'Entity resolution is audited, not assumed',
+        t: 'Matching filings to companies is audited, not assumed',
         p: 'Facility filings name a parent string, not a ticker. A separate adversarial pass checked ' +
-           fmt.int(DOC_FACTS.audit_sample.v) + ' matches by hand: 95% Wilson interval ' +
+           fmt.int(DOC_FACTS.audit_sample.v) + ' matches by hand: 95% confidence interval ' +
            DOC_FACTS.audit_ci.s + ', and ' + fmt.share(DOC_FACTS.audit_tonnes_prec.v, 0) +
            ' precision once weighted by current-year tonnes, because the one bad row carries none. ' +
            'Every error found lives in years before 2023. ' +
@@ -677,25 +727,35 @@
       }
     ];
 
+    /* Each limit is its own disclosure: the number and the name of the thing we
+       cannot see stay on screen, and the paragraph that sizes it is one click
+       down, verbatim. Nothing here is cut, because this is the part that must
+       never be cut. */
     var list = el('div', 'cv-limits');
     items.forEach(function (it) {
-      var row = el('div', 'cv-limit');
+      var row = el('details', 'cv-limit dd');
       row.innerHTML =
-        '<div class="cv-limit-f"><div class="cv-limit-fig mono">' + it.fig + '</div>' +
-          '<div class="cv-limit-u">' + it.unit + '</div></div>' +
-        '<div><div class="cv-limit-t">' + it.t + '</div>' +
-          '<div class="cv-limit-p">' + it.p + '</div>' +
-          '<div class="cv-limit-s mono">' + it.src + '</div></div>';
+        '<summary>' +
+          '<div class="cv-limit-f"><div class="cv-limit-fig mono">' + it.fig + '</div>' +
+            '<div class="cv-limit-u">' + it.unit + '</div></div>' +
+          '<div class="cv-limit-t">' + it.t + '</div>' +
+        '</summary>' +
+        '<div class="dd-body"><div class="cv-limit-p">' + it.p + '</div>' +
+        '<div class="cv-limit-s mono">' + it.src + '</div></div>';
       list.appendChild(row);
     });
     panel.appendChild(list);
 
-    panel.appendChild(note(D.scores.meta.us_only_note));
-    panel.appendChild(note(D.ear.meta.caveat));
-    panel.appendChild(note(D.scores.meta.what_this_is_not));
-    panel.appendChild(note('Figures on this panel that are not in the five JSON files are read from ' +
-      link(DOC_COVERAGE, 'the coverage and validation audit') + ' and ' +
-      link(DOC_AUDIT, 'the entity resolution audit') + ', both of which reproduce from the repo.'));
+    panel.appendChild(el2('div', 'u-mt4', F.detailsHTML('What the whole score is not', '4 notes',
+      '<div class="note">' + D.scores.meta.us_only_note + '</div>' +
+      '<div class="note u-mt4">' + D.ear.meta.caveat + '</div>' +
+      '<div class="note u-mt4">' +
+      D.scores.meta.what_this_is_not.replace('revenue_exclusions.parquet',
+        'a separate revenue table') + '</div>' +
+      '<div class="note u-mt4">Figures on this panel that are not in the five JSON files are ' +
+      'read from ' + link(DOC_COVERAGE, 'the coverage and validation audit') + ' and ' +
+      link(DOC_AUDIT, 'the entity resolution audit') + ', both of which reproduce from the ' +
+      'repo.</div>')));
     panel.appendChild(prov('scores.json, ear.json and the two audit documents',
       'meta.us_only_note, meta.what_this_is_not, ear coverage', 'mandatory and modelled'));
     return panel;
@@ -739,7 +799,7 @@
       d: 'the promised rate the say-do gap is measured against',
       src: 'Net Zero Tracker and SBTi',
       cls: 'voluntary', n: D.say_do.meta.n_promise,
-      use: 'the promise half of section 02'
+      use: 'the say-do gap'
     });
     rows.push({
       k: 'Carbon price path',
@@ -761,12 +821,12 @@
       src: 'Commission Delegated Regulation (EU) ' + euNum(D.portfolio.meta.regulation) +
         ', via EUR-Lex',
       cls: 'mandatory', n: D.portfolio.universe.n_companies,
-      use: 'the portfolio in section 04'
+      use: 'the $1bn fund'
     });
 
     panel.appendChild(head(
       'Where every number on this site comes from',
-      'Four provenance classes. Only one of them is allowed to move a score.',
+      'Four kinds of source. Only one of them is allowed to move a score.',
       '<b>' + fmt.int(D.scores.meta.indicators.length) + '</b> scored indicators, <b>' +
         fmt.int(rows.length - D.scores.meta.indicators.length) + '</b> reference series'
     ));
@@ -858,8 +918,12 @@
     return el2('div', 'note u-mt4', text);
   }
 
+  /* This used to print under every panel as a debug line. It is one disclosure
+     per panel now, and the wording says what it is. */
   function prov(file, path, cls) {
-    return el2('div', 'cv-prov',
+    return el2('details', 'dd cv-prov-dd',
+      '<summary><span class="dd-t">Source file and field</span></summary>' +
+      '<div class="dd-body cv-prov">' +
       '<span class="cv-prov-k">source</span>' +
       '<span class="mono">' + file + '</span>' +
       '<span class="cv-prov-p">' + path + '</span>' +
@@ -976,10 +1040,21 @@
     '.cv-ex-rs{grid-column:1 / -1;font-size:12px;color:var(--ink-3);margin-top:-4px}',
 
     /* limitations */
-    '.cv-limits{display:grid;gap:var(--s4)}',
-    '.cv-limit{display:grid;grid-template-columns:186px 1fr;gap:var(--s5);',
-    'border-top:1px solid var(--rule);padding-top:var(--s3)}',
-    '.cv-limit:first-child{border-top:0;padding-top:0}',
+    '.cv-limits{display:grid;gap:var(--s2)}',
+    /* each limit is a disclosure: the figure and the name of the thing we
+       cannot see are the summary, the paragraph that sizes it is the body */
+    '.cv-limit{border:0;border-top:1px solid var(--rule);background:none}',
+    '.cv-limit:first-child{border-top:0}',
+    '.cv-limit > summary{display:grid;grid-template-columns:186px 1fr;gap:var(--s5);',
+    'align-items:baseline;padding:var(--s3) 0;border-left:0}',
+    '.cv-limit > summary:hover{background:none}',
+    '.cv-limit > summary:hover .cv-limit-t{color:var(--accent-2)}',
+    '.cv-limit > summary::after{content:"+";font-family:var(--font-mono);color:var(--accent);',
+    'position:absolute;right:2px;top:var(--s3)}',
+    '.cv-limit[open] > summary::after{content:"\\2212"}',
+    '.cv-limit > summary{position:relative;padding-right:var(--s5)}',
+    '.cv-limit > .dd-body{border-top:0;padding:0 var(--s5) var(--s4) 186px}',
+    '.cv-limit .cv-limit-f{display:block}',
     '.cv-limit-fig{font-size:30px;font-weight:600;letter-spacing:-0.02em;line-height:1.05;color:var(--accent)}',
     '.cv-limit-u{font-size:12px;color:var(--ink-3);line-height:1.35;margin-top:3px}',
     '.cv-limit-t{font-size:var(--fs-sm);font-weight:600}',

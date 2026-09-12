@@ -1,4 +1,4 @@
-/* Section 03: the rank interval, the Sobol variance shares, the weight audit,
+/* Rank intervals: the interval itself, the Sobol variance shares, the weight audit,
    the Pareto front and what would narrow the band.
 
    Every figure is read out of scores.json. Nothing numeric is typed into the
@@ -15,12 +15,34 @@
   var FACTOR_LABEL = {
     missing_data:     'the missing-data assumption',
     pillar_inclusion: 'which pillars are in',
-    sector_relative:  'sector-relative or absolute',
-    normalisation:    'normalisation',
+    sector_relative:  'judged against its sector, or against everyone',
+    normalisation:    'how scores are put on one scale',
     weights:          'the weights',
-    aggregation:      'the aggregation rule',
-    winsorisation:    'winsorisation'
+    aggregation:      'how the four pillars are combined',
+    winsorisation:    'trimming the extremes'
   };
+
+  /* the file's own setting names, in words. Only the wording is ours. */
+  var SETTING_LABEL = {
+    'Dirichlet(1,1,1,1) over the four pillars': 'every weighting, drawn at random'
+  };
+  var BAND_LABEL = {
+    'all triggers live': 'nothing held fixed, which is what we publish',
+    'available-case only': 'measured companies only',
+    'NMAR-pessimistic only': 'pessimistic about the non-filers only',
+    'copeland only': 'one way of combining the pillars, fixed',
+    'linear only': 'the other way of combining them, fixed',
+    'absolute lens only': 'judged against everyone, never the sector',
+    'sector-relative only': 'judged against its own sector, always',
+    'sector-median only': 'one missing-data rule, fixed',
+    'global percentile only': 'one way of scaling the scores, fixed',
+    'all four pillars kept': 'all four pillars, always',
+    'absolute + sector-median + all four pillars': 'those three held together',
+    'absolute + available-case + all four pillars': 'those three, on measured companies only'
+  };
+  function bandLabel(k) {
+    return BAND_LABEL[k] || k.replace(/ only$/, ' held fixed');
+  }
 
   var state = {
     D: null,
@@ -98,6 +120,8 @@
       '#ranks .rk-big .of{font-size:24px;color:var(--ink-3)}',
       '#ranks .rk-biglab{font-size:var(--fs-sm);font-weight:600;margin-top:var(--s2)}',
       '#ranks .rk-sub{font-size:13px;color:var(--ink-3);line-height:1.45;margin-top:4px}',
+      '#ranks .rk-finding{font-size:var(--fs-body);color:var(--ink);max-width:86ch;' +
+        'border-left:2px solid var(--accent);padding-left:var(--s3)}',
       '#ranks .rk-pill{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:var(--s3)}',
       '#ranks .rk-pill div{border-top:1px solid var(--rule-2);padding-top:4px}',
       '#ranks .rk-pill .pk{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}',
@@ -126,6 +150,7 @@
       '#ranks .sob-rest .sob-k,#ranks .sob-rest .sob-v{color:var(--muted-ink)}',
 
       /* weight audit */
+      '#ranks #rk-weights{max-width:760px}',
       '#ranks .wa-row{display:grid;grid-template-columns:138px minmax(0,1fr) 56px;gap:var(--s3);' +
         'align-items:center;padding:7px 0}',
       '#ranks .wa-k{font-family:var(--font-mono);font-size:var(--fs-sm);color:var(--ink)}',
@@ -162,7 +187,7 @@
         'font-weight:600;letter-spacing:-.02em}',
 
       /* conditional bands */
-      '#ranks .cb-row{display:grid;grid-template-columns:238px minmax(0,1fr) 64px 88px;gap:var(--s3);align-items:center;' +
+      '#ranks .cb-row{display:grid;grid-template-columns:270px minmax(0,1fr) 64px 74px;gap:var(--s3);align-items:center;' +
         'padding:4px 0;border-bottom:1px solid var(--rule)}',
       '#ranks .cb-row:last-child{border-bottom:0}',
       '#ranks .cb-k{font-size:var(--fs-sm);color:var(--ink-2)}',
@@ -170,10 +195,11 @@
       '#ranks .cb-bar{position:absolute;left:0;top:0;bottom:0;background:var(--rule-2)}',
       '#ranks .cb-tick{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--tier-measured)}',
       '#ranks .cb-v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:var(--fs-sm);text-align:right}',
+      '#ranks .cb-n{color:var(--ink-3);font-size:12px}',
       '#ranks .cb-n{font-family:var(--font-mono);font-size:12px;color:var(--ink-3);text-align:right}',
       '#ranks .cb-row.is-live .cb-k,#ranks .cb-row.is-live .cb-v{color:var(--accent-2)}',
       '#ranks .cb-row.is-live .cb-bar{background:var(--accent)}',
-      '#ranks .cb-head{display:grid;grid-template-columns:238px minmax(0,1fr) 64px 88px;gap:var(--s3);font-size:12px;' +
+      '#ranks .cb-head{display:grid;grid-template-columns:270px minmax(0,1fr) 64px 74px;gap:var(--s3);font-size:12px;' +
         'color:var(--ink-3);font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;' +
         'padding-bottom:4px;border-bottom:1px solid var(--rule-2)}',
       '#ranks .cb-head .r{text-align:right}',
@@ -193,7 +219,7 @@
       '<div class="rk-grid">' +
         '<div class="chart-wrap">' +
           '<div class="panel-head" style="margin-bottom:12px">' +
-            '<div class="panel-title">Every company is an interval, not a rank</div>' +
+            '<div class="panel-title">Every company, ordered by median rank</div>' +
             '<div class="panel-n" id="rk-n"></div>' +
           '</div>' +
           '<div class="rk-ctl">' +
@@ -216,38 +242,35 @@
         '</div>' +
         '<aside class="card" id="rk-card"></aside>' +
       '</div>' +
-      '<div class="note u-mt4">' + m.what_this_is_not + '</div>' +
-
-      '<div class="panel u-mt5">' +
-        '<div class="panel-head">' +
-          '<div><div class="panel-title">What moves a rank is not the weights</div>' +
-          '<div class="panel-sub">First-order share of the variance of a company rank, ' +
-            'one row per modelling choice.</div></div>' +
-          '<div class="panel-n" id="rk-sob-n"></div>' +
+      '<div class="note u-mt4">' +
+        m.what_this_is_not.replace('revenue_exclusions.parquet', 'a separate revenue table') +
         '</div>' +
-        '<div class="rk-two">' +
-          '<div>' +
-            '<div class="rk-seg" id="rk-seg"></div>' +
-            '<div id="rk-sobol"></div>' +
-            '<div class="note u-mt4" id="rk-sobol-note"></div>' +
-          '</div>' +
-          '<div id="rk-weights"></div>' +
-        '</div>' +
-      '</div>' +
+      '<p class="rk-finding u-mt4">What we assume about the companies we cannot measure ' +
+        'moves a company\u2019s rank further than the weights do. The weights are the thing ' +
+        'everyone argues about.</p>' +
 
-      '<div class="panel u-mt5" id="rk-pareto"></div>' +
+      F.detailsHTML('What moves a rank',
+        Object.keys(m.trigger_factors).length + ' choices &times; <b>' +
+          fmt.int(m.n_draws) + '</b> draws',
+        '<div class="panel-sub">How much of a company\u2019s rank movement each choice ' +
+          'explains on its own. <span class="panel-n" id="rk-sob-n"></span></div>' +
+        '<div class="rk-seg u-mt4" id="rk-seg"></div>' +
+        '<div id="rk-sobol"></div>' +
+        '<div class="note u-mt4" id="rk-sobol-note"></div>') +
 
-      '<div class="panel u-mt5">' +
-        '<div class="panel-head">' +
-          '<div><div class="panel-title">What would narrow the band</div>' +
-          '<div class="panel-sub">The same ' + fmt.int(m.n_draws) + ' draws, sliced by the choices held ' +
-            'fixed. Fixing a choice buys precision only if the choice is defensible.</div></div>' +
-          '<div class="panel-n"><b>n = ' + fmt.int(m.n_companies) + '</b> companies, ' +
-            Object.keys(D.scores.conditional_bands).length + ' slices</div>' +
-        '</div>' +
-        '<div id="rk-cond"></div>' +
-        '<div class="note u-mt4" id="rk-cond-note"></div>' +
-      '</div>';
+      F.detailsHTML('Stated weights against the weights that do the work', '4 pillars',
+        '<div id="rk-weights"></div>') +
+
+      '<div id="rk-pareto" class="u-mt5"></div>' +
+
+      F.detailsHTML('What would narrow the band',
+        Object.keys(D.scores.conditional_bands).length + ' slices, <b>n = ' +
+          fmt.int(m.n_companies) + '</b>',
+        '<div class="panel-sub">The same ' + fmt.int(m.n_draws) + ' draws, sliced by the ' +
+          'choices held fixed. Fixing a choice buys precision only if the choice is ' +
+          'defensible.</div>' +
+        '<div class="u-mt4" id="rk-cond"></div>' +
+        '<div class="note u-mt4" id="rk-cond-note"></div>');
   }
 
   /* ---------------- rows and filters ---------------- */
@@ -623,7 +646,7 @@
         row('Widest', fmt.int(s.max_width)) +
         row('Wider than 200 ranks', fmt.int(s.n_wider_than_200) + ' <small>companies</small>') +
         row('Wider than 300 ranks', fmt.int(s.n_wider_than_300) + ' <small>companies</small>') +
-        row('Rank shift vs one fixed run', fmt.num(h.average_shift_vs_naive, 1) + ' <small>places</small>') +
+        row('Run it once, the average rank moves', fmt.num(h.average_shift_vs_naive, 1) + ' <small>places</small>') +
       '</div>' +
       '<table class="tbl u-mt4"><thead><tr><th>Tier</th><th>n</th>' +
         '<th>Band</th><th>Median</th></tr></thead><tbody>' +
@@ -712,7 +735,7 @@
         row('Ranked in', fmt.int(draws) + ' <small>of ' + fmt.int(m.n_draws) + ' draws</small>') +
         row('Inside the top 100', fmt.share(top100, 1) + ' <small>of draws</small>') +
         row('Inside the bottom 100', fmt.share(bot100, 1) + ' <small>of draws</small>') +
-        row('One fixed specification', fmt.int(c.naive) + ' <small>' +
+        row('If we had picked one method and stopped', fmt.int(c.naive) + ' <small>' +
             (c.naive < c.med ? fmt.int(c.med - c.naive) + ' better than our median' :
              c.naive > c.med ? fmt.int(c.naive - c.med) + ' worse than our median' : 'same as our median') +
             '</small>') +
@@ -832,14 +855,14 @@
     var host = document.getElementById('rk-sobol');
     host.innerHTML = order.map(function (k) {
       var trig = D.scores.meta.trigger_factors[k];
-      var n = Array.isArray(trig) ? trig.length + ' settings' : trig;
+      var n = Array.isArray(trig) ? trig.length + ' settings' : (SETTING_LABEL[trig] || trig);
       return '<div class="sob-row' + (k === 'weights' ? ' is-key' : '') + '" data-k="' + k + '">' +
         '<div class="sob-k">' + (FACTOR_LABEL[k] || k) + '<span class="opt">' + n + '</span></div>' +
         '<div class="sob-track"><span class="sob-bar" style="width:0%"></span></div>' +
         '<div class="sob-v"></div></div>';
     }).join('') +
       '<div class="sob-rest" data-k="_rest">' +
-        '<div class="sob-k">interactions and what no single choice explains</div>' +
+        '<div class="sob-k">choices acting together</div>' +
         '<div class="sob-track"><span class="sob-bar" style="width:0%"></span></div>' +
         '<div class="sob-v"></div></div>';
 
@@ -848,10 +871,16 @@
     paintSobol();
 
     document.getElementById('rk-sobol-note').innerHTML =
-      so.estimator + ' Weights enter as ' + so.weights_binning + '. Where the EPA does measure a ' +
-      'company, the weights matter more, ' + fmt.share(byTier.measured.weights, 1) +
-      ', and they are still not the largest factor. Rows keep the all-index order in every ' +
-      'view, so the bars stay comparable.';
+      'Where the EPA does measure a company, the weights matter more, ' +
+      fmt.share(byTier.measured.weights, 1) + ', and they are still not the largest factor. ' +
+      F.detailsHTML('How this is measured', '',
+        /* the page says "every weighting, drawn at random" where the data file
+           says Dirichlet(1,1,1,1). Both are true; the parameterisation belongs
+           here, one click down, rather than nowhere. */
+        '<p>' + so.estimator + ' Weights enter as ' +
+        so.weights_binning.replace('the Dirichlet draw',
+          'a ' + D.scores.meta.trigger_factors.weights.replace(' over the four pillars', '') +
+          ' draw, uniform over the four pillars,') + '.</p>');
   }
 
   function paintSobol() {
@@ -918,37 +947,30 @@
       '</div>';
     }).join('');
 
-    var bm = wa.benchmarks;
-    var marks = Object.keys(bm).map(function (k) { return { k: k, v: bm[k] }; });
-    marks.sort(function (a, b) { return b.v - a.v; });
-
     var host = document.getElementById('rk-weights');
     host.innerHTML =
-      '<div class="panel-head" style="border-bottom:0;padding-bottom:0;margin-bottom:8px">' +
-        '<div><div class="panel-title">Stated weights are not the real weights</div>' +
-        '<div class="panel-sub">Every pillar is given ' + fmt.num(nom[pillars[0].key], 2) +
-          '. The variance of the rank says otherwise.</div></div>' +
-      '</div>' +
-      '<div class="wa-head"><div>nominal ' + fmt.num(nom[pillars[0].key], 2) + ' marked, 0 to ' +
-        fmt.num(dom, 2) + '</div><div>effective</div></div>' +
+      '<div class="panel-sub">We say the four pillars are equal, ' +
+        fmt.num(nom[pillars[0].key], 2) + ' each. The variance of the rank says one of them ' +
+        'does a quarter more work than another.</div>' +
+      '<div class="wa-head u-mt4"><div>stated ' + fmt.num(nom[pillars[0].key], 2) +
+        ' marked, 0 to ' + fmt.num(dom, 2) + '</div><div>effective</div></div>' +
       rows +
-      dmSvg(wa, marks) +
-      '<div class="dm-list">' +
-        marks.concat([{ k: 'FILED, this index', v: wa.d_m, ours: true }])
-          .sort(function (a, b) { return b.v - a.v; })
-          .map(function (mk) {
-            return '<div' + (mk.ours ? ' class="is-ours"' : '') + '><span>' + mk.k +
-              '</span><b>' + fmt.num(mk.v, 2) + '</b></div>';
-          }).join('') +
-      '</div>' +
-      '<div class="note u-mt4">' + wa.definition + ' Reference specification: ' +
+      dmSvg(wa) +
+      F.detailsHTML('How this is measured', '',
+        '<p class="note">' + wa.definition + ' Reference specification: ' +
         wa.reference_specification + '. Bounds across the draw ' +
         fmt.num(wa.d_m_bounds[0], 3) + ' to ' + fmt.num(wa.d_m_bounds[1], 3) +
-        '; available-case only ' + fmt.num(wa.d_m_available_case, 3) + '.</div>';
+        '; measured companies only ' + fmt.num(wa.d_m_available_case, 3) + '.</p>' +
+        '<p class="note u-mt4">The same figure for published composite indicators: ' +
+        Object.keys(wa.benchmarks).sort(function (a, b) {
+          return wa.benchmarks[b] - wa.benchmarks[a];
+        }).map(function (k) {
+          return k + ' ' + fmt.num(wa.benchmarks[k], 2);
+        }).join(', ') + '.</p>');
   }
 
-  /* d_m against the published composite indicators, on one line */
-  function dmSvg(wa, marks) {
+  /* the distance between stated and effective importance, on one line */
+  function dmSvg(wa) {
     var w = 460, h = 74, y = 40, x0 = 6, x1 = w - 6;
     function px(v) { return x0 + v * (x1 - x0); }
     var ticks = [0, 0.25, 0.5, 0.75, 1];
@@ -962,22 +984,19 @@
       parts.push('<text x="' + px(t).toFixed(1) + '" y="' + (y + 20) +
         '" class="tick-label" text-anchor="middle">' + fmt.num(t, 2) + '</text>');
     });
-    marks.forEach(function (mk) {
-      parts.push('<circle cx="' + px(mk.v).toFixed(1) + '" cy="' + y + '" r="4" ' +
-        'style="fill:var(--ink-3)"/>');
-    });
     parts.push('<line x1="' + px(wa.d_m).toFixed(1) + '" x2="' + px(wa.d_m).toFixed(1) +
       '" y1="' + (y - 16) + '" y2="' + (y + 6) + '" style="stroke:var(--accent)" stroke-width="2"/>');
     parts.push('<text x="' + px(wa.d_m).toFixed(1) + '" y="' + (y - 22) +
-      '" class="pt-label" text-anchor="middle" style="fill:var(--accent-2)">d_m ' +
-      fmt.num(wa.d_m, 3) + '</text>');
+      '" class="pt-label" text-anchor="middle" style="fill:var(--accent-2)">FILED  ' +
+      fmt.num(wa.d_m, 2) + '</text>');
     parts.push('<text x="' + x0 + '" y="' + (h - 2) + '" class="tick-label">stated equals effective</text>');
     parts.push('<text x="' + x1 + '" y="' + (h - 2) +
       '" class="tick-label" text-anchor="end">one pillar does all the work</text>');
     return '<div class="u-mt4"><div class="panel-sub" style="margin-bottom:4px">' +
-      'd_m, the distance between stated and effective importance, against published composite ' +
-      'indicators</div><svg width="' + w + '" height="' + h + '" role="img" ' +
-      'aria-label="d_m against published composite indicators">' + parts.join('') + '</svg></div>';
+      'The distance between the weights we state and the weights that move the rank' +
+      '</div><svg width="' + w + '" height="' + h + '" role="img" ' +
+      'aria-label="distance between stated and effective weights">' + parts.join('') +
+      '</svg></div>';
   }
 
   /* ---------------- Pareto front and head to head ---------------- */
@@ -1007,18 +1026,16 @@
 
     var dom = D.scores.pairwise_dominance_top20;
     var host = document.getElementById('rk-pareto');
-    host.innerHTML =
-      '<div class="panel-head">' +
-        '<div><div class="panel-title">The two results that survive every weighting</div>' +
-        '<div class="panel-sub">A Pareto front carries no weights at all, and a head-to-head ' +
-          'probability carries no aggregation rule.</div></div>' +
-        '<div class="panel-n"><b>n = ' + fmt.int(p.n_scored) + '</b> companies with all four pillars observed</div>' +
-      '</div>' +
-      '<div class="rk-par">' +
+    host.innerHTML = F.detailsHTML('Results that hold under any weighting',
+      '<b>n = ' + fmt.int(p.n_scored) + '</b> with all four pillars',
+      '<div class="panel-sub">A Pareto front carries no weights at all, and a head-to-head ' +
+        'probability carries no aggregation rule. Neither depends on the argument everyone ' +
+        'has about weights.</div>' +
+      '<div class="rk-par u-mt4">' +
         '<div>' +
           '<div class="rk-big">' + fmt.int(p.front_1.length) + '<span class="of"> / ' +
             fmt.int(p.n_scored) + '</span></div>' +
-          '<div class="rk-biglab">on the first Pareto front</div>' +
+          '<div class="rk-biglab">beaten by nobody on all four pillars at once</div>' +
           '<div class="rk-sub">No other scored company beats them on all four pillars at once. ' +
             fmt.int(p.n_fronts) + ' fronts in total.</div>' +
           '<div class="par-list">' + list + '</div>' +
@@ -1032,7 +1049,7 @@
           '<div class="note u-mt4">' + p.note + '</div>' +
         '</div>' +
         '<div>' + (dom && dom.tickers ? dominance(D, dom) : '') + '</div>' +
-      '</div>';
+      '</div>');
   }
 
   function dominance(D, dom) {
@@ -1118,8 +1135,8 @@
     });
     var narrow = keys[keys.length - 1];
     document.getElementById('rk-cond-note').innerHTML =
-      'Our published band is the row with every trigger live, ' +
-      fmt.num(cb['all triggers live'].median_width, 1) + ' ranks. Holding ' + narrow +
+      'Our published band is the row with nothing held fixed, ' +
+      fmt.num(cb['all triggers live'].median_width, 1) + ' ranks. Holding ' + bandLabel(narrow) +
       ' takes it to ' + fmt.num(cb[narrow].median_width, 1) + ', on ' +
       fmt.int(cb[narrow].n_draws) + ' of the ' + fmt.int(D.scores.meta.n_draws) +
       ' draws. We do not publish that number, because nothing makes those three settings ' +
@@ -1129,19 +1146,20 @@
     host.innerHTML =
       '<div class="cb-head"><div>choices held fixed</div><div></div>' +
         '<div class="r">all ' + fmt.int(D.scores.meta.n_companies) + '</div>' +
-        '<div class="r">draws used</div></div>' +
+        '<div class="r">draws</div></div>' +
       keys.map(function (k) {
         var r = cb[k];
         var live = r.n_draws === D.scores.meta.n_draws;
-        return '<div class="cb-row' + (live ? ' is-live' : '') + '">' +
-          '<div class="cb-k">' + k + '</div>' +
+        return '<div class="cb-row' + (live ? ' is-live' : '') + '" title="' +
+          fmt.int(r.n_draws) + ' of the ' + fmt.int(D.scores.meta.n_draws) + ' draws">' +
+          '<div class="cb-k">' + bandLabel(k) + '</div>' +
           '<div class="cb-track">' +
             '<span class="cb-bar" style="width:' + (r.median_width / max * 100).toFixed(2) + '%"></span>' +
             '<span class="cb-tick" style="left:' + (r.median_width_measured / max * 100).toFixed(2) +
               '%" title="measured companies only"></span>' +
           '</div>' +
           '<div class="cb-v">' + fmt.num(r.median_width, 1) + '</div>' +
-          '<div class="cb-n">' + fmt.int(r.n_draws) + '</div>' +
+          '<div class="cb-v cb-n">' + fmt.int(r.n_draws) + '</div>' +
         '</div>';
       }).join('') +
       '<div class="legend u-mt4">' +

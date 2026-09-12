@@ -177,7 +177,7 @@
       short: 'measured',
       css: 'var(--tier-measured)',
       cls: 'tier-measured',
-      desc: 'EPA GHGRP tonnage, filed under 40 CFR Part 98'
+      desc: 'a tonnage filed with the EPA under legal penalty'
     },
     reported: {
       label: 'Reported',
@@ -373,6 +373,137 @@
     hide: function () { if (tipEl) tipEl.hidden = true; }
   };
 
+  /* ---------------- progressive disclosure ----------------
+     One pattern for the whole site: a native <details> with a summary styled
+     as a row. No JavaScript, keyboard reachable, open in print, and it works
+     over file://. The summary has to name what is inside it, so every label
+     is a noun phrase and a count, never "more". */
+
+  F.details = function (label, nHtml, body, cls) {
+    var d = F.el('details', { class: 'dd' + (cls ? ' ' + cls : '') });
+    var sum = F.el('summary', {}, [F.el('span', { class: 'dd-t', text: label })]);
+    if (nHtml) sum.appendChild(F.el('span', { class: 'dd-n', html: nHtml }));
+    d.appendChild(sum);
+    var wrap = F.el('div', { class: 'dd-body' });
+    (Array.isArray(body) ? body : [body]).forEach(function (b) {
+      if (!b) return;
+      wrap.appendChild(typeof b === 'string' ? F.el('div', { html: b }) : b);
+    });
+    d.appendChild(wrap);
+    return d;
+  };
+
+  /* the same thing for the modules that build strings */
+  F.detailsHTML = function (label, nHtml, bodyHtml, cls) {
+    return '<details class="dd' + (cls ? ' ' + cls : '') + '"><summary>' +
+      '<span class="dd-t">' + label + '</span>' +
+      (nHtml ? '<span class="dd-n">' + nHtml + '</span>' : '') +
+      '</summary><div class="dd-body">' + bodyHtml + '</div></details>';
+  };
+
+  /* ---------------- glossary ----------------
+     A dozen terms that have to stay because they are the words the regulation
+     and the filings use. Dotted underline in the default paint, definition on
+     hover, focus and tap. A tooltip nobody can see is not disclosure. */
+
+  var GLOSS = {
+    'EVIC': 'Enterprise value including cash: equity plus debt, what it costs to buy the whole company.',
+    'Scope 1': 'Emissions from a company’s own sites and vehicles.',
+    'Scope 2': 'Emissions from the electricity it buys.',
+    'Scope 3': 'Emissions from its supply chain and its products.',
+    'tracking error': 'How far a fund’s returns drift from the index it is measured against.',
+    'value at risk': 'Here it means the share of a company’s value a carbon bill would destroy. Not the finance term of art.',
+    'coverage tier': 'Which of three states a company’s emissions record is in: measured by the EPA, self-reported only, or nothing mandatory at all.',
+    'say-do gap': 'The cut a company promised each year, minus the cut its EPA-measured emissions actually show.',
+    'sub-threshold': 'Under the 25 000 tonne reporting floor, so the figure we use is an upper bound.',
+    'high impact sectors': 'The heavy-emitting industries the EU regulation names, mining, manufacturing, power, transport and the rest.',
+    'NGFS': 'Network for Greening the Financial System: the central banks’ standard set of climate scenarios.',
+    'Brinson': 'The standard way to split a change into the part from picking names and the part from moving weight between sectors.',
+    'PCAF data quality 5': 'The weakest data grade there is: a figure estimated from a sector average, not reported.',
+    'GHGRP': 'The EPA programme that makes a US facility report its emissions once it passes 25 000 tonnes a year.',
+    'active share': 'The share of the book that differs from the index.',
+    'EPA GHGRP': 'The EPA programme that makes a US facility report its emissions once it passes 25 000 tonnes a year.'
+  };
+
+  /* html string, for the modules that build markup */
+  F.g = function (term, key) {
+    var d = GLOSS[key || term];
+    if (!d) return term;
+    return '<span class="gl" tabindex="0" role="note" data-gl="' + d.replace(/"/g, '&quot;') +
+      '">' + term + '</span>';
+  };
+  /* element, for the modules that build nodes */
+  F.gEl = function (term, key) {
+    var s = document.createElement('span');
+    s.innerHTML = F.g(term, key);
+    return s.firstChild;
+  };
+
+  /* ---------------- the "how this works" drawer ----------------
+     Five sections reference the same definitions. They live here once, and
+     every entry point opens the same panel without losing scroll position. */
+
+  var drawerItems = [];
+  var drawerEl = null;
+
+  F.drawer = {
+    add: function (key, title, body) {
+      drawerItems.push({ key: key, title: title, body: body });
+    },
+    /* a button that opens the drawer at one item */
+    linkHTML: function (key, text) {
+      return '<button class="dr-go" type="button" data-dr="' + key + '">' + text + '</button>';
+    },
+    link: function (key, text) {
+      return F.el('button', { class: 'dr-go', type: 'button', 'data-dr': key, text: text });
+    },
+    open: function (key) {
+      if (!drawerEl) buildDrawer();
+      drawerEl.hidden = false;
+      document.documentElement.classList.add('has-drawer');
+      var t = key && drawerEl.querySelector('#dr-' + key);
+      if (t) t.scrollIntoView({ block: 'start' });
+      else drawerEl.querySelector('.dr-body').scrollTop = 0;
+      var c = drawerEl.querySelector('.dr-x');
+      if (c) c.focus();
+    },
+    close: function () {
+      if (drawerEl) drawerEl.hidden = true;
+      document.documentElement.classList.remove('has-drawer');
+    }
+  };
+
+  function buildDrawer() {
+    drawerEl = F.el('aside', { class: 'drawer', id: 'filed-drawer', hidden: 'hidden',
+      role: 'dialog', 'aria-label': 'How this works' });
+    var head = F.el('div', { class: 'dr-head' }, [
+      F.el('div', { class: 'dr-title', text: 'How this works' }),
+      F.el('button', { class: 'dr-x', type: 'button', text: '×',
+        'aria-label': 'close', onclick: function () { F.drawer.close(); } })
+    ]);
+    var body = F.el('div', { class: 'dr-body' });
+    drawerItems.forEach(function (it) {
+      body.appendChild(F.el('h3', { class: 'dr-h', id: 'dr-' + it.key, text: it.title }));
+      var w = F.el('div', { class: 'dr-sec' });
+      (Array.isArray(it.body) ? it.body : [it.body]).forEach(function (b) {
+        if (!b) return;
+        w.appendChild(typeof b === 'string' ? F.el('div', { html: b }) : b);
+      });
+      body.appendChild(w);
+    });
+    drawerEl.appendChild(head);
+    drawerEl.appendChild(body);
+    document.body.appendChild(drawerEl);
+  }
+
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest ? ev.target.closest('[data-dr]') : null;
+    if (b) { ev.preventDefault(); F.drawer.open(b.getAttribute('data-dr')); }
+  });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape') F.drawer.close();
+  });
+
   /* ---------------- cross-file ticker index ---------------- */
 
   function buildIndex(d) {
@@ -394,6 +525,37 @@
       port: F.index.portfolio[t] || null
     };
   };
+
+  /* ---------------- the nav rail ----------------
+     Closed it is 48px of section numbers. CSS opens it on hover and on focus;
+     this is only the pinned state, which is the one that has to survive a
+     reload for someone reading the live site. localStorage is wrapped because
+     a file:// page and a locked-down browser both throw on touching it, and a
+     nav that cannot remember is still a nav. Nothing here opens the rail on a
+     timer or on scroll: a pointer, a key or this button, and that is all. */
+
+  function navRail() {
+    var nav = document.getElementById('nav');
+    var btn = document.getElementById('nav-x');
+    if (!nav || !btn) return;
+    var KEY = 'filed.nav.open';
+
+    function set(open, remember) {
+      nav.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close the section list' : 'Open the section list');
+      if (remember) { try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {} }
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    set(saved === '1', false);
+
+    btn.addEventListener('click', function () {
+      set(!nav.classList.contains('is-open'), true);
+      btn.blur();   /* otherwise :focus-within holds it open against the click */
+    });
+  }
 
   /* ---------------- nav scroll spy ---------------- */
 
@@ -422,7 +584,7 @@
   global.FILED = F;
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { navSpy(); boot(); });
-  } else { navSpy(); boot(); }
+    document.addEventListener('DOMContentLoaded', function () { navRail(); navSpy(); boot(); });
+  } else { navRail(); navSpy(); boot(); }
 
 }(window));
