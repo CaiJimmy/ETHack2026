@@ -1,0 +1,17 @@
+{
+  "source": "EUR-Lex, Commission Delegated Regulation (EU) 2020/1818",
+  "citation": "Source: EUR-Lex, (c) European Union, 1998-2026",
+  "rules_encoded": 24,
+  "definitions_encoded": 6,
+  "fetched": [
+    {
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020R1818",
+      "retrieved_at": "2026-09-12T12:06:57+00:00",
+      "http_status": 200,
+      "bytes": 83521,
+      "sha256": "5c1e14120cdea649e7f05c1826e714bdfdf8641cf1895093fd40e14af11aa422",
+      "licence": "EUR-Lex reuse policy. (c) European Union, 1998-2026.",
+      "redistribution": "Reuse of EU legislative text and of numbers derived from it is authorised, provided the source is acknowledged: 'Source: EUR-Lex, (c) European Union, 1998-2026'. We may publish these rules."
+    }
+  ]
+}

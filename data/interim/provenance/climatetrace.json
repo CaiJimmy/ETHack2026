@@ -1,0 +1,65 @@
+{
+  "source": "Climate TRACE",
+  "release": "v5.10.0",
+  "provenance_class": "modelled",
+  "retrieved_at": "2026-09-12T14:08:30.988147+00:00",
+  "files": [
+    {
+      "url": "https://downloads.climatetrace.org/latest/sector_packages/co2e_100yr/power.zip",
+      "retrieved_at": "2026-09-12T14:08:30.988211+00:00",
+      "http_status": null,
+      "bytes": 26525723,
+      "sha256": "b943ede1924633740775abfaeb24617a48039ff5f68eb34020cb07e9ac01305d",
+      "cached": true
+    },
+    {
+      "url": "https://downloads.climatetrace.org/latest/sector_packages/co2e_100yr/manufacturing.zip",
+      "retrieved_at": "2026-09-12T14:08:31.001993+00:00",
+      "http_status": null,
+      "bytes": 45852775,
+      "sha256": "51dd3003112986d7167689147794871425798ed3ae8926297c964f72234e3186",
+      "cached": true
+    },
+    {
+      "url": "https://downloads.climatetrace.org/latest/sector_packages/co2e_100yr/fossil_fuel_operations.zip",
+      "retrieved_at": "2026-09-12T14:08:31.023143+00:00",
+      "http_status": null,
+      "bytes": 14015463,
+      "sha256": "0594d155aba14bf55dd81bd992b6238890705078b5bbedd99db6b3886b8c1f71",
+      "cached": true
+    },
+    {
+      "url": "https://downloads.climatetrace.org/latest/sector_packages/co2e_100yr/mineral_extraction.zip",
+      "retrieved_at": "2026-09-12T14:08:31.029650+00:00",
+      "http_status": null,
+      "bytes": 2913908,
+      "sha256": "1b6e5468bfe8ea8603c42174f0e98655895b17970d26c5f1cb238995bc5451c5",
+      "cached": true
+    }
+  ],
+  "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0), per climatetrace.org/data",
+  "redistribution": "Derived numbers and charts may be published with attribution to Climate TRACE.",
+  "method": "Bulk sector packages for power, manufacturing, fossil fuel operations and mineral extraction. Their *_emissions_sources_ownership_*.csv files resolve each asset up a named corporate chain; the country packages carry no such column. Parent names were matched to tickers with the same alias map, override table and blocklist the EPA entity-resolution lane uses. Chains with an intermediate hop below 50% were dropped as portfolio holdings rather than consolidation. Asset-ticker pairs were deduped because the ownership file carries one row per ancestor. Monthly co2e_100yr rows were summed to calendar years.",
+  "limitations": [
+    "Modelled, not measured. Climate TRACE infers emissions from satellite observation and activity data. It is a cross-check on the EPA spine and a bias estimate, never an input to the headline score.",
+    "Gross asset emissions double-count joint ventures: the same Qatari LNG train is carried in full against both ConocoPhillips and ExxonMobil. Every ratio published here uses equity_share_tonnes_co2e instead.",
+    "The ownership layer names a US owner on every US refinery, cement kiln and power plant but on none of Climate TRACE's 352 US oil-and-gas-production assets and none of its 352 US oil-and-gas-transport assets, while naming owners on the same asset types abroad. In those two subsectors a non-US share of 100% is an artefact of the ownership layer, not a fact about the company. subsector_us_ownership flags them and ct_nonus_share_balanced excludes them.",
+    "2026 is a partial year: the release carries six months. months_covered records it.",
+    "Ownership exists only for 14 subsectors. Waste and buildings ship no ownership file at all and transportation's two aviation ownership files have an empty parent_name on every one of their 33,637 rows, so airline fleets cannot be attributed here.",
+    "An 'unknown %' hop in an ownership chain is treated as 100% when the equity share has to be computed from the path, which overstates it. share_source on the asset level records which rows used Climate TRACE's own overall_share_percent instead.",
+    "Climate TRACE's asset boundary is not EPA's fenceline, so per-facility levels are not directly comparable. The non-US share and the ratio to measured US Scope 1 are the defensible outputs; a single facility's level is not."
+  ],
+  "outputs": {
+    "climatetrace_company.parquet": {
+      "rows": 1578,
+      "cols": 19,
+      "sha256": "138ad673b109d406cdc3b8560b7ba49669e813b1ebbf8c1ec097c4ea4c083721"
+    },
+    "climatetrace_nonus_share.parquet": {
+      "rows": 438,
+      "cols": 27,
+      "sha256": "de666194e4c129a2431a3e348f52dfe42748547689692c204700019304182b4c"
+    }
+  },
+  "finished_at": "2026-09-12T14:08:38.034180+00:00"
+}

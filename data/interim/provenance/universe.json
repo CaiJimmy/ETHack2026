@@ -1,0 +1,91 @@
+{
+ "lane": "universe",
+ "script": "src/fetch_universe.py",
+ "generated_at": "2026-09-12T12:07:58+00:00",
+ "fetches": [
+  {
+   "source": "datahub",
+   "key": "constituents",
+   "url": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
+   "retrieved_at": "2026-09-12T12:03:41+00:00",
+   "http_status": 200,
+   "bytes": 53646,
+   "sha256": "e06b473e4679074b2aaa49da67dfc154338b466ca66102935d93486c34e16883",
+   "licence": "ODC-PDDL-1.0 (public domain dedication), declared in the package's datapackage.json",
+   "redistribution": "We may publish derived numbers freely. The GICS Sector and GICS Sub-Industry columns inside this file are a proprietary S&P Global/MSCI classification: we use them for display and peer grouping but do not ship the full 500-row GICS mapping as a data file.",
+   "cache_path": "data/raw/datahub/constituents.csv",
+   "served_from_cache": true,
+   "note": "cached by another lane, bytes verified against a fresh fetch"
+  },
+  {
+   "source": "sec",
+   "key": "company_tickers",
+   "url": "https://www.sec.gov/files/company_tickers.json",
+   "retrieved_at": "2026-09-12T12:03:43+00:00",
+   "http_status": 200,
+   "bytes": 797931,
+   "sha256": "26602b2fd871aa1815bdc33fa234308f9c82f0ee6b939d16b2e2b9b1b4bfdaef",
+   "licence": "US government work, public domain (17 U.S.C. 105)",
+   "redistribution": "We may republish this and anything derived from it freely; cite SEC EDGAR.",
+   "cache_path": "data/raw/sec/company_tickers.json",
+   "served_from_cache": true,
+   "note": "cached by another lane, bytes verified against a fresh fetch"
+  },
+  {
+   "source": "sec",
+   "key": "company_tickers_exchange",
+   "url": "https://www.sec.gov/files/company_tickers_exchange.json",
+   "retrieved_at": "2026-09-12T12:01:02+00:00",
+   "http_status": 200,
+   "bytes": 522968,
+   "sha256": "8a413648b53aecc35db5d47798be6d59ca7130891850b57ea90b2070e930a8de",
+   "licence": "US government work, public domain (17 U.S.C. 105)",
+   "redistribution": "We may republish this and anything derived from it freely; cite SEC EDGAR.",
+   "cache_path": "data/raw/sec/company_tickers_exchange.json",
+   "served_from_cache": true,
+   "note": null
+  },
+  {
+   "source": "sec",
+   "key": "assets_frame",
+   "url": "https://data.sec.gov/api/xbrl/frames/us-gaap/Assets/USD/CY2025Q4I.json",
+   "retrieved_at": "2026-09-12T12:01:04+00:00",
+   "http_status": 200,
+   "bytes": 819733,
+   "sha256": "8c170e1e0949db6a79dc0a0023ea1a0fc1f3d90f56a789c9afc64f1e20293034",
+   "licence": "US government work, public domain (17 U.S.C. 105)",
+   "redistribution": "We may republish this and anything derived from it freely; cite SEC EDGAR.",
+   "cache_path": "data/raw/sec/frames_us-gaap_Assets_USD_CY2025Q4I.json",
+   "served_from_cache": true,
+   "note": null
+  },
+  {
+   "source": "sec",
+   "key": "fsds",
+   "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2026q2.zip",
+   "retrieved_at": "2026-09-12T12:07:03+00:00",
+   "http_status": 200,
+   "bytes": 60419016,
+   "sha256": "d7c815395cd420cfbe09b29dbae73a45406c5d0652d5ae1859ae11ea2e22df77",
+   "licence": "US government work, public domain (17 U.S.C. 105)",
+   "redistribution": "We may republish this and anything derived from it freely; cite SEC EDGAR.",
+   "cache_path": "data/raw/sec/financial-statement-data-sets/2026q2.zip",
+   "served_from_cache": true,
+   "note": null
+  },
+  {
+   "source": "fja05680",
+   "key": "history",
+   "url": "https://raw.githubusercontent.com/fja05680/sp500/master/S%26P%20500%20Historical%20Components%20%26%20Changes%20(Updated).csv",
+   "retrieved_at": "2026-09-12T12:01:08+00:00",
+   "http_status": 200,
+   "bytes": 5530907,
+   "sha256": "36326709d46d6cd25834de5df457b16f5f96fad3a06b9beac28f7b88aa0b0d54",
+   "licence": "MIT, Copyright (c) 2019-2020 Farrell J. Aultman",
+   "redistribution": "Derived numbers may be published with attribution to the fja05680/sp500 repo.",
+   "cache_path": "data/raw/sp500_history/historical_components.csv",
+   "served_from_cache": true,
+   "note": null
+  }
+ ]
+}

@@ -1,0 +1,879 @@
+{
+  "source": "epa_ghgrp",
+  "description": "EPA Greenhouse Gas Reporting Program, Envirofacts REST API",
+  "tables": [
+    "PUB_DIM_FACILITY",
+    "PUB_FACTS_SECTOR_GHG_EMISSION",
+    "PUB_DIM_SECTOR"
+  ],
+  "reporting_years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+  "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API.",
+  "outputs": [
+    "data/interim/ghgrp_facilities.parquet",
+    "data/interim/ghgrp_parent_year.parquet"
+  ],
+  "fetches": [
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2010/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:02.755107Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "229684b5b5a9e75286160fea4cfc76f1bda11373a6c7f2c862bcb6abcd4bd37a",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2010/ROWS/0:6872/CSV",
+      "retrieved_at": "2026-09-12T12:00:07.963012Z",
+      "http_status": 200,
+      "bytes": 2107167,
+      "sha256": "ea835377784fbdf2fa96cb1ca0f088c939a49e4236c47c3f5f1d0645658f902b",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2011/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:03.905584Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "8172b40036120431b01266ff9f97d3697ec33db399a8b68e0d41810c106627ef",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2011/ROWS/0:8061/CSV",
+      "retrieved_at": "2026-09-12T12:01:43.428183Z",
+      "http_status": 200,
+      "bytes": 2503299,
+      "sha256": "9ed8e2b2bf8b5f7a5092fc9a3955458c3260d594bb5bc361ebf1c874f682f0e8",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2012/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:05.031836Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "ffc51771e9381a81e7f54f87ca28e7512ca309cf07a40f1b999c6416744f16eb",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2012/ROWS/0:8401/CSV",
+      "retrieved_at": "2026-09-12T12:03:48.677365Z",
+      "http_status": 200,
+      "bytes": 2625429,
+      "sha256": "503c691d2951a6b99f27d9207fbcd752b5b459b18441d41ac206519cdf13e270",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2013/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:06.131983Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "4de5c9a3662091a249f2d609f4bb98449ffc737717f2043454385ccef18bd1ba",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2013/ROWS/0:8866/CSV",
+      "retrieved_at": "2026-09-12T12:05:48.660209Z",
+      "http_status": 200,
+      "bytes": 2785756,
+      "sha256": "718d2f39e330d19c3e90ceeb0aef6c5c959f19d9d246121ebb89d2b812ed5eed",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2014/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:07.196365Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "0b843e066a7718728cb1538fdc446e558f2f9f07f43745c254e97167a0587fa6",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2014/ROWS/0:9251/CSV",
+      "retrieved_at": "2026-09-12T12:08:35.184352Z",
+      "http_status": 200,
+      "bytes": 2908413,
+      "sha256": "7d29ab9c1d31715e184efc12337c53362e9bb81eb82955bfba885778d26ab490",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2015/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:08.269423Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "d0731c0cb6ed1807556d6a8e8db3cae31697753bb9589fe22119dd37f9701315",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2015/ROWS/0:9384/CSV",
+      "retrieved_at": "2026-09-12T12:11:08.884583Z",
+      "http_status": 200,
+      "bytes": 2913333,
+      "sha256": "0876147252f5b99ef0d6f9788c5a85ff11dcf06c695acbdf3d7371dca778612a",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2016/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:09.352691Z",
+      "http_status": 200,
+      "bytes": 35,
+      "sha256": "628052035ca2abf38beb3fa99a71b99ffbb6904674b8c494ac5d58b01af4d7f9",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2016/ROWS/0:9889/CSV",
+      "retrieved_at": "2026-09-12T12:14:34.848034Z",
+      "http_status": 200,
+      "bytes": 3073838,
+      "sha256": "df5343adb2095085df85d3cf6162df73bb05d88ad90b2abc62249eec151ee162",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2017/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:10.439536Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "906f1411133974ff8c837a379c99f65460bc11dbe3cc4a3c6de7192139c0fc11",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2017/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:17:43.710011Z",
+      "http_status": 200,
+      "bytes": 3101062,
+      "sha256": "b631a3842ccce2b14d15f49cb3e45e5e040268bc88e306b7d3937cebfa9a522d",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2017/ROWS/10000:10118/CSV",
+      "retrieved_at": "2026-09-12T12:17:46.408851Z",
+      "http_status": 200,
+      "bytes": 36572,
+      "sha256": "7faccd0f72c074b736c07274658e0de25bcc4a2f7b6264955e53e28b2e33216f",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2018/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:11.493809Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "ecf051512a1b35893ee421fbde06780f1e2305ad72d0dd547c7f204f252aea0b",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2018/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:20:21.608046Z",
+      "http_status": 200,
+      "bytes": 3099855,
+      "sha256": "9f052f60891cf0ac2f9a660b58bdfd1cffda9b47e583c8783bc5853eab78732a",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2018/ROWS/10000:10380/CSV",
+      "retrieved_at": "2026-09-12T12:20:27.208424Z",
+      "http_status": 200,
+      "bytes": 118209,
+      "sha256": "113be39b04cc05ff33bbca6abc74760e6bd541e7c56b19657dc32ee7a62783fc",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2019/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:12.892357Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "9160630439a835f7cd76f674ec47eed556ff4448299e56b838c369e1ba6cb3c4",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2019/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:23:16.301101Z",
+      "http_status": 200,
+      "bytes": 3097297,
+      "sha256": "82cf67c48898ab34f9088ff5f4bc1ba9ed6c36c0368fc1eb0e47ed0af6508d76",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2019/ROWS/10000:10604/CSV",
+      "retrieved_at": "2026-09-12T12:23:23.625612Z",
+      "http_status": 200,
+      "bytes": 187072,
+      "sha256": "e7a56f3e26dcc80a68e34018aaf6c8e2bbff2b029c885ec7f52088a828bdaa04",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2020/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:14.003575Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "b13cf6e220900cd380569f8c7bb84cb0acbf97a2e92f1c2e5b21abedf95c2e63",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2020/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:30:51.996081Z",
+      "http_status": 200,
+      "bytes": 3095534,
+      "sha256": "c5e15bec1bf62ea26df6c3ec40f019c6687c279a0aa3c6759e15b2065d8cfbe0",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2020/ROWS/10000:10769/CSV",
+      "retrieved_at": "2026-09-12T12:31:00.509628Z",
+      "http_status": 200,
+      "bytes": 238307,
+      "sha256": "0bc2d52a1086ed0a88e23f538fd09277fc3d4d5d29f5e7ff6d3eea85c38594b7",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2021/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:15.076728Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "b47fd0ad520055d26b34fa2dc7bd47602e4ddfabc760bc0afec2b4317acd7a3b",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2021/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:33:22.149219Z",
+      "http_status": 200,
+      "bytes": 3092341,
+      "sha256": "c504d256ebf810573019b2b7ba44f130ac1304825faed58d7c8b3b81bb5981f2",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2021/ROWS/10000:10957/CSV",
+      "retrieved_at": "2026-09-12T12:33:30.876660Z",
+      "http_status": 200,
+      "bytes": 296563,
+      "sha256": "f96ff0a06822322a2bda0d3f322d99de64f2f6eb723e4f1169165571d7c6ce7d",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2022/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:16.084218Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "3ca360b189796298a84c7cee8c23cc2efd08be958e220a390f09800c1045e491",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2022/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:34:57.220326Z",
+      "http_status": 200,
+      "bytes": 3093566,
+      "sha256": "1b3646d071a4795d6d04860eb8a3ca05b95da933d7d3044d30e89d4ca754e46e",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2022/ROWS/10000:11159/CSV",
+      "retrieved_at": "2026-09-12T12:35:04.305776Z",
+      "http_status": 200,
+      "bytes": 356896,
+      "sha256": "77d995533a44ff1c49d9aa4aed9aece1ad8e9fcdb1a4450464c99b5a40091204",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2023/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:17.124123Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "05761b761a3b3c3371dc96379d1f113df8d4053d05c9c294528ed8aed10f45dd",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2023/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:36:56.161611Z",
+      "http_status": 200,
+      "bytes": 3094060,
+      "sha256": "bedbd43efe2a0a8b5716f5861d83f0aca9ba4256d7351d302d42bb733b3ce36f",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2023/ROWS/10000:11280/CSV",
+      "retrieved_at": "2026-09-12T12:37:04.573974Z",
+      "http_status": 200,
+      "bytes": 393490,
+      "sha256": "e3be2a6f39d7ab5764d5d968e0d9b3af3dd54284843b4ff962df87b6cddde3a8",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2024/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:18.219438Z",
+      "http_status": 200,
+      "bytes": 32,
+      "sha256": "54f6d494441408f2ccbd5c3bc9b1eba3071d56b8737d554a894dd5d9a83a4065",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2025/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:19.292067Z",
+      "http_status": 200,
+      "bytes": 32,
+      "sha256": "54f6d494441408f2ccbd5c3bc9b1eba3071d56b8737d554a894dd5d9a83a4065",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_FACILITY/YEAR/2026/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:20.356694Z",
+      "http_status": 200,
+      "bytes": 32,
+      "sha256": "54f6d494441408f2ccbd5c3bc9b1eba3071d56b8737d554a894dd5d9a83a4065",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_DIM_SECTOR/CSV",
+      "retrieved_at": "2026-09-12T11:59:01.229494Z",
+      "http_status": 200,
+      "bytes": 928,
+      "sha256": "51e62e3187286378101c24a88b64daefed91d407344974b79dff594bb6bf7571",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2010/COUNT/JSON",
+      "retrieved_at": "2026-09-12T11:59:21.586086Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "bbc8d3d248783a7138827d591224c1aa20617c3dc2d8e21b4b0b6934587e6381",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2010/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:00:22.574326Z",
+      "http_status": 200,
+      "bytes": 693799,
+      "sha256": "6fb298788706c352d34c176b97e6a59eadfcf3980d127ec67d422b4d0da29afb",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2010/ROWS/10000:18577/CSV",
+      "retrieved_at": "2026-09-12T12:00:40.296978Z",
+      "http_status": 200,
+      "bytes": 596415,
+      "sha256": "69b4f8528fc5821062400fa578516435a2a2df76ad9eb97d093c281c11945be8",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2011/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:00:41.604941Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "07d9d7152d44bd4d211b366ae8d0b95d6557757219040885a23696e9323163db",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2011/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:02:03.826500Z",
+      "http_status": 200,
+      "bytes": 694657,
+      "sha256": "d7080eb668792f0ada2b27ab353ce4adbbd0e8ad54266e7ea558e11cf0858c52",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2011/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:02:31.409348Z",
+      "http_status": 200,
+      "bytes": 697035,
+      "sha256": "666d55209192252320f691c1135415abcd196dd50d6720a5211d40fcbf46c4fe",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2011/ROWS/20000:22889/CSV",
+      "retrieved_at": "2026-09-12T12:02:38.771981Z",
+      "http_status": 200,
+      "bytes": 201344,
+      "sha256": "2a3a42afa9b19a425ae154e7318443ca4187ad061079ce94120048f62d74d6d6",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2012/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:02:40.334629Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "879f03fcdbaa585fc7cd85c39e27f057c1af0eede2c4f7d27f382d76a6a8b079",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2012/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:04:04.855720Z",
+      "http_status": 200,
+      "bytes": 694328,
+      "sha256": "ee942510fe9febc4a7a98b0273d2d80b2a3a942f922768eb12e6533adc7837b8",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2012/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:04:21.444376Z",
+      "http_status": 200,
+      "bytes": 696683,
+      "sha256": "a718cbb4e4eec3ab33dedffea3b63f716cee470dda9b5685c6a2b976109e8e10",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2012/ROWS/20000:23698/CSV",
+      "retrieved_at": "2026-09-12T12:04:28.696536Z",
+      "http_status": 200,
+      "bytes": 256828,
+      "sha256": "3a2e621f0605c090f89b3857f44f7296c89a6b5b55beb67a1eca1fee998c3b1c",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2013/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:04:30.042232Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "60909be0cc5398ab39ff7a47de5fbea5d1defcfd029a865c6f181a7164c05bba",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2013/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:06:10.498009Z",
+      "http_status": 200,
+      "bytes": 691251,
+      "sha256": "f6b201a3d4c46b2b68b677a74e4b1980d9da53e49820d4b4c5763580cf0ce3a1",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2013/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:06:46.784432Z",
+      "http_status": 200,
+      "bytes": 692859,
+      "sha256": "fd2acf3325b88ffe0c9c49077e870ce91e8121058748d7d68c8347002297d625",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2013/ROWS/20000:24424/CSV",
+      "retrieved_at": "2026-09-12T12:07:01.485438Z",
+      "http_status": 200,
+      "bytes": 304178,
+      "sha256": "ce7e84e8cf231926247c6959efb1337198eef8828b0d6d80d6328f09f68fd5d4",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2014/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:07:03.303461Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "18bec4b22fb0d1778fdfb3afed7260ea3692d4d1c327ca27f8e4983da1f87ca3",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2014/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:08:57.704409Z",
+      "http_status": 200,
+      "bytes": 690063,
+      "sha256": "da19a86c8a0817f90331f9b2eff8d71f7ed42e4690651209766c7f85789ee60a",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2014/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:09:23.871691Z",
+      "http_status": 200,
+      "bytes": 691324,
+      "sha256": "a68f698ee2540ee27f803a875d294d34a40d81486c5b03cad58b09d2a5c990e1",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2014/ROWS/20000:25178/CSV",
+      "retrieved_at": "2026-09-12T12:09:42.979934Z",
+      "http_status": 200,
+      "bytes": 354991,
+      "sha256": "85382d99064e7f65198ae5ec2c5274751da08977b7469f046c6e31b048277e09",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2015/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:09:44.204957Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "51a9ea5ae7f7b2f289641a7cc40bd7db25525fbffea52364d0df4ff8efa78dd3",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2015/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:11:38.172207Z",
+      "http_status": 200,
+      "bytes": 687529,
+      "sha256": "fea49e3f0883f122adecb7718582238940566ca657f64c825ae01c04dde114f1",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2015/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:12:08.014728Z",
+      "http_status": 200,
+      "bytes": 687997,
+      "sha256": "97896ead784086cbe049f1a958f3a964e31b2dde8b023107b41816b40e3319ca",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2015/ROWS/20000:25255/CSV",
+      "retrieved_at": "2026-09-12T12:12:38.135539Z",
+      "http_status": 200,
+      "bytes": 359450,
+      "sha256": "0b55ffd71e6971db26d96004f33673853233297f8b79990c839fe27cf826448c",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2016/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:12:40.116934Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "bfc0740e6f87b64f21f363ef8bfce2e51cbf20df84e082d4ebd0ba9d51cf8653",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2016/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:14:57.175879Z",
+      "http_status": 200,
+      "bytes": 680357,
+      "sha256": "9d04e2b1cc21d0f663700199cabb3c989c5c8d69187ed5dbcb85ccc2a96fa915",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2016/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:15:16.060119Z",
+      "http_status": 200,
+      "bytes": 679070,
+      "sha256": "c277369805cfa25d20f093cad32656c174129ca97bc20df2884c4c9fed043fbb",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2016/ROWS/20000:25127/CSV",
+      "retrieved_at": "2026-09-12T12:15:30.045952Z",
+      "http_status": 200,
+      "bytes": 344895,
+      "sha256": "2beb10114f28af8331330a336fb99f5f8c355128c59936afa28f07519ff96972",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2017/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:15:31.376562Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "b1d2c5ed66ab674fc462a7f20f9a598b38168cd9361e84dc6f5222648deff5ee",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2017/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:18:19.528879Z",
+      "http_status": 200,
+      "bytes": 677602,
+      "sha256": "4edf481c26b1e5d348c03902ede83dfc6704310501d59a2bb43bb5046f713842",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2017/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:18:36.915134Z",
+      "http_status": 200,
+      "bytes": 674669,
+      "sha256": "9bd6c707acaad53256fc2fefca80cdc0279f33a84415ade77c5f8d5710df0714",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2017/ROWS/20000:25218/CSV",
+      "retrieved_at": "2026-09-12T12:18:54.915354Z",
+      "http_status": 200,
+      "bytes": 349864,
+      "sha256": "92607b1a62915dee2654fc952e9f31b62c849a15859e24c8fb3da3f005fd9321",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2018/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:18:56.230958Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "7da93bb9c0963f81f3cc6b0647bbf22c1eb233ae1eed8e454808a66e30daa4f7",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2018/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:20:45.499648Z",
+      "http_status": 200,
+      "bytes": 677492,
+      "sha256": "63b731aaad8e775210b172808cfad6a13774344018c6810c55d4da3812882853",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2018/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:21:05.359018Z",
+      "http_status": 200,
+      "bytes": 673019,
+      "sha256": "e9db847204f5a60957daf7696c5bd120aaabacbe4ffa362c1aee6233ed388516",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2018/ROWS/20000:25742/CSV",
+      "retrieved_at": "2026-09-12T12:21:26.871371Z",
+      "http_status": 200,
+      "bytes": 384978,
+      "sha256": "08b726e91378e2c5933368a02df2cc37fb3c8922896ec0e3b86dba5175255048",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2019/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:21:28.785838Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "27ecd597e829d19e9ce1fa9e05c65c9f62c861ff7d3e9c1d67cfde6fab16894c",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2019/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:23:50.189351Z",
+      "http_status": 200,
+      "bytes": 675099,
+      "sha256": "c5ef5c9f13a940e78344b8a681a9661b7f572b132e7a35211e8be11156dc4464",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2019/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:24:10.955369Z",
+      "http_status": 200,
+      "bytes": 670879,
+      "sha256": "7642bdffb77c7edf799e049a182eb7e4bc950677f45d5c289574b39e72a09661",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2019/ROWS/20000:25939/CSV",
+      "retrieved_at": "2026-09-12T12:25:01.700543Z",
+      "http_status": 200,
+      "bytes": 397736,
+      "sha256": "429917030329a3927e5a45ec95868f735043d0de0f0b69b1a21c9c0e1b848be5",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2020/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:25:13.696349Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "eacc8fe05e7ea1ca027f7f4b24ea1ec532f4fe2bc6895d52d9c8786ed6a7d646",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2020/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:31:20.896552Z",
+      "http_status": 200,
+      "bytes": 673045,
+      "sha256": "bcc1f95d6266ed267ba39b822ea35f1766b7d1baa46206804c2df0a35989927e",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2020/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:31:48.227380Z",
+      "http_status": 200,
+      "bytes": 667955,
+      "sha256": "434e8a56aa242ab30450a7263c16cab4c947548cf1a3afeaa046eb72939eff45",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2020/ROWS/20000:26002/CSV",
+      "retrieved_at": "2026-09-12T12:32:03.328787Z",
+      "http_status": 200,
+      "bytes": 400776,
+      "sha256": "bb5725b8b4d2d4605eb4c9bd1ba482a9dd17c3fb052b88c4fbd944fbe73096bc",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2021/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:32:04.890005Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "7d709aabe5aa67a8bfbaf08c12d7e4984a065582492b89f260fa8600a31c78ce",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2021/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:33:41.561351Z",
+      "http_status": 200,
+      "bytes": 671242,
+      "sha256": "82d41603ee4624b4c270a57fe5ba25afc058885c1729adb66f52e85896ce7731",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2021/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:33:53.554371Z",
+      "http_status": 200,
+      "bytes": 663917,
+      "sha256": "3d9781a84e2b9ef22496b4dc3bcf01c7e35b5bf8e3ae89d282488d689004acd0",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2021/ROWS/20000:26103/CSV",
+      "retrieved_at": "2026-09-12T12:34:01.785659Z",
+      "http_status": 200,
+      "bytes": 407623,
+      "sha256": "0a7872e9af7436e98072093d24477599988f68716b822ac1751b55ff8902c83d",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2022/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:34:03.705669Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "daec511ca86f38aedf6f85a036aedf61288c260af77c95f6b17549db4edffc25",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2022/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:35:19.456874Z",
+      "http_status": 200,
+      "bytes": 669841,
+      "sha256": "03bb6e3fcbe10b0853ce9e769ac72dc421053f3a6a894a161ee4d1e17a500b9a",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2022/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:35:33.289753Z",
+      "http_status": 200,
+      "bytes": 661065,
+      "sha256": "761c01551353a7f5e8ca2db4bf85e46e25ed26c469744b6cb47cdc903a1c73fa",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2022/ROWS/20000:26246/CSV",
+      "retrieved_at": "2026-09-12T12:35:45.137142Z",
+      "http_status": 200,
+      "bytes": 415117,
+      "sha256": "3c2ca304b6922226f4d08d292cbc08bf5b0d8546e885a353e603e57210e617b8",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2023/COUNT/JSON",
+      "retrieved_at": "2026-09-12T12:35:46.259976Z",
+      "http_status": 200,
+      "bytes": 36,
+      "sha256": "d4ea0ded0eafb76f0d60a5545486eb316c6f5e41cfcb1ced9a056d4d3569a1db",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2023/ROWS/0:9999/CSV",
+      "retrieved_at": "2026-09-12T12:37:22.924824Z",
+      "http_status": 200,
+      "bytes": 668106,
+      "sha256": "0a322775bb44c8ec80d11e488c5a601ea0ea70a80aabd5dd4e7caed65da4de63",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2023/ROWS/10000:19999/CSV",
+      "retrieved_at": "2026-09-12T12:37:43.385241Z",
+      "http_status": 200,
+      "bytes": 658294,
+      "sha256": "b6355c3aab9c7477ff0b8c453297ee1ccc90dce9f309773ef4580e09579c87ea",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    },
+    {
+      "url": "https://data.epa.gov/efservice/PUB_FACTS_SECTOR_GHG_EMISSION/YEAR/2023/ROWS/20000:26271/CSV",
+      "retrieved_at": "2026-09-12T12:37:53.941311Z",
+      "http_status": 200,
+      "bytes": 415267,
+      "sha256": "51132369ab4d11d349c311d0ebf8a7783b289536a9e951a138c83e57bdd3bbcc",
+      "licence": "US federal government work, public domain (17 U.S.C. 105); EPA requests attribution.",
+      "redistribution": "Derived numbers, tables and charts may be published. Cite as: U.S. EPA Greenhouse Gas Reporting Program, accessed via the Envirofacts REST API."
+    }
+  ]
+}

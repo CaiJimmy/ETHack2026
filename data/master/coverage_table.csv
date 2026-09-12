@@ -1,0 +1,137 @@
+column,unit,provenance_class,non_null_503,non_null_500_primary,pct_of_503
+ticker,,mandatory,503,500,100.0
+company_name,,mandatory,503,500,100.0
+cik,,mandatory,503,500,100.0
+gics_sector,,mandatory,503,500,100.0
+gics_sub_industry,,mandatory,503,500,100.0
+nace_section,,modelled,503,500,100.0
+is_primary_listing,bool,mandatory,503,500,100.0
+share_class_siblings,,mandatory,6,3,1.2
+hq_country_iso,,mandatory,503,500,100.0
+date_added,date,mandatory,503,500,100.0
+scope1_measured_us_t,tCO2e,mandatory,146,146,29.0
+scope1_measured_us_year,year,mandatory,146,146,29.0
+scope1_measured_allgas_t,tCO2e,mandatory,146,146,29.0
+scope1_biogenic_t,tCO2e,mandatory,146,146,29.0
+scope1_ar6_t,tCO2e,modelled,132,132,26.2
+scope1_lookahead_excluded_t,tCO2e,modelled,146,146,29.0
+scope1_facility_count,count,mandatory,146,146,29.0
+ghgrp_matched_zero_fossil,bool,mandatory,503,500,100.0
+scope1_current_signal_t,tCO2e,mandatory,48,48,9.5
+scope1_current_signal_year,year,mandatory,48,48,9.5
+scope1_selfreported_t,tCO2e,voluntary,288,285,57.3
+scope1_selfreported_year,year,voluntary,288,285,57.3
+scope1_selfreported_source,,voluntary,288,285,57.3
+scope1_modelled_t,tCO2e,modelled,73,73,14.5
+scope1_modelled_year,year,modelled,73,73,14.5
+scope1_t,tCO2e,mixed,322,319,64.0
+scope1_year,year,mixed,322,319,64.0
+scope1_basis,,mixed,322,319,64.0
+scope1_dq,1-5,mixed,322,319,64.0
+scope1_below_measured_floor,bool,mixed,503,500,100.0
+scope2_market_t,tCO2e,voluntary,284,281,56.5
+scope2_basis,,voluntary,284,281,56.5
+scope2_dq,1-5,voluntary,284,281,56.5
+scope2_location_t,tCO2e,voluntary,10,10,2.0
+scope2_year,year,voluntary,284,281,56.5
+scope3_total_t,tCO2e,voluntary,259,257,51.5
+scope3_basis,,voluntary,259,257,51.5
+scope3_dq,1-5,voluntary,259,257,51.5
+scope3_year,year,voluntary,259,257,51.5
+scope12_t,tCO2e,voluntary,246,245,48.9
+scope12_year,year,voluntary,246,245,48.9
+grid_factor_hq_g_per_kwh,gCO2e/kWh,mandatory,502,499,99.8
+power_intensity_g_per_kwh,gCO2e/kWh,modelled,36,36,7.2
+power_gen_mwh,MWh,mandatory,36,36,7.2
+delivered_pct_yr,%/yr,modelled,134,134,26.6
+delivered_basis,,modelled,134,134,26.6
+delivered_dq,1-5,modelled,134,134,26.6
+delivered_se_pct_yr,%/yr,modelled,134,134,26.6
+delivered_r2,,modelled,134,134,26.6
+delivered_n_years,count,modelled,134,134,26.6
+delivered_year_start,year,modelled,134,134,26.6
+delivered_year_end,year,modelled,134,134,26.6
+delivered_camd_pct_yr,%/yr,modelled,46,46,9.1
+promised_pct_yr,%/yr,voluntary,358,356,71.2
+promised_basis,,voluntary,358,356,71.2
+promised_dq,1-5,voluntary,358,356,71.2
+promised_target_year,year,voluntary,341,339,67.8
+promised_baseline_year,year,voluntary,341,339,67.8
+gap_pct_yr,%/yr,modelled,108,108,21.5
+sbti_near_term_status,,voluntary,261,259,51.9
+sbti_near_term_classification,,voluntary,227,225,45.1
+sbti_net_zero_status,,voluntary,118,117,23.5
+sbti_net_zero_year,year,voluntary,78,77,15.5
+revenue_musd,USD millions,mandatory,503,500,100.0
+revenue_basis,,mandatory,503,500,100.0
+revenue_dq,1-5,mandatory,503,500,100.0
+revenue_fy,year,mandatory,503,500,100.0
+revenue_period_end,date,mandatory,503,500,100.0
+ebit_musd,USD millions,mandatory,502,499,99.8
+ebit_basis,,mandatory,502,499,99.8
+ebit_dq,1-5,mandatory,502,499,99.8
+ebit_fy,year,mandatory,502,499,99.8
+capex_musd,USD millions,mandatory,481,478,95.6
+capex_fy,year,mandatory,481,478,95.6
+da_musd,USD millions,vendor,364,364,72.4
+da_basis,,vendor,364,364,72.4
+da_fy,year,vendor,364,364,72.4
+ebitda_musd,USD millions,mixed,494,491,98.2
+ebitda_basis,,mixed,494,491,98.2
+ebitda_dq,1-5,mixed,494,491,98.2
+ebitda_fy,year,mixed,364,364,72.4
+total_debt_musd,USD millions,mixed,503,500,100.0
+total_debt_basis,,mixed,503,500,100.0
+total_debt_dq,1-5,mixed,503,500,100.0
+total_debt_fy,year,mandatory,466,463,92.6
+total_cash_musd,USD millions,vendor,501,498,99.6
+market_cap_musd,USD millions,mixed,503,500,100.0
+market_cap_basis,,mixed,503,500,100.0
+market_cap_dq,1-5,mixed,503,500,100.0
+market_cap_shares_stale,bool,mandatory,503,500,100.0
+evic_musd,USD millions,mixed,503,500,100.0
+evic_debt_observed,bool,mixed,503,500,100.0
+ev_musd,USD millions,vendor,500,497,99.4
+ev_ebitda_x,x,vendor,503,500,100.0
+ev_ebitda_basis,,vendor,503,500,100.0
+ev_ebitda_dq,1-5,vendor,503,500,100.0
+ev_ebitda_raw_x,x,vendor,471,468,93.6
+fcf_musd,USD millions,vendor,470,467,93.4
+beta_x,x,vendor,497,494,98.8
+revenue_ttm_musd_check,USD millions,vendor,502,499,99.8
+index_weight_pct,%,mixed,503,500,100.0
+price_usd2010_per_t,US$2010/tCO2,modelled,503,500,100.0
+price_sector_usd_per_t,USD/tCO2,modelled,503,500,100.0
+coverage_scope1_pct,%,modelled,503,500,100.0
+coverage_scope2_pct,%,modelled,503,500,100.0
+coverage_scope3_pct,%,modelled,503,500,100.0
+passthrough_pct,%,modelled,503,500,100.0
+carbon_cost_musd,USD millions,mixed,327,324,65.0
+abatement_factor,,modelled,503,500,100.0
+carbon_cost_abated_musd,USD millions,mixed,327,324,65.0
+d_ebit_musd,USD millions,mixed,327,324,65.0
+d_ebit_pct_of_ebit,%,mixed,307,304,61.0
+d_ev_musd,USD millions,mixed,327,324,65.0
+d_ev_pct_of_ev,%,mixed,322,319,64.0
+model_dq,1-5,modelled,327,324,65.0
+excl_12g,bool,modelled,503,500,100.0
+excluded,bool,mixed,503,500,100.0
+excl_articles,,mixed,67,67,13.3
+excl_basis,,mixed,67,67,13.3
+excl_dq,1-5,mixed,503,500,100.0
+high_impact_nace,bool,modelled,503,500,100.0
+penalty_usd_environment,USD,mandatory,468,465,93.0
+case_count_environment,count,mandatory,468,465,93.0
+penalty_usd_total,USD,mandatory,468,465,93.0
+conduct_measured_zero,bool,mandatory,503,500,100.0
+vendor_percentile,percentile,vendor,470,470,93.4
+vendor_n_sources,count,vendor,489,486,97.2
+our_percentile,percentile,modelled,503,500,100.0
+rank_median,rank,modelled,503,500,100.0
+rank_p05,rank,modelled,503,500,100.0
+rank_p95,rank,modelled,503,500,100.0
+coverage_tier,,modelled,503,500,100.0
+score_mirrored_from,,modelled,3,0,0.6
+provenance_class,,modelled,322,319,64.0
+financial_provenance_class,,modelled,503,500,100.0
+generated_at,timestamp,modelled,503,500,100.0

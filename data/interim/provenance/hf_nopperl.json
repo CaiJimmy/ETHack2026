@@ -1,0 +1,50 @@
+[
+ {
+  "url": "https://huggingface.co/datasets/nopperl/corporate-emission-reports/resolve/main/corp_emissions.parquet",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 43920,
+  "sha256": "193afc8619c6670079d5248e4b20b9232a9839220ab64c66e0a874e6bb5652c3",
+  "local_path": "data/raw/hf_nopperl/corp_emissions.parquet",
+  "licence": "Open Data Commons Public Domain Dedication and Licence (PDDL), declared on both dataset cards.",
+  "redistribution": "PDDL is a public domain dedication, so derived numbers may be published with attribution to the dataset author and to the underlying company reports.",
+  "provenance_class": "voluntary",
+  "served_from_cache_this_run": true
+ },
+ {
+  "url": "https://huggingface.co/datasets/nopperl/sustainability-report-emissions/resolve/main/emissions_train.parquet",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 333883,
+  "sha256": "b27bd756c5e15902e952bef23c87f28f1a8000bc052fff5803619373caaff3fe",
+  "local_path": "data/raw/hf_nopperl/emissions_train.parquet",
+  "licence": "Open Data Commons Public Domain Dedication and Licence (PDDL), declared on both dataset cards.",
+  "redistribution": "PDDL is a public domain dedication, so derived numbers may be published with attribution to the dataset author and to the underlying company reports.",
+  "provenance_class": "voluntary",
+  "served_from_cache_this_run": true
+ },
+ {
+  "url": "https://datasets-server.huggingface.co/info?dataset=nopperl/sustainability-report-emissions-instruction-style",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 827,
+  "sha256": "108ebb8f908fc85a3c7aa24f5bcd21566fb6e02e8b44656643af2051a3d799c9",
+  "local_path": "data/raw/hf_nopperl/info_sustainability-report-emissions-instruction-style.json",
+  "licence": "Open Data Commons Public Domain Dedication and Licence (PDDL), declared on both dataset cards.",
+  "redistribution": "PDDL is a public domain dedication, so derived numbers may be published with attribution to the dataset author and to the underlying company reports.",
+  "provenance_class": "voluntary",
+  "served_from_cache_this_run": true
+ },
+ {
+  "url": "https://datasets-server.huggingface.co/info?dataset=nopperl/sustainability-report-emissions-dpo",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 827,
+  "sha256": "d659109d9dfb325ee2aac46209618dffd6c2217cd69a3a3ead09d815684725a0",
+  "local_path": "data/raw/hf_nopperl/info_sustainability-report-emissions-dpo.json",
+  "licence": "Open Data Commons Public Domain Dedication and Licence (PDDL), declared on both dataset cards.",
+  "redistribution": "PDDL is a public domain dedication, so derived numbers may be published with attribution to the dataset author and to the underlying company reports.",
+  "provenance_class": "voluntary",
+  "served_from_cache_this_run": true
+ }
+]

@@ -1,0 +1,26 @@
+[
+ {
+  "url": "https://public.flourish.studio/visualisation/28119771/embed",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 4248181,
+  "sha256": "db0e5705b65cd5c53ab7ebad6f1039796748a74a0ba02199c8471c45069423c2",
+  "local_path": "data/raw/cdp_flourish/flourish_28119771.html",
+  "licence": "CDP Terms of Website Use: scores must not be used for anything other than internal, non-commercial use without prior written consent from CDP.",
+  "redistribution": "Do not publish per-company CDP grades. Internal benchmarking only. Nothing from this source is written to any table in this repo; the fetch exists to document that the embeds carry no emissions figures.",
+  "provenance_class": "vendor",
+  "served_from_cache_this_run": true
+ },
+ {
+  "url": "https://public.flourish.studio/visualisation/28119907/embed",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 420594,
+  "sha256": "384135dcbab0cfccf310c415a6e00a674c61ef8e26a1092e045cbf40fa9b1edf",
+  "local_path": "data/raw/cdp_flourish/flourish_28119907.html",
+  "licence": "CDP Terms of Website Use: scores must not be used for anything other than internal, non-commercial use without prior written consent from CDP.",
+  "redistribution": "Do not publish per-company CDP grades. Internal benchmarking only. Nothing from this source is written to any table in this repo; the fetch exists to document that the embeds carry no emissions figures.",
+  "provenance_class": "vendor",
+  "served_from_cache_this_run": true
+ }
+]

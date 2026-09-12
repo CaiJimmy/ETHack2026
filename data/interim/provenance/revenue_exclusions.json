@@ -1,0 +1,86 @@
+[
+ {
+  "bytes": 127842298,
+  "http_status": 200,
+  "licence": "US government work, public domain.",
+  "note": "Structured XBRL from every filing in the quarter. The only public SEC product that keeps dimensional facts; the companyfacts API drops every axis.",
+  "provenance_class": "mandatory",
+  "redistribution": "Public domain. Derived numbers may be published without restriction.",
+  "retrieved_at": "2026-09-12T13:57:54.381399+00:00",
+  "sha256": "ebe25fa74c3655f4738ed9eb144af3953c3981c80f57d74829fb9ad68b114710",
+  "source": "sec_dera_financial_statement_data_sets",
+  "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2025q3.zip"
+ },
+ {
+  "bytes": 65830170,
+  "http_status": 200,
+  "licence": "US government work, public domain.",
+  "note": "Structured XBRL from every filing in the quarter. The only public SEC product that keeps dimensional facts; the companyfacts API drops every axis.",
+  "provenance_class": "mandatory",
+  "redistribution": "Public domain. Derived numbers may be published without restriction.",
+  "retrieved_at": "2026-09-12T13:58:18.817533+00:00",
+  "sha256": "2b36ac3850c022cf19edd882e31c3c453c7666677b9fdd2e1f7748fdb5768c6e",
+  "source": "sec_dera_financial_statement_data_sets",
+  "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2025q4.zip"
+ },
+ {
+  "bytes": 85259424,
+  "http_status": 200,
+  "licence": "US government work, public domain.",
+  "note": "Structured XBRL from every filing in the quarter. The only public SEC product that keeps dimensional facts; the companyfacts API drops every axis.",
+  "provenance_class": "mandatory",
+  "redistribution": "Public domain. Derived numbers may be published without restriction.",
+  "retrieved_at": "2026-09-12T13:58:45.172678+00:00",
+  "sha256": "d18c01c615da8f5cd46273b0dacaeee5b1163f4089171da0f84153a5f3c362f6",
+  "source": "sec_dera_financial_statement_data_sets",
+  "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2026q1.zip"
+ },
+ {
+  "bytes": 60419016,
+  "http_status": 200,
+  "licence": "US government work, public domain.",
+  "note": "Structured XBRL from every filing in the quarter. The only public SEC product that keeps dimensional facts; the companyfacts API drops every axis.",
+  "provenance_class": "mandatory",
+  "redistribution": "Public domain. Derived numbers may be published without restriction.",
+  "retrieved_at": "2026-09-12T12:07:03.167855+00:00",
+  "sha256": "d7c815395cd420cfbe09b29dbae73a45406c5d0652d5ae1859ae11ea2e22df77",
+  "source": "sec_dera_financial_statement_data_sets",
+  "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2026q2.zip"
+ },
+ {
+  "bytes": 126285,
+  "http_status": 200,
+  "licence": "Published by Norges Bank Investment Management on its public website.",
+  "note": "An asset owner's own decisions, not a commercial ESG rating. Kept in nbim_ columns.",
+  "provenance_class": "voluntary",
+  "redistribution": "Company-level exclusion decisions are public disclosures by the fund. We publish derived flags with attribution and do not rehost the page.",
+  "retrieved_at": "2026-09-12T14:06:44.027334+00:00",
+  "sha256": "6a17e14d7de9fd5c08b7315bea69c27ae3a16a35e2b27c2378d153b0d1008670",
+  "source": "nbim_exclusion_list",
+  "url": "https://www.nbim.no/en/responsible-investment/exclusion-of-companies/"
+ },
+ {
+  "bytes": 1276850,
+  "http_status": 200,
+  "licence": "Uploader declares CC0-1.0 on Kaggle. The underlying product-involvement screens originate with commercial ESG providers.",
+  "note": "14 involvement.* screens and 4 involvement_msci.* screens. Coverage of the S&P 500 is measured at run time and printed, not assumed.",
+  "provenance_class": "vendor",
+  "redistribution": "Not republished. Used only to benchmark flags we derive ourselves, and confined to columns prefixed vendor_ with provenance_class = 'vendor'.",
+  "retrieved_at": "2026-08-15T01:34:58+00:00",
+  "sha256": "ec02e66d3193b6a3b483bee9359419ecda440a7fd6d97c7e028672c137ae150e",
+  "source": "kaggle_mrbossjaysrb_global_corporate_esg",
+  "url": "https://www.kaggle.com/datasets/mrbossjaysrb/global-corporate-esg-and-financial-dataset"
+ },
+ {
+  "bytes": 21369,
+  "http_status": null,
+  "licence": "EUR-Lex reuse policy. (c) European Union, 1998-2026.",
+  "note": "Sub-rule ids and revenue thresholds are read from this file at run time.",
+  "provenance_class": "mandatory",
+  "redistribution": "Reuse authorised with acknowledgement of the source.",
+  "retrieved_at": "2026-09-12T14:18:44.782339+00:00",
+  "sha256": "a97c9251eb71d1504132b1c97af0541d76320b89cd37fe5c58475c952b8f77b3",
+  "source": "eu_2020_1818_article_12",
+  "url": "data/interim/pab_rules.json"
+ }
+]

@@ -31,61 +31,40 @@ Each scored 0–5:
 | 4 | Strong, clearly above the field |
 | 5 | Exceptional, best of the day |
 
-## App (GreenRank)
-
-Static site, no backend, no build step. It reads `web/data/master.json` (real data, see below).
+## Repo layout
 
 ```
-data/sp500_ocr.csv    -> the 503-row S&P 500 list (spine)
-data/build_master.py  -> joins tmp/ sources onto the spine, writes web/data/master.csv + master.json
-web/index.html        -> four tabs: Explore, Net-Zero Fund, Quiz, Methods & Sources
-web/app.js            -> scoring (sector percentiles, pillar weights), scatter, fund model, curated quiz
-web/style.css
-serve.py              -> static server with caching disabled (plain reload always shows the latest files)
-run.sh                -> rebuilds the master (if .venv exists) and runs serve.py on http://localhost:8000
+src/            fetch and build scripts, one per source
+data/interim/   derived tables, committed, 38 MB  -> see data/README.md
+data/raw/       cached HTTP responses, not committed, rebuildable
+docs/           audits and methodology notes
+flake.nix       nix devshell: python312 + uv + duckdb + node + ffmpeg
 ```
 
-Run: `./run.sh` then open http://localhost:8000
+## Data
 
-| Tab | What it shows |
-|---|---|
-| Explore | Two views. Scatter: sustainability score (sector-relative, 0–100) against market value, revenue, EBITDA, employees or emissions, logos as points. Treemap: the whole index as boxes sized by market value, revenue or CO2 and coloured by score (like a stock heatmap). Four weight sliders (E, S, G, Financial resilience), sector filter, search box. Click a logo or box for a score card: each metric, its value, its sector percentile and its source. |
-| Net-Zero Fund | $1B allocation under a carbon price. Four plain-language steps, three sliders each with a one-sentence explanation, results as labelled tiles, sector tilts, top positions, companies cut. A "what the model does not know" list and a glossary sit at the bottom. |
-| Quiz | Ten fixed questions about well-known companies with surprising answers (Duke Energy out-emits ExxonMobil on US sites, Berkshire out-emits Chevron, Starbucks has 13x Nvidia's staff, CVS out-sells Nvidia). Each answer shows both real values, a one-line explanation, and the source. Questions are skipped if the data is missing. |
-| World Map | Interactive globe (globe.gl, bundled in `web/lib/`). Countries coloured by CO2 per person, CO2 total, renewable electricity, electricity access, GDP per person, or life expectancy. Company logos at head-office cities (top N by market value). Click a country for its numbers and the S&P 500 companies based there. Needs WebGL; if the browser has none (VS Code's built-in browser, some remote desktops), the tab falls back to a flat SVG map with the same colours, clicks and logos. A 3D/2D toggle is in the panel. |
-| Methods & Sources | Definition, metric table with source and coverage count, scoring steps, why each source was chosen, limits, and a list of every source with links. |
+Every number comes from a source companies are legally compelled to file, or from a public regulator or
+standards body. Nothing is bought, nothing is scraped from a vendor's proprietary feed, and everything is
+reproducible by anyone with the two free API keys listed in `data/README.md`.
 
-Text follows ASD-STE100 style where practical: short sentences, active voice, one idea per sentence. Every tab ends with its sources and a glossary of the finance words used on that tab.
+| source | what it gives | S&P 500 covered |
+|---|---|---|
+| EPA GHGRP | facility-level Scope 1, mandatory, with parent company and lat/lon, 2010-2023 | 142 matched, carrying 44.8% of all US regulated direct emissions |
+| EPA CAMD | Part 75 stack-monitor CO2, instrument-measured, through 2026 | 48 tickers, 40 of them in 2025, carrying 54.0% of 2025 US measured power CO2 |
+| EIA + EPA eGRID | net generation and grid emission factors, for gCO2e/kWh | 15,757 plants |
+| SEC XBRL | revenue, operating income, assets, capex, shares | 503 / 503 |
+| Net Zero Tracker + SBTi | climate targets, years, baselines, validation status | 461 / 503 |
+| Good Jobs First | regulatory penalties by offence group, 2000-2026 | 468 measured non-zero, 35 measured zero |
+| NGFS Phase 5 | carbon price paths to 2050 under 7 scenarios | scenario layer |
+| EU 2020/1818 | the Paris-Aligned Benchmark rulebook, encoded with article citations | 24 rules |
 
-## Master dataset (real data)
+Coverage, limitations and the traps in each source are written up in `data/README.md`. The entity
+resolution behind the emissions join is audited in `docs/entity_resolution_audit.md`: 98% precision on a
+seeded random sample, with the three false positives we found and fixed.
 
-`tmp/` (gitignored) holds the raw downloads. `data/build_master.py` joins the company-level ones onto the OCR'd S&P 500 list and writes `web/data/master.csv` and `master.json` (503 rows, 500 after dual-class duplicates).
+## Setup
 
+```bash
+nix develop
+uv venv && uv pip install --python .venv/bin/python -r requirements.txt
 ```
-python3 -m venv .venv && .venv/bin/pip install openpyxl
-.venv/bin/python data/build_master.py
-```
-
-| Column group | Source file in tmp/ | Join key | Coverage |
-|---|---|---|---|
-| ticker, name, market_cap_b, price, revenue_b | `data/sp500_ocr.csv` (OCR of a Sep-2026 screener; has OCR errors, e.g. HONA, VMRK, FDXF) | spine | 500 |
-| sector, industry, employees, esg_risk_* , controversy_* | `SP 500 ESG Risk Ratings.csv` (Sustainalytics via Kaggle, 2024) | ticker | 395 with scores |
-| ebitda_b, revenue_growth, ntc_climate_credit_score | `climate-credit-risk-analyzer-main/climate_credit_risk_data.csv` (yfinance snapshot) | ticker | 393 |
-| ghgrp_scope1_mt, ghgrp_scope1_2019_mt, ghgrp_trend_5y_pct, ghg_intensity_t_per_musd, ghgrp_facilities | `2023_data_summary_spreadsheets/ghgp_data_by_year_2023.xlsx` (EPA GHGRP direct emissions, all direct-emitter sheets) + `ghgp_data_parent_company(2023).csv` (ownership %) | parent-company name, normalised + alias table | 127 |
-| logo_domain, altman_z, piotroski_f, decarb_target_year, decarb_ambition_pa_pct, decarb_coverage_pct, temp_goal_c, controversy_flags, controversy_worst, sdg_aligned_count | `Global Corporate ESG and Financial Dataset.csv` (Kaggle mrbossjaysrb, semicolon-separated; Yahoo Finance / Sustainalytics fields) | ticker | 421 (300–390 per column) |
-| report_year, report_e/s/g/total_score, report_count | `preprocessed_content.csv` (NLP keyword scores of sustainability-report PDFs, Kaggle) | ticker, latest year | 239 |
-
-Notes on the EPA join:
-- Only **direct** (Scope 1) emissions are used. `ghg.csv` (the single-file export) mixes in supplier subparts MM/NN/PP, which count fuel sold downstream and inflated refiners 10x; it is not used.
-- GHGRP covers US facilities above 25 kt CO2e only. A null means "no reporting US facility matched", not zero. Banks, software and pharma are legitimately null.
-- Matching: normalised name equality, an alias table for renames and mergers (Calpine to Constellation, Chesapeake to Expand, WestRock to Smurfit Westrock), then a two-token prefix rule. `data/ghgrp_matches.csv` lists every parent-to-ticker pair; `data/ghgrp_unmatched_parents.csv` lists the largest unmatched parents (none are S&P 500 members).
-
-Company logos are bundled in `web/icons/` (492 of 500) by `data/build_icons.py`, so the site needs no icon service at demo time. Every icon was checked by eye on a contact sheet. The Kaggle dataset's `domain` column was wrong for about 1 in 4 companies (Procter & Gamble pointed at pc-people.com), so the curated `DOMAINS` map in `web/app.js` takes priority and implausible dataset domains are dropped at build time. Sources per icon: Google's favicon service first (its blue-globe placeholder is rejected by hash), then icon.horse, with hand-checked alternative domains for a few. Eight companies have no usable icon anywhere (Allstate, Targa, Devon, Diamondback, Atmos, Alexandria RE, Berkshire, Roper) and show a ticker circle instead.
-
-Also written by other scripts: `data/build_hq.py` geocodes each head-office city once through OpenStreetMap Nominatim (cache in `data/hq_geocode.json`) and writes `web/data/hq.json`; `web/data/countries.json` holds the latest value per country per metric from `archive (3)/WorldSustainabilityDataset.csv`; `web/data/countries.geojson` is Natural Earth 110m via the globe.gl examples.
-
-The "involvement" screens in the Global Corporate dataset (thermal coal, weapons, tobacco) are filled for only 34 of 421 S&P companies, so they are not used.
-
-Not joinable to companies (country-level, kept for context or quiz questions only): World Development Indicators extract, WorldSustainabilityDataset, global-data-on-sustainable-energy, energy_data_II. `company_esg_financial_dataset.csv` is anonymised (Company_1 ...) and cannot be joined. `SP500.csv`, `data.csv`, `s-and-p-500-main` are index price history.
-
-Caveat: the `report_*` scores track the Sustainalytics `esg_risk_*` columns almost exactly (Apple 17.22 vs 17.2, JPMorgan 29.08 vs 29.3), so the Kaggle report dataset appears to have copied those ratings rather than derived them from the PDFs. Treat them as a second copy of Sustainalytics, not as independent evidence.

@@ -1,0 +1,535 @@
+{
+  "regulation": {
+    "celex": "32020R1818",
+    "title": "Commission Delegated Regulation (EU) 2020/1818 of 17 July 2020 supplementing Regulation (EU) 2016/1011 of the European Parliament and of the Council as regards minimum standards for EU Climate Transition Benchmarks and EU Paris-aligned Benchmarks",
+    "eli": "http://data.europa.eu/eli/reg_del/2020/1818/oj",
+    "source_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020R1818",
+    "retrieved_at": "2026-09-12T12:06:57+00:00",
+    "sha256": "5c1e14120cdea649e7f05c1826e714bdfdf8641cf1895093fd40e14af11aa422",
+    "articles_parsed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "licence": "EUR-Lex reuse policy. (c) European Union, 1998-2026.",
+    "redistribution": "Reuse of EU legislative text and of numbers derived from it is authorised, provided the source is acknowledged: 'Source: EUR-Lex, (c) European Union, 1998-2026'. We may publish these rules.",
+    "attribution": "Source: EUR-Lex, (c) European Union, 1998-2026"
+  },
+  "how_to_read_this_file": "Every rule carries the article it comes from and the sentence it was parsed out of. The numbers under 'parameters' were extracted by regex from the quoted sentence at fetch time, so they cannot drift from the regulation. 'check' is the constraint in the form the portfolio builder should implement it.",
+  "definitions": [
+    {
+      "term": "ghg_emissions",
+      "article": "Article 1(a)",
+      "quote": "(a) ‘greenhouse gas (GHG) emissions’ means greenhouse gas emissions as defined in Article 3, point (1), of Regulation (EU) 2018/842"
+    },
+    {
+      "term": "absolute_ghg_emissions",
+      "article": "Article 1(b)",
+      "quote": "(b) ‘absolute greenhouse gas (GHG) emissions’ means tonnes of CO2 equivalent",
+      "unit": "tCO2e"
+    },
+    {
+      "term": "ghg_intensity",
+      "article": "Article 1(c)",
+      "quote": "(c) ‘greenhouse gas (GHG) intensity’ means absolute GHG emissions divided by millions of euros in enterprise value including cash",
+      "formula": "absolute_ghg_emissions_tco2e / (evic_eur / 1e6)",
+      "unit": "tCO2e per EUR million of EVIC",
+      "why": "Per EVIC, not per revenue. The same tonnes over a bigger market cap read as a lower intensity, so a share price rally decarbonises a portfolio on paper. Article 7(3) patches this for the trajectory but not for the Article 11 level."
+    },
+    {
+      "term": "evic",
+      "article": "Article 1(d)",
+      "quote": "(d) ‘enterprise value including cash’ or ‘EVIC’ means the sum, at fiscal year-end, of the market capitalisation of ordinary shares, the market capitalization of preferred shares, and the book value of total debt and non-controlling interests, without the deduction of cash or cash equivalents",
+      "formula": "market_cap_ordinary + market_cap_preferred + book_value_total_debt + non_controlling_interests",
+      "cash_deducted": false,
+      "measured_at": "fiscal year-end"
+    },
+    {
+      "term": "investable_universe",
+      "article": "Article 1(e)",
+      "quote": "(e) ‘investable universe’ means the set of all investable instruments in a given asset class or group of asset classes",
+      "our_universe": "S&P 500 constituents"
+    },
+    {
+      "term": "base_year",
+      "article": "Article 1(f)",
+      "quote": "(f) ‘base year’ means the first of a series of years in a benchmark"
+    }
+  ],
+  "rules": [
+    {
+      "id": "reference_temperature_scenario",
+      "article": "Article 2",
+      "article_number": 2,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "reference",
+      "parameters": {
+        "warming_limit_c": 1.5
+      },
+      "quote": "shall use the 1,5 °C scenario, with no or limited overshoot, referred to in the Special Report on Global Warming of 1,5 °C from the Intergovernmental Panel on Climate Change (IPCC)",
+      "note": "Overshoot qualifier means an AR6 C1 category pathway. IIASA's AR6 Scenario Explorer serves those under the same anonymous guest token as NGFS.",
+      "parameters_note": "warming_limit_c is read as the literal 1,5 in the quoted passage; the regulation writes decimals with a comma."
+    },
+    {
+      "id": "equity_allocation_constraint",
+      "article": "Article 3",
+      "article_number": 3,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "sector_exposure_floor",
+      "parameters": {
+        "nace_section_range_start": "A",
+        "nace_section_range_end": "H",
+        "nace_section_extra": "L"
+      },
+      "quote": "aggregated exposure to the sectors listed in Sections A to H and Section L of Annex I to Regulation (EC) No 1893/2006 that is at least equivalent to the aggregated exposure of the underlying investable universe to those sectors",
+      "nace_sections": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "L"
+      ],
+      "nace_section_titles_note": "Section letters are quoted from the regulation. The plain-language titles (A agriculture, B mining, C manufacturing, D electricity and gas supply, E water and waste, F construction, G trade, H transport and storage, L real estate) come from NACE Rev. 2 Annex I of Regulation (EC) No 1893/2006, not from 2020/1818.",
+      "check": "sum(w_portfolio[i] for i in high_climate_impact) >= sum(w_universe[i] for i in high_climate_impact)",
+      "why": "This is the constraint most teams miss. You are not allowed to hit the intensity target by simply dumping energy and utilities."
+    },
+    {
+      "id": "scope3_phase_in",
+      "article": "Article 5",
+      "article_number": 5,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "data_scope",
+      "parameters": {
+        "immediate_nace_divisions": "05 to 09 and 19 and 20",
+        "tranche_2_years": 2,
+        "tranche_2_nace_divisions": "10 to 18, 21 to 33, 41, 42 and 43, 49 to 53 and Division 81",
+        "tranche_3_years": 4
+      },
+      "quote": "(a) As of 23 December 2020, Scope 3 GHG emissions data for at least the energy and mining sectors referred to in Divisions 05 to 09 and 19 and 20 of Annex I to Regulation (EC) No 1893/2006; (b) within two years from 23 December 2020, Scope 3 GHG emissions data for at least the transportation, construction, buildings, materials and industrial sectors referred to in Divisions 10 to 18, 21 to 33, 41, 42 and 43, 49 to 53 and Division 81 of Annex I to Regulation (EC) No 1893/2006; (c) within four years from 23 December 2020, Scope 3 GHG emissions data for all other sectors",
+      "effective_from": "2020-12-23",
+      "all_sectors_in_scope_from": "2024-12-23",
+      "check": "scope3 is required for every sector as of 2024-12-23, so we use scope 1+2+3 throughout"
+    },
+    {
+      "id": "target_setter_overweight",
+      "article": "Article 6",
+      "article_number": 6,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "optional_tilt",
+      "parameters": {
+        "min_annual_reduction_pct": 7.0,
+        "min_consecutive_years": 3
+      },
+      "quote": "reduced their GHG intensity or, where applicable, their absolute GHG emissions, including Scope 1, 2 and 3 GHG emissions, by an average of at least 7 % per annum for at least three consecutive years",
+      "conditional_on": "issuer publishes Scope 1, 2 and 3 emissions consistently and accurately",
+      "permissive": true,
+      "why": "The only place the regulation lets you overweight anything, and it turns on a reduction the issuer has already delivered rather than one it has announced. That is the same test as our promise-versus-physics gap."
+    },
+    {
+      "id": "decarbonisation_trajectory_equity",
+      "article": "Article 7(1)(a)",
+      "article_number": 7,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "trajectory",
+      "parameters": {
+        "min_annual_reduction_pct": 7.0
+      },
+      "quote": "(a) for equity securities admitted to a public market in the Union or in another jurisdiction, at least 7 % reduction of GHG intensity on average per annum",
+      "basis": "GHG intensity, meaning absolute emissions per EUR million of EVIC",
+      "check": "intensity[base_year + n] <= intensity[base_year] * (1 - 0.07) ** n"
+    },
+    {
+      "id": "trajectory_is_geometric",
+      "article": "Article 7(2)",
+      "article_number": 7,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "trajectory_mechanics",
+      "parameters": {
+        "min_annual_reduction_pct": 7.0
+      },
+      "quote": "shall be calculated geometrically, which shall mean that the annual minimum 7 % reduction of GHG intensity or of absolute GHG emissions for year ‘n’ shall be calculated based on the GHG intensity or absolute GHG emissions for the year n-1, in a geometric progression from the base year",
+      "check": "compounding, not linear: a 10 year path is (1-0.07)**10 = 0.484 of the base year"
+    },
+    {
+      "id": "evic_inflation_adjustment",
+      "article": "Article 7(3)",
+      "article_number": 7,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "trajectory_mechanics",
+      "parameters": {},
+      "quote": "the EVIC of each constituent shall be adjusted by dividing it by an enterprise value inflation adjustment factor. That enterprise value inflation adjustment factor shall be calculated by dividing the average EVIC of the benchmark constituents at the end of a calendar year by the average EVIC of the benchmark constituents at the end of the previous calendar year",
+      "formula": "evic_adjusted[i,t] = evic[i,t] / (mean(evic[:,t]) / mean(evic[:,t-1]))",
+      "why": "Without this a bull market alone would show you decarbonising."
+    },
+    {
+      "id": "missed_target_compensation",
+      "article": "Article 7(4)",
+      "article_number": 7,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "trajectory_mechanics",
+      "parameters": {},
+      "quote": "for each year in which the targets laid down in paragraph 1 are not achieved, compensate for those missed targets by upwardly adjusting the targets in their decarbonisation trajectory for the following year"
+    },
+    {
+      "id": "label_loss",
+      "article": "Article 7(5)",
+      "article_number": 7,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "trajectory_mechanics",
+      "parameters": {
+        "max_misses": 3,
+        "rolling_window_years": 10
+      },
+      "quote": "(a) the targets laid down in paragraph 1 are not achieved in a given year and the target miss is not compensated in the following year; or (b) the targets laid down in paragraph 1 are not achieved on three occasions in any consecutive 10-year period",
+      "relabel_condition": "meets the trajectory target for two consecutive years after the loss, unless the label was lost twice"
+    },
+    {
+      "id": "change_measurement",
+      "article": "Article 8(1)",
+      "article_number": 8,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "measurement",
+      "parameters": {},
+      "quote": "percentage change between, on the one hand, the weighted average GHG intensity or absolute GHG emissions of all constituents of the EU Climate Transition Benchmark or the EU Paris-aligned Benchmark at the end of year ‘n’ and, on the other hand, the weighted average GHG intensity or absolute GHG emissions of all constituents of the benchmarks at the end of year n-1",
+      "check": "weighted average across constituents, portfolio weights as the weights"
+    },
+    {
+      "id": "ctb_baseline_reduction",
+      "article": "Article 9",
+      "article_number": 9,
+      "applies_to": [
+        "CTB"
+      ],
+      "type": "intensity_floor",
+      "parameters": {
+        "min_reduction_vs_universe_pct": 30.0
+      },
+      "quote": "for EU Climate Transition Benchmarks, including Scope 1, 2 and 3 GHG emissions, shall be at least 30 % lower than the GHG intensity or absolute GHG emissions of the investable universe",
+      "scopes": [
+        1,
+        2,
+        3
+      ],
+      "check": "intensity_portfolio <= intensity_universe * (1 - 0.30)"
+    },
+    {
+      "id": "ctb_exclusions_apply",
+      "article": "Article 10(2)",
+      "article_number": 10,
+      "applies_to": [
+        "CTB"
+      ],
+      "type": "exclusion_reference",
+      "parameters": {},
+      "quote": "By 31 December 2022, administrators of EU Climate Transition Benchmarks shall comply with the requirements set out in Article 12(1), points (a), (b) and (c), and Article 12(2)",
+      "inherits": [
+        "pab_exclusion_controversial_weapons",
+        "pab_exclusion_tobacco",
+        "pab_exclusion_ungc_oecd",
+        "pab_exclusion_dnsh"
+      ],
+      "note": "A CTB inherits the conduct exclusions but not the fossil revenue thresholds."
+    },
+    {
+      "id": "pab_baseline_reduction",
+      "article": "Article 11",
+      "article_number": 11,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "intensity_floor",
+      "parameters": {
+        "min_reduction_vs_universe_pct": 50.0
+      },
+      "quote": "for EU Paris-aligned Benchmarks, including Scope 1, 2 and 3 GHG emissions, shall be at least 50 % lower than the GHG intensity or absolute GHG emissions of the investable universe",
+      "scopes": [
+        1,
+        2,
+        3
+      ],
+      "measured_at": "inception, against the investable universe",
+      "check": "intensity_portfolio <= intensity_universe * (1 - 0.50)"
+    },
+    {
+      "id": "pab_exclusion_controversial_weapons",
+      "article": "Article 12(1)(a)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB",
+        "CTB"
+      ],
+      "type": "exclusion",
+      "parameters": {},
+      "quote": "(a) companies involved in any activities related to controversial weapons",
+      "basis": "activity"
+    },
+    {
+      "id": "pab_exclusion_tobacco",
+      "article": "Article 12(1)(b)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB",
+        "CTB"
+      ],
+      "type": "exclusion",
+      "parameters": {},
+      "quote": "(b) companies involved in the cultivation and production of tobacco",
+      "basis": "activity"
+    },
+    {
+      "id": "pab_exclusion_ungc_oecd",
+      "article": "Article 12(1)(c)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB",
+        "CTB"
+      ],
+      "type": "exclusion",
+      "parameters": {},
+      "quote": "(c) companies that benchmark administrators find in violation of the United Nations Global Compact (UNGC) principles or the Organisation for Economic Cooperation and Development (OECD) Guidelines for Multinational Enterprises",
+      "basis": "conduct"
+    },
+    {
+      "id": "pab_exclusion_coal",
+      "article": "Article 12(1)(d)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "exclusion",
+      "parameters": {
+        "revenue_threshold_pct": 1.0
+      },
+      "quote": "(d) companies that derive 1 % or more of their revenues from exploration, mining, extraction, distribution or refining of hard coal and lignite",
+      "basis": "revenue_share",
+      "operator": ">=",
+      "activities": [
+        "exploration",
+        "mining",
+        "extraction",
+        "distribution",
+        "refining"
+      ],
+      "commodity": "hard coal and lignite",
+      "check": "revenue_share_coal >= 0.01 -> exclude"
+    },
+    {
+      "id": "pab_exclusion_oil",
+      "article": "Article 12(1)(e)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "exclusion",
+      "parameters": {
+        "revenue_threshold_pct": 10.0
+      },
+      "quote": "(e) companies that derive 10 % or more of their revenues from the exploration, extraction, distribution or refining of oil fuels",
+      "basis": "revenue_share",
+      "operator": ">=",
+      "activities": [
+        "exploration",
+        "extraction",
+        "distribution",
+        "refining"
+      ],
+      "commodity": "oil fuels",
+      "check": "revenue_share_oil >= 0.10 -> exclude"
+    },
+    {
+      "id": "pab_exclusion_gas",
+      "article": "Article 12(1)(f)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "exclusion",
+      "parameters": {
+        "revenue_threshold_pct": 50.0
+      },
+      "quote": "(f) companies that derive 50 % or more of their revenues from the exploration, extraction, manufacturing or distribution of gaseous fuels",
+      "basis": "revenue_share",
+      "operator": ">=",
+      "activities": [
+        "exploration",
+        "extraction",
+        "manufacturing",
+        "distribution"
+      ],
+      "commodity": "gaseous fuels",
+      "check": "revenue_share_gas >= 0.50 -> exclude"
+    },
+    {
+      "id": "pab_exclusion_power_generation",
+      "article": "Article 12(1)(g)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "exclusion",
+      "parameters": {
+        "revenue_threshold_pct": 50.0,
+        "intensity_threshold_gco2e_per_kwh": 100.0
+      },
+      "quote": "(g) companies that derive 50 % or more of their revenues from electricity generation with a GHG intensity of more than 100 g CO2 e/kWh",
+      "basis": "revenue_share_and_intensity",
+      "operator": ">=",
+      "intensity_operator": ">",
+      "check": "revenue_share_power >= 0.50 and generation_intensity_gco2e_kwh > 100 -> exclude",
+      "why": "Both legs must hold. A utility with half its revenue from generation but a clean fleet stays in, which is what makes this a transition rule rather than a ban."
+    },
+    {
+      "id": "pab_exclusion_dnsh",
+      "article": "Article 12(2)",
+      "article_number": 12,
+      "applies_to": [
+        "PAB"
+      ],
+      "type": "exclusion",
+      "parameters": {},
+      "quote": "companies that are found or estimated by them or by external data providers to significantly harm one or more of the environmental objectives referred to in Article 9 of Regulation (EU) 2020/852",
+      "basis": "taxonomy_dnsh",
+      "note": "EU Taxonomy Regulation (EU) 2020/852 Article 9 objectives."
+    },
+    {
+      "id": "estimation_transparency",
+      "article": "Article 13",
+      "article_number": 13,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "disclosure",
+      "parameters": {},
+      "quote": "that use estimations that are not based on data provided by an external data provider, shall formalise, document and make public the methodology upon which such estimations are based",
+      "why": "Our estimated emissions carry a PCAF-style dq score and a named method, which is what this article asks for."
+    },
+    {
+      "id": "trajectory_disclosure",
+      "article": "Article 14",
+      "article_number": 14,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "disclosure",
+      "parameters": {},
+      "quote": "shall formalise, document and make public the decarbonisation trajectories of those benchmarks, the base year used for the determination of those decarbonisation trajectories"
+    },
+    {
+      "id": "data_accuracy_standards",
+      "article": "Article 15(1)",
+      "article_number": 15,
+      "applies_to": [
+        "CTB",
+        "PAB"
+      ],
+      "type": "disclosure",
+      "parameters": {},
+      "quote": "shall ensure that data on Scope 1, 2 and 3 GHG emissions are accurate, in accordance with global or European standards, such as the Product Environmental Footprint (PEF), the Organisation Environmental Footprint (OEF) methods (9), the Corporate Value Chain (Scope 3) Accounting and Reporting Standard (10), the EN ISO 14064 or the EN ISO 14069",
+      "standards": [
+        "GHG Protocol Corporate Value Chain (Scope 3) Accounting and Reporting Standard",
+        "EN ISO 14064",
+        "EN ISO 14069",
+        "PEF",
+        "OEF"
+      ]
+    }
+  ],
+  "thresholds": {
+    "reference_temperature_scenario": {
+      "warming_limit_c": 1.5
+    },
+    "equity_allocation_constraint": {
+      "nace_section_range_start": "A",
+      "nace_section_range_end": "H",
+      "nace_section_extra": "L"
+    },
+    "scope3_phase_in": {
+      "immediate_nace_divisions": "05 to 09 and 19 and 20",
+      "tranche_2_years": 2,
+      "tranche_2_nace_divisions": "10 to 18, 21 to 33, 41, 42 and 43, 49 to 53 and Division 81",
+      "tranche_3_years": 4
+    },
+    "target_setter_overweight": {
+      "min_annual_reduction_pct": 7.0,
+      "min_consecutive_years": 3
+    },
+    "decarbonisation_trajectory_equity": {
+      "min_annual_reduction_pct": 7.0
+    },
+    "trajectory_is_geometric": {
+      "min_annual_reduction_pct": 7.0
+    },
+    "label_loss": {
+      "max_misses": 3,
+      "rolling_window_years": 10
+    },
+    "ctb_baseline_reduction": {
+      "min_reduction_vs_universe_pct": 30.0
+    },
+    "pab_baseline_reduction": {
+      "min_reduction_vs_universe_pct": 50.0
+    },
+    "pab_exclusion_coal": {
+      "revenue_threshold_pct": 1.0
+    },
+    "pab_exclusion_oil": {
+      "revenue_threshold_pct": 10.0
+    },
+    "pab_exclusion_gas": {
+      "revenue_threshold_pct": 50.0
+    },
+    "pab_exclusion_power_generation": {
+      "revenue_threshold_pct": 50.0,
+      "intensity_threshold_gco2e_per_kwh": 100.0
+    }
+  }
+}

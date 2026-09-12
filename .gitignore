@@ -1,4 +1,25 @@
+# python
 .venv/
-tmp/
+__pycache__/
+*.pyc
+
+# nix
+result
+result-*
+
+# Raw HTTP caches: 2 GB and rebuildable. Every fetch script is idempotent, so
+# `nix develop --command .venv/bin/python src/fetch_*.py` repopulates data/raw/
+# from scratch. Some of it also carries no redistribution grant (Yahoo prices).
+data/raw/
+
+# node / site build
+node_modules/
+site/dist/
+
+# credentials
+.env
+kaggle.json
+
+# scratch
+*.log
 .DS_Store
-data/hq_build.log

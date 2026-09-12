@@ -1,0 +1,26 @@
+[
+ {
+  "url": "https://www.kaggle.com/datasets/jaidityachopra/esg-sustainability-reports-of-s-and-p-500-companies",
+  "retrieved_at": "2026-09-12T14:07:31+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 91243380,
+  "sha256": "a5d6a910410c31fad33d755de17396e9fef310ea3da4d247852d661602ab36eb",
+  "local_path": "data/raw/kaggle_esg/preprocessed_content.csv",
+  "licence": "Apache 2.0 asserted by the uploader; the underlying text is the companies' own published reports.",
+  "redistribution": "Derived statistics may be published with attribution to the uploader. No tonnage is extracted because none survives the preprocessing.",
+  "provenance_class": "vendor",
+  "served_from_cache_this_run": true
+ },
+ {
+  "url": "https://www.kaggle.com/datasets/mrbossjaysrb/global-corporate-esg-and-financial-dataset",
+  "retrieved_at": "2026-09-12T14:07:32+00:00",
+  "http_status": "not requested, served from cache",
+  "bytes": 1276850,
+  "sha256": "ec02e66d3193b6a3b483bee9359419ecda440a7fd6d97c7e028672c137ae150e",
+  "local_path": "data/raw/kaggle_esg/Global Corporate ESG and Financial Dataset.csv",
+  "licence": "CC0 claimed by the uploader. The content is a Refinitiv Eikon / MSCI extract, which the uploader has no right to place in the public domain, so the claim is invalid.",
+  "redistribution": "Do not publish. Only the header row is read, to establish that the dataset carries no emissions column.",
+  "provenance_class": "vendor",
+  "served_from_cache_this_run": true
+ }
+]

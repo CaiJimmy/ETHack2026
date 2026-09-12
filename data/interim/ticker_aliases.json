@@ -1,0 +1,4793 @@
+{
+ "generated_at": "2026-09-12T12:07:58+00:00",
+ "canonical_spelling": "uppercase, share class after a dot, e.g. BRK.B",
+ "lookup_rule": "Uppercase and strip the input, drop a US exchange suffix (.US -US :US ' US' or a US: prefix), then look it up in `aliases`. Keys are uppercase. If it is absent the symbol is not an S&P 500 constituent under any spelling we generated.",
+ "name_rule": "`name_to_ticker` keys are uppercase alphanumerics with corporate suffixes stripped (CORP, INC, PLC, HOLDINGS, GROUP, THE, ...). Match on exact equality only; prefix or fuzzy matching on these strings produces false positives such as SEA vs SEAGATE. `name_source` says where each key came from: the index list, SEC company_tickers, the name on the latest EDGAR filing, or the name the registrant last changed away from. Former names are here because emissions and enforcement data lag corporate renames.",
+ "n_canonical": 503,
+ "n_aliases": 511,
+ "collisions": [],
+ "name_collisions": [
+  [
+   "FOX",
+   "FOXA",
+   "FOX",
+   "sec"
+  ],
+  [
+   "ALPHABET",
+   "GOOGL",
+   "GOOG",
+   "sec"
+  ],
+  [
+   "NEWS",
+   "NWSA",
+   "NWS",
+   "sec"
+  ],
+  [
+   "FOX",
+   "FOXA",
+   "FOX",
+   "sec_filing"
+  ],
+  [
+   "ALPHABET",
+   "GOOGL",
+   "GOOG",
+   "sec_filing"
+  ],
+  [
+   "NEWS",
+   "NWSA",
+   "NWS",
+   "sec_filing"
+  ],
+  [
+   "TRAVELERS",
+   "TRV",
+   "C",
+   "sec_former"
+  ],
+  [
+   "INGERSOLLRAND",
+   "IR",
+   "TT",
+   "sec_former"
+  ],
+  [
+   "FOX",
+   "FOXA",
+   "FOX",
+   "sec_former"
+  ],
+  [
+   "NEWS",
+   "NWSA",
+   "NWS",
+   "sec_former"
+  ]
+ ],
+ "aliases": {
+  "A": "A",
+  "AAPL": "AAPL",
+  "ABBV": "ABBV",
+  "ABNB": "ABNB",
+  "ABT": "ABT",
+  "ACGL": "ACGL",
+  "ACN": "ACN",
+  "ADBE": "ADBE",
+  "ADI": "ADI",
+  "ADM": "ADM",
+  "ADP": "ADP",
+  "ADSK": "ADSK",
+  "AEE": "AEE",
+  "AEP": "AEP",
+  "AES": "AES",
+  "AFL": "AFL",
+  "AIG": "AIG",
+  "AIZ": "AIZ",
+  "AJG": "AJG",
+  "AKAM": "AKAM",
+  "ALB": "ALB",
+  "ALGN": "ALGN",
+  "ALL": "ALL",
+  "ALLE": "ALLE",
+  "AMAT": "AMAT",
+  "AMCR": "AMCR",
+  "AMD": "AMD",
+  "AME": "AME",
+  "AMGN": "AMGN",
+  "AMP": "AMP",
+  "AMT": "AMT",
+  "AMZN": "AMZN",
+  "ANET": "ANET",
+  "AON": "AON",
+  "AOS": "AOS",
+  "APA": "APA",
+  "APD": "APD",
+  "APH": "APH",
+  "APO": "APO",
+  "APP": "APP",
+  "APTV": "APTV",
+  "ARE": "ARE",
+  "ARES": "ARES",
+  "ATO": "ATO",
+  "AVGO": "AVGO",
+  "AVY": "AVY",
+  "AWK": "AWK",
+  "AXON": "AXON",
+  "AXP": "AXP",
+  "AZO": "AZO",
+  "BA": "BA",
+  "BAC": "BAC",
+  "BALL": "BALL",
+  "BAX": "BAX",
+  "BBY": "BBY",
+  "BDX": "BDX",
+  "BEN": "BEN",
+  "BF B": "BF.B",
+  "BF-B": "BF.B",
+  "BF.B": "BF.B",
+  "BF/B": "BF.B",
+  "BFB": "BF.B",
+  "BG": "BG",
+  "BIIB": "BIIB",
+  "BKNG": "BKNG",
+  "BKR": "BKR",
+  "BLDR": "BLDR",
+  "BLK": "BLK",
+  "BMY": "BMY",
+  "BNY": "BNY",
+  "BR": "BR",
+  "BRK B": "BRK.B",
+  "BRK-B": "BRK.B",
+  "BRK.B": "BRK.B",
+  "BRK/B": "BRK.B",
+  "BRKB": "BRK.B",
+  "BRO": "BRO",
+  "BSX": "BSX",
+  "BX": "BX",
+  "BXP": "BXP",
+  "C": "C",
+  "CAH": "CAH",
+  "CARR": "CARR",
+  "CASY": "CASY",
+  "CAT": "CAT",
+  "CB": "CB",
+  "CBOE": "CBOE",
+  "CBRE": "CBRE",
+  "CCI": "CCI",
+  "CCL": "CCL",
+  "CDNS": "CDNS",
+  "CDW": "CDW",
+  "CEG": "CEG",
+  "CF": "CF",
+  "CFG": "CFG",
+  "CHD": "CHD",
+  "CHRW": "CHRW",
+  "CHTR": "CHTR",
+  "CI": "CI",
+  "CIEN": "CIEN",
+  "CINF": "CINF",
+  "CL": "CL",
+  "CLX": "CLX",
+  "CMCSA": "CMCSA",
+  "CME": "CME",
+  "CMG": "CMG",
+  "CMI": "CMI",
+  "CMS": "CMS",
+  "CNC": "CNC",
+  "CNP": "CNP",
+  "COF": "COF",
+  "COHR": "COHR",
+  "COIN": "COIN",
+  "COO": "COO",
+  "COP": "COP",
+  "COR": "COR",
+  "COST": "COST",
+  "CPAY": "CPAY",
+  "CPRT": "CPRT",
+  "CPT": "CPT",
+  "CRH": "CRH",
+  "CRL": "CRL",
+  "CRM": "CRM",
+  "CRWD": "CRWD",
+  "CSCO": "CSCO",
+  "CSGP": "CSGP",
+  "CSX": "CSX",
+  "CTAS": "CTAS",
+  "CTSH": "CTSH",
+  "CTVA": "CTVA",
+  "CVNA": "CVNA",
+  "CVS": "CVS",
+  "CVX": "CVX",
+  "D": "D",
+  "DAL": "DAL",
+  "DASH": "DASH",
+  "DD": "DD",
+  "DDOG": "DDOG",
+  "DE": "DE",
+  "DECK": "DECK",
+  "DELL": "DELL",
+  "DG": "DG",
+  "DGX": "DGX",
+  "DHI": "DHI",
+  "DHR": "DHR",
+  "DIS": "DIS",
+  "DLR": "DLR",
+  "DLTR": "DLTR",
+  "DOC": "DOC",
+  "DOV": "DOV",
+  "DOW": "DOW",
+  "DPZ": "DPZ",
+  "DRI": "DRI",
+  "DTE": "DTE",
+  "DUK": "DUK",
+  "DVA": "DVA",
+  "DVN": "DVN",
+  "DXCM": "DXCM",
+  "EBAY": "EBAY",
+  "ECHO": "ECHO",
+  "ECL": "ECL",
+  "ED": "ED",
+  "EFX": "EFX",
+  "EG": "EG",
+  "EIX": "EIX",
+  "EL": "EL",
+  "ELV": "ELV",
+  "EME": "EME",
+  "EMR": "EMR",
+  "EOG": "EOG",
+  "EQIX": "EQIX",
+  "EQT": "EQT",
+  "ERIE": "ERIE",
+  "ES": "ES",
+  "ESS": "ESS",
+  "ETN": "ETN",
+  "ETR": "ETR",
+  "EVRG": "EVRG",
+  "EW": "EW",
+  "EXC": "EXC",
+  "EXE": "EXE",
+  "EXPD": "EXPD",
+  "EXPE": "EXPE",
+  "EXR": "EXR",
+  "F": "F",
+  "FANG": "FANG",
+  "FAST": "FAST",
+  "FCX": "FCX",
+  "FDS": "FDS",
+  "FDX": "FDX",
+  "FDXF": "FDXF",
+  "FE": "FE",
+  "FERG": "FERG",
+  "FFIV": "FFIV",
+  "FICO": "FICO",
+  "FIS": "FIS",
+  "FISV": "FISV",
+  "FITB": "FITB",
+  "FIX": "FIX",
+  "FLEX": "FLEX",
+  "FOX": "FOX",
+  "FOXA": "FOXA",
+  "FRT": "FRT",
+  "FSLR": "FSLR",
+  "FTNT": "FTNT",
+  "FTV": "FTV",
+  "GD": "GD",
+  "GDDY": "GDDY",
+  "GE": "GE",
+  "GEHC": "GEHC",
+  "GEN": "GEN",
+  "GEV": "GEV",
+  "GILD": "GILD",
+  "GIS": "GIS",
+  "GL": "GL",
+  "GLW": "GLW",
+  "GM": "GM",
+  "GNRC": "GNRC",
+  "GOOG": "GOOG",
+  "GOOGL": "GOOGL",
+  "GPC": "GPC",
+  "GPN": "GPN",
+  "GRMN": "GRMN",
+  "GS": "GS",
+  "GWW": "GWW",
+  "HAL": "HAL",
+  "HAS": "HAS",
+  "HBAN": "HBAN",
+  "HCA": "HCA",
+  "HD": "HD",
+  "HIG": "HIG",
+  "HII": "HII",
+  "HLT": "HLT",
+  "HON": "HON",
+  "HONA": "HONA",
+  "HOOD": "HOOD",
+  "HPE": "HPE",
+  "HPQ": "HPQ",
+  "HRL": "HRL",
+  "HSIC": "HSIC",
+  "HST": "HST",
+  "HSY": "HSY",
+  "HUBB": "HUBB",
+  "HUM": "HUM",
+  "HWM": "HWM",
+  "IBKR": "IBKR",
+  "IBM": "IBM",
+  "ICE": "ICE",
+  "IDXX": "IDXX",
+  "IEX": "IEX",
+  "IFF": "IFF",
+  "INCY": "INCY",
+  "INTC": "INTC",
+  "INTU": "INTU",
+  "INVH": "INVH",
+  "IP": "IP",
+  "IQV": "IQV",
+  "IR": "IR",
+  "IRM": "IRM",
+  "ISRG": "ISRG",
+  "IT": "IT",
+  "ITW": "ITW",
+  "IVZ": "IVZ",
+  "J": "J",
+  "JBHT": "JBHT",
+  "JBL": "JBL",
+  "JCI": "JCI",
+  "JKHY": "JKHY",
+  "JNJ": "JNJ",
+  "JPM": "JPM",
+  "KDP": "KDP",
+  "KEY": "KEY",
+  "KEYS": "KEYS",
+  "KHC": "KHC",
+  "KIM": "KIM",
+  "KKR": "KKR",
+  "KLAC": "KLAC",
+  "KMB": "KMB",
+  "KMI": "KMI",
+  "KO": "KO",
+  "KR": "KR",
+  "KVUE": "KVUE",
+  "L": "L",
+  "LDOS": "LDOS",
+  "LEN": "LEN",
+  "LH": "LH",
+  "LHX": "LHX",
+  "LII": "LII",
+  "LIN": "LIN",
+  "LITE": "LITE",
+  "LLY": "LLY",
+  "LMT": "LMT",
+  "LNT": "LNT",
+  "LOW": "LOW",
+  "LRCX": "LRCX",
+  "LULU": "LULU",
+  "LUV": "LUV",
+  "LVS": "LVS",
+  "LYB": "LYB",
+  "LYV": "LYV",
+  "MA": "MA",
+  "MAA": "MAA",
+  "MAR": "MAR",
+  "MAS": "MAS",
+  "MCD": "MCD",
+  "MCHP": "MCHP",
+  "MCK": "MCK",
+  "MCO": "MCO",
+  "MDLZ": "MDLZ",
+  "MDT": "MDT",
+  "MET": "MET",
+  "META": "META",
+  "MGM": "MGM",
+  "MKC": "MKC",
+  "MLM": "MLM",
+  "MMM": "MMM",
+  "MNST": "MNST",
+  "MO": "MO",
+  "MOS": "MOS",
+  "MPC": "MPC",
+  "MPWR": "MPWR",
+  "MRK": "MRK",
+  "MRNA": "MRNA",
+  "MRSH": "MRSH",
+  "MRVL": "MRVL",
+  "MS": "MS",
+  "MSCI": "MSCI",
+  "MSFT": "MSFT",
+  "MSI": "MSI",
+  "MTB": "MTB",
+  "MTD": "MTD",
+  "MU": "MU",
+  "NCLH": "NCLH",
+  "NDAQ": "NDAQ",
+  "NDSN": "NDSN",
+  "NEE": "NEE",
+  "NEM": "NEM",
+  "NFLX": "NFLX",
+  "NI": "NI",
+  "NKE": "NKE",
+  "NOC": "NOC",
+  "NOW": "NOW",
+  "NRG": "NRG",
+  "NSC": "NSC",
+  "NTAP": "NTAP",
+  "NTRS": "NTRS",
+  "NUE": "NUE",
+  "NVDA": "NVDA",
+  "NVR": "NVR",
+  "NWS": "NWS",
+  "NWSA": "NWSA",
+  "NXPI": "NXPI",
+  "O": "O",
+  "ODFL": "ODFL",
+  "OKE": "OKE",
+  "OMC": "OMC",
+  "ON": "ON",
+  "ORCL": "ORCL",
+  "ORLY": "ORLY",
+  "OTIS": "OTIS",
+  "OXY": "OXY",
+  "PANW": "PANW",
+  "PAYX": "PAYX",
+  "PCAR": "PCAR",
+  "PCG": "PCG",
+  "PEG": "PEG",
+  "PEP": "PEP",
+  "PFE": "PFE",
+  "PFG": "PFG",
+  "PG": "PG",
+  "PGR": "PGR",
+  "PH": "PH",
+  "PHM": "PHM",
+  "PKG": "PKG",
+  "PLD": "PLD",
+  "PLTR": "PLTR",
+  "PM": "PM",
+  "PNC": "PNC",
+  "PNR": "PNR",
+  "PNW": "PNW",
+  "PODD": "PODD",
+  "PPG": "PPG",
+  "PPL": "PPL",
+  "PRU": "PRU",
+  "PSA": "PSA",
+  "PSKY": "PSKY",
+  "PSX": "PSX",
+  "PTC": "PTC",
+  "PWR": "PWR",
+  "PYPL": "PYPL",
+  "Q": "Q",
+  "QCOM": "QCOM",
+  "RCL": "RCL",
+  "RDDT": "RDDT",
+  "REG": "REG",
+  "REGN": "REGN",
+  "RF": "RF",
+  "RJF": "RJF",
+  "RL": "RL",
+  "RMD": "RMD",
+  "ROK": "ROK",
+  "ROL": "ROL",
+  "ROP": "ROP",
+  "ROST": "ROST",
+  "RSG": "RSG",
+  "RTX": "RTX",
+  "RVTY": "RVTY",
+  "SBAC": "SBAC",
+  "SBUX": "SBUX",
+  "SCHW": "SCHW",
+  "SHW": "SHW",
+  "SJM": "SJM",
+  "SLB": "SLB",
+  "SMCI": "SMCI",
+  "SNA": "SNA",
+  "SNDK": "SNDK",
+  "SNPS": "SNPS",
+  "SO": "SO",
+  "SOLV": "SOLV",
+  "SPG": "SPG",
+  "SPGI": "SPGI",
+  "SRE": "SRE",
+  "STE": "STE",
+  "STLD": "STLD",
+  "STT": "STT",
+  "STX": "STX",
+  "STZ": "STZ",
+  "SW": "SW",
+  "SWK": "SWK",
+  "SWKS": "SWKS",
+  "SYF": "SYF",
+  "SYK": "SYK",
+  "SYY": "SYY",
+  "T": "T",
+  "TAP": "TAP",
+  "TDG": "TDG",
+  "TDY": "TDY",
+  "TECH": "TECH",
+  "TEL": "TEL",
+  "TER": "TER",
+  "TFC": "TFC",
+  "TGT": "TGT",
+  "TJX": "TJX",
+  "TKO": "TKO",
+  "TMO": "TMO",
+  "TMUS": "TMUS",
+  "TPL": "TPL",
+  "TPR": "TPR",
+  "TRGP": "TRGP",
+  "TRMB": "TRMB",
+  "TROW": "TROW",
+  "TRV": "TRV",
+  "TSCO": "TSCO",
+  "TSLA": "TSLA",
+  "TSN": "TSN",
+  "TT": "TT",
+  "TTD": "TTD",
+  "TTWO": "TTWO",
+  "TXN": "TXN",
+  "TXT": "TXT",
+  "TYL": "TYL",
+  "UAL": "UAL",
+  "UBER": "UBER",
+  "UDR": "UDR",
+  "UHS": "UHS",
+  "ULTA": "ULTA",
+  "UNH": "UNH",
+  "UNP": "UNP",
+  "UPS": "UPS",
+  "URI": "URI",
+  "USB": "USB",
+  "V": "V",
+  "VEEV": "VEEV",
+  "VICI": "VICI",
+  "VLO": "VLO",
+  "VLTO": "VLTO",
+  "VMC": "VMC",
+  "VMRK": "VMRK",
+  "VRSK": "VRSK",
+  "VRSN": "VRSN",
+  "VRT": "VRT",
+  "VRTX": "VRTX",
+  "VST": "VST",
+  "VTR": "VTR",
+  "VTRS": "VTRS",
+  "VZ": "VZ",
+  "WAB": "WAB",
+  "WAT": "WAT",
+  "WBD": "WBD",
+  "WDAY": "WDAY",
+  "WDC": "WDC",
+  "WEC": "WEC",
+  "WELL": "WELL",
+  "WFC": "WFC",
+  "WM": "WM",
+  "WMB": "WMB",
+  "WMT": "WMT",
+  "WRB": "WRB",
+  "WSM": "WSM",
+  "WST": "WST",
+  "WTW": "WTW",
+  "WY": "WY",
+  "WYNN": "WYNN",
+  "XEL": "XEL",
+  "XOM": "XOM",
+  "XYL": "XYL",
+  "XYZ": "XYZ",
+  "YUM": "YUM",
+  "ZBH": "ZBH",
+  "ZBRA": "ZBRA",
+  "ZTS": "ZTS"
+ },
+ "name_to_ticker": {
+  "3M": "MMM",
+  "3MHEALTHCARE": "SOLV",
+  "ABBOTTLABORATORIES": "ABT",
+  "ABBVIE": "ABBV",
+  "ACCENTURE": "ACN",
+  "ADOBE": "ADBE",
+  "ADOBESYSTEMS": "ADBE",
+  "ADVANCEDMICRODEVICES": "AMD",
+  "AES": "AES",
+  "AFLAC": "AFL",
+  "AGILENTTECHNOLOGIES": "A",
+  "AIRBNB": "ABNB",
+  "AIRPRODUCTS": "APD",
+  "AIRPRODUCTSCHEMICALS": "APD",
+  "AIRSOUTHWEST": "LUV",
+  "AKAMAITECHNOLOGIES": "AKAM",
+  "ALBEMARLE": "ALB",
+  "ALEXANDRIAREALESTATEEQUITIES": "ARE",
+  "ALIGNTECHNOLOGY": "ALGN",
+  "ALLEGION": "ALLE",
+  "ALLIANTENERGY": "LNT",
+  "ALLIEDSIGNAL": "HON",
+  "ALLSTATE": "ALL",
+  "ALPHABET": "GOOGL",
+  "ALPHABETINCCLAS": "GOOGL",
+  "ALPHABETINCCLASSC": "GOOG",
+  "ALTRIA": "MO",
+  "AMAZON": "AMZN",
+  "AMAZONCOM": "AMZN",
+  "AMBPROPERTY": "PLD",
+  "AMCOR": "AMCR",
+  "AMEREN": "AEE",
+  "AMERICANELECTRICPOWER": "AEP",
+  "AMERICANEXPRESS": "AXP",
+  "AMERICANEXPRESSFINANCIAL": "AMP",
+  "AMERICANFAMILY": "AFL",
+  "AMERICANINTERNATIONAL": "AIG",
+  "AMERICANTEXTRON": "TXT",
+  "AMERICANTOWER": "AMT",
+  "AMERICANTOWERCORPMA": "AMT",
+  "AMERICANTOWERSYSTEMS": "AMT",
+  "AMERICANWATERWORKS": "AWK",
+  "AMERIPRISEFINANCIAL": "AMP",
+  "AMERISOURCEBERGEN": "COR",
+  "AMETEK": "AME",
+  "AMETEKAEROSPACEPRODUCTS": "AME",
+  "AMGEN": "AMGN",
+  "AMPHENOL": "APH",
+  "AMPHENOLCORPDE": "APH",
+  "ANALOGDEVICES": "ADI",
+  "ANTHEM": "ELV",
+  "AON": "AON",
+  "AOSMITH": "AOS",
+  "APA": "APA",
+  "APOLLOGLOBALMANAGEMENT": "APO",
+  "APPLE": "AAPL",
+  "APPLIEDMATERIALS": "AMAT",
+  "APPLIEDMATERIALSINCDE": "AMAT",
+  "APPLIEDMATERIALSTECHNOLOGY": "AMAT",
+  "APPLOVIN": "APP",
+  "APTIV": "APTV",
+  "ARCHCAPITAL": "ACGL",
+  "ARCHERDANIELSMIDLAND": "ADM",
+  "ARCONIC": "HWM",
+  "ARCTICJERSEY": "AMCR",
+  "ARESMANAGEMENT": "ARES",
+  "ARISTANETWORKS": "ANET",
+  "ARTHURJGALLAGHER": "AJG",
+  "ASSURANT": "AIZ",
+  "ATMOSENERGY": "ATO",
+  "ATT": "T",
+  "ATTCOMCAST": "CMCSA",
+  "AUTODESK": "ADSK",
+  "AUTOMATICDATAPROCESSING": "ADP",
+  "AUTOZONE": "AZO",
+  "AVERYDENNISON": "AVY",
+  "AXONENTERPRISE": "AXON",
+  "AZP": "PNW",
+  "BAKERHUGHES": "BKR",
+  "BAKERHUGHESAGE": "BKR",
+  "BALL": "BALL",
+  "BANKAMERICACORPDE": "BAC",
+  "BANKOFAMERICA": "BAC",
+  "BANKOFAMERICACORPDE": "BAC",
+  "BANKOFNEWYORKMELLON": "BNY",
+  "BAXTERINTERNATIONAL": "BAX",
+  "BAXTERTRAVENOLLABORATORIES": "BAX",
+  "BBT": "TFC",
+  "BECTONDICKINSON": "BDX",
+  "BELLATLANTIC": "VZ",
+  "BERKLEYWR": "WRB",
+  "BERKSHIREHATHAWAY": "BRK.B",
+  "BESTBUY": "BBY",
+  "BESTBUYS": "BBY",
+  "BIOGEN": "BIIB",
+  "BIOGENIDEC": "BIIB",
+  "BIOTECHNE": "TECH",
+  "BLACKROCK": "BLK",
+  "BLACKROCKFUNDINGINCDE": "BLK",
+  "BLACKSTONE": "BX",
+  "BLOCK": "XYZ",
+  "BNYMELLON": "BNY",
+  "BOEING": "BA",
+  "BOEINGAIRPLANE": "BA",
+  "BOOKING": "BKNG",
+  "BOSTONPROPERTIES": "BXP",
+  "BOSTONSCIENTIFIC": "BSX",
+  "BRISTOLMYERS": "BMY",
+  "BRISTOLMYERSSQUIBB": "BMY",
+  "BROADCOM": "AVGO",
+  "BROADRIDGEFINANCIALSOLUTIONS": "BR",
+  "BROWNBROWN": "BRO",
+  "BROWNFORMAN": "BF.B",
+  "BUILDERSFIRSTSOURCE": "BLDR",
+  "BUNGEGLOBAL": "BG",
+  "BXP": "BXP",
+  "CADENCEDESIGNSYSTEMS": "CDNS",
+  "CAMDENPROPERTY": "CPT",
+  "CAPITALONE": "COF",
+  "CAPITALONEFINANCIAL": "COF",
+  "CARDINALDISTRIBUTION": "CAH",
+  "CARDINALHEALTH": "CAH",
+  "CARNIVAL": "CCL",
+  "CARRIERGLOBAL": "CARR",
+  "CARVANA": "CVNA",
+  "CASEYS": "CASY",
+  "CASEYSGENERALSTORES": "CASY",
+  "CATERPILLAR": "CAT",
+  "CATERPILLARTRACTOR": "CAT",
+  "CBOE": "CBOE",
+  "CBOEGLOBALMARKETS": "CBOE",
+  "CBRE": "CBRE",
+  "CBRICHARDELLIS": "CBRE",
+  "CDW": "CDW",
+  "CENCORA": "COR",
+  "CENTENE": "CNC",
+  "CENTERPOINTENERGY": "CNP",
+  "CENTRALILLINOISPUBLICSERVICE": "AEE",
+  "CERTEGY": "FIS",
+  "CFINDUSTRIES": "CF",
+  "CHARLESRIVERLABORATORIES": "CRL",
+  "CHARLESRIVERLABORATORIESINTERNATIONAL": "CRL",
+  "CHARLESSCHWAB": "SCHW",
+  "CHARTERCOMMUNICATIONS": "CHTR",
+  "CHARTERCOMMUNICATIONSINCMO": "CHTR",
+  "CHESAPEAKEENERGY": "EXE",
+  "CHEVRON": "CVX",
+  "CHEVRONTEXA": "CVX",
+  "CHICAGOMERCANTILEEXCHANGE": "CME",
+  "CHIPOTLEMEXICANGRILL": "CMG",
+  "CHROBINSON": "CHRW",
+  "CHROBINSONWORLDWIDE": "CHRW",
+  "CHUBB": "CB",
+  "CHURCHDWIGHT": "CHD",
+  "CHURCHDWIGHTCOINCDE": "CHD",
+  "CIENA": "CIEN",
+  "CIGNA": "CI",
+  "CINCINNATIFINANCIAL": "CINF",
+  "CINTAS": "CTAS",
+  "CIS": "CSCO",
+  "CISCOSYSTEMS": "CSCO",
+  "CITI": "C",
+  "CITIZENSFINANCIAL": "CFG",
+  "CITIZENSFINANCIALGROUPINCRI": "CFG",
+  "CLOROX": "CLX",
+  "CLOROXCODE": "CLX",
+  "CME": "CME",
+  "CMSENERGY": "CMS",
+  "COACH": "TPR",
+  "COCACOLA": "KO",
+  "COGNIZANT": "CTSH",
+  "COGNIZANTTECHNOLOGYSOLUTIONS": "CTSH",
+  "COHERENT": "COHR",
+  "COINBASE": "COIN",
+  "COINBASEGLOBAL": "COIN",
+  "COLGATEPALMOLIVE": "CL",
+  "COMCAST": "CMCSA",
+  "COMFORTSYSTEMSU": "FIX",
+  "CONOCOPHILLIPS": "COP",
+  "CONSOLIDATEDEDISON": "ED",
+  "CONSTELLATIONBRANDS": "STZ",
+  "CONSTELLATIONENERGY": "CEG",
+  "CONSTELLATIONNEWHOLD": "CEG",
+  "CONSUMERSPOWER": "CMS",
+  "COOPER": "COO",
+  "COPART": "CPRT",
+  "CORNING": "GLW",
+  "CORNINGCLINICALLABORATORIES": "DGX",
+  "CORNINGGLASSWORKS": "GLW",
+  "CORNINGINCNY": "GLW",
+  "CORPAY": "CPAY",
+  "CORTEVA": "CTVA",
+  "CORVETTEPORSCHE": "COP",
+  "COST": "COST",
+  "COSTAR": "CSGP",
+  "COSTCOWHOLESALECORPNEW": "COST",
+  "CRH": "CRH",
+  "CRHPUBLIC": "CRH",
+  "CROWDSTRIKE": "CRWD",
+  "CROWNCASTLE": "CCI",
+  "CROWNCASTLEINTERNATIONAL": "CCI",
+  "CSX": "CSX",
+  "CUMMINS": "CMI",
+  "CUMMINSENGINE": "CMI",
+  "CVSCAREMARK": "CVS",
+  "CVSHEALTH": "CVS",
+  "DANAHER": "DHR",
+  "DANAHERCORPDE": "DHR",
+  "DARDENRESTAURANTS": "DRI",
+  "DATADOG": "DDOG",
+  "DAVITA": "DVA",
+  "DAVITAHEALTHCAREPARTNERS": "DVA",
+  "DAYTONHUDSON": "TGT",
+  "DECKERSBRANDS": "DECK",
+  "DECKERSFOOTWEAR": "DECK",
+  "DECKERSOUTDOOR": "DECK",
+  "DEERE": "DE",
+  "DELLTECHNOLOGIES": "DELL",
+  "DELPHIAUTOMOTIVE": "APTV",
+  "DELTAAIRLINES": "DAL",
+  "DELTAAIRLINESINCDE": "DAL",
+  "DEVONDELAWARE": "DVN",
+  "DEVONENERGY": "DVN",
+  "DEVONENERGYCORPDE": "DVN",
+  "DEXCOM": "DXCM",
+  "DIAMONDBACKENERGY": "FANG",
+  "DIGITALREALTY": "DLR",
+  "DISCOVERY": "WBD",
+  "DMG": "DHR",
+  "DOLLARGENERAL": "DG",
+  "DOLLARTREE": "DLTR",
+  "DOMINIONENERGY": "D",
+  "DOMINIONENERGYINCVA": "D",
+  "DOMINOS": "DPZ",
+  "DOMINOSPIZZA": "DPZ",
+  "DOORDASH": "DASH",
+  "DOVER": "DOV",
+  "DOW": "DOW",
+  "DOWDUPONT": "DD",
+  "DRHORTON": "DHI",
+  "DRPEPPERSNAPPLE": "KDP",
+  "DTE": "DTE",
+  "DTEENERGY": "DTE",
+  "DUKEENERGY": "DUK",
+  "DUNBRADSTREETCORPDE": "MCO",
+  "DUPONT": "DD",
+  "DUPONTDENEMOURS": "DD",
+  "DUPONTEIDENEMOURS": "CTVA",
+  "EATON": "ETN",
+  "EBAY": "EBAY",
+  "ECADINCDE": "CDNS",
+  "ECHEM": "ALB",
+  "ECHOSTAR": "ECHO",
+  "ECOLAB": "ECL",
+  "EDISONINTERNATIONAL": "EIX",
+  "EDWARDSLIFESCIENCES": "EW",
+  "ELEVANCEHEALTH": "ELV",
+  "ELILILLY": "LLY",
+  "EMCOR": "EME",
+  "EMERSONELECTRIC": "EMR",
+  "EMERSONELECTRICMANUFACTUING": "EMR",
+  "ENERGAS": "ATO",
+  "ENRONOILGAS": "EOG",
+  "ENTERGY": "ETR",
+  "ENTERGYCORPDE": "ETR",
+  "ENTERGYCORPFL": "ETR",
+  "EOGRESOURCES": "EOG",
+  "EQT": "EQT",
+  "EQTCORPPA": "EQT",
+  "EQUIFAX": "EFX",
+  "EQUINIX": "EQIX",
+  "EQUITYRESIDENTIAL": "VMRK",
+  "EQUITYRESIDENTIALPROPERTIES": "VMRK",
+  "ERIEINDEMNITY": "ERIE",
+  "ESSEXPORTFOLIO": "ESS",
+  "ESSEXPROPERTY": "ESS",
+  "ESTEELAUDER": "EL",
+  "ESTELAUDER": "EL",
+  "EVEREST": "EG",
+  "EVERESTRE": "EG",
+  "EVERGY": "EVRG",
+  "EVERSOURCEENERGY": "ES",
+  "EXELON": "EXC",
+  "EXPANDENERGY": "EXE",
+  "EXPEDIA": "EXPE",
+  "EXPEDITORSINTERNATIONAL": "EXPD",
+  "EXPEDITORSINTERNATIONALOFWASHINGTON": "EXPD",
+  "EXTENDICARE": "HUM",
+  "EXTRASPACESTORAGE": "EXR",
+  "EXXONMOBIL": "XOM",
+  "F5": "FFIV",
+  "F5NETWORKS": "FFIV",
+  "FACEBOOK": "META",
+  "FACTSET": "FDS",
+  "FACTSETRESEARCHSYSTEMS": "FDS",
+  "FAIRISAAC": "FICO",
+  "FASTENAL": "FAST",
+  "FEDERALREALTYINVESTMENT": "FRT",
+  "FEDEX": "FDX",
+  "FEDEXFREIGHT": "FDXF",
+  "FERGUSONENTERPRISES": "FERG",
+  "FERGUSONENTERPRISESINCDE": "FERG",
+  "FIDELITYNATIONALINFORMATIONSERVICES": "FIS",
+  "FIFTHTHIRDBAN": "FITB",
+  "FIRSTBANKSYSTEM": "USB",
+  "FIRSTEMPIRESTATE": "MTB",
+  "FIRSTENERGY": "FE",
+  "FIRSTSOLAR": "FSLR",
+  "FISERV": "FISV",
+  "FLEETCORTECHNOLOGIES": "CPAY",
+  "FLEX": "FLEX",
+  "FLEXTRONICSINTERNATIONAL": "FLEX",
+  "FORDMOTOR": "F",
+  "FORTINET": "FTNT",
+  "FORTIVE": "FTV",
+  "FOX": "FOXA",
+  "FOXCORPORATIONCLAS": "FOXA",
+  "FOXCORPORATIONCLASSB": "FOX",
+  "FPL": "NEE",
+  "FRANKLINRESOURCES": "BEN",
+  "FRANKLINTEMPLETON": "BEN",
+  "FREEPORTMCMORAN": "FCX",
+  "FREEPORTMCMORANCOPPERGOLD": "FCX",
+  "GARDNERDENVER": "IR",
+  "GARMIN": "GRMN",
+  "GARTNER": "IT",
+  "GEAEROSPACE": "GE",
+  "GEHEALTHCARE": "GEHC",
+  "GEHEALTHCARETECHNOLOGIES": "GEHC",
+  "GENDIGITAL": "GEN",
+  "GENERAC": "GNRC",
+  "GENERALDIGITAL": "WDC",
+  "GENERALDYNAMICS": "GD",
+  "GENERALELECTRIC": "GE",
+  "GENERALMILLS": "GIS",
+  "GENERALMOTORS": "GM",
+  "GENUINEPARTS": "GPC",
+  "GEVERNOVA": "GEV",
+  "GILEADSCIENCES": "GILD",
+  "GLOBALNUTRITIONSOLUTIONS": "MOS",
+  "GLOBALPAYMENTS": "GPN",
+  "GLOBELIFE": "GL",
+  "GODADDY": "GDDY",
+  "GOLDMANSACHS": "GS",
+  "GRAINGERWW": "GWW",
+  "GSACQUISITION": "VRT",
+  "HALLIBURTON": "HAL",
+  "HALLIBURTONOILWELLCEMENTING": "HAL",
+  "HANSENNATURAL": "MNST",
+  "HARRISCORPDE": "LHX",
+  "HARTFORD": "HIG",
+  "HARTFORDFINANCIALSERVICES": "HIG",
+  "HARTFORDINSURANCE": "HIG",
+  "HASBRO": "HAS",
+  "HCA": "HCA",
+  "HCAHEALTHCARE": "HCA",
+  "HCP": "DOC",
+  "HEALTHCAREREITINCDE": "WELL",
+  "HEALTHPEAKPROPERTIES": "DOC",
+  "HENRYJACKASSOCIATES": "JKHY",
+  "HENRYSCHEIN": "HSIC",
+  "HERSHEY": "HSY",
+  "HERSHEYFOODS": "HSY",
+  "HEWLETTPACKARD": "HPQ",
+  "HEWLETTPACKARDENTERPRISE": "HPE",
+  "HILTONWORLDWIDE": "HLT",
+  "HJHEINZ": "KHC",
+  "HOMEDEPOT": "HD",
+  "HONEYWELLAEROSPACE": "HONA",
+  "HONEYWELLINTERNATIONAL": "HON",
+  "HONEYWELLTECHNOLOGIES": "HON",
+  "HORMELFOODS": "HRL",
+  "HORMELFOODSCORPDE": "HRL",
+  "HORMELGEOA": "HRL",
+  "HORTONDRINCDE": "DHI",
+  "HOSTHOTELSRESORTS": "HST",
+  "HOSTMARRIOTT": "HST",
+  "HOWMETAEROSPACE": "HWM",
+  "HP": "HPQ",
+  "HUBBELL": "HUBB",
+  "HUBBELLHARVEY": "HUBB",
+  "HUMANA": "HUM",
+  "HUNTINGTONBANCSHARES": "HBAN",
+  "HUNTINGTONBANCSHARESINCMD": "HBAN",
+  "HUNTINGTONINGALLSINDUSTRIES": "HII",
+  "HUNTJBTRANSPORTSERVICES": "JBHT",
+  "IBM": "IBM",
+  "IDEX": "IEX",
+  "IDEXCORPDE": "IEX",
+  "IDEXXCORPDE": "IDXX",
+  "IDEXXLABORATORIES": "IDXX",
+  "IDEXXLABORATORIESINCDE": "IDXX",
+  "IIVI": "COHR",
+  "ILLINOISTOOLWORKS": "ITW",
+  "INCYTE": "INCY",
+  "INGERSOLLRAND": "IR",
+  "INSULET": "PODD",
+  "INTEL": "INTC",
+  "INTERACTIVEBROKERS": "IBKR",
+  "INTERCONTINENTALEXCHANGE": "ICE",
+  "INTERNATIONALBUSINESSMACHINES": "IBM",
+  "INTERNATIONALFLAVORSFRAGRANCES": "IFF",
+  "INTERNATIONALPAPER": "IP",
+  "INTERNATIONALPAPERCONEW": "IP",
+  "INTERNATIONALPAPERPOWER": "IP",
+  "INTERSTATEENERGY": "LNT",
+  "INTUIT": "INTU",
+  "INTUITIVESURGICAL": "ISRG",
+  "INVES": "IVZ",
+  "INVESCOASSETMANAGEMENTDEUTSCHLANDGMBH": "IVZ",
+  "INVITATIONHOMES": "INVH",
+  "IQVIA": "IQV",
+  "IRONMOUNTAIN": "IRM",
+  "IRONMOUNTAININCPA": "IRM",
+  "ITTW": "XYL",
+  "JABIL": "JBL",
+  "JABILCIRCUIT": "JBL",
+  "JACKHENRYASSOCIATES": "JKHY",
+  "JACOBSENGINEERINGGROUPINCDE": "J",
+  "JACOBSSOLUTIONS": "J",
+  "JBHUNT": "JBHT",
+  "JMSMUCKER": "SJM",
+  "JNTL": "KVUE",
+  "JOHNSONCONTROLS": "JCI",
+  "JOHNSONCONTROLSINTERNATIONAL": "JCI",
+  "JOHNSONJOHNSON": "JNJ",
+  "JPMORGANCHASE": "JPM",
+  "KASLIONACQUISITIONBV": "NXPI",
+  "KENVUE": "KVUE",
+  "KEURIGDRPEPPER": "KDP",
+  "KEY": "KEY",
+  "KEYCORPNEW": "KEY",
+  "KEYSIGHTTECHNOLOGIES": "KEYS",
+  "KIMBERLYCLARK": "KMB",
+  "KIMCOREALTY": "KIM",
+  "KINDERMORGAN": "KMI",
+  "KINDERMORGANHOLD": "KMI",
+  "KINGSPORTUTILITIES": "AEP",
+  "KKR": "KKR",
+  "KLA": "KLAC",
+  "KLATENCOR": "KLAC",
+  "KRAFTFOODS": "MDLZ",
+  "KRAFTHEINZ": "KHC",
+  "KROGER": "KR",
+  "L3HARRIS": "LHX",
+  "L3HARRISTECHNOLOGIESINCDE": "LHX",
+  "LAB": "LH",
+  "LABORATORYCORPOFAMERICA": "LH",
+  "LAMRESEARCH": "LRCX",
+  "LASVEGASSANDS": "LVS",
+  "LEIDOS": "LDOS",
+  "LENNAR": "LEN",
+  "LENNARCORPNEW": "LEN",
+  "LENNOXINTERNATIONAL": "LII",
+  "LILLYELI": "LLY",
+  "LINDE": "LIN",
+  "LIVENATION": "LYV",
+  "LIVENATIONENTERTAINMENT": "LYV",
+  "LOCKHEEDMARTIN": "LMT",
+  "LOEWS": "L",
+  "LOWES": "LOW",
+  "LULULEMON": "LULU",
+  "LULULEMONATHLETICA": "LULU",
+  "LUMENTUM": "LITE",
+  "LYONDELLBASELL": "LYB",
+  "LYONDELLBASELLINDUSTRIES": "LYB",
+  "MARATHONPETROLEUM": "MPC",
+  "MARRIOTTINTERNATIONAL": "MAR",
+  "MARRIOTTINTERNATIONALINCMD": "MAR",
+  "MARSHMCLENNAN": "MRSH",
+  "MARTINMARIETTAMATERIALS": "MLM",
+  "MARVELLTECHNOLOGY": "MRVL",
+  "MAS": "MAS",
+  "MASCOCORPDE": "MAS",
+  "MASCOSCREWPRODUCTS": "MAS",
+  "MASTERCARD": "MA",
+  "MCCORMICK": "MKC",
+  "MCDONALDS": "MCD",
+  "MCGRAWHILLFINANCIAL": "SPGI",
+  "MCKESSON": "MCK",
+  "MCKESSONHBOC": "MCK",
+  "MEDTRONIC": "MDT",
+  "MERCK": "MRK",
+  "METAPLATFORMS": "META",
+  "METLIFE": "MET",
+  "METROPCSCOMMUNICATIONS": "TMUS",
+  "METTLERTOLEDO": "MTD",
+  "METTLERTOLEDOINTERNATIONAL": "MTD",
+  "MGMMIRAGE": "MGM",
+  "MGMRESORTS": "MGM",
+  "MGMRESORTSINTERNATIONAL": "MGM",
+  "MICROCHIPTECHNOLOGY": "MCHP",
+  "MICRONTECHNOLOGY": "MU",
+  "MICROSOFT": "MSFT",
+  "MIDAMERICAAPARTMENTCOMMUNITIES": "MAA",
+  "MINNESOTAMININGMANUFACTURING": "MMM",
+  "MODERNA": "MRNA",
+  "MODERNATHERAPEUTICS": "MRNA",
+  "MOLSONCOORSBEVERAGE": "TAP",
+  "MOLSONCOORSBREWING": "TAP",
+  "MONARCHENERGY": "EVRG",
+  "MONDELEZINTERNATIONAL": "MDLZ",
+  "MONOLITHICPOWERSYSTEMS": "MPWR",
+  "MONSTERBEVERAGE": "MNST",
+  "MOODYS": "MCO",
+  "MOODYSCORPDE": "MCO",
+  "MORGANSTANLEY": "MS",
+  "MORGANSTANLEYDEANWITTER": "MS",
+  "MOSAIC": "MOS",
+  "MOTOROLA": "MSI",
+  "MOTOROLASOLUTIONS": "MSI",
+  "MSCI": "MSCI",
+  "MTBANK": "MTB",
+  "NASDAQ": "NDAQ",
+  "NASDAQOMX": "NDAQ",
+  "NBH": "BRK.B",
+  "NETAPP": "NTAP",
+  "NETFLIX": "NFLX",
+  "NETFLIXCOM": "NFLX",
+  "NETWORKAPPLIANCE": "NTAP",
+  "NEWMARRIOTTMI": "MAR",
+  "NEWMONT": "NEM",
+  "NEWMONTCORPDE": "NEM",
+  "NEWMONTGOLDCORPCORPDE": "NEM",
+  "NEWPLUTOGLOBAL": "PSKY",
+  "NEWREGIONSFINANCIAL": "RF",
+  "NEWS": "NWSA",
+  "NEWSCORPCLAS": "NWSA",
+  "NEWSCORPCLASSB": "NWS",
+  "NEWWHALE": "TKO",
+  "NEXTERAENERGY": "NEE",
+  "NIKE": "NKE",
+  "NISOURCE": "NI",
+  "NISOURCEINCDE": "NI",
+  "NNG": "NOC",
+  "NOR": "NTRS",
+  "NORDSON": "NDSN",
+  "NORFOLKSOUTHERN": "NSC",
+  "NORTHEASTUTILITIES": "ES",
+  "NORTHERN": "NTRS",
+  "NORTHERNSTATESPOWERCOMN": "XEL",
+  "NORTHROPGRUMMAN": "NOC",
+  "NORTHROPGRUMMANCORPDE": "NOC",
+  "NORTONLIFELOCK": "GEN",
+  "NORWEGIANCRUISELINE": "NCLH",
+  "NOVUSSPINCO1": "Q",
+  "NRGENERGY": "NRG",
+  "NUCLEARCORPOFAMERICA": "NUE",
+  "NUCOR": "NUE",
+  "NVIDIA": "NVDA",
+  "NVIDIACORPDE": "NVDA",
+  "NVR": "NVR",
+  "NXPSEMICONDUCTORS": "NXPI",
+  "OAKSTONEFINANCIAL": "COF",
+  "OCCIDENTALPETROLEUM": "OXY",
+  "OCCIDENTALPETROLEUMCORPDE": "OXY",
+  "OLDDOMINION": "ODFL",
+  "OLDDOMINIONFREIGHTLINE": "ODFL",
+  "OLDDOMINIONFREIGHTLINEINCVA": "ODFL",
+  "OMNICOM": "OMC",
+  "ONEOK": "OKE",
+  "ONEOKINCNEW": "OKE",
+  "ONSEMICONDUCTOR": "ON",
+  "ORACLE": "ORCL",
+  "OREILLYAUTOMOTIVE": "ORLY",
+  "OTISWORLDWIDE": "OTIS",
+  "OZARK": "ORCL",
+  "PACCAR": "PCAR",
+  "PACIFICCARFOUNDRY": "PCAR",
+  "PACIFICGREYSTONECORPDE": "LEN",
+  "PACKAGINGCORPOFAMERICA": "PKG",
+  "PACKAGINGCORPORATIONOFAMERICA": "PKG",
+  "PALANTIRTECHNOLOGIES": "PLTR",
+  "PALOALTONETWORKS": "PANW",
+  "PARAMETRICTECHNOLOGY": "PTC",
+  "PARAMOUNTSKYDANCE": "PSKY",
+  "PARKERHANNIFIN": "PH",
+  "PAYCHEX": "PAYX",
+  "PAYPAL": "PYPL",
+  "PENTAIR": "PNR",
+  "PEPSI": "PEP",
+  "PEPSICOLA": "PEP",
+  "PERKINELMER": "RVTY",
+  "PFIZER": "PFE",
+  "PFIZERCHARLES": "PFE",
+  "PGE": "PCG",
+  "PHILIPMORRISINTERNATIONAL": "PM",
+  "PHILLIPS66": "PSX",
+  "PINNACLEWESTCAPITAL": "PNW",
+  "PITTSBURGHPLATEGLASS": "PPG",
+  "PNCFINANCIALSERVICES": "PNC",
+  "POLORALPHLAUREN": "RL",
+  "PPGINDUSTRIES": "PPG",
+  "PPL": "PPL",
+  "PRICELINE": "BKNG",
+  "PRICETROWE": "TROW",
+  "PRINCIPALFINANCIAL": "PFG",
+  "PROCTERGAMBLE": "PG",
+  "PROGRESSIVE": "PGR",
+  "PROGRESSIVECORPOH": "PGR",
+  "PROLOGIS": "PLD",
+  "PRUDENTIALFINANCIAL": "PRU",
+  "PTC": "PTC",
+  "PUBLICSERVICEENTERPRISE": "PEG",
+  "PUBLICSTORAGE": "PSA",
+  "PULTE": "PHM",
+  "PULTEGROUPINCMI": "PHM",
+  "PULTEHOMESINCMI": "PHM",
+  "QNITYELECTRONICS": "Q",
+  "QUALCOMM": "QCOM",
+  "QUALCOMMINCDE": "QCOM",
+  "QUANTASERVICES": "PWR",
+  "QUESTDIAGNOSTICS": "DGX",
+  "QUINTILESIMS": "IQV",
+  "RA": "RCL",
+  "RALPHLAUREN": "RL",
+  "RAYMONDJAMESFINANCIAL": "RJF",
+  "RAYTHEONTECHNOLOGIES": "RTX",
+  "REALTYINCOME": "O",
+  "REDDIT": "RDDT",
+  "REGENCYCENTERS": "REG",
+  "REGENCYREALTY": "REG",
+  "REGENERONPHARMACEUTICALS": "REGN",
+  "REGIONSFINANCIAL": "RF",
+  "RELIANTENERGYREG": "CNP",
+  "REPUBLICSERVICES": "RSG",
+  "RESMED": "RMD",
+  "RETAILCREDIT": "EFX",
+  "REVVITY": "RVTY",
+  "RJFINANCIALCORPFL": "RJF",
+  "ROBINHOODMARKETS": "HOOD",
+  "ROCKWELLAUTOMATION": "ROK",
+  "ROLLINS": "ROL",
+  "ROPERINDUSTRIES": "ROP",
+  "ROPERTECHNOLOGIES": "ROP",
+  "ROSSSTORES": "ROST",
+  "ROYALCARIBBEAN": "RCL",
+  "ROYALCARIBBEANCRUISES": "RCL",
+  "RTX": "RTX",
+  "SAIC": "LDOS",
+  "SALESFORCE": "CRM",
+  "SALESFORCECOM": "CRM",
+  "SANDISK": "SNDK",
+  "SBACOMMUNICATIONS": "SBAC",
+  "SBCCOMMUNICATIONS": "T",
+  "SCE": "EIX",
+  "SCG": "ON",
+  "SCHEINHENRY": "HSIC",
+  "SCHLUMBERGER": "SLB",
+  "SCHWABCHARLES": "SCHW",
+  "SEAGATETECHNOLOGY": "STX",
+  "SEMPRA": "SRE",
+  "SEMPRAENERGY": "SRE",
+  "SERVICENOW": "NOW",
+  "SERVICENOWCOM": "NOW",
+  "SHERWINWILLIAMS": "SHW",
+  "SIMONPROPERTY": "SPG",
+  "SIMONPROPERTYGROUPINCDE": "SPG",
+  "SKYWORKSSOLUTIONS": "SWKS",
+  "SLB": "SLB",
+  "SMITHAO": "AOS",
+  "SMUCKERJM": "SJM",
+  "SMURFITWESTROCK": "SW",
+  "SNAPON": "SNA",
+  "SOCIETY": "KEY",
+  "SOLVENTUM": "SOLV",
+  "SOUTHERN": "SO",
+  "SOUTHERNCOGAS": "SO",
+  "SOUTHWESTAIRLINES": "LUV",
+  "SPGLOBAL": "SPGI",
+  "SQUARE": "XYZ",
+  "STANLEYBLACKDECKER": "SWK",
+  "STANLEYWORKS": "SWK",
+  "STARBUCKS": "SBUX",
+  "STATESTREET": "STT",
+  "STEELDYNAMICS": "STLD",
+  "STERIS": "STE",
+  "STPAULTRAVELERS": "TRV",
+  "STRYKER": "SYK",
+  "SUPERMICRO": "SMCI",
+  "SUPERMICROCOMPUTER": "SMCI",
+  "SYNCHRONYFINANCIAL": "SYF",
+  "SYNOPSYS": "SNPS",
+  "SYS": "SYY",
+  "TAKETWOINTERACTIVE": "TTWO",
+  "TAKETWOINTERACTIVESOFTWARE": "TTWO",
+  "TANGO": "APO",
+  "TAPESTRY": "TPR",
+  "TARGARESOURCES": "TRGP",
+  "TARGARESOURCESINVESTMENTS": "TRGP",
+  "TARGET": "TGT",
+  "TASERINTERNATIONAL": "AXON",
+  "TD": "TDG",
+  "TECHNECORPMN": "TECH",
+  "TECONNECTIVITY": "TEL",
+  "TELEDYNETECHNOLOGIES": "TDY",
+  "TERADYNE": "TER",
+  "TESLA": "TSLA",
+  "TESLAMOTORS": "TSLA",
+  "TEXASINSTRUMENTS": "TXN",
+  "TEXASPACIFICLAND": "TPL",
+  "TEXTRON": "TXT",
+  "TGA": "FTV",
+  "THERMOELECTRON": "TMO",
+  "THERMOFISHERSCIENTIFIC": "TMO",
+  "TJX": "TJX",
+  "TJXCOMPANIESINCDE": "TJX",
+  "TKO": "TKO",
+  "TMOBILEUS": "TMUS",
+  "TORCHMARK": "GL",
+  "TRACTORSUPPLY": "TSCO",
+  "TRACTORSUPPLYCODE": "TSCO",
+  "TRADEDESK": "TTD",
+  "TRANETECHNOLOGIES": "TT",
+  "TRANSDIGM": "TDG",
+  "TRAVELERS": "TRV",
+  "TRICONGLOBALRESTAURANTS": "YUM",
+  "TRIMBLE": "TRMB",
+  "TRIMBLENAVIGATIONLTDCA": "TRMB",
+  "TROWEPRICE": "TROW",
+  "TRUISTFINANCIAL": "TFC",
+  "TURNERCAL": "DG",
+  "TWDCHOLDCO613": "DIS",
+  "TYCOINTERNATIONAL": "JCI",
+  "TYLERCORPNEW": "TYL",
+  "TYLERTECHNOLOGIES": "TYL",
+  "TYSONFOODS": "TSN",
+  "UBER": "UBER",
+  "UBERTECHNOLOGIES": "UBER",
+  "UDR": "UDR",
+  "ULTABEAUTY": "ULTA",
+  "ULTASALONCOSMETICSFRAGRANCE": "ULTA",
+  "UNIONPACIFIC": "UNP",
+  "UNITEDAIRLINES": "UAL",
+  "UNITEDCONTINENTAL": "UAL",
+  "UNITEDDOMINIONREALTY": "UDR",
+  "UNITEDHEALTH": "UNH",
+  "UNITEDHEALTHCARE": "UNH",
+  "UNITEDPARCELSERVICE": "UPS",
+  "UNITEDRENTALS": "URI",
+  "UNITEDRENTALSINCDE": "URI",
+  "UNIVERSALHEALTHSERVICES": "UHS",
+  "UPJOHN": "VTRS",
+  "USAWASTESERVICES": "WM",
+  "USBAN": "USB",
+  "USBANCORPDE": "USB",
+  "VALEROENERGY": "VLO",
+  "VALEROENERGYCORPTX": "VLO",
+  "VANAMERIGENHAEBLER": "IFF",
+  "VEEVASYSTEMS": "VEEV",
+  "VENTAS": "VTR",
+  "VERALTO": "VLTO",
+  "VERISIGN": "VRSN",
+  "VERISIGNINCCA": "VRSN",
+  "VERISKANALYTICS": "VRSK",
+  "VERIZON": "VZ",
+  "VERIZONCOMMUNICATIONS": "VZ",
+  "VERTEXPHARMACEUTICALS": "VRTX",
+  "VERTEXPHARMACEUTICALSINCMA": "VRTX",
+  "VERTICALSONDEMAND": "VEEV",
+  "VERTIV": "VRT",
+  "VH": "CDW",
+  "VI": "V",
+  "VIATRIS": "VTRS",
+  "VICIPROPERTIES": "VICI",
+  "VIRGINIAHOLD": "VMC",
+  "VISTRA": "VST",
+  "VISTRAENERGY": "VST",
+  "VIVMARKRESIDENTIAL": "VMRK",
+  "VULCANMATERIALS": "VMC",
+  "WABTEC": "WAB",
+  "WAI": "OKE",
+  "WALMART": "WMT",
+  "WALMARTSTORES": "WMT",
+  "WALTDISNEY": "DIS",
+  "WARNERBROSDISCOVERY": "WBD",
+  "WASTEMANAGEMENT": "WM",
+  "WATERS": "WAT",
+  "WATERSCORPDE": "WAT",
+  "WCDINVESTORSINCDE": "WAT",
+  "WECENERGY": "WEC",
+  "WELLSFARGO": "WFC",
+  "WELLSFARGOCOMN": "WFC",
+  "WELLSFARGOCOMPANYMN": "WFC",
+  "WELLTOWER": "WELL",
+  "WEST": "WST",
+  "WESTERNDIGITAL": "WDC",
+  "WESTINGHOUSEAIRBRAKETECHNOLOGIES": "WAB",
+  "WESTPHARMACEUTICALSERVICES": "WST",
+  "WEYERHAEUSER": "WY",
+  "WILLIAMS": "WMB",
+  "WILLIAMSSONOMA": "WSM",
+  "WILLIS": "WTW",
+  "WILLISTOWERSWATSON": "WTW",
+  "WISCONSINENERGY": "WEC",
+  "WORKDAY": "WDAY",
+  "WRBERKLEY": "WRB",
+  "WWGRAINGER": "GWW",
+  "WYNNRESORTS": "WYNN",
+  "XCELENERGY": "XEL",
+  "XYLEM": "XYL",
+  "YUMBRANDS": "YUM",
+  "ZAMALIGHT": "LIN",
+  "ZAYRE": "TJX",
+  "ZEBRATECHNOLOGIES": "ZBRA",
+  "ZIMMER": "ZBH",
+  "ZIMMERBIOMET": "ZBH",
+  "ZOETIS": "ZTS"
+ },
+ "name_source": {
+  "3M": "index",
+  "3MHEALTHCARE": "sec_former",
+  "ABBOTTLABORATORIES": "index",
+  "ABBVIE": "index",
+  "ACCENTURE": "index",
+  "ADOBE": "index",
+  "ADOBESYSTEMS": "sec_former",
+  "ADVANCEDMICRODEVICES": "index",
+  "AES": "index",
+  "AFLAC": "index",
+  "AGILENTTECHNOLOGIES": "index",
+  "AIRBNB": "index",
+  "AIRPRODUCTS": "index",
+  "AIRPRODUCTSCHEMICALS": "sec",
+  "AIRSOUTHWEST": "sec_former",
+  "AKAMAITECHNOLOGIES": "index",
+  "ALBEMARLE": "index",
+  "ALEXANDRIAREALESTATEEQUITIES": "index",
+  "ALIGNTECHNOLOGY": "index",
+  "ALLEGION": "index",
+  "ALLIANTENERGY": "index",
+  "ALLIEDSIGNAL": "sec_former",
+  "ALLSTATE": "index",
+  "ALPHABET": "sec",
+  "ALPHABETINCCLAS": "index",
+  "ALPHABETINCCLASSC": "index",
+  "ALTRIA": "index",
+  "AMAZON": "index",
+  "AMAZONCOM": "sec",
+  "AMBPROPERTY": "sec_former",
+  "AMCOR": "index",
+  "AMEREN": "index",
+  "AMERICANELECTRICPOWER": "index",
+  "AMERICANEXPRESS": "index",
+  "AMERICANEXPRESSFINANCIAL": "sec_former",
+  "AMERICANFAMILY": "sec_former",
+  "AMERICANINTERNATIONAL": "index",
+  "AMERICANTEXTRON": "sec_former",
+  "AMERICANTOWER": "index",
+  "AMERICANTOWERCORPMA": "sec",
+  "AMERICANTOWERSYSTEMS": "sec_former",
+  "AMERICANWATERWORKS": "index",
+  "AMERIPRISEFINANCIAL": "index",
+  "AMERISOURCEBERGEN": "sec_former",
+  "AMETEK": "index",
+  "AMETEKAEROSPACEPRODUCTS": "sec_former",
+  "AMGEN": "index",
+  "AMPHENOL": "index",
+  "AMPHENOLCORPDE": "sec",
+  "ANALOGDEVICES": "index",
+  "ANTHEM": "sec_former",
+  "AON": "index",
+  "AOSMITH": "index",
+  "APA": "index",
+  "APOLLOGLOBALMANAGEMENT": "index",
+  "APPLE": "index",
+  "APPLIEDMATERIALS": "index",
+  "APPLIEDMATERIALSINCDE": "sec",
+  "APPLIEDMATERIALSTECHNOLOGY": "sec_former",
+  "APPLOVIN": "index",
+  "APTIV": "index",
+  "ARCHCAPITAL": "index",
+  "ARCHERDANIELSMIDLAND": "index",
+  "ARCONIC": "sec_former",
+  "ARCTICJERSEY": "sec_former",
+  "ARESMANAGEMENT": "index",
+  "ARISTANETWORKS": "index",
+  "ARTHURJGALLAGHER": "index",
+  "ASSURANT": "index",
+  "ATMOSENERGY": "index",
+  "ATT": "index",
+  "ATTCOMCAST": "sec_former",
+  "AUTODESK": "index",
+  "AUTOMATICDATAPROCESSING": "index",
+  "AUTOZONE": "index",
+  "AVERYDENNISON": "index",
+  "AXONENTERPRISE": "index",
+  "AZP": "sec_former",
+  "BAKERHUGHES": "index",
+  "BAKERHUGHESAGE": "sec_former",
+  "BALL": "index",
+  "BANKAMERICACORPDE": "sec_former",
+  "BANKOFAMERICA": "index",
+  "BANKOFAMERICACORPDE": "sec",
+  "BANKOFNEWYORKMELLON": "sec",
+  "BAXTERINTERNATIONAL": "index",
+  "BAXTERTRAVENOLLABORATORIES": "sec_former",
+  "BBT": "sec_former",
+  "BECTONDICKINSON": "index",
+  "BELLATLANTIC": "sec_former",
+  "BERKLEYWR": "sec",
+  "BERKSHIREHATHAWAY": "index",
+  "BESTBUY": "index",
+  "BESTBUYS": "sec_former",
+  "BIOGEN": "index",
+  "BIOGENIDEC": "sec_former",
+  "BIOTECHNE": "index",
+  "BLACKROCK": "index",
+  "BLACKROCKFUNDINGINCDE": "sec_former",
+  "BLACKSTONE": "index",
+  "BLOCK": "index",
+  "BNYMELLON": "index",
+  "BOEING": "index",
+  "BOEINGAIRPLANE": "sec_former",
+  "BOOKING": "index",
+  "BOSTONPROPERTIES": "sec_former",
+  "BOSTONSCIENTIFIC": "index",
+  "BRISTOLMYERS": "sec_former",
+  "BRISTOLMYERSSQUIBB": "index",
+  "BROADCOM": "index",
+  "BROADRIDGEFINANCIALSOLUTIONS": "index",
+  "BROWNBROWN": "index",
+  "BROWNFORMAN": "index",
+  "BUILDERSFIRSTSOURCE": "index",
+  "BUNGEGLOBAL": "index",
+  "BXP": "index",
+  "CADENCEDESIGNSYSTEMS": "index",
+  "CAMDENPROPERTY": "index",
+  "CAPITALONE": "index",
+  "CAPITALONEFINANCIAL": "sec",
+  "CARDINALDISTRIBUTION": "sec_former",
+  "CARDINALHEALTH": "index",
+  "CARNIVAL": "index",
+  "CARRIERGLOBAL": "index",
+  "CARVANA": "index",
+  "CASEYS": "index",
+  "CASEYSGENERALSTORES": "sec",
+  "CATERPILLAR": "index",
+  "CATERPILLARTRACTOR": "sec_former",
+  "CBOE": "sec_former",
+  "CBOEGLOBALMARKETS": "index",
+  "CBRE": "index",
+  "CBRICHARDELLIS": "sec_former",
+  "CDW": "index",
+  "CENCORA": "index",
+  "CENTENE": "index",
+  "CENTERPOINTENERGY": "index",
+  "CENTRALILLINOISPUBLICSERVICE": "sec_former",
+  "CERTEGY": "sec_former",
+  "CFINDUSTRIES": "index",
+  "CHARLESRIVERLABORATORIES": "index",
+  "CHARLESRIVERLABORATORIESINTERNATIONAL": "sec",
+  "CHARLESSCHWAB": "index",
+  "CHARTERCOMMUNICATIONS": "index",
+  "CHARTERCOMMUNICATIONSINCMO": "sec",
+  "CHESAPEAKEENERGY": "sec_former",
+  "CHEVRON": "index",
+  "CHEVRONTEXA": "sec_former",
+  "CHICAGOMERCANTILEEXCHANGE": "sec_former",
+  "CHIPOTLEMEXICANGRILL": "index",
+  "CHROBINSON": "index",
+  "CHROBINSONWORLDWIDE": "sec",
+  "CHUBB": "index",
+  "CHURCHDWIGHT": "index",
+  "CHURCHDWIGHTCOINCDE": "sec",
+  "CIENA": "index",
+  "CIGNA": "index",
+  "CINCINNATIFINANCIAL": "index",
+  "CINTAS": "index",
+  "CIS": "index",
+  "CISCOSYSTEMS": "sec",
+  "CITI": "index",
+  "CITIZENSFINANCIAL": "index",
+  "CITIZENSFINANCIALGROUPINCRI": "sec",
+  "CLOROX": "index",
+  "CLOROXCODE": "sec",
+  "CME": "index",
+  "CMSENERGY": "index",
+  "COACH": "sec_former",
+  "COCACOLA": "index",
+  "COGNIZANT": "index",
+  "COGNIZANTTECHNOLOGYSOLUTIONS": "sec",
+  "COHERENT": "index",
+  "COINBASE": "index",
+  "COINBASEGLOBAL": "sec",
+  "COLGATEPALMOLIVE": "index",
+  "COMCAST": "index",
+  "COMFORTSYSTEMSU": "index",
+  "CONOCOPHILLIPS": "index",
+  "CONSOLIDATEDEDISON": "index",
+  "CONSTELLATIONBRANDS": "index",
+  "CONSTELLATIONENERGY": "index",
+  "CONSTELLATIONNEWHOLD": "sec_former",
+  "CONSUMERSPOWER": "sec_former",
+  "COOPER": "index",
+  "COPART": "index",
+  "CORNING": "index",
+  "CORNINGCLINICALLABORATORIES": "sec_former",
+  "CORNINGGLASSWORKS": "sec_former",
+  "CORNINGINCNY": "sec",
+  "CORPAY": "index",
+  "CORTEVA": "index",
+  "CORVETTEPORSCHE": "sec_former",
+  "COST": "index",
+  "COSTAR": "index",
+  "COSTCOWHOLESALECORPNEW": "sec",
+  "CRH": "index",
+  "CRHPUBLIC": "sec",
+  "CROWDSTRIKE": "index",
+  "CROWNCASTLE": "index",
+  "CROWNCASTLEINTERNATIONAL": "sec_former",
+  "CSX": "index",
+  "CUMMINS": "index",
+  "CUMMINSENGINE": "sec_former",
+  "CVSCAREMARK": "sec_former",
+  "CVSHEALTH": "index",
+  "DANAHER": "index",
+  "DANAHERCORPDE": "sec",
+  "DARDENRESTAURANTS": "index",
+  "DATADOG": "index",
+  "DAVITA": "index",
+  "DAVITAHEALTHCAREPARTNERS": "sec_former",
+  "DAYTONHUDSON": "sec_former",
+  "DECKERSBRANDS": "index",
+  "DECKERSFOOTWEAR": "sec_former",
+  "DECKERSOUTDOOR": "sec",
+  "DEERE": "index",
+  "DELLTECHNOLOGIES": "index",
+  "DELPHIAUTOMOTIVE": "sec_former",
+  "DELTAAIRLINES": "index",
+  "DELTAAIRLINESINCDE": "sec_former",
+  "DEVONDELAWARE": "sec_former",
+  "DEVONENERGY": "index",
+  "DEVONENERGYCORPDE": "sec",
+  "DEXCOM": "index",
+  "DIAMONDBACKENERGY": "index",
+  "DIGITALREALTY": "index",
+  "DISCOVERY": "sec_former",
+  "DMG": "sec_former",
+  "DOLLARGENERAL": "index",
+  "DOLLARTREE": "index",
+  "DOMINIONENERGY": "index",
+  "DOMINIONENERGYINCVA": "sec_former",
+  "DOMINOS": "index",
+  "DOMINOSPIZZA": "sec",
+  "DOORDASH": "index",
+  "DOVER": "index",
+  "DOW": "index",
+  "DOWDUPONT": "sec_former",
+  "DRHORTON": "index",
+  "DRPEPPERSNAPPLE": "sec_former",
+  "DTE": "sec_former",
+  "DTEENERGY": "index",
+  "DUKEENERGY": "index",
+  "DUNBRADSTREETCORPDE": "sec_former",
+  "DUPONT": "index",
+  "DUPONTDENEMOURS": "sec",
+  "DUPONTEIDENEMOURS": "sec_former",
+  "EATON": "index",
+  "EBAY": "index",
+  "ECADINCDE": "sec_former",
+  "ECHEM": "sec_former",
+  "ECHOSTAR": "index",
+  "ECOLAB": "index",
+  "EDISONINTERNATIONAL": "index",
+  "EDWARDSLIFESCIENCES": "index",
+  "ELEVANCEHEALTH": "index",
+  "ELILILLY": "sec",
+  "EMCOR": "index",
+  "EMERSONELECTRIC": "index",
+  "EMERSONELECTRICMANUFACTUING": "sec_former",
+  "ENERGAS": "sec_former",
+  "ENRONOILGAS": "sec_former",
+  "ENTERGY": "index",
+  "ENTERGYCORPDE": "sec",
+  "ENTERGYCORPFL": "sec_former",
+  "EOGRESOURCES": "index",
+  "EQT": "index",
+  "EQTCORPPA": "sec_former",
+  "EQUIFAX": "index",
+  "EQUINIX": "index",
+  "EQUITYRESIDENTIAL": "sec_filing",
+  "EQUITYRESIDENTIALPROPERTIES": "sec_former",
+  "ERIEINDEMNITY": "index",
+  "ESSEXPORTFOLIO": "sec_former",
+  "ESSEXPROPERTY": "index",
+  "ESTEELAUDER": "sec",
+  "ESTELAUDER": "index",
+  "EVEREST": "index",
+  "EVERESTRE": "sec_former",
+  "EVERGY": "index",
+  "EVERSOURCEENERGY": "index",
+  "EXELON": "index",
+  "EXPANDENERGY": "index",
+  "EXPEDIA": "index",
+  "EXPEDITORSINTERNATIONAL": "index",
+  "EXPEDITORSINTERNATIONALOFWASHINGTON": "sec",
+  "EXTENDICARE": "sec_former",
+  "EXTRASPACESTORAGE": "index",
+  "EXXONMOBIL": "index",
+  "F5": "index",
+  "F5NETWORKS": "sec_former",
+  "FACEBOOK": "sec_former",
+  "FACTSET": "index",
+  "FACTSETRESEARCHSYSTEMS": "sec",
+  "FAIRISAAC": "index",
+  "FASTENAL": "index",
+  "FEDERALREALTYINVESTMENT": "index",
+  "FEDEX": "index",
+  "FEDEXFREIGHT": "index",
+  "FERGUSONENTERPRISES": "index",
+  "FERGUSONENTERPRISESINCDE": "sec",
+  "FIDELITYNATIONALINFORMATIONSERVICES": "index",
+  "FIFTHTHIRDBAN": "index",
+  "FIRSTBANKSYSTEM": "sec_former",
+  "FIRSTEMPIRESTATE": "sec_former",
+  "FIRSTENERGY": "index",
+  "FIRSTSOLAR": "index",
+  "FISERV": "index",
+  "FLEETCORTECHNOLOGIES": "sec_former",
+  "FLEX": "index",
+  "FLEXTRONICSINTERNATIONAL": "sec_former",
+  "FORDMOTOR": "index",
+  "FORTINET": "index",
+  "FORTIVE": "index",
+  "FOX": "sec",
+  "FOXCORPORATIONCLAS": "index",
+  "FOXCORPORATIONCLASSB": "index",
+  "FPL": "sec_former",
+  "FRANKLINRESOURCES": "index",
+  "FRANKLINTEMPLETON": "sec",
+  "FREEPORTMCMORAN": "index",
+  "FREEPORTMCMORANCOPPERGOLD": "sec_former",
+  "GARDNERDENVER": "sec_former",
+  "GARMIN": "index",
+  "GARTNER": "index",
+  "GEAEROSPACE": "index",
+  "GEHEALTHCARE": "index",
+  "GEHEALTHCARETECHNOLOGIES": "sec",
+  "GENDIGITAL": "index",
+  "GENERAC": "index",
+  "GENERALDIGITAL": "sec_former",
+  "GENERALDYNAMICS": "index",
+  "GENERALELECTRIC": "sec",
+  "GENERALMILLS": "index",
+  "GENERALMOTORS": "index",
+  "GENUINEPARTS": "index",
+  "GEVERNOVA": "index",
+  "GILEADSCIENCES": "index",
+  "GLOBALNUTRITIONSOLUTIONS": "sec_former",
+  "GLOBALPAYMENTS": "index",
+  "GLOBELIFE": "index",
+  "GODADDY": "index",
+  "GOLDMANSACHS": "index",
+  "GRAINGERWW": "sec_former",
+  "GSACQUISITION": "sec_former",
+  "HALLIBURTON": "index",
+  "HALLIBURTONOILWELLCEMENTING": "sec_former",
+  "HANSENNATURAL": "sec_former",
+  "HARRISCORPDE": "sec_former",
+  "HARTFORD": "index",
+  "HARTFORDFINANCIALSERVICES": "sec_former",
+  "HARTFORDINSURANCE": "sec",
+  "HASBRO": "index",
+  "HCA": "sec_former",
+  "HCAHEALTHCARE": "index",
+  "HCP": "sec_former",
+  "HEALTHCAREREITINCDE": "sec_former",
+  "HEALTHPEAKPROPERTIES": "index",
+  "HENRYJACKASSOCIATES": "sec_former",
+  "HENRYSCHEIN": "index",
+  "HERSHEY": "index",
+  "HERSHEYFOODS": "sec_former",
+  "HEWLETTPACKARD": "sec_former",
+  "HEWLETTPACKARDENTERPRISE": "index",
+  "HILTONWORLDWIDE": "index",
+  "HJHEINZ": "sec_former",
+  "HOMEDEPOT": "index",
+  "HONEYWELLAEROSPACE": "index",
+  "HONEYWELLINTERNATIONAL": "sec",
+  "HONEYWELLTECHNOLOGIES": "index",
+  "HORMELFOODS": "index",
+  "HORMELFOODSCORPDE": "sec",
+  "HORMELGEOA": "sec_former",
+  "HORTONDRINCDE": "sec",
+  "HOSTHOTELSRESORTS": "index",
+  "HOSTMARRIOTT": "sec_former",
+  "HOWMETAEROSPACE": "index",
+  "HP": "index",
+  "HUBBELL": "index",
+  "HUBBELLHARVEY": "sec_former",
+  "HUMANA": "index",
+  "HUNTINGTONBANCSHARES": "index",
+  "HUNTINGTONBANCSHARESINCMD": "sec",
+  "HUNTINGTONINGALLSINDUSTRIES": "index",
+  "HUNTJBTRANSPORTSERVICES": "sec",
+  "IBM": "index",
+  "IDEX": "index",
+  "IDEXCORPDE": "sec",
+  "IDEXXCORPDE": "sec_former",
+  "IDEXXLABORATORIES": "index",
+  "IDEXXLABORATORIESINCDE": "sec",
+  "IIVI": "sec_former",
+  "ILLINOISTOOLWORKS": "index",
+  "INCYTE": "index",
+  "INGERSOLLRAND": "index",
+  "INSULET": "index",
+  "INTEL": "index",
+  "INTERACTIVEBROKERS": "index",
+  "INTERCONTINENTALEXCHANGE": "index",
+  "INTERNATIONALBUSINESSMACHINES": "sec",
+  "INTERNATIONALFLAVORSFRAGRANCES": "index",
+  "INTERNATIONALPAPER": "index",
+  "INTERNATIONALPAPERCONEW": "sec",
+  "INTERNATIONALPAPERPOWER": "sec_former",
+  "INTERSTATEENERGY": "sec_former",
+  "INTUIT": "index",
+  "INTUITIVESURGICAL": "index",
+  "INVES": "index",
+  "INVESCOASSETMANAGEMENTDEUTSCHLANDGMBH": "sec_former",
+  "INVITATIONHOMES": "index",
+  "IQVIA": "index",
+  "IRONMOUNTAIN": "index",
+  "IRONMOUNTAININCPA": "sec_former",
+  "ITTW": "sec_former",
+  "JABIL": "index",
+  "JABILCIRCUIT": "sec_former",
+  "JACKHENRYASSOCIATES": "index",
+  "JACOBSENGINEERINGGROUPINCDE": "sec_former",
+  "JACOBSSOLUTIONS": "index",
+  "JBHUNT": "index",
+  "JMSMUCKER": "index",
+  "JNTL": "sec_former",
+  "JOHNSONCONTROLS": "index",
+  "JOHNSONCONTROLSINTERNATIONAL": "sec",
+  "JOHNSONJOHNSON": "index",
+  "JPMORGANCHASE": "index",
+  "KASLIONACQUISITIONBV": "sec_former",
+  "KENVUE": "index",
+  "KEURIGDRPEPPER": "index",
+  "KEY": "index",
+  "KEYCORPNEW": "sec",
+  "KEYSIGHTTECHNOLOGIES": "index",
+  "KIMBERLYCLARK": "index",
+  "KIMCOREALTY": "index",
+  "KINDERMORGAN": "index",
+  "KINDERMORGANHOLD": "sec_former",
+  "KINGSPORTUTILITIES": "sec_former",
+  "KKR": "index",
+  "KLA": "index",
+  "KLATENCOR": "sec_former",
+  "KRAFTFOODS": "sec_former",
+  "KRAFTHEINZ": "index",
+  "KROGER": "index",
+  "L3HARRIS": "index",
+  "L3HARRISTECHNOLOGIESINCDE": "sec",
+  "LAB": "index",
+  "LABORATORYCORPOFAMERICA": "sec_former",
+  "LAMRESEARCH": "index",
+  "LASVEGASSANDS": "index",
+  "LEIDOS": "index",
+  "LENNAR": "index",
+  "LENNARCORPNEW": "sec",
+  "LENNOXINTERNATIONAL": "index",
+  "LILLYELI": "index",
+  "LINDE": "index",
+  "LIVENATION": "sec_former",
+  "LIVENATIONENTERTAINMENT": "index",
+  "LOCKHEEDMARTIN": "index",
+  "LOEWS": "index",
+  "LOWES": "index",
+  "LULULEMON": "sec_former",
+  "LULULEMONATHLETICA": "index",
+  "LUMENTUM": "index",
+  "LYONDELLBASELL": "index",
+  "LYONDELLBASELLINDUSTRIES": "sec",
+  "MARATHONPETROLEUM": "index",
+  "MARRIOTTINTERNATIONAL": "index",
+  "MARRIOTTINTERNATIONALINCMD": "sec",
+  "MARSHMCLENNAN": "index",
+  "MARTINMARIETTAMATERIALS": "index",
+  "MARVELLTECHNOLOGY": "index",
+  "MAS": "index",
+  "MASCOCORPDE": "sec",
+  "MASCOSCREWPRODUCTS": "sec_former",
+  "MASTERCARD": "index",
+  "MCCORMICK": "index",
+  "MCDONALDS": "index",
+  "MCGRAWHILLFINANCIAL": "sec_former",
+  "MCKESSON": "index",
+  "MCKESSONHBOC": "sec_former",
+  "MEDTRONIC": "index",
+  "MERCK": "index",
+  "METAPLATFORMS": "index",
+  "METLIFE": "index",
+  "METROPCSCOMMUNICATIONS": "sec_former",
+  "METTLERTOLEDO": "index",
+  "METTLERTOLEDOINTERNATIONAL": "sec",
+  "MGMMIRAGE": "sec_former",
+  "MGMRESORTS": "index",
+  "MGMRESORTSINTERNATIONAL": "sec",
+  "MICROCHIPTECHNOLOGY": "index",
+  "MICRONTECHNOLOGY": "index",
+  "MICROSOFT": "index",
+  "MIDAMERICAAPARTMENTCOMMUNITIES": "index",
+  "MINNESOTAMININGMANUFACTURING": "sec_former",
+  "MODERNA": "index",
+  "MODERNATHERAPEUTICS": "sec_former",
+  "MOLSONCOORSBEVERAGE": "index",
+  "MOLSONCOORSBREWING": "sec_former",
+  "MONARCHENERGY": "sec_former",
+  "MONDELEZINTERNATIONAL": "index",
+  "MONOLITHICPOWERSYSTEMS": "index",
+  "MONSTERBEVERAGE": "index",
+  "MOODYS": "index",
+  "MOODYSCORPDE": "sec",
+  "MORGANSTANLEY": "index",
+  "MORGANSTANLEYDEANWITTER": "sec_former",
+  "MOSAIC": "index",
+  "MOTOROLA": "sec_former",
+  "MOTOROLASOLUTIONS": "index",
+  "MSCI": "index",
+  "MTBANK": "index",
+  "NASDAQ": "index",
+  "NASDAQOMX": "sec_former",
+  "NBH": "sec_former",
+  "NETAPP": "index",
+  "NETFLIX": "index",
+  "NETFLIXCOM": "sec_former",
+  "NETWORKAPPLIANCE": "sec_former",
+  "NEWMARRIOTTMI": "sec_former",
+  "NEWMONT": "index",
+  "NEWMONTCORPDE": "sec",
+  "NEWMONTGOLDCORPCORPDE": "sec_former",
+  "NEWPLUTOGLOBAL": "sec_former",
+  "NEWREGIONSFINANCIAL": "sec_former",
+  "NEWS": "sec",
+  "NEWSCORPCLAS": "index",
+  "NEWSCORPCLASSB": "index",
+  "NEWWHALE": "sec_former",
+  "NEXTERAENERGY": "index",
+  "NIKE": "index",
+  "NISOURCE": "index",
+  "NISOURCEINCDE": "sec_former",
+  "NNG": "sec_former",
+  "NOR": "sec_former",
+  "NORDSON": "index",
+  "NORFOLKSOUTHERN": "index",
+  "NORTHEASTUTILITIES": "sec_former",
+  "NORTHERN": "index",
+  "NORTHERNSTATESPOWERCOMN": "sec_former",
+  "NORTHROPGRUMMAN": "index",
+  "NORTHROPGRUMMANCORPDE": "sec",
+  "NORTONLIFELOCK": "sec_former",
+  "NORWEGIANCRUISELINE": "index",
+  "NOVUSSPINCO1": "sec_former",
+  "NRGENERGY": "index",
+  "NUCLEARCORPOFAMERICA": "sec_former",
+  "NUCOR": "index",
+  "NVIDIA": "index",
+  "NVIDIACORPDE": "sec_former",
+  "NVR": "index",
+  "NXPSEMICONDUCTORS": "index",
+  "OAKSTONEFINANCIAL": "sec_former",
+  "OCCIDENTALPETROLEUM": "index",
+  "OCCIDENTALPETROLEUMCORPDE": "sec",
+  "OLDDOMINION": "index",
+  "OLDDOMINIONFREIGHTLINE": "sec",
+  "OLDDOMINIONFREIGHTLINEINCVA": "sec_former",
+  "OMNICOM": "index",
+  "ONEOK": "index",
+  "ONEOKINCNEW": "sec",
+  "ONSEMICONDUCTOR": "index",
+  "ORACLE": "index",
+  "OREILLYAUTOMOTIVE": "index",
+  "OTISWORLDWIDE": "index",
+  "OZARK": "sec_former",
+  "PACCAR": "index",
+  "PACIFICCARFOUNDRY": "sec_former",
+  "PACIFICGREYSTONECORPDE": "sec_former",
+  "PACKAGINGCORPOFAMERICA": "sec",
+  "PACKAGINGCORPORATIONOFAMERICA": "index",
+  "PALANTIRTECHNOLOGIES": "index",
+  "PALOALTONETWORKS": "index",
+  "PARAMETRICTECHNOLOGY": "sec_former",
+  "PARAMOUNTSKYDANCE": "index",
+  "PARKERHANNIFIN": "index",
+  "PAYCHEX": "index",
+  "PAYPAL": "index",
+  "PENTAIR": "index",
+  "PEPSI": "index",
+  "PEPSICOLA": "sec_former",
+  "PERKINELMER": "sec_former",
+  "PFIZER": "index",
+  "PFIZERCHARLES": "sec_former",
+  "PGE": "index",
+  "PHILIPMORRISINTERNATIONAL": "index",
+  "PHILLIPS66": "index",
+  "PINNACLEWESTCAPITAL": "index",
+  "PITTSBURGHPLATEGLASS": "sec_former",
+  "PNCFINANCIALSERVICES": "index",
+  "POLORALPHLAUREN": "sec_former",
+  "PPGINDUSTRIES": "index",
+  "PPL": "index",
+  "PRICELINE": "sec_former",
+  "PRICETROWE": "sec",
+  "PRINCIPALFINANCIAL": "index",
+  "PROCTERGAMBLE": "index",
+  "PROGRESSIVE": "index",
+  "PROGRESSIVECORPOH": "sec",
+  "PROLOGIS": "index",
+  "PRUDENTIALFINANCIAL": "index",
+  "PTC": "index",
+  "PUBLICSERVICEENTERPRISE": "index",
+  "PUBLICSTORAGE": "index",
+  "PULTE": "index",
+  "PULTEGROUPINCMI": "sec",
+  "PULTEHOMESINCMI": "sec_former",
+  "QNITYELECTRONICS": "index",
+  "QUALCOMM": "index",
+  "QUALCOMMINCDE": "sec",
+  "QUANTASERVICES": "index",
+  "QUESTDIAGNOSTICS": "index",
+  "QUINTILESIMS": "sec_former",
+  "RA": "sec_former",
+  "RALPHLAUREN": "index",
+  "RAYMONDJAMESFINANCIAL": "index",
+  "RAYTHEONTECHNOLOGIES": "sec_former",
+  "REALTYINCOME": "index",
+  "REDDIT": "index",
+  "REGENCYCENTERS": "index",
+  "REGENCYREALTY": "sec_former",
+  "REGENERONPHARMACEUTICALS": "index",
+  "REGIONSFINANCIAL": "index",
+  "RELIANTENERGYREG": "sec_former",
+  "REPUBLICSERVICES": "index",
+  "RESMED": "index",
+  "RETAILCREDIT": "sec_former",
+  "REVVITY": "index",
+  "RJFINANCIALCORPFL": "sec_former",
+  "ROBINHOODMARKETS": "index",
+  "ROCKWELLAUTOMATION": "index",
+  "ROLLINS": "index",
+  "ROPERINDUSTRIES": "sec_former",
+  "ROPERTECHNOLOGIES": "index",
+  "ROSSSTORES": "index",
+  "ROYALCARIBBEAN": "index",
+  "ROYALCARIBBEANCRUISES": "sec",
+  "RTX": "index",
+  "SAIC": "sec_former",
+  "SALESFORCE": "index",
+  "SALESFORCECOM": "sec_former",
+  "SANDISK": "index",
+  "SBACOMMUNICATIONS": "index",
+  "SBCCOMMUNICATIONS": "sec_former",
+  "SCE": "sec_former",
+  "SCG": "sec_former",
+  "SCHEINHENRY": "sec_former",
+  "SCHLUMBERGER": "index",
+  "SCHWABCHARLES": "sec",
+  "SEAGATETECHNOLOGY": "index",
+  "SEMPRA": "index",
+  "SEMPRAENERGY": "sec_former",
+  "SERVICENOW": "index",
+  "SERVICENOWCOM": "sec_former",
+  "SHERWINWILLIAMS": "index",
+  "SIMONPROPERTY": "index",
+  "SIMONPROPERTYGROUPINCDE": "sec_former",
+  "SKYWORKSSOLUTIONS": "index",
+  "SLB": "sec",
+  "SMITHAO": "sec",
+  "SMUCKERJM": "sec_former",
+  "SMURFITWESTROCK": "index",
+  "SNAPON": "index",
+  "SOCIETY": "sec_former",
+  "SOLVENTUM": "index",
+  "SOUTHERN": "index",
+  "SOUTHERNCOGAS": "sec_former",
+  "SOUTHWESTAIRLINES": "index",
+  "SPGLOBAL": "index",
+  "SQUARE": "sec_former",
+  "STANLEYBLACKDECKER": "index",
+  "STANLEYWORKS": "sec_former",
+  "STARBUCKS": "index",
+  "STATESTREET": "index",
+  "STEELDYNAMICS": "index",
+  "STERIS": "index",
+  "STPAULTRAVELERS": "sec_former",
+  "STRYKER": "index",
+  "SUPERMICRO": "index",
+  "SUPERMICROCOMPUTER": "sec",
+  "SYNCHRONYFINANCIAL": "index",
+  "SYNOPSYS": "index",
+  "SYS": "index",
+  "TAKETWOINTERACTIVE": "index",
+  "TAKETWOINTERACTIVESOFTWARE": "sec",
+  "TANGO": "sec_former",
+  "TAPESTRY": "index",
+  "TARGARESOURCES": "index",
+  "TARGARESOURCESINVESTMENTS": "sec_former",
+  "TARGET": "index",
+  "TASERINTERNATIONAL": "sec_former",
+  "TD": "sec_former",
+  "TECHNECORPMN": "sec_former",
+  "TECONNECTIVITY": "index",
+  "TELEDYNETECHNOLOGIES": "index",
+  "TERADYNE": "index",
+  "TESLA": "index",
+  "TESLAMOTORS": "sec_former",
+  "TEXASINSTRUMENTS": "index",
+  "TEXASPACIFICLAND": "index",
+  "TEXTRON": "index",
+  "TGA": "sec_former",
+  "THERMOELECTRON": "sec_former",
+  "THERMOFISHERSCIENTIFIC": "index",
+  "TJX": "index",
+  "TJXCOMPANIESINCDE": "sec",
+  "TKO": "index",
+  "TMOBILEUS": "index",
+  "TORCHMARK": "sec_former",
+  "TRACTORSUPPLY": "index",
+  "TRACTORSUPPLYCODE": "sec",
+  "TRADEDESK": "index",
+  "TRANETECHNOLOGIES": "index",
+  "TRANSDIGM": "index",
+  "TRAVELERS": "index",
+  "TRICONGLOBALRESTAURANTS": "sec_former",
+  "TRIMBLE": "index",
+  "TRIMBLENAVIGATIONLTDCA": "sec_former",
+  "TROWEPRICE": "index",
+  "TRUISTFINANCIAL": "index",
+  "TURNERCAL": "sec_former",
+  "TWDCHOLDCO613": "sec_former",
+  "TYCOINTERNATIONAL": "sec_former",
+  "TYLERCORPNEW": "sec_former",
+  "TYLERTECHNOLOGIES": "index",
+  "TYSONFOODS": "index",
+  "UBER": "index",
+  "UBERTECHNOLOGIES": "sec",
+  "UDR": "index",
+  "ULTABEAUTY": "index",
+  "ULTASALONCOSMETICSFRAGRANCE": "sec_former",
+  "UNIONPACIFIC": "index",
+  "UNITEDAIRLINES": "index",
+  "UNITEDCONTINENTAL": "sec_former",
+  "UNITEDDOMINIONREALTY": "sec_former",
+  "UNITEDHEALTH": "index",
+  "UNITEDHEALTHCARE": "sec_former",
+  "UNITEDPARCELSERVICE": "index",
+  "UNITEDRENTALS": "index",
+  "UNITEDRENTALSINCDE": "sec_former",
+  "UNIVERSALHEALTHSERVICES": "index",
+  "UPJOHN": "sec_former",
+  "USAWASTESERVICES": "sec_former",
+  "USBAN": "index",
+  "USBANCORPDE": "sec",
+  "VALEROENERGY": "index",
+  "VALEROENERGYCORPTX": "sec",
+  "VANAMERIGENHAEBLER": "sec_former",
+  "VEEVASYSTEMS": "index",
+  "VENTAS": "index",
+  "VERALTO": "index",
+  "VERISIGN": "index",
+  "VERISIGNINCCA": "sec",
+  "VERISKANALYTICS": "index",
+  "VERIZON": "index",
+  "VERIZONCOMMUNICATIONS": "sec",
+  "VERTEXPHARMACEUTICALS": "index",
+  "VERTEXPHARMACEUTICALSINCMA": "sec",
+  "VERTICALSONDEMAND": "sec_former",
+  "VERTIV": "index",
+  "VH": "sec_former",
+  "VI": "index",
+  "VIATRIS": "index",
+  "VICIPROPERTIES": "index",
+  "VIRGINIAHOLD": "sec_former",
+  "VISTRA": "index",
+  "VISTRAENERGY": "sec_former",
+  "VIVMARKRESIDENTIAL": "index",
+  "VULCANMATERIALS": "index",
+  "WABTEC": "index",
+  "WAI": "sec_former",
+  "WALMART": "index",
+  "WALMARTSTORES": "sec_former",
+  "WALTDISNEY": "index",
+  "WARNERBROSDISCOVERY": "index",
+  "WASTEMANAGEMENT": "index",
+  "WATERS": "index",
+  "WATERSCORPDE": "sec",
+  "WCDINVESTORSINCDE": "sec_former",
+  "WECENERGY": "index",
+  "WELLSFARGO": "index",
+  "WELLSFARGOCOMN": "sec_former",
+  "WELLSFARGOCOMPANYMN": "sec",
+  "WELLTOWER": "index",
+  "WEST": "sec_former",
+  "WESTERNDIGITAL": "index",
+  "WESTINGHOUSEAIRBRAKETECHNOLOGIES": "sec",
+  "WESTPHARMACEUTICALSERVICES": "index",
+  "WEYERHAEUSER": "index",
+  "WILLIAMS": "index",
+  "WILLIAMSSONOMA": "index",
+  "WILLIS": "sec_former",
+  "WILLISTOWERSWATSON": "index",
+  "WISCONSINENERGY": "sec_former",
+  "WORKDAY": "index",
+  "WRBERKLEY": "index",
+  "WWGRAINGER": "index",
+  "WYNNRESORTS": "index",
+  "XCELENERGY": "index",
+  "XYLEM": "index",
+  "YUMBRANDS": "index",
+  "ZAMALIGHT": "sec_former",
+  "ZAYRE": "sec_former",
+  "ZEBRATECHNOLOGIES": "index",
+  "ZIMMER": "sec_former",
+  "ZIMMERBIOMET": "index",
+  "ZOETIS": "index"
+ },
+ "ticker_to_cik": {
+  "A": "0001090872",
+  "AAPL": "0000320193",
+  "ABBV": "0001551152",
+  "ABNB": "0001559720",
+  "ABT": "0000001800",
+  "ACGL": "0000947484",
+  "ACN": "0001467373",
+  "ADBE": "0000796343",
+  "ADI": "0000006281",
+  "ADM": "0000007084",
+  "ADP": "0000008670",
+  "ADSK": "0000769397",
+  "AEE": "0001002910",
+  "AEP": "0000004904",
+  "AES": "0000874761",
+  "AFL": "0000004977",
+  "AIG": "0000005272",
+  "AIZ": "0001267238",
+  "AJG": "0000354190",
+  "AKAM": "0001086222",
+  "ALB": "0000915913",
+  "ALGN": "0001097149",
+  "ALL": "0000899051",
+  "ALLE": "0001579241",
+  "AMAT": "0000006951",
+  "AMCR": "0001748790",
+  "AMD": "0000002488",
+  "AME": "0001037868",
+  "AMGN": "0000318154",
+  "AMP": "0000820027",
+  "AMT": "0001053507",
+  "AMZN": "0001018724",
+  "ANET": "0001596532",
+  "AON": "0000315293",
+  "AOS": "0000091142",
+  "APA": "0001841666",
+  "APD": "0000002969",
+  "APH": "0000820313",
+  "APO": "0001858681",
+  "APP": "0001751008",
+  "APTV": "0001521332",
+  "ARE": "0001035443",
+  "ARES": "0001176948",
+  "ATO": "0000731802",
+  "AVGO": "0001730168",
+  "AVY": "0000008818",
+  "AWK": "0001410636",
+  "AXON": "0001069183",
+  "AXP": "0000004962",
+  "AZO": "0000866787",
+  "BA": "0000012927",
+  "BAC": "0000070858",
+  "BALL": "0000009389",
+  "BAX": "0000010456",
+  "BBY": "0000764478",
+  "BDX": "0000010795",
+  "BEN": "0000038777",
+  "BF.B": "0000014693",
+  "BG": "0001996862",
+  "BIIB": "0000875045",
+  "BKNG": "0001075531",
+  "BKR": "0001701605",
+  "BLDR": "0001316835",
+  "BLK": "0002012383",
+  "BMY": "0000014272",
+  "BNY": "0001390777",
+  "BR": "0001383312",
+  "BRK.B": "0001067983",
+  "BRO": "0000079282",
+  "BSX": "0000885725",
+  "BX": "0001393818",
+  "BXP": "0001037540",
+  "C": "0000831001",
+  "CAH": "0000721371",
+  "CARR": "0001783180",
+  "CASY": "0000726958",
+  "CAT": "0000018230",
+  "CB": "0000896159",
+  "CBOE": "0001374310",
+  "CBRE": "0001138118",
+  "CCI": "0001051470",
+  "CCL": "0000815097",
+  "CDNS": "0000813672",
+  "CDW": "0001402057",
+  "CEG": "0001868275",
+  "CF": "0001324404",
+  "CFG": "0000759944",
+  "CHD": "0000313927",
+  "CHRW": "0001043277",
+  "CHTR": "0001091667",
+  "CI": "0001739940",
+  "CIEN": "0000936395",
+  "CINF": "0000020286",
+  "CL": "0000021665",
+  "CLX": "0000021076",
+  "CMCSA": "0001166691",
+  "CME": "0001156375",
+  "CMG": "0001058090",
+  "CMI": "0000026172",
+  "CMS": "0000811156",
+  "CNC": "0001071739",
+  "CNP": "0001130310",
+  "COF": "0000927628",
+  "COHR": "0000820318",
+  "COIN": "0001679788",
+  "COO": "0000711404",
+  "COP": "0001163165",
+  "COR": "0001140859",
+  "COST": "0000909832",
+  "CPAY": "0001175454",
+  "CPRT": "0000900075",
+  "CPT": "0000906345",
+  "CRH": "0000849395",
+  "CRL": "0001100682",
+  "CRM": "0001108524",
+  "CRWD": "0001535527",
+  "CSCO": "0000858877",
+  "CSGP": "0001057352",
+  "CSX": "0000277948",
+  "CTAS": "0000723254",
+  "CTSH": "0001058290",
+  "CTVA": "0001755672",
+  "CVNA": "0001690820",
+  "CVS": "0000064803",
+  "CVX": "0000093410",
+  "D": "0000715957",
+  "DAL": "0000027904",
+  "DASH": "0001792789",
+  "DD": "0001666700",
+  "DDOG": "0001561550",
+  "DE": "0000315189",
+  "DECK": "0000910521",
+  "DELL": "0001571996",
+  "DG": "0000029534",
+  "DGX": "0001022079",
+  "DHI": "0000882184",
+  "DHR": "0000313616",
+  "DIS": "0001744489",
+  "DLR": "0001297996",
+  "DLTR": "0000935703",
+  "DOC": "0000765880",
+  "DOV": "0000029905",
+  "DOW": "0001751788",
+  "DPZ": "0001286681",
+  "DRI": "0000940944",
+  "DTE": "0000936340",
+  "DUK": "0001326160",
+  "DVA": "0000927066",
+  "DVN": "0001090012",
+  "DXCM": "0001093557",
+  "EBAY": "0001065088",
+  "ECHO": "0001415404",
+  "ECL": "0000031462",
+  "ED": "0001047862",
+  "EFX": "0000033185",
+  "EG": "0001095073",
+  "EIX": "0000827052",
+  "EL": "0001001250",
+  "ELV": "0001156039",
+  "EME": "0000105634",
+  "EMR": "0000032604",
+  "EOG": "0000821189",
+  "EQIX": "0001101239",
+  "EQT": "0000033213",
+  "ERIE": "0000922621",
+  "ES": "0000072741",
+  "ESS": "0000920522",
+  "ETN": "0001551182",
+  "ETR": "0000065984",
+  "EVRG": "0001711269",
+  "EW": "0001099800",
+  "EXC": "0001109357",
+  "EXE": "0000895126",
+  "EXPD": "0000746515",
+  "EXPE": "0001324424",
+  "EXR": "0001289490",
+  "F": "0000037996",
+  "FANG": "0001539838",
+  "FAST": "0000815556",
+  "FCX": "0000831259",
+  "FDS": "0001013237",
+  "FDX": "0001048911",
+  "FDXF": "0002082247",
+  "FE": "0001031296",
+  "FERG": "0002011641",
+  "FFIV": "0001048695",
+  "FICO": "0000814547",
+  "FIS": "0001136893",
+  "FISV": "0000798354",
+  "FITB": "0000035527",
+  "FIX": "0001035983",
+  "FLEX": "0000866374",
+  "FOX": "0001754301",
+  "FOXA": "0001754301",
+  "FRT": "0000034903",
+  "FSLR": "0001274494",
+  "FTNT": "0001262039",
+  "FTV": "0001659166",
+  "GD": "0000040533",
+  "GDDY": "0001609711",
+  "GE": "0000040545",
+  "GEHC": "0001932393",
+  "GEN": "0000849399",
+  "GEV": "0001996810",
+  "GILD": "0000882095",
+  "GIS": "0000040704",
+  "GL": "0000320335",
+  "GLW": "0000024741",
+  "GM": "0001467858",
+  "GNRC": "0001474735",
+  "GOOG": "0001652044",
+  "GOOGL": "0001652044",
+  "GPC": "0000040987",
+  "GPN": "0001123360",
+  "GRMN": "0001121788",
+  "GS": "0000886982",
+  "GWW": "0000277135",
+  "HAL": "0000045012",
+  "HAS": "0000046080",
+  "HBAN": "0000049196",
+  "HCA": "0000860730",
+  "HD": "0000354950",
+  "HIG": "0000874766",
+  "HII": "0001501585",
+  "HLT": "0001585689",
+  "HON": "0000773840",
+  "HONA": "0002089271",
+  "HOOD": "0001783879",
+  "HPE": "0001645590",
+  "HPQ": "0000047217",
+  "HRL": "0000048465",
+  "HSIC": "0001000228",
+  "HST": "0001070750",
+  "HSY": "0000047111",
+  "HUBB": "0000048898",
+  "HUM": "0000049071",
+  "HWM": "0000004281",
+  "IBKR": "0001381197",
+  "IBM": "0000051143",
+  "ICE": "0001571949",
+  "IDXX": "0000874716",
+  "IEX": "0000832101",
+  "IFF": "0000051253",
+  "INCY": "0000879169",
+  "INTC": "0000050863",
+  "INTU": "0000896878",
+  "INVH": "0001687229",
+  "IP": "0000051434",
+  "IQV": "0001478242",
+  "IR": "0001699150",
+  "IRM": "0001020569",
+  "ISRG": "0001035267",
+  "IT": "0000749251",
+  "ITW": "0000049826",
+  "IVZ": "0000914208",
+  "J": "0000052988",
+  "JBHT": "0000728535",
+  "JBL": "0000898293",
+  "JCI": "0000833444",
+  "JKHY": "0000779152",
+  "JNJ": "0000200406",
+  "JPM": "0000019617",
+  "KDP": "0001418135",
+  "KEY": "0000091576",
+  "KEYS": "0001601046",
+  "KHC": "0001637459",
+  "KIM": "0000879101",
+  "KKR": "0001404912",
+  "KLAC": "0000319201",
+  "KMB": "0000055785",
+  "KMI": "0001506307",
+  "KO": "0000021344",
+  "KR": "0000056873",
+  "KVUE": "0001944048",
+  "L": "0000060086",
+  "LDOS": "0001336920",
+  "LEN": "0000920760",
+  "LH": "0000920148",
+  "LHX": "0000202058",
+  "LII": "0001069202",
+  "LIN": "0001707925",
+  "LITE": "0001633978",
+  "LLY": "0000059478",
+  "LMT": "0000936468",
+  "LNT": "0000352541",
+  "LOW": "0000060667",
+  "LRCX": "0000707549",
+  "LULU": "0001397187",
+  "LUV": "0000092380",
+  "LVS": "0001300514",
+  "LYB": "0001489393",
+  "LYV": "0001335258",
+  "MA": "0001141391",
+  "MAA": "0000912595",
+  "MAR": "0001048286",
+  "MAS": "0000062996",
+  "MCD": "0000063908",
+  "MCHP": "0000827054",
+  "MCK": "0000927653",
+  "MCO": "0001059556",
+  "MDLZ": "0001103982",
+  "MDT": "0001613103",
+  "MET": "0001099219",
+  "META": "0001326801",
+  "MGM": "0000789570",
+  "MKC": "0000063754",
+  "MLM": "0000916076",
+  "MMM": "0000066740",
+  "MNST": "0000865752",
+  "MO": "0000764180",
+  "MOS": "0001285785",
+  "MPC": "0001510295",
+  "MPWR": "0001280452",
+  "MRK": "0000310158",
+  "MRNA": "0001682852",
+  "MRSH": "0000062709",
+  "MRVL": "0001835632",
+  "MS": "0000895421",
+  "MSCI": "0001408198",
+  "MSFT": "0000789019",
+  "MSI": "0000068505",
+  "MTB": "0000036270",
+  "MTD": "0001037646",
+  "MU": "0000723125",
+  "NCLH": "0001513761",
+  "NDAQ": "0001120193",
+  "NDSN": "0000072331",
+  "NEE": "0000753308",
+  "NEM": "0001164727",
+  "NFLX": "0001065280",
+  "NI": "0001111711",
+  "NKE": "0000320187",
+  "NOC": "0001133421",
+  "NOW": "0001373715",
+  "NRG": "0001013871",
+  "NSC": "0000702165",
+  "NTAP": "0001002047",
+  "NTRS": "0000073124",
+  "NUE": "0000073309",
+  "NVDA": "0001045810",
+  "NVR": "0000906163",
+  "NWS": "0001564708",
+  "NWSA": "0001564708",
+  "NXPI": "0001413447",
+  "O": "0000726728",
+  "ODFL": "0000878927",
+  "OKE": "0001039684",
+  "OMC": "0000029989",
+  "ON": "0001097864",
+  "ORCL": "0001341439",
+  "ORLY": "0000898173",
+  "OTIS": "0001781335",
+  "OXY": "0000797468",
+  "PANW": "0001327567",
+  "PAYX": "0000723531",
+  "PCAR": "0000075362",
+  "PCG": "0001004980",
+  "PEG": "0000788784",
+  "PEP": "0000077476",
+  "PFE": "0000078003",
+  "PFG": "0001126328",
+  "PG": "0000080424",
+  "PGR": "0000080661",
+  "PH": "0000076334",
+  "PHM": "0000822416",
+  "PKG": "0000075677",
+  "PLD": "0001045609",
+  "PLTR": "0001321655",
+  "PM": "0001413329",
+  "PNC": "0000713676",
+  "PNR": "0000077360",
+  "PNW": "0000764622",
+  "PODD": "0001145197",
+  "PPG": "0000079879",
+  "PPL": "0000922224",
+  "PRU": "0001137774",
+  "PSA": "0001393311",
+  "PSKY": "0002041610",
+  "PSX": "0001534701",
+  "PTC": "0000857005",
+  "PWR": "0001050915",
+  "PYPL": "0001633917",
+  "Q": "0002058873",
+  "QCOM": "0000804328",
+  "RCL": "0000884887",
+  "RDDT": "0001713445",
+  "REG": "0000910606",
+  "REGN": "0000872589",
+  "RF": "0001281761",
+  "RJF": "0000720005",
+  "RL": "0001037038",
+  "RMD": "0000943819",
+  "ROK": "0001024478",
+  "ROL": "0000084839",
+  "ROP": "0000882835",
+  "ROST": "0000745732",
+  "RSG": "0001060391",
+  "RTX": "0000101829",
+  "RVTY": "0000031791",
+  "SBAC": "0001034054",
+  "SBUX": "0000829224",
+  "SCHW": "0000316709",
+  "SHW": "0000089800",
+  "SJM": "0000091419",
+  "SLB": "0000087347",
+  "SMCI": "0001375365",
+  "SNA": "0000091440",
+  "SNDK": "0002023554",
+  "SNPS": "0000883241",
+  "SO": "0000092122",
+  "SOLV": "0001964738",
+  "SPG": "0001063761",
+  "SPGI": "0000064040",
+  "SRE": "0001032208",
+  "STE": "0001757898",
+  "STLD": "0001022671",
+  "STT": "0000093751",
+  "STX": "0001137789",
+  "STZ": "0000016918",
+  "SW": "0002005951",
+  "SWK": "0000093556",
+  "SWKS": "0000004127",
+  "SYF": "0001601712",
+  "SYK": "0000310764",
+  "SYY": "0000096021",
+  "T": "0000732717",
+  "TAP": "0000024545",
+  "TDG": "0001260221",
+  "TDY": "0001094285",
+  "TECH": "0000842023",
+  "TEL": "0001385157",
+  "TER": "0000097210",
+  "TFC": "0000092230",
+  "TGT": "0000027419",
+  "TJX": "0000109198",
+  "TKO": "0001973266",
+  "TMO": "0000097745",
+  "TMUS": "0001283699",
+  "TPL": "0001811074",
+  "TPR": "0001116132",
+  "TRGP": "0001389170",
+  "TRMB": "0000864749",
+  "TROW": "0001113169",
+  "TRV": "0000086312",
+  "TSCO": "0000916365",
+  "TSLA": "0001318605",
+  "TSN": "0000100493",
+  "TT": "0001466258",
+  "TTD": "0001671933",
+  "TTWO": "0000946581",
+  "TXN": "0000097476",
+  "TXT": "0000217346",
+  "TYL": "0000860731",
+  "UAL": "0000100517",
+  "UBER": "0001543151",
+  "UDR": "0000074208",
+  "UHS": "0000352915",
+  "ULTA": "0001403568",
+  "UNH": "0000731766",
+  "UNP": "0000100885",
+  "UPS": "0001090727",
+  "URI": "0001067701",
+  "USB": "0000036104",
+  "V": "0001403161",
+  "VEEV": "0001393052",
+  "VICI": "0001705696",
+  "VLO": "0001035002",
+  "VLTO": "0001967680",
+  "VMC": "0001396009",
+  "VMRK": "0000906107",
+  "VRSK": "0001442145",
+  "VRSN": "0001014473",
+  "VRT": "0001674101",
+  "VRTX": "0000875320",
+  "VST": "0001692819",
+  "VTR": "0000740260",
+  "VTRS": "0001792044",
+  "VZ": "0000732712",
+  "WAB": "0000943452",
+  "WAT": "0001000697",
+  "WBD": "0001437107",
+  "WDAY": "0001327811",
+  "WDC": "0000106040",
+  "WEC": "0000783325",
+  "WELL": "0000766704",
+  "WFC": "0000072971",
+  "WM": "0000823768",
+  "WMB": "0000107263",
+  "WMT": "0000104169",
+  "WRB": "0000011544",
+  "WSM": "0000719955",
+  "WST": "0000105770",
+  "WTW": "0001140536",
+  "WY": "0000106535",
+  "WYNN": "0001174922",
+  "XEL": "0000072903",
+  "XOM": "0002115436",
+  "XYL": "0001524472",
+  "XYZ": "0001512673",
+  "YUM": "0001041061",
+  "ZBH": "0001136869",
+  "ZBRA": "0000877212",
+  "ZTS": "0001555280"
+ },
+ "cik_to_tickers": {
+  "0000001800": [
+   "ABT"
+  ],
+  "0000002488": [
+   "AMD"
+  ],
+  "0000002969": [
+   "APD"
+  ],
+  "0000004127": [
+   "SWKS"
+  ],
+  "0000004281": [
+   "HWM"
+  ],
+  "0000004904": [
+   "AEP"
+  ],
+  "0000004962": [
+   "AXP"
+  ],
+  "0000004977": [
+   "AFL"
+  ],
+  "0000005272": [
+   "AIG"
+  ],
+  "0000006281": [
+   "ADI"
+  ],
+  "0000006951": [
+   "AMAT"
+  ],
+  "0000007084": [
+   "ADM"
+  ],
+  "0000008670": [
+   "ADP"
+  ],
+  "0000008818": [
+   "AVY"
+  ],
+  "0000009389": [
+   "BALL"
+  ],
+  "0000010456": [
+   "BAX"
+  ],
+  "0000010795": [
+   "BDX"
+  ],
+  "0000011544": [
+   "WRB"
+  ],
+  "0000012927": [
+   "BA"
+  ],
+  "0000014272": [
+   "BMY"
+  ],
+  "0000014693": [
+   "BF.B"
+  ],
+  "0000016918": [
+   "STZ"
+  ],
+  "0000018230": [
+   "CAT"
+  ],
+  "0000019617": [
+   "JPM"
+  ],
+  "0000020286": [
+   "CINF"
+  ],
+  "0000021076": [
+   "CLX"
+  ],
+  "0000021344": [
+   "KO"
+  ],
+  "0000021665": [
+   "CL"
+  ],
+  "0000024545": [
+   "TAP"
+  ],
+  "0000024741": [
+   "GLW"
+  ],
+  "0000026172": [
+   "CMI"
+  ],
+  "0000027419": [
+   "TGT"
+  ],
+  "0000027904": [
+   "DAL"
+  ],
+  "0000029534": [
+   "DG"
+  ],
+  "0000029905": [
+   "DOV"
+  ],
+  "0000029989": [
+   "OMC"
+  ],
+  "0000031462": [
+   "ECL"
+  ],
+  "0000031791": [
+   "RVTY"
+  ],
+  "0000032604": [
+   "EMR"
+  ],
+  "0000033185": [
+   "EFX"
+  ],
+  "0000033213": [
+   "EQT"
+  ],
+  "0000034903": [
+   "FRT"
+  ],
+  "0000035527": [
+   "FITB"
+  ],
+  "0000036104": [
+   "USB"
+  ],
+  "0000036270": [
+   "MTB"
+  ],
+  "0000037996": [
+   "F"
+  ],
+  "0000038777": [
+   "BEN"
+  ],
+  "0000040533": [
+   "GD"
+  ],
+  "0000040545": [
+   "GE"
+  ],
+  "0000040704": [
+   "GIS"
+  ],
+  "0000040987": [
+   "GPC"
+  ],
+  "0000045012": [
+   "HAL"
+  ],
+  "0000046080": [
+   "HAS"
+  ],
+  "0000047111": [
+   "HSY"
+  ],
+  "0000047217": [
+   "HPQ"
+  ],
+  "0000048465": [
+   "HRL"
+  ],
+  "0000048898": [
+   "HUBB"
+  ],
+  "0000049071": [
+   "HUM"
+  ],
+  "0000049196": [
+   "HBAN"
+  ],
+  "0000049826": [
+   "ITW"
+  ],
+  "0000050863": [
+   "INTC"
+  ],
+  "0000051143": [
+   "IBM"
+  ],
+  "0000051253": [
+   "IFF"
+  ],
+  "0000051434": [
+   "IP"
+  ],
+  "0000052988": [
+   "J"
+  ],
+  "0000055785": [
+   "KMB"
+  ],
+  "0000056873": [
+   "KR"
+  ],
+  "0000059478": [
+   "LLY"
+  ],
+  "0000060086": [
+   "L"
+  ],
+  "0000060667": [
+   "LOW"
+  ],
+  "0000062709": [
+   "MRSH"
+  ],
+  "0000062996": [
+   "MAS"
+  ],
+  "0000063754": [
+   "MKC"
+  ],
+  "0000063908": [
+   "MCD"
+  ],
+  "0000064040": [
+   "SPGI"
+  ],
+  "0000064803": [
+   "CVS"
+  ],
+  "0000065984": [
+   "ETR"
+  ],
+  "0000066740": [
+   "MMM"
+  ],
+  "0000068505": [
+   "MSI"
+  ],
+  "0000070858": [
+   "BAC"
+  ],
+  "0000072331": [
+   "NDSN"
+  ],
+  "0000072741": [
+   "ES"
+  ],
+  "0000072903": [
+   "XEL"
+  ],
+  "0000072971": [
+   "WFC"
+  ],
+  "0000073124": [
+   "NTRS"
+  ],
+  "0000073309": [
+   "NUE"
+  ],
+  "0000074208": [
+   "UDR"
+  ],
+  "0000075362": [
+   "PCAR"
+  ],
+  "0000075677": [
+   "PKG"
+  ],
+  "0000076334": [
+   "PH"
+  ],
+  "0000077360": [
+   "PNR"
+  ],
+  "0000077476": [
+   "PEP"
+  ],
+  "0000078003": [
+   "PFE"
+  ],
+  "0000079282": [
+   "BRO"
+  ],
+  "0000079879": [
+   "PPG"
+  ],
+  "0000080424": [
+   "PG"
+  ],
+  "0000080661": [
+   "PGR"
+  ],
+  "0000084839": [
+   "ROL"
+  ],
+  "0000086312": [
+   "TRV"
+  ],
+  "0000087347": [
+   "SLB"
+  ],
+  "0000089800": [
+   "SHW"
+  ],
+  "0000091142": [
+   "AOS"
+  ],
+  "0000091419": [
+   "SJM"
+  ],
+  "0000091440": [
+   "SNA"
+  ],
+  "0000091576": [
+   "KEY"
+  ],
+  "0000092122": [
+   "SO"
+  ],
+  "0000092230": [
+   "TFC"
+  ],
+  "0000092380": [
+   "LUV"
+  ],
+  "0000093410": [
+   "CVX"
+  ],
+  "0000093556": [
+   "SWK"
+  ],
+  "0000093751": [
+   "STT"
+  ],
+  "0000096021": [
+   "SYY"
+  ],
+  "0000097210": [
+   "TER"
+  ],
+  "0000097476": [
+   "TXN"
+  ],
+  "0000097745": [
+   "TMO"
+  ],
+  "0000100493": [
+   "TSN"
+  ],
+  "0000100517": [
+   "UAL"
+  ],
+  "0000100885": [
+   "UNP"
+  ],
+  "0000101829": [
+   "RTX"
+  ],
+  "0000104169": [
+   "WMT"
+  ],
+  "0000105634": [
+   "EME"
+  ],
+  "0000105770": [
+   "WST"
+  ],
+  "0000106040": [
+   "WDC"
+  ],
+  "0000106535": [
+   "WY"
+  ],
+  "0000107263": [
+   "WMB"
+  ],
+  "0000109198": [
+   "TJX"
+  ],
+  "0000200406": [
+   "JNJ"
+  ],
+  "0000202058": [
+   "LHX"
+  ],
+  "0000217346": [
+   "TXT"
+  ],
+  "0000277135": [
+   "GWW"
+  ],
+  "0000277948": [
+   "CSX"
+  ],
+  "0000310158": [
+   "MRK"
+  ],
+  "0000310764": [
+   "SYK"
+  ],
+  "0000313616": [
+   "DHR"
+  ],
+  "0000313927": [
+   "CHD"
+  ],
+  "0000315189": [
+   "DE"
+  ],
+  "0000315293": [
+   "AON"
+  ],
+  "0000316709": [
+   "SCHW"
+  ],
+  "0000318154": [
+   "AMGN"
+  ],
+  "0000319201": [
+   "KLAC"
+  ],
+  "0000320187": [
+   "NKE"
+  ],
+  "0000320193": [
+   "AAPL"
+  ],
+  "0000320335": [
+   "GL"
+  ],
+  "0000352541": [
+   "LNT"
+  ],
+  "0000352915": [
+   "UHS"
+  ],
+  "0000354190": [
+   "AJG"
+  ],
+  "0000354950": [
+   "HD"
+  ],
+  "0000702165": [
+   "NSC"
+  ],
+  "0000707549": [
+   "LRCX"
+  ],
+  "0000711404": [
+   "COO"
+  ],
+  "0000713676": [
+   "PNC"
+  ],
+  "0000715957": [
+   "D"
+  ],
+  "0000719955": [
+   "WSM"
+  ],
+  "0000720005": [
+   "RJF"
+  ],
+  "0000721371": [
+   "CAH"
+  ],
+  "0000723125": [
+   "MU"
+  ],
+  "0000723254": [
+   "CTAS"
+  ],
+  "0000723531": [
+   "PAYX"
+  ],
+  "0000726728": [
+   "O"
+  ],
+  "0000726958": [
+   "CASY"
+  ],
+  "0000728535": [
+   "JBHT"
+  ],
+  "0000731766": [
+   "UNH"
+  ],
+  "0000731802": [
+   "ATO"
+  ],
+  "0000732712": [
+   "VZ"
+  ],
+  "0000732717": [
+   "T"
+  ],
+  "0000740260": [
+   "VTR"
+  ],
+  "0000745732": [
+   "ROST"
+  ],
+  "0000746515": [
+   "EXPD"
+  ],
+  "0000749251": [
+   "IT"
+  ],
+  "0000753308": [
+   "NEE"
+  ],
+  "0000759944": [
+   "CFG"
+  ],
+  "0000764180": [
+   "MO"
+  ],
+  "0000764478": [
+   "BBY"
+  ],
+  "0000764622": [
+   "PNW"
+  ],
+  "0000765880": [
+   "DOC"
+  ],
+  "0000766704": [
+   "WELL"
+  ],
+  "0000769397": [
+   "ADSK"
+  ],
+  "0000773840": [
+   "HON"
+  ],
+  "0000779152": [
+   "JKHY"
+  ],
+  "0000783325": [
+   "WEC"
+  ],
+  "0000788784": [
+   "PEG"
+  ],
+  "0000789019": [
+   "MSFT"
+  ],
+  "0000789570": [
+   "MGM"
+  ],
+  "0000796343": [
+   "ADBE"
+  ],
+  "0000797468": [
+   "OXY"
+  ],
+  "0000798354": [
+   "FISV"
+  ],
+  "0000804328": [
+   "QCOM"
+  ],
+  "0000811156": [
+   "CMS"
+  ],
+  "0000813672": [
+   "CDNS"
+  ],
+  "0000814547": [
+   "FICO"
+  ],
+  "0000815097": [
+   "CCL"
+  ],
+  "0000815556": [
+   "FAST"
+  ],
+  "0000820027": [
+   "AMP"
+  ],
+  "0000820313": [
+   "APH"
+  ],
+  "0000820318": [
+   "COHR"
+  ],
+  "0000821189": [
+   "EOG"
+  ],
+  "0000822416": [
+   "PHM"
+  ],
+  "0000823768": [
+   "WM"
+  ],
+  "0000827052": [
+   "EIX"
+  ],
+  "0000827054": [
+   "MCHP"
+  ],
+  "0000829224": [
+   "SBUX"
+  ],
+  "0000831001": [
+   "C"
+  ],
+  "0000831259": [
+   "FCX"
+  ],
+  "0000832101": [
+   "IEX"
+  ],
+  "0000833444": [
+   "JCI"
+  ],
+  "0000842023": [
+   "TECH"
+  ],
+  "0000849395": [
+   "CRH"
+  ],
+  "0000849399": [
+   "GEN"
+  ],
+  "0000857005": [
+   "PTC"
+  ],
+  "0000858877": [
+   "CSCO"
+  ],
+  "0000860730": [
+   "HCA"
+  ],
+  "0000860731": [
+   "TYL"
+  ],
+  "0000864749": [
+   "TRMB"
+  ],
+  "0000865752": [
+   "MNST"
+  ],
+  "0000866374": [
+   "FLEX"
+  ],
+  "0000866787": [
+   "AZO"
+  ],
+  "0000872589": [
+   "REGN"
+  ],
+  "0000874716": [
+   "IDXX"
+  ],
+  "0000874761": [
+   "AES"
+  ],
+  "0000874766": [
+   "HIG"
+  ],
+  "0000875045": [
+   "BIIB"
+  ],
+  "0000875320": [
+   "VRTX"
+  ],
+  "0000877212": [
+   "ZBRA"
+  ],
+  "0000878927": [
+   "ODFL"
+  ],
+  "0000879101": [
+   "KIM"
+  ],
+  "0000879169": [
+   "INCY"
+  ],
+  "0000882095": [
+   "GILD"
+  ],
+  "0000882184": [
+   "DHI"
+  ],
+  "0000882835": [
+   "ROP"
+  ],
+  "0000883241": [
+   "SNPS"
+  ],
+  "0000884887": [
+   "RCL"
+  ],
+  "0000885725": [
+   "BSX"
+  ],
+  "0000886982": [
+   "GS"
+  ],
+  "0000895126": [
+   "EXE"
+  ],
+  "0000895421": [
+   "MS"
+  ],
+  "0000896159": [
+   "CB"
+  ],
+  "0000896878": [
+   "INTU"
+  ],
+  "0000898173": [
+   "ORLY"
+  ],
+  "0000898293": [
+   "JBL"
+  ],
+  "0000899051": [
+   "ALL"
+  ],
+  "0000900075": [
+   "CPRT"
+  ],
+  "0000906107": [
+   "VMRK"
+  ],
+  "0000906163": [
+   "NVR"
+  ],
+  "0000906345": [
+   "CPT"
+  ],
+  "0000909832": [
+   "COST"
+  ],
+  "0000910521": [
+   "DECK"
+  ],
+  "0000910606": [
+   "REG"
+  ],
+  "0000912595": [
+   "MAA"
+  ],
+  "0000914208": [
+   "IVZ"
+  ],
+  "0000915913": [
+   "ALB"
+  ],
+  "0000916076": [
+   "MLM"
+  ],
+  "0000916365": [
+   "TSCO"
+  ],
+  "0000920148": [
+   "LH"
+  ],
+  "0000920522": [
+   "ESS"
+  ],
+  "0000920760": [
+   "LEN"
+  ],
+  "0000922224": [
+   "PPL"
+  ],
+  "0000922621": [
+   "ERIE"
+  ],
+  "0000927066": [
+   "DVA"
+  ],
+  "0000927628": [
+   "COF"
+  ],
+  "0000927653": [
+   "MCK"
+  ],
+  "0000935703": [
+   "DLTR"
+  ],
+  "0000936340": [
+   "DTE"
+  ],
+  "0000936395": [
+   "CIEN"
+  ],
+  "0000936468": [
+   "LMT"
+  ],
+  "0000940944": [
+   "DRI"
+  ],
+  "0000943452": [
+   "WAB"
+  ],
+  "0000943819": [
+   "RMD"
+  ],
+  "0000946581": [
+   "TTWO"
+  ],
+  "0000947484": [
+   "ACGL"
+  ],
+  "0001000228": [
+   "HSIC"
+  ],
+  "0001000697": [
+   "WAT"
+  ],
+  "0001001250": [
+   "EL"
+  ],
+  "0001002047": [
+   "NTAP"
+  ],
+  "0001002910": [
+   "AEE"
+  ],
+  "0001004980": [
+   "PCG"
+  ],
+  "0001013237": [
+   "FDS"
+  ],
+  "0001013871": [
+   "NRG"
+  ],
+  "0001014473": [
+   "VRSN"
+  ],
+  "0001018724": [
+   "AMZN"
+  ],
+  "0001020569": [
+   "IRM"
+  ],
+  "0001022079": [
+   "DGX"
+  ],
+  "0001022671": [
+   "STLD"
+  ],
+  "0001024478": [
+   "ROK"
+  ],
+  "0001031296": [
+   "FE"
+  ],
+  "0001032208": [
+   "SRE"
+  ],
+  "0001034054": [
+   "SBAC"
+  ],
+  "0001035002": [
+   "VLO"
+  ],
+  "0001035267": [
+   "ISRG"
+  ],
+  "0001035443": [
+   "ARE"
+  ],
+  "0001035983": [
+   "FIX"
+  ],
+  "0001037038": [
+   "RL"
+  ],
+  "0001037540": [
+   "BXP"
+  ],
+  "0001037646": [
+   "MTD"
+  ],
+  "0001037868": [
+   "AME"
+  ],
+  "0001039684": [
+   "OKE"
+  ],
+  "0001041061": [
+   "YUM"
+  ],
+  "0001043277": [
+   "CHRW"
+  ],
+  "0001045609": [
+   "PLD"
+  ],
+  "0001045810": [
+   "NVDA"
+  ],
+  "0001047862": [
+   "ED"
+  ],
+  "0001048286": [
+   "MAR"
+  ],
+  "0001048695": [
+   "FFIV"
+  ],
+  "0001048911": [
+   "FDX"
+  ],
+  "0001050915": [
+   "PWR"
+  ],
+  "0001051470": [
+   "CCI"
+  ],
+  "0001053507": [
+   "AMT"
+  ],
+  "0001057352": [
+   "CSGP"
+  ],
+  "0001058090": [
+   "CMG"
+  ],
+  "0001058290": [
+   "CTSH"
+  ],
+  "0001059556": [
+   "MCO"
+  ],
+  "0001060391": [
+   "RSG"
+  ],
+  "0001063761": [
+   "SPG"
+  ],
+  "0001065088": [
+   "EBAY"
+  ],
+  "0001065280": [
+   "NFLX"
+  ],
+  "0001067701": [
+   "URI"
+  ],
+  "0001067983": [
+   "BRK.B"
+  ],
+  "0001069183": [
+   "AXON"
+  ],
+  "0001069202": [
+   "LII"
+  ],
+  "0001070750": [
+   "HST"
+  ],
+  "0001071739": [
+   "CNC"
+  ],
+  "0001075531": [
+   "BKNG"
+  ],
+  "0001086222": [
+   "AKAM"
+  ],
+  "0001090012": [
+   "DVN"
+  ],
+  "0001090727": [
+   "UPS"
+  ],
+  "0001090872": [
+   "A"
+  ],
+  "0001091667": [
+   "CHTR"
+  ],
+  "0001093557": [
+   "DXCM"
+  ],
+  "0001094285": [
+   "TDY"
+  ],
+  "0001095073": [
+   "EG"
+  ],
+  "0001097149": [
+   "ALGN"
+  ],
+  "0001097864": [
+   "ON"
+  ],
+  "0001099219": [
+   "MET"
+  ],
+  "0001099800": [
+   "EW"
+  ],
+  "0001100682": [
+   "CRL"
+  ],
+  "0001101239": [
+   "EQIX"
+  ],
+  "0001103982": [
+   "MDLZ"
+  ],
+  "0001108524": [
+   "CRM"
+  ],
+  "0001109357": [
+   "EXC"
+  ],
+  "0001111711": [
+   "NI"
+  ],
+  "0001113169": [
+   "TROW"
+  ],
+  "0001116132": [
+   "TPR"
+  ],
+  "0001120193": [
+   "NDAQ"
+  ],
+  "0001121788": [
+   "GRMN"
+  ],
+  "0001123360": [
+   "GPN"
+  ],
+  "0001126328": [
+   "PFG"
+  ],
+  "0001130310": [
+   "CNP"
+  ],
+  "0001133421": [
+   "NOC"
+  ],
+  "0001136869": [
+   "ZBH"
+  ],
+  "0001136893": [
+   "FIS"
+  ],
+  "0001137774": [
+   "PRU"
+  ],
+  "0001137789": [
+   "STX"
+  ],
+  "0001138118": [
+   "CBRE"
+  ],
+  "0001140536": [
+   "WTW"
+  ],
+  "0001140859": [
+   "COR"
+  ],
+  "0001141391": [
+   "MA"
+  ],
+  "0001145197": [
+   "PODD"
+  ],
+  "0001156039": [
+   "ELV"
+  ],
+  "0001156375": [
+   "CME"
+  ],
+  "0001163165": [
+   "COP"
+  ],
+  "0001164727": [
+   "NEM"
+  ],
+  "0001166691": [
+   "CMCSA"
+  ],
+  "0001174922": [
+   "WYNN"
+  ],
+  "0001175454": [
+   "CPAY"
+  ],
+  "0001176948": [
+   "ARES"
+  ],
+  "0001260221": [
+   "TDG"
+  ],
+  "0001262039": [
+   "FTNT"
+  ],
+  "0001267238": [
+   "AIZ"
+  ],
+  "0001274494": [
+   "FSLR"
+  ],
+  "0001280452": [
+   "MPWR"
+  ],
+  "0001281761": [
+   "RF"
+  ],
+  "0001283699": [
+   "TMUS"
+  ],
+  "0001285785": [
+   "MOS"
+  ],
+  "0001286681": [
+   "DPZ"
+  ],
+  "0001289490": [
+   "EXR"
+  ],
+  "0001297996": [
+   "DLR"
+  ],
+  "0001300514": [
+   "LVS"
+  ],
+  "0001316835": [
+   "BLDR"
+  ],
+  "0001318605": [
+   "TSLA"
+  ],
+  "0001321655": [
+   "PLTR"
+  ],
+  "0001324404": [
+   "CF"
+  ],
+  "0001324424": [
+   "EXPE"
+  ],
+  "0001326160": [
+   "DUK"
+  ],
+  "0001326801": [
+   "META"
+  ],
+  "0001327567": [
+   "PANW"
+  ],
+  "0001327811": [
+   "WDAY"
+  ],
+  "0001335258": [
+   "LYV"
+  ],
+  "0001336920": [
+   "LDOS"
+  ],
+  "0001341439": [
+   "ORCL"
+  ],
+  "0001373715": [
+   "NOW"
+  ],
+  "0001374310": [
+   "CBOE"
+  ],
+  "0001375365": [
+   "SMCI"
+  ],
+  "0001381197": [
+   "IBKR"
+  ],
+  "0001383312": [
+   "BR"
+  ],
+  "0001385157": [
+   "TEL"
+  ],
+  "0001389170": [
+   "TRGP"
+  ],
+  "0001390777": [
+   "BNY"
+  ],
+  "0001393052": [
+   "VEEV"
+  ],
+  "0001393311": [
+   "PSA"
+  ],
+  "0001393818": [
+   "BX"
+  ],
+  "0001396009": [
+   "VMC"
+  ],
+  "0001397187": [
+   "LULU"
+  ],
+  "0001402057": [
+   "CDW"
+  ],
+  "0001403161": [
+   "V"
+  ],
+  "0001403568": [
+   "ULTA"
+  ],
+  "0001404912": [
+   "KKR"
+  ],
+  "0001408198": [
+   "MSCI"
+  ],
+  "0001410636": [
+   "AWK"
+  ],
+  "0001413329": [
+   "PM"
+  ],
+  "0001413447": [
+   "NXPI"
+  ],
+  "0001415404": [
+   "ECHO"
+  ],
+  "0001418135": [
+   "KDP"
+  ],
+  "0001437107": [
+   "WBD"
+  ],
+  "0001442145": [
+   "VRSK"
+  ],
+  "0001466258": [
+   "TT"
+  ],
+  "0001467373": [
+   "ACN"
+  ],
+  "0001467858": [
+   "GM"
+  ],
+  "0001474735": [
+   "GNRC"
+  ],
+  "0001478242": [
+   "IQV"
+  ],
+  "0001489393": [
+   "LYB"
+  ],
+  "0001501585": [
+   "HII"
+  ],
+  "0001506307": [
+   "KMI"
+  ],
+  "0001510295": [
+   "MPC"
+  ],
+  "0001512673": [
+   "XYZ"
+  ],
+  "0001513761": [
+   "NCLH"
+  ],
+  "0001521332": [
+   "APTV"
+  ],
+  "0001524472": [
+   "XYL"
+  ],
+  "0001534701": [
+   "PSX"
+  ],
+  "0001535527": [
+   "CRWD"
+  ],
+  "0001539838": [
+   "FANG"
+  ],
+  "0001543151": [
+   "UBER"
+  ],
+  "0001551152": [
+   "ABBV"
+  ],
+  "0001551182": [
+   "ETN"
+  ],
+  "0001555280": [
+   "ZTS"
+  ],
+  "0001559720": [
+   "ABNB"
+  ],
+  "0001561550": [
+   "DDOG"
+  ],
+  "0001564708": [
+   "NWS",
+   "NWSA"
+  ],
+  "0001571949": [
+   "ICE"
+  ],
+  "0001571996": [
+   "DELL"
+  ],
+  "0001579241": [
+   "ALLE"
+  ],
+  "0001585689": [
+   "HLT"
+  ],
+  "0001596532": [
+   "ANET"
+  ],
+  "0001601046": [
+   "KEYS"
+  ],
+  "0001601712": [
+   "SYF"
+  ],
+  "0001609711": [
+   "GDDY"
+  ],
+  "0001613103": [
+   "MDT"
+  ],
+  "0001633917": [
+   "PYPL"
+  ],
+  "0001633978": [
+   "LITE"
+  ],
+  "0001637459": [
+   "KHC"
+  ],
+  "0001645590": [
+   "HPE"
+  ],
+  "0001652044": [
+   "GOOG",
+   "GOOGL"
+  ],
+  "0001659166": [
+   "FTV"
+  ],
+  "0001666700": [
+   "DD"
+  ],
+  "0001671933": [
+   "TTD"
+  ],
+  "0001674101": [
+   "VRT"
+  ],
+  "0001679788": [
+   "COIN"
+  ],
+  "0001682852": [
+   "MRNA"
+  ],
+  "0001687229": [
+   "INVH"
+  ],
+  "0001690820": [
+   "CVNA"
+  ],
+  "0001692819": [
+   "VST"
+  ],
+  "0001699150": [
+   "IR"
+  ],
+  "0001701605": [
+   "BKR"
+  ],
+  "0001705696": [
+   "VICI"
+  ],
+  "0001707925": [
+   "LIN"
+  ],
+  "0001711269": [
+   "EVRG"
+  ],
+  "0001713445": [
+   "RDDT"
+  ],
+  "0001730168": [
+   "AVGO"
+  ],
+  "0001739940": [
+   "CI"
+  ],
+  "0001744489": [
+   "DIS"
+  ],
+  "0001748790": [
+   "AMCR"
+  ],
+  "0001751008": [
+   "APP"
+  ],
+  "0001751788": [
+   "DOW"
+  ],
+  "0001754301": [
+   "FOX",
+   "FOXA"
+  ],
+  "0001755672": [
+   "CTVA"
+  ],
+  "0001757898": [
+   "STE"
+  ],
+  "0001781335": [
+   "OTIS"
+  ],
+  "0001783180": [
+   "CARR"
+  ],
+  "0001783879": [
+   "HOOD"
+  ],
+  "0001792044": [
+   "VTRS"
+  ],
+  "0001792789": [
+   "DASH"
+  ],
+  "0001811074": [
+   "TPL"
+  ],
+  "0001835632": [
+   "MRVL"
+  ],
+  "0001841666": [
+   "APA"
+  ],
+  "0001858681": [
+   "APO"
+  ],
+  "0001868275": [
+   "CEG"
+  ],
+  "0001932393": [
+   "GEHC"
+  ],
+  "0001944048": [
+   "KVUE"
+  ],
+  "0001964738": [
+   "SOLV"
+  ],
+  "0001967680": [
+   "VLTO"
+  ],
+  "0001973266": [
+   "TKO"
+  ],
+  "0001996810": [
+   "GEV"
+  ],
+  "0001996862": [
+   "BG"
+  ],
+  "0002005951": [
+   "SW"
+  ],
+  "0002011641": [
+   "FERG"
+  ],
+  "0002012383": [
+   "BLK"
+  ],
+  "0002023554": [
+   "SNDK"
+  ],
+  "0002041610": [
+   "PSKY"
+  ],
+  "0002058873": [
+   "Q"
+  ],
+  "0002082247": [
+   "FDXF"
+  ],
+  "0002089271": [
+   "HONA"
+  ],
+  "0002115436": [
+   "XOM"
+  ]
+ },
+ "primary_ticker_by_cik": {
+  "0001090872": "A",
+  "0000320193": "AAPL",
+  "0001551152": "ABBV",
+  "0001559720": "ABNB",
+  "0000001800": "ABT",
+  "0000947484": "ACGL",
+  "0001467373": "ACN",
+  "0000796343": "ADBE",
+  "0000006281": "ADI",
+  "0000007084": "ADM",
+  "0000008670": "ADP",
+  "0000769397": "ADSK",
+  "0001002910": "AEE",
+  "0000004904": "AEP",
+  "0000874761": "AES",
+  "0000004977": "AFL",
+  "0000005272": "AIG",
+  "0001267238": "AIZ",
+  "0000354190": "AJG",
+  "0001086222": "AKAM",
+  "0000915913": "ALB",
+  "0001097149": "ALGN",
+  "0000899051": "ALL",
+  "0001579241": "ALLE",
+  "0000006951": "AMAT",
+  "0001748790": "AMCR",
+  "0000002488": "AMD",
+  "0001037868": "AME",
+  "0000318154": "AMGN",
+  "0000820027": "AMP",
+  "0001053507": "AMT",
+  "0001018724": "AMZN",
+  "0001596532": "ANET",
+  "0000315293": "AON",
+  "0000091142": "AOS",
+  "0001841666": "APA",
+  "0000002969": "APD",
+  "0000820313": "APH",
+  "0001858681": "APO",
+  "0001751008": "APP",
+  "0001521332": "APTV",
+  "0001035443": "ARE",
+  "0001176948": "ARES",
+  "0000731802": "ATO",
+  "0001730168": "AVGO",
+  "0000008818": "AVY",
+  "0001410636": "AWK",
+  "0001069183": "AXON",
+  "0000004962": "AXP",
+  "0000866787": "AZO",
+  "0000012927": "BA",
+  "0000070858": "BAC",
+  "0000009389": "BALL",
+  "0000010456": "BAX",
+  "0000764478": "BBY",
+  "0000010795": "BDX",
+  "0000038777": "BEN",
+  "0000014693": "BF.B",
+  "0001996862": "BG",
+  "0000875045": "BIIB",
+  "0001075531": "BKNG",
+  "0001701605": "BKR",
+  "0001316835": "BLDR",
+  "0002012383": "BLK",
+  "0000014272": "BMY",
+  "0001390777": "BNY",
+  "0001383312": "BR",
+  "0001067983": "BRK.B",
+  "0000079282": "BRO",
+  "0000885725": "BSX",
+  "0001393818": "BX",
+  "0001037540": "BXP",
+  "0000831001": "C",
+  "0000721371": "CAH",
+  "0001783180": "CARR",
+  "0000726958": "CASY",
+  "0000018230": "CAT",
+  "0000896159": "CB",
+  "0001374310": "CBOE",
+  "0001138118": "CBRE",
+  "0001051470": "CCI",
+  "0000815097": "CCL",
+  "0000813672": "CDNS",
+  "0001402057": "CDW",
+  "0001868275": "CEG",
+  "0001324404": "CF",
+  "0000759944": "CFG",
+  "0000313927": "CHD",
+  "0001043277": "CHRW",
+  "0001091667": "CHTR",
+  "0001739940": "CI",
+  "0000936395": "CIEN",
+  "0000020286": "CINF",
+  "0000021665": "CL",
+  "0000021076": "CLX",
+  "0001166691": "CMCSA",
+  "0001156375": "CME",
+  "0001058090": "CMG",
+  "0000026172": "CMI",
+  "0000811156": "CMS",
+  "0001071739": "CNC",
+  "0001130310": "CNP",
+  "0000927628": "COF",
+  "0000820318": "COHR",
+  "0001679788": "COIN",
+  "0000711404": "COO",
+  "0001163165": "COP",
+  "0001140859": "COR",
+  "0000909832": "COST",
+  "0001175454": "CPAY",
+  "0000900075": "CPRT",
+  "0000906345": "CPT",
+  "0000849395": "CRH",
+  "0001100682": "CRL",
+  "0001108524": "CRM",
+  "0001535527": "CRWD",
+  "0000858877": "CSCO",
+  "0001057352": "CSGP",
+  "0000277948": "CSX",
+  "0000723254": "CTAS",
+  "0001058290": "CTSH",
+  "0001755672": "CTVA",
+  "0001690820": "CVNA",
+  "0000064803": "CVS",
+  "0000093410": "CVX",
+  "0000715957": "D",
+  "0000027904": "DAL",
+  "0001792789": "DASH",
+  "0001666700": "DD",
+  "0001561550": "DDOG",
+  "0000315189": "DE",
+  "0000910521": "DECK",
+  "0001571996": "DELL",
+  "0000029534": "DG",
+  "0001022079": "DGX",
+  "0000882184": "DHI",
+  "0000313616": "DHR",
+  "0001744489": "DIS",
+  "0001297996": "DLR",
+  "0000935703": "DLTR",
+  "0000765880": "DOC",
+  "0000029905": "DOV",
+  "0001751788": "DOW",
+  "0001286681": "DPZ",
+  "0000940944": "DRI",
+  "0000936340": "DTE",
+  "0001326160": "DUK",
+  "0000927066": "DVA",
+  "0001090012": "DVN",
+  "0001093557": "DXCM",
+  "0001065088": "EBAY",
+  "0001415404": "ECHO",
+  "0000031462": "ECL",
+  "0001047862": "ED",
+  "0000033185": "EFX",
+  "0001095073": "EG",
+  "0000827052": "EIX",
+  "0001001250": "EL",
+  "0001156039": "ELV",
+  "0000105634": "EME",
+  "0000032604": "EMR",
+  "0000821189": "EOG",
+  "0001101239": "EQIX",
+  "0000033213": "EQT",
+  "0000922621": "ERIE",
+  "0000072741": "ES",
+  "0000920522": "ESS",
+  "0001551182": "ETN",
+  "0000065984": "ETR",
+  "0001711269": "EVRG",
+  "0001099800": "EW",
+  "0001109357": "EXC",
+  "0000895126": "EXE",
+  "0000746515": "EXPD",
+  "0001324424": "EXPE",
+  "0001289490": "EXR",
+  "0000037996": "F",
+  "0001539838": "FANG",
+  "0000815556": "FAST",
+  "0000831259": "FCX",
+  "0001013237": "FDS",
+  "0001048911": "FDX",
+  "0002082247": "FDXF",
+  "0001031296": "FE",
+  "0002011641": "FERG",
+  "0001048695": "FFIV",
+  "0000814547": "FICO",
+  "0001136893": "FIS",
+  "0000798354": "FISV",
+  "0000035527": "FITB",
+  "0001035983": "FIX",
+  "0000866374": "FLEX",
+  "0001754301": "FOXA",
+  "0000034903": "FRT",
+  "0001274494": "FSLR",
+  "0001262039": "FTNT",
+  "0001659166": "FTV",
+  "0000040533": "GD",
+  "0001609711": "GDDY",
+  "0000040545": "GE",
+  "0001932393": "GEHC",
+  "0000849399": "GEN",
+  "0001996810": "GEV",
+  "0000882095": "GILD",
+  "0000040704": "GIS",
+  "0000320335": "GL",
+  "0000024741": "GLW",
+  "0001467858": "GM",
+  "0001474735": "GNRC",
+  "0001652044": "GOOGL",
+  "0000040987": "GPC",
+  "0001123360": "GPN",
+  "0001121788": "GRMN",
+  "0000886982": "GS",
+  "0000277135": "GWW",
+  "0000045012": "HAL",
+  "0000046080": "HAS",
+  "0000049196": "HBAN",
+  "0000860730": "HCA",
+  "0000354950": "HD",
+  "0000874766": "HIG",
+  "0001501585": "HII",
+  "0001585689": "HLT",
+  "0000773840": "HON",
+  "0002089271": "HONA",
+  "0001783879": "HOOD",
+  "0001645590": "HPE",
+  "0000047217": "HPQ",
+  "0000048465": "HRL",
+  "0001000228": "HSIC",
+  "0001070750": "HST",
+  "0000047111": "HSY",
+  "0000048898": "HUBB",
+  "0000049071": "HUM",
+  "0000004281": "HWM",
+  "0001381197": "IBKR",
+  "0000051143": "IBM",
+  "0001571949": "ICE",
+  "0000874716": "IDXX",
+  "0000832101": "IEX",
+  "0000051253": "IFF",
+  "0000879169": "INCY",
+  "0000050863": "INTC",
+  "0000896878": "INTU",
+  "0001687229": "INVH",
+  "0000051434": "IP",
+  "0001478242": "IQV",
+  "0001699150": "IR",
+  "0001020569": "IRM",
+  "0001035267": "ISRG",
+  "0000749251": "IT",
+  "0000049826": "ITW",
+  "0000914208": "IVZ",
+  "0000052988": "J",
+  "0000728535": "JBHT",
+  "0000898293": "JBL",
+  "0000833444": "JCI",
+  "0000779152": "JKHY",
+  "0000200406": "JNJ",
+  "0000019617": "JPM",
+  "0001418135": "KDP",
+  "0000091576": "KEY",
+  "0001601046": "KEYS",
+  "0001637459": "KHC",
+  "0000879101": "KIM",
+  "0001404912": "KKR",
+  "0000319201": "KLAC",
+  "0000055785": "KMB",
+  "0001506307": "KMI",
+  "0000021344": "KO",
+  "0000056873": "KR",
+  "0001944048": "KVUE",
+  "0000060086": "L",
+  "0001336920": "LDOS",
+  "0000920760": "LEN",
+  "0000920148": "LH",
+  "0000202058": "LHX",
+  "0001069202": "LII",
+  "0001707925": "LIN",
+  "0001633978": "LITE",
+  "0000059478": "LLY",
+  "0000936468": "LMT",
+  "0000352541": "LNT",
+  "0000060667": "LOW",
+  "0000707549": "LRCX",
+  "0001397187": "LULU",
+  "0000092380": "LUV",
+  "0001300514": "LVS",
+  "0001489393": "LYB",
+  "0001335258": "LYV",
+  "0001141391": "MA",
+  "0000912595": "MAA",
+  "0001048286": "MAR",
+  "0000062996": "MAS",
+  "0000063908": "MCD",
+  "0000827054": "MCHP",
+  "0000927653": "MCK",
+  "0001059556": "MCO",
+  "0001103982": "MDLZ",
+  "0001613103": "MDT",
+  "0001099219": "MET",
+  "0001326801": "META",
+  "0000789570": "MGM",
+  "0000063754": "MKC",
+  "0000916076": "MLM",
+  "0000066740": "MMM",
+  "0000865752": "MNST",
+  "0000764180": "MO",
+  "0001285785": "MOS",
+  "0001510295": "MPC",
+  "0001280452": "MPWR",
+  "0000310158": "MRK",
+  "0001682852": "MRNA",
+  "0000062709": "MRSH",
+  "0001835632": "MRVL",
+  "0000895421": "MS",
+  "0001408198": "MSCI",
+  "0000789019": "MSFT",
+  "0000068505": "MSI",
+  "0000036270": "MTB",
+  "0001037646": "MTD",
+  "0000723125": "MU",
+  "0001513761": "NCLH",
+  "0001120193": "NDAQ",
+  "0000072331": "NDSN",
+  "0000753308": "NEE",
+  "0001164727": "NEM",
+  "0001065280": "NFLX",
+  "0001111711": "NI",
+  "0000320187": "NKE",
+  "0001133421": "NOC",
+  "0001373715": "NOW",
+  "0001013871": "NRG",
+  "0000702165": "NSC",
+  "0001002047": "NTAP",
+  "0000073124": "NTRS",
+  "0000073309": "NUE",
+  "0001045810": "NVDA",
+  "0000906163": "NVR",
+  "0001564708": "NWSA",
+  "0001413447": "NXPI",
+  "0000726728": "O",
+  "0000878927": "ODFL",
+  "0001039684": "OKE",
+  "0000029989": "OMC",
+  "0001097864": "ON",
+  "0001341439": "ORCL",
+  "0000898173": "ORLY",
+  "0001781335": "OTIS",
+  "0000797468": "OXY",
+  "0001327567": "PANW",
+  "0000723531": "PAYX",
+  "0000075362": "PCAR",
+  "0001004980": "PCG",
+  "0000788784": "PEG",
+  "0000077476": "PEP",
+  "0000078003": "PFE",
+  "0001126328": "PFG",
+  "0000080424": "PG",
+  "0000080661": "PGR",
+  "0000076334": "PH",
+  "0000822416": "PHM",
+  "0000075677": "PKG",
+  "0001045609": "PLD",
+  "0001321655": "PLTR",
+  "0001413329": "PM",
+  "0000713676": "PNC",
+  "0000077360": "PNR",
+  "0000764622": "PNW",
+  "0001145197": "PODD",
+  "0000079879": "PPG",
+  "0000922224": "PPL",
+  "0001137774": "PRU",
+  "0001393311": "PSA",
+  "0002041610": "PSKY",
+  "0001534701": "PSX",
+  "0000857005": "PTC",
+  "0001050915": "PWR",
+  "0001633917": "PYPL",
+  "0002058873": "Q",
+  "0000804328": "QCOM",
+  "0000884887": "RCL",
+  "0001713445": "RDDT",
+  "0000910606": "REG",
+  "0000872589": "REGN",
+  "0001281761": "RF",
+  "0000720005": "RJF",
+  "0001037038": "RL",
+  "0000943819": "RMD",
+  "0001024478": "ROK",
+  "0000084839": "ROL",
+  "0000882835": "ROP",
+  "0000745732": "ROST",
+  "0001060391": "RSG",
+  "0000101829": "RTX",
+  "0000031791": "RVTY",
+  "0001034054": "SBAC",
+  "0000829224": "SBUX",
+  "0000316709": "SCHW",
+  "0000089800": "SHW",
+  "0000091419": "SJM",
+  "0000087347": "SLB",
+  "0001375365": "SMCI",
+  "0000091440": "SNA",
+  "0002023554": "SNDK",
+  "0000883241": "SNPS",
+  "0000092122": "SO",
+  "0001964738": "SOLV",
+  "0001063761": "SPG",
+  "0000064040": "SPGI",
+  "0001032208": "SRE",
+  "0001757898": "STE",
+  "0001022671": "STLD",
+  "0000093751": "STT",
+  "0001137789": "STX",
+  "0000016918": "STZ",
+  "0002005951": "SW",
+  "0000093556": "SWK",
+  "0000004127": "SWKS",
+  "0001601712": "SYF",
+  "0000310764": "SYK",
+  "0000096021": "SYY",
+  "0000732717": "T",
+  "0000024545": "TAP",
+  "0001260221": "TDG",
+  "0001094285": "TDY",
+  "0000842023": "TECH",
+  "0001385157": "TEL",
+  "0000097210": "TER",
+  "0000092230": "TFC",
+  "0000027419": "TGT",
+  "0000109198": "TJX",
+  "0001973266": "TKO",
+  "0000097745": "TMO",
+  "0001283699": "TMUS",
+  "0001811074": "TPL",
+  "0001116132": "TPR",
+  "0001389170": "TRGP",
+  "0000864749": "TRMB",
+  "0001113169": "TROW",
+  "0000086312": "TRV",
+  "0000916365": "TSCO",
+  "0001318605": "TSLA",
+  "0000100493": "TSN",
+  "0001466258": "TT",
+  "0001671933": "TTD",
+  "0000946581": "TTWO",
+  "0000097476": "TXN",
+  "0000217346": "TXT",
+  "0000860731": "TYL",
+  "0000100517": "UAL",
+  "0001543151": "UBER",
+  "0000074208": "UDR",
+  "0000352915": "UHS",
+  "0001403568": "ULTA",
+  "0000731766": "UNH",
+  "0000100885": "UNP",
+  "0001090727": "UPS",
+  "0001067701": "URI",
+  "0000036104": "USB",
+  "0001403161": "V",
+  "0001393052": "VEEV",
+  "0001705696": "VICI",
+  "0001035002": "VLO",
+  "0001967680": "VLTO",
+  "0001396009": "VMC",
+  "0000906107": "VMRK",
+  "0001442145": "VRSK",
+  "0001014473": "VRSN",
+  "0001674101": "VRT",
+  "0000875320": "VRTX",
+  "0001692819": "VST",
+  "0000740260": "VTR",
+  "0001792044": "VTRS",
+  "0000732712": "VZ",
+  "0000943452": "WAB",
+  "0001000697": "WAT",
+  "0001437107": "WBD",
+  "0001327811": "WDAY",
+  "0000106040": "WDC",
+  "0000783325": "WEC",
+  "0000766704": "WELL",
+  "0000072971": "WFC",
+  "0000823768": "WM",
+  "0000107263": "WMB",
+  "0000104169": "WMT",
+  "0000011544": "WRB",
+  "0000719955": "WSM",
+  "0000105770": "WST",
+  "0001140536": "WTW",
+  "0000106535": "WY",
+  "0001174922": "WYNN",
+  "0000072903": "XEL",
+  "0002115436": "XOM",
+  "0001524472": "XYL",
+  "0001512673": "XYZ",
+  "0001041061": "YUM",
+  "0001136869": "ZBH",
+  "0000877212": "ZBRA",
+  "0001555280": "ZTS"
+ },
+ "cik_cofilers": {
+  "note": "Other CIKs that report an identical us-gaap:Assets CY2025Q4I value under the same normalised entity name. EDGAR attributes a combined filing's facts to every co-registrant CIK, so a reverse join from XBRL to company double counts unless these are collapsed. For XOM the index CIK is the 2026 holdco and the annual history sits on the other CIK.",
+  "map": {
+   "0000004904": [
+    "0000081027"
+   ],
+   "0000034903": [
+    "0001901876"
+   ],
+   "0000065984": [
+    "0000007323"
+   ],
+   "0000092122": [
+    "0001004155"
+   ],
+   "0000352541": [
+    "0000052485"
+   ],
+   "0000715957": [
+    "0000103682"
+   ],
+   "0000753308": [
+    "0000037634"
+   ],
+   "0000827052": [
+    "0000092103"
+   ],
+   "0000910606": [
+    "0001066247"
+   ],
+   "0000912595": [
+    "0001581776"
+   ],
+   "0000922224": [
+    "0000060549"
+   ],
+   "0000936340": [
+    "0000028385"
+   ],
+   "0001031296": [
+    "0000053456"
+   ],
+   "0001032208": [
+    "0000092108"
+   ],
+   "0001045609": [
+    "0001045610"
+   ],
+   "0001047862": [
+    "0000023632"
+   ],
+   "0001067701": [
+    "0001047166"
+   ],
+   "0001109357": [
+    "0000027879"
+   ],
+   "0001130310": [
+    "0001042773"
+   ],
+   "0001297996": [
+    "0001494877"
+   ],
+   "0001326160": [
+    "0000017797"
+   ],
+   "0001711269": [
+    "0000054507"
+   ],
+   "0001751788": [
+    "0000029915"
+   ],
+   "0002115436": [
+    "0000034088"
+   ]
+  }
+ }
+}

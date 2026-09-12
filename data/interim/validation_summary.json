@@ -1,0 +1,1260 @@
+{
+  "generated_at": "2026-09-12T14:34:43Z",
+  "vendor_disagreement": {
+    "esg_total": {
+      "n_companies": 486,
+      "n_sources": 6,
+      "n_pairs": 15,
+      "rho_min": -0.14876602884895415,
+      "rho_max": 0.9999753553634292,
+      "rho_median": 0.4455852875231213,
+      "n_min": 215,
+      "n_max": 403
+    },
+    "esg_e": {
+      "n_companies": 467,
+      "n_sources": 5,
+      "n_pairs": 10,
+      "rho_min": -0.24779864029607607,
+      "rho_max": 0.9998726939895688,
+      "rho_median": 0.3065719081776832,
+      "n_min": 341,
+      "n_max": 403
+    },
+    "lineage": {
+      "same_lineage_min": 0.9481846338222142,
+      "same_lineage_max": 0.9999753553634292,
+      "n_same": 3,
+      "cross_lineage_min": -0.14876602884895415,
+      "cross_lineage_max": 0.8377759557635447,
+      "n_cross": 12,
+      "cross_excl_ai_min": -0.14876602884895415,
+      "cross_excl_ai_max": 0.8377759557635447,
+      "n_cross_excl_ai": 7,
+      "cross_excl_alistairking_min": 0.3593546533656814,
+      "cross_excl_alistairking_max": 0.8377759557635447,
+      "cross_excl_alistairking_median": 0.4470677663538866,
+      "n_cross_excl_alistairking": 7
+    },
+    "bkr": {
+      "band_lo": 0.38,
+      "band_hi": 0.71,
+      "cross_pairs_inside": 3,
+      "cross_pairs_total": 12,
+      "cross_pairs_below": 6,
+      "cross_pairs_above": 3
+    },
+    "spread": {
+      "n": 418,
+      "median_pp": 46.011643500251864,
+      "p90_pp": 79.94543526853546,
+      "n_over_50pp": 186,
+      "share_over_50pp": 0.4449760765550239,
+      "worst": [
+        {
+          "ticker": "CBRE",
+          "spread_pp": 98.7,
+          "n_sources": 6
+        },
+        {
+          "ticker": "ELV",
+          "spread_pp": 96.9,
+          "n_sources": 5
+        },
+        {
+          "ticker": "ADBE",
+          "spread_pp": 95.6,
+          "n_sources": 6
+        },
+        {
+          "ticker": "COP",
+          "spread_pp": 95.0,
+          "n_sources": 6
+        },
+        {
+          "ticker": "CDW",
+          "spread_pp": 95.0,
+          "n_sources": 5
+        },
+        {
+          "ticker": "LOW",
+          "spread_pp": 94.1,
+          "n_sources": 6
+        },
+        {
+          "ticker": "MPC",
+          "spread_pp": 92.9,
+          "n_sources": 6
+        },
+        {
+          "ticker": "DLR",
+          "spread_pp": 92.1,
+          "n_sources": 6
+        },
+        {
+          "ticker": "AZO",
+          "spread_pp": 90.9,
+          "n_sources": 5
+        },
+        {
+          "ticker": "CRM",
+          "spread_pp": 90.2,
+          "n_sources": 5
+        }
+      ],
+      "n_quartile_flip": 106,
+      "share_quartile_flip": 0.2535885167464115
+    },
+    "vs_measured": {
+      "n": 125,
+      "rho_intensity": -0.1312012288786482,
+      "p_intensity": 0.14471654825726923,
+      "rho_absolute": -0.1981628264208909,
+      "p_absolute": 0.026740380720310677
+    }
+  },
+  "gics_proxy": {
+    "pab_exclusion_coal": {
+      "article": "Article 12(1)(d)",
+      "comparators": {
+        "vendor": {
+          "n": 38,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 38,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "kappa": null,
+          "both_flag": [],
+          "gics_only": [],
+          "comparator_only": []
+        },
+        "sec_segment": {
+          "n": 257,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 255,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "kappa": 0.0,
+          "both_flag": [],
+          "gics_only": [],
+          "comparator_only": [
+            "CSX",
+            "NSC"
+          ]
+        },
+        "nbim": {
+          "n": 0
+        }
+      }
+    },
+    "pab_exclusion_controversial_weapons": {
+      "article": "Article 12(1)(a)",
+      "comparators": {
+        "vendor": {
+          "n": 387,
+          "tp": 2,
+          "fp": 9,
+          "fn": 0,
+          "tn": 376,
+          "precision": 0.18181818181818182,
+          "recall": 1.0,
+          "f1": 0.3076923076923077,
+          "kappa": 0.3015841187086438,
+          "both_flag": [
+            "LHX",
+            "LMT"
+          ],
+          "gics_only": [
+            "AXON",
+            "BA",
+            "GD",
+            "GE",
+            "HII",
+            "NOC",
+            "RTX",
+            "TDG",
+            "TXT"
+          ],
+          "comparator_only": []
+        },
+        "sec_segment": {
+          "n": 0
+        },
+        "nbim": {
+          "n": 500,
+          "tp": 8,
+          "fp": 5,
+          "fn": 1,
+          "tn": 486,
+          "precision": 0.6153846153846154,
+          "recall": 0.8888888888888888,
+          "f1": 0.7272727272727274,
+          "kappa": 0.7213449749210474,
+          "both_flag": [
+            "BA",
+            "GD",
+            "HII",
+            "HONA",
+            "LHX",
+            "LMT",
+            "NOC",
+            "TXT"
+          ],
+          "gics_only": [
+            "AXON",
+            "GE",
+            "HWM",
+            "RTX",
+            "TDG"
+          ],
+          "comparator_only": [
+            "J"
+          ]
+        }
+      }
+    },
+    "pab_exclusion_gas": {
+      "article": "Article 12(1)(f)",
+      "comparators": {
+        "vendor": {
+          "n": 0
+        },
+        "sec_segment": {
+          "n": 312,
+          "tp": 2,
+          "fp": 0,
+          "fn": 2,
+          "tn": 308,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666,
+          "kappa": 0.6637931034482761,
+          "both_flag": [
+            "ATO",
+            "KMI"
+          ],
+          "gics_only": [],
+          "comparator_only": [
+            "EQT",
+            "EXE"
+          ]
+        },
+        "nbim": {
+          "n": 0
+        }
+      }
+    },
+    "pab_exclusion_oil": {
+      "article": "Article 12(1)(e)",
+      "comparators": {
+        "vendor": {
+          "n": 0
+        },
+        "sec_segment": {
+          "n": 299,
+          "tp": 8,
+          "fp": 1,
+          "fn": 0,
+          "tn": 290,
+          "precision": 0.8888888888888888,
+          "recall": 1.0,
+          "f1": 0.9411764705882353,
+          "kappa": 0.9394614294391577,
+          "both_flag": [
+            "CVX",
+            "DVN",
+            "EOG",
+            "FANG",
+            "MPC",
+            "OKE",
+            "PSX",
+            "VLO"
+          ],
+          "gics_only": [
+            "EXE"
+          ],
+          "comparator_only": []
+        },
+        "nbim": {
+          "n": 0
+        }
+      }
+    },
+    "pab_exclusion_tobacco": {
+      "article": "Article 12(1)(b)",
+      "comparators": {
+        "vendor": {
+          "n": 387,
+          "tp": 2,
+          "fp": 0,
+          "fn": 21,
+          "tn": 364,
+          "precision": 1.0,
+          "recall": 0.08695652173913043,
+          "f1": 0.16,
+          "kappa": 0.15193571950328763,
+          "both_flag": [
+            "MO",
+            "PM"
+          ],
+          "gics_only": [],
+          "comparator_only": [
+            "ADM",
+            "ADP",
+            "ALL",
+            "APO",
+            "CMCSA",
+            "COST",
+            "CVX",
+            "DG",
+            "DIS",
+            "DLTR",
+            "DRI",
+            "HLT",
+            "HST",
+            "IFF",
+            "KR",
+            "LVS",
+            "MGM",
+            "RCL",
+            "TSCO",
+            "WMT",
+            "WYNN"
+          ]
+        },
+        "sec_segment": {
+          "n": 306,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "tn": 304,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "kappa": 1.0,
+          "both_flag": [
+            "MO",
+            "PM"
+          ],
+          "gics_only": [],
+          "comparator_only": []
+        },
+        "nbim": {
+          "n": 500,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "tn": 498,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "kappa": 1.0,
+          "both_flag": [
+            "MO",
+            "PM"
+          ],
+          "gics_only": [],
+          "comparator_only": []
+        }
+      }
+    },
+    "pab_exclusion_ungc_oecd": {
+      "article": "Article 12(1)(c)",
+      "comparators": {
+        "vendor": {
+          "n": 0
+        },
+        "sec_segment": {
+          "n": 0
+        },
+        "nbim": {
+          "n": 0
+        }
+      }
+    },
+    "pooled": [
+      {
+        "comparator": "vendor",
+        "n": 812,
+        "tp": 4,
+        "fp": 9,
+        "fn": 21,
+        "tn": 778,
+        "precision": 0.3076923076923077,
+        "recall": 0.16,
+        "f1": 0.2105263157894737,
+        "kappa": 0.19353770774018245
+      },
+      {
+        "comparator": "sec_segment",
+        "n": 1174,
+        "tp": 12,
+        "fp": 1,
+        "fn": 4,
+        "tn": 1157,
+        "precision": 0.9230769230769231,
+        "recall": 0.75,
+        "f1": 0.8275862068965517,
+        "kappa": 0.8254534641688991
+      },
+      {
+        "comparator": "nbim",
+        "n": 1000,
+        "tp": 10,
+        "fp": 5,
+        "fn": 1,
+        "tn": 984,
+        "precision": 0.6666666666666666,
+        "recall": 0.9090909090909091,
+        "f1": 0.7692307692307692,
+        "kappa": 0.7662641215426573
+      }
+    ],
+    "cross_screen": [
+      {
+        "rule_id": "pab_exclusion_tobacco",
+        "a": "sec_segment",
+        "b": "nbim",
+        "n": 306,
+        "kappa": 1.0,
+        "a_flags": 2,
+        "b_flags": 2
+      },
+      {
+        "rule_id": "pab_exclusion_coal",
+        "a": "sec_segment",
+        "b": "vendor",
+        "n": 21,
+        "kappa": null,
+        "a_flags": 0,
+        "b_flags": 0
+      },
+      {
+        "rule_id": "pab_exclusion_tobacco",
+        "a": "sec_segment",
+        "b": "vendor",
+        "n": 243,
+        "kappa": 0.22402358142962464,
+        "a_flags": 2,
+        "b_flags": 15
+      },
+      {
+        "rule_id": "pab_exclusion_controversial_weapons",
+        "a": "nbim",
+        "b": "vendor",
+        "n": 387,
+        "kappa": 0.43994211287988755,
+        "a_flags": 7,
+        "b_flags": 2
+      },
+      {
+        "rule_id": "pab_exclusion_tobacco",
+        "a": "nbim",
+        "b": "vendor",
+        "n": 387,
+        "kappa": 0.15193571950328763,
+        "a_flags": 2,
+        "b_flags": 23
+      }
+    ],
+    "decided_by": {
+      "gics_proxy": 1317,
+      "nbim_exclusion": 12,
+      "nbim_no_finding": 497,
+      "sec_segment": 1174
+    },
+    "gics_only_exclusions": [
+      {
+        "ticker": "APA",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Exploration & Production"
+      },
+      {
+        "ticker": "AXON",
+        "rule": "pab_exclusion_controversial_weapons",
+        "sub_industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "COP",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Exploration & Production"
+      },
+      {
+        "ticker": "EQT",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Exploration & Production"
+      },
+      {
+        "ticker": "GE",
+        "rule": "pab_exclusion_controversial_weapons",
+        "sub_industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "HWM",
+        "rule": "pab_exclusion_controversial_weapons",
+        "sub_industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "KMI",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "OKE",
+        "rule": "pab_exclusion_gas",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "OXY",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Exploration & Production"
+      },
+      {
+        "ticker": "RTX",
+        "rule": "pab_exclusion_controversial_weapons",
+        "sub_industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "TDG",
+        "rule": "pab_exclusion_controversial_weapons",
+        "sub_industry": "Aerospace & Defense"
+      },
+      {
+        "ticker": "TPL",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Exploration & Production"
+      },
+      {
+        "ticker": "TRGP",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "TRGP",
+        "rule": "pab_exclusion_gas",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "WMB",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "WMB",
+        "rule": "pab_exclusion_gas",
+        "sub_industry": "Oil & Gas Storage & Transportation"
+      },
+      {
+        "ticker": "XOM",
+        "rule": "pab_exclusion_oil",
+        "sub_industry": "Integrated Oil & Gas"
+      }
+    ],
+    "n_excluded_best": 40,
+    "n_excluded_resting_on_gics": 15
+  },
+  "nonus_bias": {
+    "year": 2023,
+    "n_with_assets": 73,
+    "material_threshold_t": 250000,
+    "n_material": 25,
+    "measured_us_mmt": 375.7481019969192,
+    "ct_nonus_mmt": 582.7965402042826,
+    "visible_share": 0.3919985418040117,
+    "index_measured_mmt": 1208.524008745223,
+    "nonus_as_share_of_index_measured": 0.4822382807350133,
+    "n_ownership_blind": 3,
+    "blind_tickers": [
+      "APA",
+      "EOG",
+      "SLB"
+    ],
+    "n_balanced": 22,
+    "balanced_us_mmt": 369.1939865176914,
+    "balanced_nonus_mmt": 133.25705799006613,
+    "balanced_visible_share": 0.7347859867211228,
+    "table": [
+      {
+        "ticker": "CVX",
+        "name": "Chevron Corporation",
+        "sector": "Energy",
+        "us_mmt": 23.05,
+        "nonus_mmt": 210.26,
+        "multiple": 9.1,
+        "nonus_share": 0.945,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "XOM",
+        "name": "ExxonMobil",
+        "sector": "Energy",
+        "us_mmt": 42.28,
+        "nonus_mmt": 180.18,
+        "multiple": 4.3,
+        "nonus_share": 0.851,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "OXY",
+        "name": "Occidental Petroleum",
+        "sector": "Energy",
+        "us_mmt": 11.26,
+        "nonus_mmt": 71.28,
+        "multiple": 6.3,
+        "nonus_share": 0.955,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "APA",
+        "name": "APA Corporation",
+        "sector": "Energy",
+        "us_mmt": 1.34,
+        "nonus_mmt": 25.29,
+        "multiple": 18.8,
+        "nonus_share": 1.0,
+        "ownership_blind": true
+      },
+      {
+        "ticker": "COP",
+        "name": "ConocoPhillips",
+        "sector": "Energy",
+        "us_mmt": 11.58,
+        "nonus_mmt": 18.0,
+        "multiple": 1.6,
+        "nonus_share": 0.993,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "AES",
+        "name": "AES Corporation",
+        "sector": "Utilities",
+        "us_mmt": 15.57,
+        "nonus_mmt": 17.7,
+        "multiple": 1.1,
+        "nonus_share": 0.598,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "DOW",
+        "name": "Dow Inc.",
+        "sector": "Materials",
+        "us_mmt": 16.65,
+        "nonus_mmt": 15.19,
+        "multiple": 0.9,
+        "nonus_share": 0.589,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "CRH",
+        "name": "CRH plc",
+        "sector": "Materials",
+        "us_mmt": 5.9,
+        "nonus_mmt": 9.74,
+        "multiple": 1.6,
+        "nonus_share": 0.732,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "PSX",
+        "name": "Phillips 66",
+        "sector": "Energy",
+        "us_mmt": 31.72,
+        "nonus_mmt": 6.01,
+        "multiple": 0.2,
+        "nonus_share": 0.211,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "LYB",
+        "name": "LyondellBasell",
+        "sector": "Materials",
+        "us_mmt": 8.52,
+        "nonus_mmt": 5.88,
+        "multiple": 0.7,
+        "nonus_share": 0.39,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "VLO",
+        "name": "Valero Energy",
+        "sector": "Energy",
+        "us_mmt": 23.52,
+        "nonus_mmt": 4.7,
+        "multiple": 0.2,
+        "nonus_share": 0.157,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "APD",
+        "name": "Air Products",
+        "sector": "Materials",
+        "us_mmt": 14.07,
+        "nonus_mmt": 3.46,
+        "multiple": 0.2,
+        "nonus_share": 0.84,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "FCX",
+        "name": "Freeport-McMoRan",
+        "sector": "Materials",
+        "us_mmt": 0.47,
+        "nonus_mmt": 3.43,
+        "multiple": 7.3,
+        "nonus_share": 0.694,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "CF",
+        "name": "CF Industries",
+        "sector": "Materials",
+        "us_mmt": 20.58,
+        "nonus_mmt": 2.08,
+        "multiple": 0.1,
+        "nonus_share": 0.141,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "GE",
+        "name": "GE Aerospace",
+        "sector": "Industrials",
+        "us_mmt": 0.27,
+        "nonus_mmt": 1.74,
+        "multiple": 6.4,
+        "nonus_share": 0.466,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "CEG",
+        "name": "Constellation Energy",
+        "sector": "Utilities",
+        "us_mmt": 56.64,
+        "nonus_mmt": 1.51,
+        "multiple": 0.0,
+        "nonus_share": 0.027,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "LIN",
+        "name": "Linde plc",
+        "sector": "Materials",
+        "us_mmt": 10.07,
+        "nonus_mmt": 1.49,
+        "multiple": 0.1,
+        "nonus_share": 1.0,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "SLB",
+        "name": "Schlumberger",
+        "sector": "Energy",
+        "us_mmt": null,
+        "nonus_mmt": 1.3,
+        "multiple": null,
+        "nonus_share": 1.0,
+        "ownership_blind": true
+      },
+      {
+        "ticker": "IP",
+        "name": "International Paper",
+        "sector": "Materials",
+        "us_mmt": 27.96,
+        "nonus_mmt": 0.9,
+        "multiple": 0.0,
+        "nonus_share": 0.605,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "SRE",
+        "name": "Sempra",
+        "sector": "Utilities",
+        "us_mmt": 5.35,
+        "nonus_mmt": 0.69,
+        "multiple": 0.1,
+        "nonus_share": 0.357,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "NEM",
+        "name": "Newmont",
+        "sector": "Materials",
+        "us_mmt": 0.57,
+        "nonus_mmt": 0.53,
+        "multiple": 0.9,
+        "nonus_share": 1.0,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "NRG",
+        "name": "NRG Energy",
+        "sector": "Utilities",
+        "us_mmt": 22.46,
+        "nonus_mmt": 0.48,
+        "multiple": 0.0,
+        "nonus_share": 0.018,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "EXC",
+        "name": "Exelon",
+        "sector": "Utilities",
+        "us_mmt": 0.3,
+        "nonus_mmt": 0.4,
+        "multiple": 1.3,
+        "nonus_share": 0.826,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "SW",
+        "name": "Smurfit Westrock",
+        "sector": "Materials",
+        "us_mmt": 20.4,
+        "nonus_mmt": 0.31,
+        "multiple": 0.0,
+        "nonus_share": 0.447,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "EOG",
+        "name": "EOG Resources",
+        "sector": "Energy",
+        "us_mmt": 5.21,
+        "nonus_mmt": 0.28,
+        "multiple": 0.1,
+        "nonus_share": 1.0,
+        "ownership_blind": true
+      }
+    ],
+    "hidden": [
+      {
+        "ticker": "CVX",
+        "name": "Chevron Corporation",
+        "us_mmt": 23.051,
+        "nonus_mmt": 210.263,
+        "multiple": 9.1,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "XOM",
+        "name": "ExxonMobil",
+        "us_mmt": 42.279,
+        "nonus_mmt": 180.178,
+        "multiple": 4.3,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "OXY",
+        "name": "Occidental Petroleum",
+        "us_mmt": 11.257,
+        "nonus_mmt": 71.282,
+        "multiple": 6.3,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "APA",
+        "name": "APA Corporation",
+        "us_mmt": 1.342,
+        "nonus_mmt": 25.293,
+        "multiple": 18.8,
+        "ownership_blind": true
+      },
+      {
+        "ticker": "FCX",
+        "name": "Freeport-McMoRan",
+        "us_mmt": 0.468,
+        "nonus_mmt": 3.427,
+        "multiple": 7.3,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "GE",
+        "name": "GE Aerospace",
+        "us_mmt": 0.272,
+        "nonus_mmt": 1.736,
+        "multiple": 6.4,
+        "ownership_blind": false
+      },
+      {
+        "ticker": "SLB",
+        "name": "Schlumberger",
+        "us_mmt": null,
+        "nonus_mmt": 1.296,
+        "multiple": null,
+        "ownership_blind": true
+      }
+    ],
+    "boundary_check": {
+      "n": 8,
+      "median_ratio": 0.6087492216494798,
+      "rows": [
+        {
+          "ticker": "MPC",
+          "fy": 2022,
+          "reported_mmt": 33.7,
+          "ct_mmt": 35.06,
+          "ratio": 1.04
+        },
+        {
+          "ticker": "APA",
+          "fy": 2022,
+          "reported_mmt": 6.0,
+          "ct_mmt": 25.29,
+          "ratio": 4.22
+        },
+        {
+          "ticker": "SRE",
+          "fy": 2021,
+          "reported_mmt": 6.8,
+          "ct_mmt": 1.92,
+          "ratio": 0.28
+        },
+        {
+          "ticker": "STLD",
+          "fy": 2019,
+          "reported_mmt": 1.7,
+          "ct_mmt": 1.79,
+          "ratio": 1.05
+        },
+        {
+          "ticker": "KMI",
+          "fy": 2021,
+          "reported_mmt": 15.3,
+          "ct_mmt": 0.95,
+          "ratio": 0.06
+        },
+        {
+          "ticker": "MLM",
+          "fy": 2020,
+          "reported_mmt": 4.5,
+          "ct_mmt": 0.53,
+          "ratio": 0.12
+        },
+        {
+          "ticker": "MSFT",
+          "fy": 2015,
+          "reported_mmt": 0.09,
+          "ct_mmt": 0.08,
+          "ratio": 0.93
+        },
+        {
+          "ticker": "AAPL",
+          "fy": 2021,
+          "reported_mmt": 0.24,
+          "ct_mmt": 0.0,
+          "ratio": 0.0
+        }
+      ]
+    },
+    "us_agreement": {
+      "n": 44,
+      "median": 0.9451946880107231,
+      "q1": 0.7058074369146472,
+      "q3": 1.0484888812646485
+    },
+    "reach": {
+      "tickers_with_ct_assets": 73,
+      "of_listings": 503,
+      "share": 0.14512922465208747
+    }
+  },
+  "coverage": [
+    {
+      "layer": "Universe and identity",
+      "n_listings": 503,
+      "n_companies": 500,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 100.0,
+      "provenance_class": "mandatory",
+      "supports": "every join in the project, GICS logic, index weights",
+      "does_not_support": "nothing; all 503 agree with SEC on CIK"
+    },
+    {
+      "layer": "Financials, revenue any year",
+      "n_listings": 503,
+      "n_companies": 500,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 100.0,
+      "provenance_class": "mandatory",
+      "supports": "intensity denominators and earnings at risk",
+      "does_not_support": "segment revenue, which the companyfacts API drops entirely"
+    },
+    {
+      "layer": "Financials, operating income",
+      "n_listings": 502,
+      "n_companies": 499,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 99.8,
+      "provenance_class": "mandatory",
+      "supports": "the earnings-at-risk numerator",
+      "does_not_support": "the 1 listing with no reported operating income line"
+    },
+    {
+      "layer": "Market cap and float",
+      "n_listings": 502,
+      "n_companies": 499,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 99.8,
+      "provenance_class": "mandatory",
+      "supports": "portfolio weights and the PAB benchmark",
+      "does_not_support": "forward valuation"
+    },
+    {
+      "layer": "Matched to a GHGRP facility",
+      "n_listings": 146,
+      "n_companies": 146,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 29.0,
+      "provenance_class": "mandatory",
+      "supports": "proof the entity resolution reached the company",
+      "does_not_support": "a tonnage on its own; 7 of these report none"
+    },
+    {
+      "layer": "Measured Scope 1, GHGRP, any year 2010-2023",
+      "n_listings": 139,
+      "n_companies": 139,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 27.6,
+      "provenance_class": "mandatory",
+      "supports": "the headline score, promised versus delivered, facility attribution",
+      "does_not_support": "non-US emissions, sub-threshold facilities, 2024 onward"
+    },
+    {
+      "layer": "Measured Scope 1, GHGRP, 2023",
+      "n_listings": 128,
+      "n_companies": 128,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 25.4,
+      "provenance_class": "mandatory",
+      "supports": "the current-year score",
+      "does_not_support": "the same limits, one year narrower"
+    },
+    {
+      "layer": "Measured power CO2, CAMD, any year",
+      "n_listings": 48,
+      "n_companies": 48,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 9.5,
+      "provenance_class": "mandatory",
+      "supports": "stack-monitored power CO2 and Article 12(1)(g) intensity",
+      "does_not_support": "anything outside power"
+    },
+    {
+      "layer": "Measured power CO2, CAMD, 2025",
+      "n_listings": 40,
+      "n_companies": 40,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 8.0,
+      "provenance_class": "mandatory",
+      "supports": "the only feed that is current",
+      "does_not_support": "non-power sectors, and 2026 is part-year"
+    },
+    {
+      "layer": "Plant-level intensity, gCO2e/kWh",
+      "n_listings": 61,
+      "n_companies": 61,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 12.1,
+      "provenance_class": "mandatory",
+      "supports": "the PAB 100 g/kWh electricity-producer test at plant resolution",
+      "does_not_support": "utilities whose generation sits in unconsolidated joint ventures"
+    },
+    {
+      "layer": "Voluntary Scope 1, extracted from reports",
+      "n_listings": 112,
+      "n_companies": 109,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 22.3,
+      "provenance_class": "voluntary",
+      "supports": "a global cross-check on the US-only spine, to FY2022",
+      "does_not_support": "anything current or audited; 17 rows are order-of-magnitude suspect"
+    },
+    {
+      "layer": "Voluntary Scope 2, either basis",
+      "n_listings": 111,
+      "n_companies": 108,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 22.1,
+      "provenance_class": "voluntary",
+      "supports": "benchmarking the asset-light names GHGRP never sees",
+      "does_not_support": "index-wide Scope 2, or any year after 2022"
+    },
+    {
+      "layer": "Voluntary Scope 2, location basis",
+      "n_listings": 10,
+      "n_companies": 10,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 2.0,
+      "provenance_class": "voluntary",
+      "supports": "the grid comparison a market-based figure hides",
+      "does_not_support": "almost the whole index"
+    },
+    {
+      "layer": "Voluntary Scope 3 total",
+      "n_listings": 74,
+      "n_companies": 72,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 14.7,
+      "provenance_class": "voluntary",
+      "supports": "an order of magnitude for the value chain",
+      "does_not_support": "ranking; every filer draws the boundary differently"
+    },
+    {
+      "layer": "Voluntary Scope 3 by category",
+      "n_listings": 7,
+      "n_companies": 7,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 1.4,
+      "provenance_class": "voluntary",
+      "supports": "category structure on a handful of worked examples",
+      "does_not_support": "anything at index scale"
+    },
+    {
+      "layer": "Grid factor for HQ region, eGRID",
+      "n_listings": 502,
+      "n_companies": 499,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 99.8,
+      "provenance_class": "modelled",
+      "supports": "a Scope 2 estimate the moment a kWh number exists",
+      "does_not_support": "a tonnage by itself; per-company kWh is not free anywhere"
+    },
+    {
+      "layer": "PAB exclusions, Article 12(1)(a) to (f)",
+      "n_listings": 503,
+      "n_companies": 500,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 100.0,
+      "provenance_class": "mandatory",
+      "supports": "a decided flag for every company on every activity rule, with its basis",
+      "does_not_support": "12(1)(c) conduct, which no sector code can see"
+    },
+    {
+      "layer": "  decided on measured segment revenue",
+      "n_listings": 317,
+      "n_companies": 317,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 63.0,
+      "provenance_class": "mandatory",
+      "supports": "an actual revenue share against the article's own threshold",
+      "does_not_support": "filers whose 10-K carries no product or segment axis"
+    },
+    {
+      "layer": "  conduct rule 12(1)(c)",
+      "n_listings": 503,
+      "n_companies": 500,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 100.0,
+      "provenance_class": "voluntary",
+      "supports": "3 exclusions from one published institutional list",
+      "does_not_support": "a systematic norms review; absence here is untested, not clean"
+    },
+    {
+      "layer": "Climate targets, in NZT or SBTi",
+      "n_listings": 461,
+      "n_companies": 458,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 91.7,
+      "provenance_class": "voluntary",
+      "supports": "whether a company has promised anything at all",
+      "does_not_support": "whether the promise is being kept"
+    },
+    {
+      "layer": "  with a numeric annual reduction rate",
+      "n_listings": 341,
+      "n_companies": 339,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 67.8,
+      "provenance_class": "voluntary",
+      "supports": "promised versus delivered as a number",
+      "does_not_support": "companies whose target has no arithmetic in it"
+    },
+    {
+      "layer": "Regulatory penalties, non-zero",
+      "n_listings": 468,
+      "n_companies": 465,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 93.0,
+      "provenance_class": "mandatory",
+      "supports": "conduct evidence with a dollar figure; the other 35 are measured zero",
+      "does_not_support": "conduct outside the United States"
+    },
+    {
+      "layer": "Vendor ESG, any source",
+      "n_listings": 492,
+      "n_companies": 489,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 97.8,
+      "provenance_class": "vendor",
+      "supports": "benchmarking our score, and the disagreement slide",
+      "does_not_support": "any input to our score; the schema forbids it"
+    },
+    {
+      "layer": "Vendor ESG, excluding the AI-generated source",
+      "n_listings": 475,
+      "n_companies": 475,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 94.4,
+      "provenance_class": "vendor",
+      "supports": "the same benchmark without a language model in the loop",
+      "does_not_support": "the same limit"
+    },
+    {
+      "layer": "Vendor ESG consensus percentile",
+      "n_listings": 489,
+      "n_companies": 486,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 97.2,
+      "provenance_class": "vendor",
+      "supports": "one comparable number per company",
+      "does_not_support": "a defensible ranking; its inputs disagree"
+    },
+    {
+      "layer": "Climate TRACE asset ownership",
+      "n_listings": 73,
+      "n_companies": 73,
+      "of_listings": 503,
+      "of_companies": 500,
+      "pct_listings": 14.5,
+      "provenance_class": "modelled",
+      "supports": "sizing the non-US gap for heavy industry, and validating EPA company by company",
+      "does_not_support": "the 430 listings with no heavy physical asset"
+    }
+  ],
+  "coverage_extra": {
+    "n_mandatory": 139,
+    "n_voluntary": 115,
+    "n_either": 228,
+    "n_no_tonnage_anywhere": 273
+  }
+}

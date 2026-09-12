@@ -1,0 +1,79 @@
+[
+  {
+    "url": "https://www.epa.gov/sites/default/files/2020-03/egrid2018_data_v2.xlsx",
+    "retrieved_at": "2026-09-12T12:42:17+00:00",
+    "http_status": 200,
+    "bytes": 10748522,
+    "sha256": "74369b758c76b31ace8e48e89a6c7beb68d40bbd868aa10e378059939f6717ad",
+    "local_path": "data/raw/epa_egrid/egrid2018_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/sites/default/files/2021-02/egrid2019_data.xlsx",
+    "retrieved_at": "2026-09-12T12:42:24+00:00",
+    "http_status": 200,
+    "bytes": 11574903,
+    "sha256": "7a20c0a5b7f71f2465728a4f4f0b0a19833b4318f020931e39d7b1fd9939bcb8",
+    "local_path": "data/raw/epa_egrid/egrid2019_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/system/files/documents/2022-09/eGRID2020_Data_v2.xlsx",
+    "retrieved_at": "2026-09-12T12:42:30+00:00",
+    "http_status": 200,
+    "bytes": 11879492,
+    "sha256": "d3bc01d8dd554e164cdf0fba4fa88e2523c7e233d26eb3be5446da8deb31dfce",
+    "local_path": "data/raw/epa_egrid/egrid2020_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/system/files/documents/2023-01/eGRID2021_data.xlsx",
+    "retrieved_at": "2026-09-12T12:42:36+00:00",
+    "http_status": 200,
+    "bytes": 14097047,
+    "sha256": "0bab3376509c79168ba19dff111e8a5ca7724043229af47af5cb5b6f71465644",
+    "local_path": "data/raw/epa_egrid/egrid2021_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/system/files/documents/2024-01/egrid2022_data.xlsx",
+    "retrieved_at": "2026-09-12T12:42:43+00:00",
+    "http_status": 200,
+    "bytes": 15602850,
+    "sha256": "c73fdc561aa402d0f6ed3cc35e5d961bee6af6e003c9c035b40f757f8480b76b",
+    "local_path": "data/raw/epa_egrid/egrid2022_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+    "retrieved_at": "2026-09-12T12:42:53+00:00",
+    "http_status": 200,
+    "bytes": 21213301,
+    "sha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6",
+    "local_path": "data/raw/epa_egrid/egrid2023_data.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_metric_rev2.xlsx",
+    "retrieved_at": "2026-09-12T12:43:04+00:00",
+    "http_status": 200,
+    "bytes": 24803997,
+    "sha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+    "local_path": "data/raw/epa_egrid/egrid2023_data_metric.xlsx",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Emissions & Generation Resource Integrated Database (eGRID) and the retrieval date.",
+    "served_from_cache_this_run": true
+  }
+]

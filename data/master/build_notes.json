@@ -1,0 +1,35 @@
+{
+ "generated_at": "2026-09-12T16:53:36+00:00",
+ "rows": 503,
+ "columns": 136,
+ "primary_listings": 500,
+ "panel_rows": 51441,
+ "wba_crosswalk_accepted": [
+  "BG",
+  "GOOG"
+ ],
+ "wba_crosswalk_rejected": [
+  "EQT"
+ ],
+ "market_cap_overrides": [
+  "BX",
+  "ERIE",
+  "IBKR",
+  "VMRK"
+ ],
+ "ngfs_price_usd2010": 98.5853,
+ "deflator": 1.44,
+ "passthrough_default": {
+  "Utilities": 0.8,
+  "Consumer Staples": 0.7,
+  "Health Care": 0.7,
+  "Energy": 0.6,
+  "Information Technology": 0.6,
+  "Communication Services": 0.6,
+  "Real Estate": 0.6,
+  "Industrials": 0.5,
+  "Financials": 0.5,
+  "Consumer Discretionary": 0.4,
+  "Materials": 0.35
+ }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "url": "https://api.epa.gov/easey/streaming-services/emissions/apportioned/annual/by-facility?api_key=<api_key>&year=2025",
+    "retrieved_at": "2026-09-12T14:59:43+00:00",
+    "http_status": 200,
+    "bytes": 269914,
+    "sha256": "11fe25c2e0518e70d385777b0d6ea4d3a9329c2a1b16493b5f439d0511ffae93",
+    "local_path": "data/raw/epa_camd_verify/by_facility_2025.json",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Clean Air Markets Division and the retrieval date.",
+    "served_from_cache_this_run": true
+  },
+  {
+    "url": "https://api.epa.gov/easey/streaming-services/emissions/apportioned/annual/by-state?api_key=<api_key>&year=2025",
+    "retrieved_at": "2026-09-12T14:59:46+00:00",
+    "http_status": 200,
+    "bytes": 8293,
+    "sha256": "e10343932eca8412d93d5caf9a06b9a250a1f320220c4410ac2e4d7ffbc57f2d",
+    "local_path": "data/raw/epa_camd_verify/by_state_2025.json",
+    "licence": "US federal government work, public domain (17 U.S.C. 105).",
+    "redistribution": "Public domain. We may publish derived numbers, tables and charts, citing EPA Clean Air Markets Division and the retrieval date.",
+    "served_from_cache_this_run": true
+  }
+]
