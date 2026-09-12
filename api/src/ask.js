@@ -44,7 +44,7 @@ Use default limit 5 unless requested, never exceed 20; if more requested explain
 
 async function generate(env, system, data, schema, fetcher) {
     system += '\nFormat the answer as 2–4 short paragraphs, separated by actual newline characters (a blank line between paragraphs). Put the finding, interpretation, and next verification step in separate paragraphs when relevant. Encode newlines correctly in the JSON string. Do not return one dense paragraph or literal backslash-n text.';
-    const model = env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+    const model = env.GEMINI_MODEL || 'gemini-3.8-flash';
     if (!/^[a-zA-Z0-9.-]+$/.test(model)) throw new AskError('Invalid model configuration', 503);
     let response;
     try {
@@ -126,40 +126,40 @@ export async function answerQuestion(input, env, execute, fetcher = fetch) {
     if (!actionable.length) return { status: 'needs_clarification', answer: plans[0]?.message?.slice(0, 1000) || 'This question needs data or a query that is not supported yet.', evidence: [], visualization: null };
     const evidence = [], notes = new Set(), results = [], paths = [], planParams = new Map();
     for (const plan of actionable) {
-      const params = new URLSearchParams();
-      if (plan.filters.length > 15) throw new AskError('Too many AI filters', 502);
-      for (const pair of plan.filters) {
-        if (!pair || typeof pair.key !== 'string' || typeof pair.value !== 'string' || params.has(pair.key) || pair.key === 'offset') throw new AskError('Invalid AI filters', 502);
-        params.append(pair.key, pair.value);
-      }
-      let nextPaths;
-      if (plan.operation === 'details') {
-        if (plan.filters.length || plan.tickers.length < 1 || plan.tickers.length > 3 || !plan.tickers.every(t => typeof t === 'string' && /^[A-Z0-9.-]{1,15}$/.test(t))) throw new AskError('Invalid company selection', 502);
-        nextPaths = [...new Set(plan.tickers)].map(t => `/api/companies/${encodeURIComponent(t)}`);
-      } else {
-        if (plan.tickers.length) throw new AskError('Invalid listing selection', 502);
-        if (!params.has('limit')) params.set('limit', '5');
-        const limit = Number(params.get('limit'));
-        if (!Number.isInteger(limit) || limit < 1 || limit > 20) throw new AskError('AI result limit must be 1–20', 502);
-        const endpoint = plan.operation === 'company_benchmarks' ? 'insights/company-benchmarks' : plan.operation === 'hotspots' ? 'insights/hotspots' : plan.operation;
-        nextPaths = [`/api/${endpoint}?${params}`];
-      }
-      planParams.set(plan, params);
-      for (const path of nextPaths) {
-        paths.push(path);
-        const response = await execute(path);
-        if (response.status === 404) return { status: 'no_results', answer: 'The requested company was not found in this dataset.', evidence: [], visualization: null };
-        if (response.status === 400) throw new AskError('The question could not be translated into supported filters. Please rephrase.', 422);
-        if (!response.ok) throw new AskError('Data service unavailable', 503);
-        const result = await response.json(); results.push(result);
-        for (const note of result.notes || []) notes.add(note);
-        const rows = plan.operation === 'details' ? [result.data] : result.data;
-        for (const row of rows) {
-            const id = row.plume_id || row.ticker || row.listing.ticker;
-            const evidenceId = evidence.some(e => e.id === id) ? `${id}:${plan.operation}` : id;
-            if (!evidence.some(e => e.id === evidenceId)) evidence.push({ id: evidenceId, kind: plan.operation, source: result.source, data: row });
+        const params = new URLSearchParams();
+        if (plan.filters.length > 15) throw new AskError('Too many AI filters', 502);
+        for (const pair of plan.filters) {
+            if (!pair || typeof pair.key !== 'string' || typeof pair.value !== 'string' || params.has(pair.key) || pair.key === 'offset') throw new AskError('Invalid AI filters', 502);
+            params.append(pair.key, pair.value);
         }
-      }
+        let nextPaths;
+        if (plan.operation === 'details') {
+            if (plan.filters.length || plan.tickers.length < 1 || plan.tickers.length > 3 || !plan.tickers.every(t => typeof t === 'string' && /^[A-Z0-9.-]{1,15}$/.test(t))) throw new AskError('Invalid company selection', 502);
+            nextPaths = [...new Set(plan.tickers)].map(t => `/api/companies/${encodeURIComponent(t)}`);
+        } else {
+            if (plan.tickers.length) throw new AskError('Invalid listing selection', 502);
+            if (!params.has('limit')) params.set('limit', '5');
+            const limit = Number(params.get('limit'));
+            if (!Number.isInteger(limit) || limit < 1 || limit > 20) throw new AskError('AI result limit must be 1–20', 502);
+            const endpoint = plan.operation === 'company_benchmarks' ? 'insights/company-benchmarks' : plan.operation === 'hotspots' ? 'insights/hotspots' : plan.operation;
+            nextPaths = [`/api/${endpoint}?${params}`];
+        }
+        planParams.set(plan, params);
+        for (const path of nextPaths) {
+            paths.push(path);
+            const response = await execute(path);
+            if (response.status === 404) return { status: 'no_results', answer: 'The requested company was not found in this dataset.', evidence: [], visualization: null };
+            if (response.status === 400) throw new AskError('The question could not be translated into supported filters. Please rephrase.', 422);
+            if (!response.ok) throw new AskError('Data service unavailable', 503);
+            const result = await response.json(); results.push(result);
+            for (const note of result.notes || []) notes.add(note);
+            const rows = plan.operation === 'details' ? [result.data] : result.data;
+            for (const row of rows) {
+                const id = row.plume_id || row.ticker || row.listing.ticker;
+                const evidenceId = evidence.some(e => e.id === id) ? `${id}:${plan.operation}` : id;
+                if (!evidence.some(e => e.id === evidenceId)) evidence.push({ id: evidenceId, kind: plan.operation, source: result.source, data: row });
+            }
+        }
     }
     const primary = actionable[0], primaryEvidence = evidence.filter(e => e.kind === primary.operation), primaryParams = planParams.get(primary);
     const visualization = {
