@@ -1,0 +1,146 @@
+[
+  {
+    "file": "slides/img/02a_rank_wall.png",
+    "slide": 2,
+    "css_px": [
+      1100,
+      720
+    ],
+    "scale": 2,
+    "pixels": [
+      2200,
+      1440
+    ],
+    "aspect": 1.53,
+    "kb": 135,
+    "shows": "The rank interval wall. 500 bands, one per company, sorted by median rank, coloured by coverage tier, with the 312.5-rank median band drawn to the same scale above them."
+  },
+  {
+    "file": "slides/img/02b_sobol_bars_wide.png",
+    "slide": 2,
+    "css_px": [
+      916,
+      534
+    ],
+    "scale": 2,
+    "pixels": [
+      1832,
+      1067
+    ],
+    "aspect": 1.72,
+    "kb": 126,
+    "shows": "The same bars in a landscape frame, if the two slide-2 panels end up stacked rather than side by side."
+  },
+  {
+    "file": "slides/img/04_pab_waterfall.png",
+    "slide": 4,
+    "css_px": [
+      1012,
+      797
+    ],
+    "scale": 2,
+    "pixels": [
+      2024,
+      1594
+    ],
+    "aspect": 1.27,
+    "kb": 257,
+    "shows": "The Brinson decomposition of the PAB book's intensity cut. Every step prints its level and its signed share: improvement 20.5%, reallocation 97.4%, selection -0.1%, interaction -17.8%. The closing paragraph that reads the cross term aloud is hidden, because outline.md and script.md both forbid that sentence."
+  },
+  {
+    "file": "slides/img/04_pab_waterfall_plain.png",
+    "slide": 4,
+    "css_px": [
+      1012,
+      682
+    ],
+    "scale": 2,
+    "pixels": [
+      2024,
+      1365
+    ],
+    "aspect": 1.48,
+    "kb": 186,
+    "shows": "The same waterfall without the 76px 97.4% block, for a slide that already sets 97.4% at 96pt."
+  },
+  {
+    "file": "slides/img/05_coverage_partition.png",
+    "slide": 5,
+    "css_px": [
+      916,
+      416
+    ],
+    "scale": 2,
+    "pixels": [
+      1832,
+      831
+    ],
+    "aspect": 2.2,
+    "kb": 100,
+    "shows": "The coverage partition: 139 measured, 88 reported, 273 not measurable, one cell per company. 88 + 273 is the 361 with no mandatory tonnage. Not specified by outline.md, which renders slide 5 as five typographic rows."
+  },
+  {
+    "file": "slides/img/01_saydo_scatter.png",
+    "slide": 1,
+    "css_px": [
+      720,
+      683
+    ],
+    "scale": 3,
+    "pixels": [
+      2160,
+      2049
+    ],
+    "aspect": 1.05,
+    "kb": 424,
+    "shows": "Say-do scatter under the panel's own title and n. Promised on x, delivered on y, the identity line labelled 'delivered = promised', and the accent half-plane ABOVE it labelled EMITTING MORE THAN PROMISED."
+  },
+  {
+    "file": "slides/img/01_saydo_scatter_nolabels.png",
+    "slide": 1,
+    "css_px": [
+      720,
+      683
+    ],
+    "scale": 3,
+    "pixels": [
+      2160,
+      2049
+    ],
+    "aspect": 1.05,
+    "kb": 395,
+    "shows": "The same thing with the ten ticker labels and their leader lines suppressed, for outline.md's 'No company names' rule. The 'delivered = promised' label survives."
+  },
+  {
+    "file": "slides/img/01_saydo_plot_only.png",
+    "slide": 1,
+    "css_px": [
+      700,
+      564
+    ],
+    "scale": 3,
+    "pixels": [
+      2100,
+      1692
+    ],
+    "aspect": 1.24,
+    "kb": 363,
+    "shows": "The scatter alone, no section title: plot, legend, and the size key that states n = 108 plotted. outline.md's 'one scatter, nothing else'."
+  },
+  {
+    "file": "slides/img/02b_sobol_bars.png",
+    "slide": 2,
+    "css_px": [
+      620,
+      607
+    ],
+    "scale": 3,
+    "pixels": [
+      1860,
+      1821
+    ],
+    "aspect": 1.02,
+    "kb": 202,
+    "shows": "Sobol first-order variance shares, one bar per modelling choice, the weights bar in accent and every other bar muted. The effective-weight audit that sits beside it on the site is hidden, per outline.md."
+  }
+]

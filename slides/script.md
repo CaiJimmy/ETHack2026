@@ -81,7 +81,8 @@ copy is the caption. Nothing needs to be burned in.
 
 | demo.mp4 | Deck clock | What is on screen |
 |---|---|---|
-| 0:00 to 0:05 | 0:48 | 01 Allocate. Three columns: the assumption, the 500-company treemap, the $1bn advice. Sector prices at 284 |
+| 0:00 to 0:03 | 0:48 | 01 Allocate. Three columns: the assumption, the 500-company treemap, the $1bn advice. Opens on **Current Policies, every sector at 22** |
+| 0:03 to 0:05 | 0:51 | The scenario dropdown switches to **Net Zero 2050**, every sector to 284. The treemap recolours, the advice rebuilds |
 | 0:05 to 0:09 | 0:53 | Every sector price dragged to 1000. The advice panel prints `Weights unchanged. Value at risk x3.52, largest weight change 0.00 bp. The allocation runs on the rank of value at risk, and a scalar cannot reorder a ranking.` |
 | 0:09 to 0:14 | 0:57 | The `181 WITH NO TONNAGE` control switched to Abstain. `Weights moved. Largest weight change 30 bp.` Money on the 181 falls from $141m to $121m, n priced falls 500 to 319 |
 | 0:14 to 0:24 | 1:02 | 03 Say and do. `84 of 108 companies emit more than they promised`. Promised -5.92, delivered -1.87, gap +2.91 |
@@ -106,6 +107,10 @@ the missing-data switch moves the money. Do not talk over it.
 **[1:17 to 1:38]  SILENT to the end.** Twenty-one seconds of rank wall, weight
 audit and the Paris-aligned waterfall, with no voice on them. A demo that has to
 be explained is not a demo.
+
+Stage: the spoken "284 dollars a tonne" is the Net Zero 2050 level the recording
+switches to at 0:03, not the opening frame. The opening is Current Policies at 22.
+The x3.52 the panel prints is 1000/284, so the words and the screen agree.
 
 Stage: **"because the allocation runs on rank" is not optional.** It is eight
 words, the product's own advice panel says the same thing on screen, and it
