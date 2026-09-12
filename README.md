@@ -30,3 +30,24 @@ Each scored 0–5:
 | 3 | Solid, meets expectations |
 | 4 | Strong, clearly above the field |
 | 5 | Exceptional, best of the day |
+
+## App (GreenRank)
+
+Static site, no backend, no build step. All metric values are **synthetic** (seeded, sector-calibrated); company names, tickers and logos are real.
+
+```
+data/generate.py      -> writes web/data/companies.json  (swap this for the real EDGAR/EPA pipeline; keep the schema)
+web/index.html        -> four tabs: Explore, Net-Zero Fund, Quiz, Methods
+web/app.js            -> scoring engine (sector percentile ranks, pillar weights, missing-data penalty) + all panels
+web/style.css
+run.sh                -> regenerates data and serves on http://localhost:8000
+```
+
+Run: `./run.sh` then open http://localhost:8000
+
+| Tab | What it shows |
+|---|---|
+| Explore | Scatter of sustainability score vs market cap / return / P/E / GHG intensity, logos as points, live E/S/G weight sliders, sector filter, click for a score card with per-metric rank, source and missing-data flags |
+| Net-Zero Fund | $1B allocation under a shadow carbon price: EBIT hit per company, tilt away from it, trim until portfolio intensity cap holds; sector tilts, active share, names dropped first |
+| Quiz | "Which company has the lower X?" between sector peers; reveals values and source; accumulates a perception-gap table in localStorage |
+| Methods | Definition, indicator table with intended real sources, scoring steps, limitations |

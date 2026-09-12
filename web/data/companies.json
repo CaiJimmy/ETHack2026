@@ -1,0 +1,2315 @@
+{
+ "generated": "synthetic",
+ "companies": [
+  {
+   "ticker": "XOM",
+   "name": "Exxon Mobil",
+   "sector": "Energy",
+   "domain": "exxonmobil.com",
+   "financial": {
+    "revenueB": 201.7,
+    "marketCapB": 151.6,
+    "ebitB": 23.02,
+    "return5y": 85.6,
+    "pe": 26.1
+   },
+   "env": {
+    "ghgIntensity": 897.0,
+    "scope12Mt": 180.957,
+    "scope3Reported": false,
+    "renewableShare": 0,
+    "waterIntensity": 624.69,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.21,
+    "penaltiesM": 1.1,
+    "genderPayGap": 15.07
+   },
+   "gov": {
+    "boardIndependence": 91.0,
+    "ceoPayRatio": 381.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "CVX",
+   "name": "Chevron",
+   "sector": "Energy",
+   "domain": "chevron.com",
+   "financial": {
+    "revenueB": 51.9,
+    "marketCapB": 261.0,
+    "ebitB": 10.97,
+    "return5y": 47.0,
+    "pe": 37.8
+   },
+   "env": {
+    "ghgIntensity": 659.2,
+    "scope12Mt": 34.229,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": 596.02,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 6.1,
+    "genderPayGap": 3.8
+   },
+   "gov": {
+    "boardIndependence": 76.0,
+    "ceoPayRatio": 443.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "COP",
+   "name": "ConocoPhillips",
+   "sector": "Energy",
+   "domain": "conocophillips.com",
+   "financial": {
+    "revenueB": 216.7,
+    "marketCapB": 1066.3,
+    "ebitB": 19.24,
+    "return5y": 89.3,
+    "pe": 10.3
+   },
+   "env": {
+    "ghgIntensity": 401.3,
+    "scope12Mt": 86.938,
+    "scope3Reported": false,
+    "renewableShare": 10.54,
+    "waterIntensity": 1393.22,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.41,
+    "penaltiesM": 0,
+    "genderPayGap": 7.27
+   },
+   "gov": {
+    "boardIndependence": 91.0,
+    "ceoPayRatio": 205.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "SLB",
+   "name": "Schlumberger",
+   "sector": "Energy",
+   "domain": "slb.com",
+   "financial": {
+    "revenueB": 105.4,
+    "marketCapB": 785.3,
+    "ebitB": 19.48,
+    "return5y": 73.5,
+    "pe": 18.6
+   },
+   "env": {
+    "ghgIntensity": 357.2,
+    "scope12Mt": 37.656,
+    "scope3Reported": false,
+    "renewableShare": 16.87,
+    "waterIntensity": 386.76,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.52,
+    "penaltiesM": 0,
+    "genderPayGap": 5.27
+   },
+   "gov": {
+    "boardIndependence": 66.0,
+    "ceoPayRatio": 303.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "EOG",
+   "name": "EOG Resources",
+   "sector": "Energy",
+   "domain": "eogresources.com",
+   "financial": {
+    "revenueB": 105.3,
+    "marketCapB": 858.7,
+    "ebitB": 13.91,
+    "return5y": 19.2,
+    "pe": 17.1
+   },
+   "env": {
+    "ghgIntensity": 877.9,
+    "scope12Mt": 92.434,
+    "scope3Reported": true,
+    "renewableShare": 0,
+    "waterIntensity": 983.86,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 1.29,
+    "penaltiesM": 1.4,
+    "genderPayGap": 12.05
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 332.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "PSX",
+   "name": "Phillips 66",
+   "sector": "Energy",
+   "domain": "phillips66.com",
+   "financial": {
+    "revenueB": 66.1,
+    "marketCapB": 174.6,
+    "ebitB": 9.41,
+    "return5y": 46.5,
+    "pe": 12.4
+   },
+   "env": {
+    "ghgIntensity": 874.0,
+    "scope12Mt": 57.764,
+    "scope3Reported": false,
+    "renewableShare": 53.14,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0,
+    "genderPayGap": 12.58
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 411.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "LIN",
+   "name": "Linde",
+   "sector": "Materials",
+   "domain": "linde.com",
+   "financial": {
+    "revenueB": 12.3,
+    "marketCapB": 42.9,
+    "ebitB": 1.35,
+    "return5y": 49.8,
+    "pe": 22.4
+   },
+   "env": {
+    "ghgIntensity": 1004.3,
+    "scope12Mt": 12.403,
+    "scope3Reported": true,
+    "renewableShare": 11.52,
+    "waterIntensity": 441.35,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 0.65,
+    "penaltiesM": 31.6,
+    "genderPayGap": 12.96
+   },
+   "gov": {
+    "boardIndependence": 80.0,
+    "ceoPayRatio": 506.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "SHW",
+   "name": "Sherwin-Williams",
+   "sector": "Materials",
+   "domain": "sherwin-williams.com",
+   "financial": {
+    "revenueB": 49.9,
+    "marketCapB": 73.3,
+    "ebitB": 5.76,
+    "return5y": 40.3,
+    "pe": 25.4
+   },
+   "env": {
+    "ghgIntensity": 1734.9,
+    "scope12Mt": 86.582,
+    "scope3Reported": false,
+    "renewableShare": 0,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.51,
+    "penaltiesM": 0.5,
+    "genderPayGap": 0.51
+   },
+   "gov": {
+    "boardIndependence": 84.0,
+    "ceoPayRatio": 506.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "FCX",
+   "name": "Freeport-McMoRan",
+   "sector": "Materials",
+   "domain": "fcx.com",
+   "financial": {
+    "revenueB": 17.4,
+    "marketCapB": 39.0,
+    "ebitB": 2.04,
+    "return5y": 43.4,
+    "pe": 16.0
+   },
+   "env": {
+    "ghgIntensity": 718.8,
+    "scope12Mt": 12.508,
+    "scope3Reported": true,
+    "renewableShare": 15.62,
+    "waterIntensity": 1289.48,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 19.1,
+    "genderPayGap": 3.35
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 694.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NEM",
+   "name": "Newmont",
+   "sector": "Materials",
+   "domain": "newmont.com",
+   "financial": {
+    "revenueB": 41.5,
+    "marketCapB": 150.1,
+    "ebitB": 3.86,
+    "return5y": 85.6,
+    "pe": 20.6
+   },
+   "env": {
+    "ghgIntensity": 1405.2,
+    "scope12Mt": 58.362,
+    "scope3Reported": false,
+    "renewableShare": 14.73,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.38,
+    "penaltiesM": 0,
+    "genderPayGap": 10.86
+   },
+   "gov": {
+    "boardIndependence": 81.0,
+    "ceoPayRatio": 382.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "DOW",
+   "name": "Dow",
+   "sector": "Materials",
+   "domain": "dow.com",
+   "financial": {
+    "revenueB": 12.5,
+    "marketCapB": 21.6,
+    "ebitB": 1.69,
+    "return5y": 85.9,
+    "pe": 25.7
+   },
+   "env": {
+    "ghgIntensity": 1109.0,
+    "scope12Mt": 13.901,
+    "scope3Reported": true,
+    "renewableShare": 57.93,
+    "waterIntensity": 2159.91,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 5.7,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 78.0,
+    "ceoPayRatio": 207.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NUE",
+   "name": "Nucor",
+   "sector": "Materials",
+   "domain": "nucor.com",
+   "financial": {
+    "revenueB": 11.8,
+    "marketCapB": 62.9,
+    "ebitB": 1.59,
+    "return5y": 117.0,
+    "pe": 28.3
+   },
+   "env": {
+    "ghgIntensity": 987.3,
+    "scope12Mt": 11.694,
+    "scope3Reported": false,
+    "renewableShare": 46.64,
+    "waterIntensity": 1000.77,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 0.47,
+    "penaltiesM": 3.7,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 86.0,
+    "ceoPayRatio": 210.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "CAT",
+   "name": "Caterpillar",
+   "sector": "Industrials",
+   "domain": "caterpillar.com",
+   "financial": {
+    "revenueB": 132.7,
+    "marketCapB": 622.1,
+    "ebitB": 14.95,
+    "return5y": 75.1,
+    "pe": 21.4
+   },
+   "env": {
+    "ghgIntensity": 163.7,
+    "scope12Mt": 21.728,
+    "scope3Reported": true,
+    "renewableShare": 30.92,
+    "waterIntensity": 256.23,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.92,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 73.0,
+    "ceoPayRatio": 430.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "HON",
+   "name": "Honeywell",
+   "sector": "Industrials",
+   "domain": "honeywell.com",
+   "financial": {
+    "revenueB": 17.9,
+    "marketCapB": 88.0,
+    "ebitB": 2.8,
+    "return5y": -61.8,
+    "pe": 21.8
+   },
+   "env": {
+    "ghgIntensity": 209.9,
+    "scope12Mt": 3.752,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": 581.56,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 1.08,
+    "penaltiesM": 0,
+    "genderPayGap": 12.39
+   },
+   "gov": {
+    "boardIndependence": 80.0,
+    "ceoPayRatio": 501.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "UNP",
+   "name": "Union Pacific",
+   "sector": "Industrials",
+   "domain": "up.com",
+   "financial": {
+    "revenueB": 177.8,
+    "marketCapB": 576.2,
+    "ebitB": 25.4,
+    "return5y": 86.8,
+    "pe": 21.9
+   },
+   "env": {
+    "ghgIntensity": 175.9,
+    "scope12Mt": 31.274,
+    "scope3Reported": true,
+    "renewableShare": 64.57,
+    "waterIntensity": 236.95,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 2.61,
+    "penaltiesM": 11.4,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 90.0,
+    "ceoPayRatio": 464.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "BA",
+   "name": "Boeing",
+   "sector": "Industrials",
+   "domain": "boeing.com",
+   "financial": {
+    "revenueB": 68.1,
+    "marketCapB": 133.6,
+    "ebitB": 7.18,
+    "return5y": 80.8,
+    "pe": 23.2
+   },
+   "env": {
+    "ghgIntensity": 300.8,
+    "scope12Mt": 20.471,
+    "scope3Reported": true,
+    "renewableShare": 39.35,
+    "waterIntensity": 191.16,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 148.7,
+    "genderPayGap": 10.37
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 140.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "DE",
+   "name": "Deere",
+   "sector": "Industrials",
+   "domain": "deere.com",
+   "financial": {
+    "revenueB": 39.6,
+    "marketCapB": 202.2,
+    "ebitB": 3.28,
+    "return5y": 60.7,
+    "pe": 25.3
+   },
+   "env": {
+    "ghgIntensity": 126.6,
+    "scope12Mt": 5.017,
+    "scope3Reported": true,
+    "renewableShare": 20.72,
+    "waterIntensity": 196.32,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.82,
+    "penaltiesM": 5.7,
+    "genderPayGap": 9.43
+   },
+   "gov": {
+    "boardIndependence": 89.0,
+    "ceoPayRatio": 117.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "GE",
+   "name": "GE Aerospace",
+   "sector": "Industrials",
+   "domain": "geaerospace.com",
+   "financial": {
+    "revenueB": 32.6,
+    "marketCapB": 78.5,
+    "ebitB": 3.71,
+    "return5y": 41.3,
+    "pe": 47.5
+   },
+   "env": {
+    "ghgIntensity": 113.1,
+    "scope12Mt": 3.685,
+    "scope3Reported": false,
+    "renewableShare": 0,
+    "waterIntensity": 145.92,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 0.43,
+    "penaltiesM": 6.4,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 90.0,
+    "ceoPayRatio": 153.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "AMZN",
+   "name": "Amazon",
+   "sector": "Consumer Discretionary",
+   "domain": "amazon.com",
+   "financial": {
+    "revenueB": 75.8,
+    "marketCapB": 445.3,
+    "ebitB": 7.66,
+    "return5y": -56.2,
+    "pe": 17.0
+   },
+   "env": {
+    "ghgIntensity": 40.1,
+    "scope12Mt": 3.038,
+    "scope3Reported": false,
+    "renewableShare": null,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 22.0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 77.0,
+    "ceoPayRatio": 132.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "TSLA",
+   "name": "Tesla",
+   "sector": "Consumer Discretionary",
+   "domain": "tesla.com",
+   "financial": {
+    "revenueB": 77.9,
+    "marketCapB": 685.2,
+    "ebitB": 11.26,
+    "return5y": 63.6,
+    "pe": 14.5
+   },
+   "env": {
+    "ghgIntensity": 81.9,
+    "scope12Mt": 6.383,
+    "scope3Reported": false,
+    "renewableShare": 38.28,
+    "waterIntensity": null,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 10.0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 76.0,
+    "ceoPayRatio": 97.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "HD",
+   "name": "Home Depot",
+   "sector": "Consumer Discretionary",
+   "domain": "homedepot.com",
+   "financial": {
+    "revenueB": 101.3,
+    "marketCapB": 229.7,
+    "ebitB": 13.85,
+    "return5y": 32.4,
+    "pe": 18.4
+   },
+   "env": {
+    "ghgIntensity": 51.5,
+    "scope12Mt": 5.224,
+    "scope3Reported": true,
+    "renewableShare": 29.5,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.63,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 67.0,
+    "ceoPayRatio": 214.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "MCD",
+   "name": "McDonald's",
+   "sector": "Consumer Discretionary",
+   "domain": "mcdonalds.com",
+   "financial": {
+    "revenueB": 41.8,
+    "marketCapB": 361.1,
+    "ebitB": 5.21,
+    "return5y": 104.8,
+    "pe": 28.1
+   },
+   "env": {
+    "ghgIntensity": 71.9,
+    "scope12Mt": 3.01,
+    "scope3Reported": true,
+    "renewableShare": 35.37,
+    "waterIntensity": 97.63,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.68,
+    "penaltiesM": 142.1,
+    "genderPayGap": 6.71
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 709.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NKE",
+   "name": "Nike",
+   "sector": "Consumer Discretionary",
+   "domain": "nike.com",
+   "financial": {
+    "revenueB": 32.8,
+    "marketCapB": 286.7,
+    "ebitB": 2.19,
+    "return5y": 43.3,
+    "pe": 13.6
+   },
+   "env": {
+    "ghgIntensity": 34.4,
+    "scope12Mt": 1.13,
+    "scope3Reported": false,
+    "renewableShare": 46.58,
+    "waterIntensity": 130.01,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.56,
+    "penaltiesM": 6.9,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 145.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "F",
+   "name": "Ford",
+   "sector": "Consumer Discretionary",
+   "domain": "ford.com",
+   "financial": {
+    "revenueB": 60.0,
+    "marketCapB": 99.2,
+    "ebitB": 4.74,
+    "return5y": 43.0,
+    "pe": 24.2
+   },
+   "env": {
+    "ghgIntensity": 41.2,
+    "scope12Mt": 2.473,
+    "scope3Reported": false,
+    "renewableShare": 0,
+    "waterIntensity": 154.59,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 0.64,
+    "penaltiesM": 6.8,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 224.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "PG",
+   "name": "Procter & Gamble",
+   "sector": "Consumer Staples",
+   "domain": "pg.com",
+   "financial": {
+    "revenueB": 59.1,
+    "marketCapB": 75.4,
+    "ebitB": 7.39,
+    "return5y": -23.2,
+    "pe": 20.7
+   },
+   "env": {
+    "ghgIntensity": 38.9,
+    "scope12Mt": 2.296,
+    "scope3Reported": false,
+    "renewableShare": 35.41,
+    "waterIntensity": 186.68,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 0.36,
+    "penaltiesM": 2.8,
+    "genderPayGap": 4.65
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 757.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "KO",
+   "name": "Coca-Cola",
+   "sector": "Consumer Staples",
+   "domain": "coca-colacompany.com",
+   "financial": {
+    "revenueB": 196.1,
+    "marketCapB": 918.6,
+    "ebitB": 17.74,
+    "return5y": 27.3,
+    "pe": 12.6
+   },
+   "env": {
+    "ghgIntensity": 243.1,
+    "scope12Mt": 47.663,
+    "scope3Reported": true,
+    "renewableShare": 8.67,
+    "waterIntensity": null,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0,
+    "genderPayGap": 13.17
+   },
+   "gov": {
+    "boardIndependence": 100.0,
+    "ceoPayRatio": 224.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "PEP",
+   "name": "PepsiCo",
+   "sector": "Consumer Staples",
+   "domain": "pepsico.com",
+   "financial": {
+    "revenueB": 59.2,
+    "marketCapB": 116.6,
+    "ebitB": 4.79,
+    "return5y": 123.9,
+    "pe": 13.2
+   },
+   "env": {
+    "ghgIntensity": 117.9,
+    "scope12Mt": 6.984,
+    "scope3Reported": true,
+    "renewableShare": 29.76,
+    "waterIntensity": 403.17,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.4,
+    "penaltiesM": 25.0,
+    "genderPayGap": 8.33
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 700.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "WMT",
+   "name": "Walmart",
+   "sector": "Consumer Staples",
+   "domain": "walmart.com",
+   "financial": {
+    "revenueB": 116.8,
+    "marketCapB": 118.4,
+    "ebitB": 10.07,
+    "return5y": 109.3,
+    "pe": 32.9
+   },
+   "env": {
+    "ghgIntensity": 56.2,
+    "scope12Mt": 6.569,
+    "scope3Reported": true,
+    "renewableShare": 51.11,
+    "waterIntensity": null,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 1.97,
+    "penaltiesM": 6.7,
+    "genderPayGap": 20.12
+   },
+   "gov": {
+    "boardIndependence": 74.0,
+    "ceoPayRatio": 229.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "COST",
+   "name": "Costco",
+   "sector": "Consumer Staples",
+   "domain": "costco.com",
+   "financial": {
+    "revenueB": 57.9,
+    "marketCapB": 108.9,
+    "ebitB": 6.15,
+    "return5y": 5.0,
+    "pe": 21.5
+   },
+   "env": {
+    "ghgIntensity": 64.2,
+    "scope12Mt": 3.718,
+    "scope3Reported": true,
+    "renewableShare": 40.14,
+    "waterIntensity": 252.4,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 0.72,
+    "penaltiesM": 0.6,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 79.0,
+    "ceoPayRatio": 106.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "MDLZ",
+   "name": "Mondelez",
+   "sector": "Consumer Staples",
+   "domain": "mondelezinternational.com",
+   "financial": {
+    "revenueB": 44.7,
+    "marketCapB": 358.3,
+    "ebitB": 5.18,
+    "return5y": 4.1,
+    "pe": 28.4
+   },
+   "env": {
+    "ghgIntensity": 138.9,
+    "scope12Mt": 6.207,
+    "scope3Reported": true,
+    "renewableShare": 0,
+    "waterIntensity": 459.75,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 3.3,
+    "genderPayGap": 0.19
+   },
+   "gov": {
+    "boardIndependence": 72.0,
+    "ceoPayRatio": 414.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "JNJ",
+   "name": "Johnson & Johnson",
+   "sector": "Health Care",
+   "domain": "jnj.com",
+   "financial": {
+    "revenueB": 97.9,
+    "marketCapB": 68.3,
+    "ebitB": 18.83,
+    "return5y": 116.9,
+    "pe": 30.6
+   },
+   "env": {
+    "ghgIntensity": 26.8,
+    "scope12Mt": 2.626,
+    "scope3Reported": true,
+    "renewableShare": 46.36,
+    "waterIntensity": 98.48,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 2.32,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 82.0,
+    "ceoPayRatio": 165.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "UNH",
+   "name": "UnitedHealth",
+   "sector": "Health Care",
+   "domain": "unitedhealthgroup.com",
+   "financial": {
+    "revenueB": 77.4,
+    "marketCapB": 69.3,
+    "ebitB": 17.88,
+    "return5y": 75.3,
+    "pe": 28.3
+   },
+   "env": {
+    "ghgIntensity": 18.6,
+    "scope12Mt": 1.439,
+    "scope3Reported": false,
+    "renewableShare": 38.41,
+    "waterIntensity": 169.08,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.69,
+    "penaltiesM": 11.5,
+    "genderPayGap": 7.15
+   },
+   "gov": {
+    "boardIndependence": 63.0,
+    "ceoPayRatio": 60.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "PFE",
+   "name": "Pfizer",
+   "sector": "Health Care",
+   "domain": "pfizer.com",
+   "financial": {
+    "revenueB": 69.1,
+    "marketCapB": 627.0,
+    "ebitB": 11.28,
+    "return5y": 113.9,
+    "pe": 20.4
+   },
+   "env": {
+    "ghgIntensity": 39.8,
+    "scope12Mt": 2.747,
+    "scope3Reported": true,
+    "renewableShare": 23.56,
+    "waterIntensity": 422.33,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 0.48,
+    "penaltiesM": 77.3,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 81.0,
+    "ceoPayRatio": 269.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "LLY",
+   "name": "Eli Lilly",
+   "sector": "Health Care",
+   "domain": "lilly.com",
+   "financial": {
+    "revenueB": 143.3,
+    "marketCapB": 293.9,
+    "ebitB": 28.89,
+    "return5y": 75.5,
+    "pe": 13.4
+   },
+   "env": {
+    "ghgIntensity": 16.0,
+    "scope12Mt": 2.3,
+    "scope3Reported": false,
+    "renewableShare": 2.06,
+    "waterIntensity": 150.16,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 0.97,
+    "penaltiesM": 22.2,
+    "genderPayGap": 2.7
+   },
+   "gov": {
+    "boardIndependence": 94.0,
+    "ceoPayRatio": 183.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "MRK",
+   "name": "Merck",
+   "sector": "Health Care",
+   "domain": "merck.com",
+   "financial": {
+    "revenueB": 57.0,
+    "marketCapB": 212.3,
+    "ebitB": 16.06,
+    "return5y": 103.5,
+    "pe": 15.3
+   },
+   "env": {
+    "ghgIntensity": 57.4,
+    "scope12Mt": 3.273,
+    "scope3Reported": false,
+    "renewableShare": 25.28,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 37.9,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 95.0,
+    "ceoPayRatio": 204.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "ABT",
+   "name": "Abbott",
+   "sector": "Health Care",
+   "domain": "abbott.com",
+   "financial": {
+    "revenueB": 47.1,
+    "marketCapB": 620.3,
+    "ebitB": 8.49,
+    "return5y": 52.1,
+    "pe": 15.7
+   },
+   "env": {
+    "ghgIntensity": 25.8,
+    "scope12Mt": 1.214,
+    "scope3Reported": true,
+    "renewableShare": 11.64,
+    "waterIntensity": 378.55,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 3.0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 127.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "JPM",
+   "name": "JPMorgan Chase",
+   "sector": "Financials",
+   "domain": "jpmorganchase.com",
+   "financial": {
+    "revenueB": 76.4,
+    "marketCapB": 229.9,
+    "ebitB": 22.45,
+    "return5y": 5.2,
+    "pe": 23.6
+   },
+   "env": {
+    "ghgIntensity": 3.5,
+    "scope12Mt": 0.269,
+    "scope3Reported": false,
+    "renewableShare": 14.6,
+    "waterIntensity": 22.72,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.36,
+    "penaltiesM": 16.6,
+    "genderPayGap": 7.26
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 328.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "BAC",
+   "name": "Bank of America",
+   "sector": "Financials",
+   "domain": "bankofamerica.com",
+   "financial": {
+    "revenueB": 55.0,
+    "marketCapB": 878.3,
+    "ebitB": 20.61,
+    "return5y": 56.1,
+    "pe": 22.6
+   },
+   "env": {
+    "ghgIntensity": 5.7,
+    "scope12Mt": 0.315,
+    "scope3Reported": true,
+    "renewableShare": 31.43,
+    "waterIntensity": 58.53,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0,
+    "genderPayGap": 19.74
+   },
+   "gov": {
+    "boardIndependence": 81.0,
+    "ceoPayRatio": 178.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "GS",
+   "name": "Goldman Sachs",
+   "sector": "Financials",
+   "domain": "goldmansachs.com",
+   "financial": {
+    "revenueB": 52.9,
+    "marketCapB": 595.5,
+    "ebitB": 12.24,
+    "return5y": -47.5,
+    "pe": 26.9
+   },
+   "env": {
+    "ghgIntensity": 3.3,
+    "scope12Mt": 0.176,
+    "scope3Reported": false,
+    "renewableShare": 91.53,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.54,
+    "penaltiesM": 9.7,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 318.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "V",
+   "name": "Visa",
+   "sector": "Financials",
+   "domain": "visa.com",
+   "financial": {
+    "revenueB": 63.0,
+    "marketCapB": 146.6,
+    "ebitB": 15.78,
+    "return5y": 54.1,
+    "pe": 19.3
+   },
+   "env": {
+    "ghgIntensity": 2.7,
+    "scope12Mt": 0.172,
+    "scope3Reported": true,
+    "renewableShare": 35.25,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.33,
+    "penaltiesM": 4.1,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 86.0,
+    "ceoPayRatio": 764.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "MA",
+   "name": "Mastercard",
+   "sector": "Financials",
+   "domain": "mastercard.com",
+   "financial": {
+    "revenueB": 167.3,
+    "marketCapB": 438.9,
+    "ebitB": 50.45,
+    "return5y": 127.2,
+    "pe": 29.7
+   },
+   "env": {
+    "ghgIntensity": 4.6,
+    "scope12Mt": 0.776,
+    "scope3Reported": false,
+    "renewableShare": 7.47,
+    "waterIntensity": 14.89,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 0.98,
+    "penaltiesM": 2.4,
+    "genderPayGap": 12.88
+   },
+   "gov": {
+    "boardIndependence": 82.0,
+    "ceoPayRatio": 121.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "BRK.B",
+   "name": "Berkshire Hathaway",
+   "sector": "Financials",
+   "domain": "berkshirehathaway.com",
+   "financial": {
+    "revenueB": 70.5,
+    "marketCapB": 201.2,
+    "ebitB": 20.99,
+    "return5y": -0.1,
+    "pe": 18.5
+   },
+   "env": {
+    "ghgIntensity": 3.1,
+    "scope12Mt": 0.221,
+    "scope3Reported": true,
+    "renewableShare": 20.07,
+    "waterIntensity": 14.84,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0,
+    "genderPayGap": 9.2
+   },
+   "gov": {
+    "boardIndependence": 82.0,
+    "ceoPayRatio": 355.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "AAPL",
+   "name": "Apple",
+   "sector": "Information Technology",
+   "domain": "apple.com",
+   "financial": {
+    "revenueB": 180.9,
+    "marketCapB": 199.3,
+    "ebitB": 60.38,
+    "return5y": 154.1,
+    "pe": 33.4
+   },
+   "env": {
+    "ghgIntensity": 9.8,
+    "scope12Mt": 1.772,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": 42.96,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 1.13,
+    "penaltiesM": 27.7,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 79.0,
+    "ceoPayRatio": 212.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "MSFT",
+   "name": "Microsoft",
+   "sector": "Information Technology",
+   "domain": "microsoft.com",
+   "financial": {
+    "revenueB": 80.9,
+    "marketCapB": 159.4,
+    "ebitB": 24.37,
+    "return5y": 68.8,
+    "pe": 11.6
+   },
+   "env": {
+    "ghgIntensity": 16.0,
+    "scope12Mt": 1.295,
+    "scope3Reported": false,
+    "renewableShare": 34.76,
+    "waterIntensity": 160.56,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.35,
+    "penaltiesM": 4.3,
+    "genderPayGap": 12.17
+   },
+   "gov": {
+    "boardIndependence": 82.0,
+    "ceoPayRatio": 412.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NVDA",
+   "name": "NVIDIA",
+   "sector": "Information Technology",
+   "domain": "nvidia.com",
+   "financial": {
+    "revenueB": 98.7,
+    "marketCapB": 905.4,
+    "ebitB": 27.9,
+    "return5y": 83.4,
+    "pe": 17.1
+   },
+   "env": {
+    "ghgIntensity": 10.0,
+    "scope12Mt": 0.983,
+    "scope3Reported": true,
+    "renewableShare": 61.66,
+    "waterIntensity": 113.18,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.81,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 92.0,
+    "ceoPayRatio": 179.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "INTC",
+   "name": "Intel",
+   "sector": "Information Technology",
+   "domain": "intel.com",
+   "financial": {
+    "revenueB": 76.1,
+    "marketCapB": 337.3,
+    "ebitB": 18.53,
+    "return5y": 74.8,
+    "pe": 19.1
+   },
+   "env": {
+    "ghgIntensity": 8.3,
+    "scope12Mt": 0.628,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": 38.37,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.88,
+    "penaltiesM": 78.6,
+    "genderPayGap": 1.02
+   },
+   "gov": {
+    "boardIndependence": 68.0,
+    "ceoPayRatio": 229.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "CSCO",
+   "name": "Cisco",
+   "sector": "Information Technology",
+   "domain": "cisco.com",
+   "financial": {
+    "revenueB": 65.7,
+    "marketCapB": 632.4,
+    "ebitB": 18.13,
+    "return5y": 52.7,
+    "pe": 21.8
+   },
+   "env": {
+    "ghgIntensity": 11.1,
+    "scope12Mt": 0.727,
+    "scope3Reported": true,
+    "renewableShare": 0,
+    "waterIntensity": 136.66,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 0.7,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 82.0,
+    "ceoPayRatio": 385.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "ORCL",
+   "name": "Oracle",
+   "sector": "Information Technology",
+   "domain": "oracle.com",
+   "financial": {
+    "revenueB": 33.8,
+    "marketCapB": 66.8,
+    "ebitB": 9.81,
+    "return5y": 78.6,
+    "pe": 22.7
+   },
+   "env": {
+    "ghgIntensity": 17.5,
+    "scope12Mt": 0.592,
+    "scope3Reported": true,
+    "renewableShare": 37.61,
+    "waterIntensity": 81.08,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 0.76,
+    "penaltiesM": 15.5,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 200.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "GOOGL",
+   "name": "Alphabet",
+   "sector": "Communication Services",
+   "domain": "google.com",
+   "financial": {
+    "revenueB": 73.9,
+    "marketCapB": 60.7,
+    "ebitB": 13.05,
+    "return5y": 42.6,
+    "pe": 18.5
+   },
+   "env": {
+    "ghgIntensity": 30.6,
+    "scope12Mt": 2.258,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": null,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 1.54,
+    "penaltiesM": 14.9,
+    "genderPayGap": 7.29
+   },
+   "gov": {
+    "boardIndependence": 60.0,
+    "ceoPayRatio": 683.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "META",
+   "name": "Meta",
+   "sector": "Communication Services",
+   "domain": "meta.com",
+   "financial": {
+    "revenueB": 169.3,
+    "marketCapB": 486.3,
+    "ebitB": 13.64,
+    "return5y": 20.2,
+    "pe": 27.7
+   },
+   "env": {
+    "ghgIntensity": 24.8,
+    "scope12Mt": 4.191,
+    "scope3Reported": true,
+    "renewableShare": 27.96,
+    "waterIntensity": 24.55,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 1.67,
+    "penaltiesM": 8.5,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 74.0,
+    "ceoPayRatio": 318.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NFLX",
+   "name": "Netflix",
+   "sector": "Communication Services",
+   "domain": "netflix.com",
+   "financial": {
+    "revenueB": 357.2,
+    "marketCapB": 873.7,
+    "ebitB": 79.88,
+    "return5y": 25.0,
+    "pe": 13.4
+   },
+   "env": {
+    "ghgIntensity": 23.2,
+    "scope12Mt": 8.285,
+    "scope3Reported": true,
+    "renewableShare": 50.31,
+    "waterIntensity": 69.62,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 2.4,
+    "genderPayGap": 7.29
+   },
+   "gov": {
+    "boardIndependence": 86.0,
+    "ceoPayRatio": 176.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "DIS",
+   "name": "Disney",
+   "sector": "Communication Services",
+   "domain": "disney.com",
+   "financial": {
+    "revenueB": 82.3,
+    "marketCapB": 145.3,
+    "ebitB": 21.19,
+    "return5y": 97.2,
+    "pe": 19.9
+   },
+   "env": {
+    "ghgIntensity": 11.7,
+    "scope12Mt": 0.964,
+    "scope3Reported": false,
+    "renewableShare": 36.13,
+    "waterIntensity": 191.01,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0.2,
+    "genderPayGap": 3.85
+   },
+   "gov": {
+    "boardIndependence": 73.0,
+    "ceoPayRatio": 106.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "VZ",
+   "name": "Verizon",
+   "sector": "Communication Services",
+   "domain": "verizon.com",
+   "financial": {
+    "revenueB": 20.9,
+    "marketCapB": 59.4,
+    "ebitB": 3.89,
+    "return5y": 71.6,
+    "pe": 20.9
+   },
+   "env": {
+    "ghgIntensity": 46.3,
+    "scope12Mt": 0.966,
+    "scope3Reported": true,
+    "renewableShare": 37.97,
+    "waterIntensity": null,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.44,
+    "penaltiesM": 18.2,
+    "genderPayGap": 4.85
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 179.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "T",
+   "name": "AT&T",
+   "sector": "Communication Services",
+   "domain": "att.com",
+   "financial": {
+    "revenueB": 86.7,
+    "marketCapB": 538.2,
+    "ebitB": 14.98,
+    "return5y": 91.6,
+    "pe": 22.1
+   },
+   "env": {
+    "ghgIntensity": 30.5,
+    "scope12Mt": 2.643,
+    "scope3Reported": true,
+    "renewableShare": 52.49,
+    "waterIntensity": 116.26,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 0.5,
+    "penaltiesM": 14.8,
+    "genderPayGap": 10.45
+   },
+   "gov": {
+    "boardIndependence": 83.0,
+    "ceoPayRatio": 287.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "NEE",
+   "name": "NextEra Energy",
+   "sector": "Utilities",
+   "domain": "nexteraenergy.com",
+   "financial": {
+    "revenueB": 55.0,
+    "marketCapB": 353.1,
+    "ebitB": 14.39,
+    "return5y": 59.3,
+    "pe": 21.6
+   },
+   "env": {
+    "ghgIntensity": 5041.0,
+    "scope12Mt": 277.336,
+    "scope3Reported": true,
+    "renewableShare": 28.27,
+    "waterIntensity": 5482.98,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.44,
+    "penaltiesM": 18.2,
+    "genderPayGap": 3.35
+   },
+   "gov": {
+    "boardIndependence": 78.0,
+    "ceoPayRatio": 306.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "DUK",
+   "name": "Duke Energy",
+   "sector": "Utilities",
+   "domain": "duke-energy.com",
+   "financial": {
+    "revenueB": 31.5,
+    "marketCapB": 79.2,
+    "ebitB": 5.91,
+    "return5y": 3.7,
+    "pe": 25.6
+   },
+   "env": {
+    "ghgIntensity": 2430.8,
+    "scope12Mt": 76.555,
+    "scope3Reported": false,
+    "renewableShare": 1.87,
+    "waterIntensity": 8168.75,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 1.44,
+    "penaltiesM": 0,
+    "genderPayGap": 2.92
+   },
+   "gov": {
+    "boardIndependence": 86.0,
+    "ceoPayRatio": 412.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "SO",
+   "name": "Southern Company",
+   "sector": "Utilities",
+   "domain": "southerncompany.com",
+   "financial": {
+    "revenueB": 20.8,
+    "marketCapB": 116.7,
+    "ebitB": 4.31,
+    "return5y": 99.7,
+    "pe": 26.5
+   },
+   "env": {
+    "ghgIntensity": 2224.7,
+    "scope12Mt": 46.292,
+    "scope3Reported": true,
+    "renewableShare": 58.9,
+    "waterIntensity": 5879.59,
+    "netZeroTarget": 2040
+   },
+   "social": {
+    "injuryRate": 1.41,
+    "penaltiesM": 23.7,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 79.0,
+    "ceoPayRatio": 79.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "AEP",
+   "name": "American Electric Power",
+   "sector": "Utilities",
+   "domain": "aep.com",
+   "financial": {
+    "revenueB": 15.1,
+    "marketCapB": 67.8,
+    "ebitB": 2.71,
+    "return5y": 82.7,
+    "pe": 21.9
+   },
+   "env": {
+    "ghgIntensity": 2924.5,
+    "scope12Mt": 44.119,
+    "scope3Reported": true,
+    "renewableShare": 71.06,
+    "waterIntensity": null,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 0,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 68.0,
+    "ceoPayRatio": 70.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "EXC",
+   "name": "Exelon",
+   "sector": "Utilities",
+   "domain": "exeloncorp.com",
+   "financial": {
+    "revenueB": 14.8,
+    "marketCapB": 118.3,
+    "ebitB": 3.16,
+    "return5y": 68.2,
+    "pe": 21.0
+   },
+   "env": {
+    "ghgIntensity": 2226.8,
+    "scope12Mt": 32.941,
+    "scope3Reported": false,
+    "renewableShare": 59.8,
+    "waterIntensity": 9033.76,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": null,
+    "penaltiesM": 2.4,
+    "genderPayGap": 20.71
+   },
+   "gov": {
+    "boardIndependence": 91.0,
+    "ceoPayRatio": 63.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "XEL",
+   "name": "Xcel Energy",
+   "sector": "Utilities",
+   "domain": "xcelenergy.com",
+   "financial": {
+    "revenueB": 7.1,
+    "marketCapB": 8.4,
+    "ebitB": 0.73,
+    "return5y": 189.6,
+    "pe": 23.9
+   },
+   "env": {
+    "ghgIntensity": 3751.2,
+    "scope12Mt": 26.78,
+    "scope3Reported": true,
+    "renewableShare": 19.63,
+    "waterIntensity": 4127.73,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.88,
+    "penaltiesM": 1.5,
+    "genderPayGap": 11.58
+   },
+   "gov": {
+    "boardIndependence": 73.0,
+    "ceoPayRatio": 164.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "PLD",
+   "name": "Prologis",
+   "sector": "Real Estate",
+   "domain": "prologis.com",
+   "financial": {
+    "revenueB": 2.6,
+    "marketCapB": 2.4,
+    "ebitB": 0.98,
+    "return5y": 161.2,
+    "pe": 13.9
+   },
+   "env": {
+    "ghgIntensity": 27.7,
+    "scope12Mt": 0.071,
+    "scope3Reported": false,
+    "renewableShare": 24.7,
+    "waterIntensity": 321.86,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 0.51,
+    "penaltiesM": 0,
+    "genderPayGap": 14.39
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 426.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "AMT",
+   "name": "American Tower",
+   "sector": "Real Estate",
+   "domain": "americantower.com",
+   "financial": {
+    "revenueB": 3.6,
+    "marketCapB": 5.4,
+    "ebitB": 1.38,
+    "return5y": 50.7,
+    "pe": 22.3
+   },
+   "env": {
+    "ghgIntensity": 117.9,
+    "scope12Mt": 0.428,
+    "scope3Reported": true,
+    "renewableShare": 52.86,
+    "waterIntensity": null,
+    "netZeroTarget": null
+   },
+   "social": {
+    "injuryRate": 1.5,
+    "penaltiesM": 153.8,
+    "genderPayGap": null
+   },
+   "gov": {
+    "boardIndependence": 85.0,
+    "ceoPayRatio": 616.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "EQIX",
+   "name": "Equinix",
+   "sector": "Real Estate",
+   "domain": "equinix.com",
+   "financial": {
+    "revenueB": 6.0,
+    "marketCapB": 26.5,
+    "ebitB": 1.83,
+    "return5y": 73.7,
+    "pe": 32.3
+   },
+   "env": {
+    "ghgIntensity": 33.2,
+    "scope12Mt": 0.2,
+    "scope3Reported": false,
+    "renewableShare": 59.06,
+    "waterIntensity": 167.35,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.15,
+    "penaltiesM": 0,
+    "genderPayGap": 12.36
+   },
+   "gov": {
+    "boardIndependence": 86.0,
+    "ceoPayRatio": 152.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "SPG",
+   "name": "Simon Property",
+   "sector": "Real Estate",
+   "domain": "simon.com",
+   "financial": {
+    "revenueB": 7.1,
+    "marketCapB": 31.0,
+    "ebitB": 2.55,
+    "return5y": 54.3,
+    "pe": 16.6
+   },
+   "env": {
+    "ghgIntensity": 72.5,
+    "scope12Mt": 0.511,
+    "scope3Reported": true,
+    "renewableShare": null,
+    "waterIntensity": 568.94,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 0.9,
+    "penaltiesM": 0,
+    "genderPayGap": 1.37
+   },
+   "gov": {
+    "boardIndependence": 81.0,
+    "ceoPayRatio": 195.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "O",
+   "name": "Realty Income",
+   "sector": "Real Estate",
+   "domain": "realtyincome.com",
+   "financial": {
+    "revenueB": 3.2,
+    "marketCapB": 8.5,
+    "ebitB": 1.17,
+    "return5y": 48.5,
+    "pe": 16.2
+   },
+   "env": {
+    "ghgIntensity": 46.0,
+    "scope12Mt": 0.147,
+    "scope3Reported": false,
+    "renewableShare": 21.95,
+    "waterIntensity": 287.46,
+    "netZeroTarget": 2050
+   },
+   "social": {
+    "injuryRate": 1.88,
+    "penaltiesM": 5.5,
+    "genderPayGap": 7.37
+   },
+   "gov": {
+    "boardIndependence": 87.0,
+    "ceoPayRatio": 274.0,
+    "climateInProxy": false
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  },
+  {
+   "ticker": "WELL",
+   "name": "Welltower",
+   "sector": "Real Estate",
+   "domain": "welltower.com",
+   "financial": {
+    "revenueB": 3.7,
+    "marketCapB": 1.2,
+    "ebitB": 1.47,
+    "return5y": 85.6,
+    "pe": 21.3
+   },
+   "env": {
+    "ghgIntensity": 50.3,
+    "scope12Mt": 0.187,
+    "scope3Reported": true,
+    "renewableShare": 54.58,
+    "waterIntensity": 485.6,
+    "netZeroTarget": 2030
+   },
+   "social": {
+    "injuryRate": 1.65,
+    "penaltiesM": 10.3,
+    "genderPayGap": 8.3
+   },
+   "gov": {
+    "boardIndependence": 74.0,
+    "ceoPayRatio": 123.0,
+    "climateInProxy": true
+   },
+   "meta": {
+    "source": "SYNTHETIC (seed 2026)",
+    "asOf": "2025-12-31"
+   }
+  }
+ ]
+}

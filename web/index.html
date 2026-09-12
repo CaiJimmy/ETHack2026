@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GreenRank — S&P 500 Sustainability</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>GreenRank</h1>
+  <nav>
+    <button data-tab="explore" class="active">Explore</button>
+    <button data-tab="fund">Net-Zero Fund</button>
+    <button data-tab="quiz">Quiz</button>
+    <button data-tab="methods">Methods</button>
+  </nav>
+  <span class="badge">synthetic data</span>
+</header>
+
+<!-- ---------- EXPLORE ---------- -->
+<section id="explore" class="tab active">
+  <aside class="controls">
+    <label>Sector
+      <select id="sectorFilter"><option value="">All sectors</option></select>
+    </label>
+    <label>X axis
+      <select id="xAxis">
+        <option value="marketCapB">Market cap ($B)</option>
+        <option value="return5y">5-year return (%)</option>
+        <option value="pe">P/E</option>
+        <option value="ghgIntensity">GHG intensity (tCO2e/$M)</option>
+        <option value="revenueB">Revenue ($B)</option>
+      </select>
+    </label>
+    <label>Log X <input type="checkbox" id="logX" checked></label>
+    <h3>Pillar weights</h3>
+    <label>Environment <span id="wEv">50</span>%<input type="range" id="wE" min="0" max="100" value="50"></label>
+    <label>Social <span id="wSv">25</span>%<input type="range" id="wS" min="0" max="100" value="25"></label>
+    <label>Governance <span id="wGv">25</span>%<input type="range" id="wG" min="0" max="100" value="25"></label>
+    <label>Missing-data penalty <span id="penv">10</span> pts<input type="range" id="pen" min="0" max="30" value="10"></label>
+    <p class="hint">Scores are sector-relative percentiles. Drag the weights: the ranking changes. There is no single "true" rank.</p>
+  </aside>
+  <div class="chartwrap"><svg id="scatter"></svg></div>
+  <aside id="card" class="card"><p class="hint">Click a logo for its score card.</p></aside>
+</section>
+
+<!-- ---------- FUND ---------- -->
+<section id="fund" class="tab">
+  <aside class="controls">
+    <h3>$1B under a net-zero shock</h3>
+    <label>Shadow carbon price $<span id="cpv">150</span>/t<input type="range" id="cp" min="0" max="500" step="10" value="150"></label>
+    <label>Portfolio intensity cap: <span id="capv">50</span>% below index<input type="range" id="cap" min="0" max="90" step="5" value="50"></label>
+    <label>Tilt strength <span id="tiltv">1.0</span><input type="range" id="tilt" min="0" max="3" step="0.1" value="1"></label>
+    <p class="hint">Start from market-cap weights. Each company's EBIT is hit by carbon price × Scope 1+2. Weights tilt away from the hit, then high-intensity names are trimmed until the cap holds.</p>
+    <div id="fundStats"></div>
+  </aside>
+  <div class="fundmain">
+    <h3>Sector tilt vs index</h3>
+    <div id="sectorTilt"></div>
+    <h3>Largest positions</h3>
+    <table id="fundTable"><thead><tr><th>Company</th><th>Index</th><th>Fund</th><th>EBIT hit</th></tr></thead><tbody></tbody></table>
+    <h3>Dropped first</h3>
+    <div id="dropped"></div>
+  </div>
+</section>
+
+<!-- ---------- QUIZ ---------- -->
+<section id="quiz" class="tab">
+  <div class="quizbox">
+    <p id="qText"></p>
+    <div class="choices">
+      <button class="choice" id="c0"></button>
+      <span>vs</span>
+      <button class="choice" id="c1"></button>
+    </div>
+    <div id="reveal" class="reveal hidden"></div>
+    <button id="next" class="hidden">Next →</button>
+    <p class="score">Score: <span id="qScore">0</span> / <span id="qTotal">0</span></p>
+  </div>
+  <aside class="controls">
+    <h3>Perception gap</h3>
+    <p class="hint">Companies people guess are greener than they are (all players, this browser).</p>
+    <div id="gap"></div>
+  </aside>
+</section>
+
+<!-- ---------- METHODS ---------- -->
+<section id="methods" class="tab prose">
+  <h2>What we mean by sustainability</h2>
+  <p>The ability of a company to keep operating in a world that prices carbon, enforces labour and safety law, and holds boards accountable. We measure it on three pillars and always relative to sector peers.</p>
+  <h2>Indicators</h2>
+  <table>
+    <tr><th>Pillar</th><th>Metric</th><th>Direction</th><th>Intended source</th></tr>
+    <tr><td>E</td><td>GHG intensity (Scope 1+2 / revenue)</td><td>lower is better</td><td>EPA GHGRP, 10-K, CSR reports</td></tr>
+    <tr><td>E</td><td>Renewable electricity share</td><td>higher</td><td>CSR reports, CDP</td></tr>
+    <tr><td>E</td><td>Water intensity</td><td>lower</td><td>CSR reports</td></tr>
+    <tr><td>E</td><td>Scope 3 reported; net-zero target year</td><td>yes / earlier</td><td>CSR reports, SBTi</td></tr>
+    <tr><td>S</td><td>Injury rate (TRIR)</td><td>lower</td><td>OSHA, CSR reports</td></tr>
+    <tr><td>S</td><td>Fines & penalties</td><td>lower</td><td>Violation Tracker</td></tr>
+    <tr><td>S</td><td>Gender pay gap</td><td>lower</td><td>CSR reports</td></tr>
+    <tr><td>G</td><td>Board independence</td><td>higher</td><td>DEF 14A proxy</td></tr>
+    <tr><td>G</td><td>CEO pay ratio</td><td>lower</td><td>DEF 14A proxy</td></tr>
+    <tr><td>G</td><td>Climate risk discussed in proxy</td><td>yes</td><td>DEF 14A proxy</td></tr>
+  </table>
+  <h2>Scoring</h2>
+  <ol>
+    <li>Each metric → percentile rank within GICS sector (0–100). Reverse for "bad" metrics.</li>
+    <li>Missing value → excluded from the pillar mean and a fixed penalty is subtracted. We never impute the median.</li>
+    <li>Pillar score = mean of its metric ranks. Composite = user-weighted mean of pillars.</li>
+  </ol>
+  <h2>Limitations (honest list)</h2>
+  <ul>
+    <li><b>All metric values on this page are synthetic.</b> The pipeline, schema and scoring are real; the numbers are seeded random draws calibrated per sector.</li>
+    <li>Sector-relative ranking hides that a "best-in-class" utility still emits far more than a bank.</li>
+    <li>Scope 3 is where most emissions sit for financials and retailers, and it is the least reported.</li>
+    <li>The fund model ignores pass-through of carbon costs to customers, and uses active share as a stand-in for tracking error.</li>
+  </ul>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
