@@ -1,6 +1,10 @@
 /* GreenRank — runs on web/data/master.json (real data). No build step. */
 const $ = s => document.querySelector(s);
-const logoUrl = d => `https://www.google.com/s2/favicons?domain=${d}&sz=64`;
+let ICONS = {};   // ticker -> bundled file in web/icons/ (built by data/build_icons.py)
+const letterIcon = t => "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><circle cx="32" cy="32" r="32" fill="#2a2f3a"/><text x="32" y="40" text-anchor="middle" font-family="sans-serif" font-size="${t.length > 3 ? 18 : 24}" font-weight="700" fill="#e6e8ee">${t}</text></svg>`);
+const logoUrl = c => ICONS[c.ticker] ? `icons/${ICONS[c.ticker]}` : letterIcon(c.ticker);
+window.logoFallback = (el, t) => { const u = letterIcon(t); el.tagName === "image" ? el.setAttribute("href", u) : (el.src = u); };
+const logoAttrs = c => `onerror="logoFallback(this,'${c.ticker}')"`;
 const fmt = (v, d = 1) => v == null ? "—" : (+v).toLocaleString("en-US", { maximumFractionDigits: d });
 const pct = v => v == null ? "—" : (v >= 0 ? "+" : "") + fmt(v, 1) + "%";
 
@@ -136,7 +140,7 @@ function drawScatterChart() {
     const x = sx(row.x), y = sy(row.y);
     g += `<g class="logo${selected === row.c.ticker ? " sel" : ""}" data-t="${row.c.ticker}"><title>${row.c.name} — score ${fmt(row.y, 0)}</title>
       <circle cx="${x}" cy="${y}" r="${r}" fill="#fff" stroke="hsl(${row.y * 1.2},70%,45%)" stroke-width="3"/>
-      <image href="${logoUrl(row.c.domain)}" x="${x - r * .65}" y="${y - r * .65}" width="${r * 1.3}" height="${r * 1.3}"/>
+      <image href="${logoUrl(row.c)}" ${logoAttrs(row.c)} x="${x - r * .65}" y="${y - r * .65}" width="${r * 1.3}" height="${r * 1.3}"/>
       ${showLabels ? `<text x="${x}" y="${y + r + 11}">${row.c.ticker}</text>` : ""}</g>`;
   }
   svg.innerHTML = g;
@@ -149,7 +153,7 @@ function showCard(c) {
   const s = score(c, weights());
   const peers = DATA.filter(x => x.sector === c.sector).map(x => ({ t: x.ticker, s: score(x, weights()).total })).filter(p => p.s != null).sort((a, b) => b.s - a.s);
   const pos = peers.findIndex(p => p.t === c.ticker) + 1;
-  let h = `<h2><img src="${logoUrl(c.domain)}" width="20" style="vertical-align:middle"> ${c.name}</h2>
+  let h = `<h2><img src="${logoUrl(c)}" ${logoAttrs(c)} width="20" style="vertical-align:middle"> ${c.name}</h2>
     <div class="hint">${c.sector} · ${c.industry || ""}</div>
     <div class="big">${fmt(s.total, 0)}</div>
     <div class="hint">Rank ${pos} of ${peers.length} in ${c.sector}. Data for ${s.n} of ${s.of} metrics.</div>`;
@@ -206,7 +210,7 @@ function drawFund() {
   }).join("");
   const top = [...rows].sort((a, b) => b.w - a.w).slice(0, 15);
   $("#fundTable tbody").innerHTML = top.map(r =>
-    `<tr><td><img src="${logoUrl(r.c.domain)}" width="14">${r.c.name}</td><td>${fmt(r.wIdx * 100, 2)}%</td><td>${fmt(r.w * 100, 2)}%</td><td>${r.c.ghgrp_scope1_mt == null ? "<span class='hint'>no site data</span>" : fmt(r.hit * 100, 0) + "%"}</td></tr>`).join("");
+    `<tr><td><img src="${logoUrl(r.c)}" ${logoAttrs(r.c)} width="14">${r.c.name}</td><td>${fmt(r.wIdx * 100, 2)}%</td><td>${fmt(r.w * 100, 2)}%</td><td>${r.c.ghgrp_scope1_mt == null ? "<span class='hint'>no site data</span>" : fmt(r.hit * 100, 0) + "%"}</td></tr>`).join("");
   const cut = rows.filter(r => r.wIdx > 0 && r.w / r.wIdx <= 0.1 && !r.excluded).sort((a, b) => b.wIdx - a.wIdx);
   $("#dropped").innerHTML = cut.length ? `<span class="hint">${cut.length} companies. The largest: </span>` + cut.slice(0, 12).map(r => `${r.c.name} <span class="hint">(${fmt(r.hit * 100, 0)}% of profit at risk)</span>`).join(" · ") : `<span class="hint">None at these settings.</span>`;
   const gained = [...rows].sort((a, b) => (b.w - b.wIdx) - (a.w - a.wIdx)).slice(0, 3), lost = [...rows].sort((a, b) => (a.w - a.wIdx) - (b.w - b.wIdx)).slice(0, 3);
@@ -257,7 +261,7 @@ function askQuestion() {
   $("#finish").classList.add("hidden"); $(".choices").classList.remove("hidden");
   $("#qProgress").textContent = `Question ${qi + 1} of ${order.length} · score ${qScore}`;
   $("#qText").textContent = t.text;
-  q.pair.forEach((c, i) => { const el = $("#c" + i); el.className = "choice"; el.disabled = false; el.innerHTML = `<img src="${logoUrl(c.domain)}">${c.name}<small>${c.sector || ""}</small>`; });
+  q.pair.forEach((c, i) => { const el = $("#c" + i); el.className = "choice"; el.disabled = false; el.innerHTML = `<img src="${logoUrl(c)}" ${logoAttrs(c)}>${c.name}<small>${c.sector || ""}</small>`; });
   $("#reveal").classList.add("hidden"); $("#next").classList.add("hidden");
 }
 function answer(i) {
@@ -284,25 +288,66 @@ function colorScale(key) {
   const good = key === "renew_elec_pct" || key === "elec_access_pct" || key === "gdp_pc" || key === "life_exp";
   return { lo, hi, color: v => { if (v == null) return "rgba(60,60,70,.6)"; const x = good ? 1 - t(v) : t(v); return `hsl(${120 - 120 * x},70%,${35 + 15 * x}%)`; } };
 }
-async function initGlobe() {
-  if (G) { G.width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight); return; }
+let mapMode = "3d";
+async function loadGlobeData() {
+  if (COUNTRIES) return;
   [COUNTRIES, GEO, HQ] = await Promise.all([fetch("data/countries.json").then(r => r.json()).then(j => j.countries), fetch("data/countries.geojson").then(r => r.json()), fetch("data/hq.json").then(r => r.json()).catch(() => ({}))]);
   ALL.forEach(c => { c.hq = HQ[c.ticker] || null; });
-  const withHq = ALL.filter(c => c.hq).length;
-  $("#globeNote").textContent = `${withHq} of ${ALL.length} companies have a known head-office location.`;
-  G = Globe()($("#globeDiv"))
-    .width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight)
-    .globeImageUrl("lib/earth-dark.jpg").backgroundImageUrl("lib/night-sky.png")
-    .polygonsData(GEO.features.filter(f => f.properties.ISO_A2 !== "AQ"))
-    .polygonAltitude(0.006).polygonSideColor(() => "rgba(0,0,0,0.15)").polygonStrokeColor(() => "#111")
-    .polygonLabel(f => { const c = COUNTRIES[isoOf(f)], k = $("#globeMetric").value; return `<div style="background:#181b22;padding:6px 8px;border-radius:6px;font-size:12px"><b>${f.properties.ADMIN}</b><br>${c && c[k] != null ? METRIC_FMT[k](c[k]) + " (" + (c[k + "_yr"] || c.co2_mt_yr) + ")" : "no data"}</div>`; })
-    .onPolygonClick(f => showCountry(f))
-    .htmlElement(c => { const el = document.createElement("img"); el.src = logoUrl(c.domain); el.className = "glogo"; el.title = `${c.name} — ${c.hq.city.split(",")[0]}`; el.onclick = () => { openExplore(c); }; return el; })
-    .htmlLat(c => c.hq.lat).htmlLng(c => c.hq.lon).htmlAltitude(0.01);
-  G.pointOfView({ lat: 35, lng: -60, altitude: 1.9 });
-  G.controls().autoRotate = true; G.controls().autoRotateSpeed = 0.4;
-  $("#globeDiv").addEventListener("pointerdown", () => G.controls().autoRotate = false);
-  paintGlobe(); placeLogos();
+  $("#globeNote").textContent = `${ALL.filter(c => c.hq).length} of ${ALL.length} companies have a known head-office location.`;
+}
+async function initGlobe() {
+  await loadGlobeData();
+  const want = document.querySelector('input[name="mapView"]:checked').value;
+  if (want === "2d" || mapMode === "2d-forced") { showFlat(); return; }
+  $("#flatMap").classList.add("hidden"); $("#globeDiv").classList.remove("hidden");
+  if (G) { G.width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight); return; }
+  try {
+    const test = document.createElement("canvas").getContext("webgl2") || document.createElement("canvas").getContext("webgl");
+    if (!test) throw new Error("no WebGL");
+    G = Globe()($("#globeDiv"))
+      .width($("#globeDiv").clientWidth).height($("#globeDiv").clientHeight)
+      .globeImageUrl("lib/earth-dark.jpg").backgroundImageUrl("lib/night-sky.png")
+      .polygonsData(GEO.features.filter(f => f.properties.ISO_A2 !== "AQ"))
+      .polygonAltitude(0.006).polygonSideColor(() => "rgba(0,0,0,0.15)").polygonStrokeColor(() => "#111")
+      .polygonLabel(f => { const c = COUNTRIES[isoOf(f)], k = $("#globeMetric").value; return `<div style="background:#181b22;padding:6px 8px;border-radius:6px;font-size:12px"><b>${f.properties.ADMIN}</b><br>${c && c[k] != null ? METRIC_FMT[k](c[k]) + " (" + (c[k + "_yr"] || c.co2_mt_yr) + ")" : "no data"}</div>`; })
+      .onPolygonClick(f => showCountry(f))
+      .htmlElement(c => { const el = document.createElement("img"); el.src = logoUrl(c); el.onerror = () => logoFallback(el, c.ticker); el.className = "glogo"; el.title = `${c.name} — ${c.hq.city.split(",")[0]}`; el.onclick = () => { openExplore(c); }; return el; })
+      .htmlLat(c => c.hq.lat).htmlLng(c => c.hq.lon).htmlAltitude(0.01);
+    G.pointOfView({ lat: 35, lng: -60, altitude: 1.9 });
+    G.controls().autoRotate = true; G.controls().autoRotateSpeed = 0.4;
+    $("#globeDiv").addEventListener("pointerdown", () => G.controls().autoRotate = false);
+    paintGlobe(); placeLogos();
+  } catch (e) {
+    G = null; mapMode = "2d-forced";
+    $("#webglNote").textContent = "3D needs WebGL, which this browser has turned off. Showing the flat map instead.";
+    document.querySelector('input[name="mapView"][value="2d"]').checked = true;
+    showFlat();
+  }
+}
+/* ---- Flat map: equirectangular SVG, same colours, same click behaviour ---- */
+function showFlat() {
+  $("#globeDiv").classList.add("hidden"); const svg = $("#flatMap"); svg.classList.remove("hidden");
+  const W = svg.clientWidth || 800, H = svg.clientHeight || 500, k = $("#globeMetric").value, sc = colorScale(k);
+  const sx = lon => (lon + 180) / 360 * W, sy = lat => (90 - lat) / 180 * H * (W / H / 2);   // keep 2:1 aspect
+  svg.setAttribute("viewBox", `0 0 ${W} ${W / 2}`);
+  const ring = r => r.map((p, i) => (i ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("") + "Z";
+  let g = "";
+  for (const f of GEO.features) {
+    if (f.properties.ISO_A2 === "AQ") continue;
+    const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+    const dpath = polys.map(p => p.map(ring).join("")).join("");
+    const v = COUNTRIES[isoOf(f)]?.[k];
+    g += `<path d="${dpath}" fill="${sc.color(v)}" data-i="${GEO.features.indexOf(f)}"><title>${f.properties.ADMIN}: ${v == null ? "no data" : METRIC_FMT[k](v)}</title></path>`;
+  }
+  const n = +$("#topN").value;
+  for (const c of ALL.filter(c => c.hq).sort((a, b) => b.market_cap_b - a.market_cap_b).slice(0, n)) {
+    const x = sx(c.hq.lon), y = sy(c.hq.lat);
+    g += `<g class="flogo" data-t="${c.ticker}"><title>${c.name} — ${c.hq.city.split(",")[0]}</title><circle cx="${x}" cy="${y}" r="7" fill="#fff" stroke="#3ecf8e" stroke-width="1.5"/><image href="${logoUrl(c)}" ${logoAttrs(c)} x="${x - 5}" y="${y - 5}" width="10" height="10"/></g>`;
+  }
+  svg.innerHTML = g;
+  svg.querySelectorAll("path").forEach(p => p.onclick = () => showCountry(GEO.features[+p.dataset.i]));
+  svg.querySelectorAll(".flogo").forEach(el => el.onclick = () => openExplore(byT(el.dataset.t)));
+  $("#globeLegend").innerHTML = `<span>${METRIC_FMT[k](sc.lo)}</span><i></i><span>${METRIC_FMT[k](sc.hi)}</span>`;
 }
 function paintGlobe() {
   const k = $("#globeMetric").value, sc = colorScale(k);
@@ -325,13 +370,12 @@ function showCountry(f) {
   if (here.length) {
     const mc = here.reduce((a, x) => a + x.market_cap_b, 0), em = here.reduce((a, x) => a + (x.ghgrp_scope1_mt || 0), 0);
     h += `<p class="hint">Together worth $${fmt(mc / 1000, 1)} trillion. Their reported US site emissions: ${fmt(em, 0)} Mt.</p><ul class="clist">` +
-      here.slice(0, 40).map(x => `<li data-t="${x.ticker}"><img src="${logoUrl(x.domain)}">${x.name}<span class="hint" style="margin-left:auto">${x.hq.city.split(",")[0]}</span></li>`).join("") + (here.length > 40 ? `<li class="hint">… and ${here.length - 40} more</li>` : "") + "</ul>";
+      here.slice(0, 40).map(x => `<li data-t="${x.ticker}"><img src="${logoUrl(x)}" ${logoAttrs(x)}>${x.name}<span class="hint" style="margin-left:auto">${x.hq.city.split(",")[0]}</span></li>`).join("") + (here.length > 40 ? `<li class="hint">… and ${here.length - 40} more</li>` : "") + "</ul>";
   } else h += `<p class="hint">No S&P 500 company has its head office here. Many still sell, make, or emit here; that is not in this dataset.</p>`;
   h += `<p class="hint">Source: ${SRC.world.name}</p>`;
   $("#countryCard").innerHTML = h;
   $("#countryCard").querySelectorAll("li[data-t]").forEach(li => li.onclick = () => openExplore(byT(li.dataset.t)));
-  const [lng, lat] = centroid(f);
-  G.pointOfView({ lat, lng, altitude: 1.6 }, 800);
+  if (G && !$("#globeDiv").classList.contains("hidden")) { const [lng, lat] = centroid(f); G.pointOfView({ lat, lng, altitude: 1.6 }, 800); }
 }
 function centroid(f) {           // vertex average of the largest ring; good enough to aim the camera
   const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
@@ -342,8 +386,10 @@ function openExplore(c) {
   document.querySelector('nav button[data-tab="explore"]').click();
   if (DATA.includes(c)) { $("#sectorFilter").value = ""; drawScatter(); showCard(c); }
 }
-$("#globeMetric").onchange = () => G && paintGlobe();
-$("#topN").oninput = () => G && placeLogos();
+const flatShown = () => !$("#flatMap").classList.contains("hidden");
+$("#globeMetric").onchange = () => flatShown() ? showFlat() : G && paintGlobe();
+$("#topN").oninput = () => { $("#topNv").textContent = $("#topN").value; flatShown() ? showFlat() : G && placeLogos(); };
+document.querySelectorAll('input[name="mapView"]').forEach(r => r.onchange = initGlobe);
 
 /* ================= METHODS tables ================= */
 function fillMethods() {
@@ -379,11 +425,11 @@ $("#sizeKey").onchange = drawScatter;
 $("#c0").onclick = () => answer(0); $("#c1").onclick = () => answer(1);
 $("#next").onclick = () => { qi++; askQuestion(); };
 $("#restart").onclick = newRound;
-window.onresize = () => $("#explore").classList.contains("active") && drawScatter();
+window.onresize = () => { if ($("#explore").classList.contains("active")) drawScatter(); if ($("#globe").classList.contains("active") && flatShown()) showFlat(); };
 
-fetch("data/master.json").then(r => r.json()).then(j => {
+fetch("data/icons.json").then(r => r.json()).then(j => { ICONS = j; }).catch(() => {}).then(() => fetch("data/master.json")).then(r => r.json()).then(j => {
   ALL = j.companies.filter(c => !c.dual_class_duplicate && c.market_cap_b);
-  ALL.forEach(c => c.domain = c.logo_domain || DOMAINS[c.ticker] || (c.name.toLowerCase().replace(/^the /, "").replace(/[,.]?\s*(inc|corp|corporation|company|co|plc|ltd|group|holdings|incorporated|limited)\b.*$/, "").replace(/[^a-z0-9]/g, "") + ".com"));
+  ALL.forEach(c => c.domain = DOMAINS[c.ticker] || c.logo_domain || (c.name.toLowerCase().replace(/^the /, "").replace(/[,.]?\s*(inc|corp|corporation|company|co|plc|ltd|group|holdings|incorporated|limited)\b.*$/, "").replace(/[^a-z0-9]/g, "") + ".com"));
   DATA = ALL.filter(c => c.sector);
   computeRanks();
   [...new Set(DATA.map(c => c.sector))].sort().forEach(s => $("#sectorFilter").insertAdjacentHTML("beforeend", `<option>${s}</option>`));
@@ -468,4 +514,5 @@ const DOMAINS = { AAPL: "apple.com", GOOGL: "google.com", META: "meta.com", "BRK
   WST: "westpharma.com", RVTY: "revvity.com", SOLV: "solventum.com", GEHC: "gehealthcare.com", LH: "labcorp.com", DGX: "questdiagnostics.com",
   DVA: "davita.com", UHS: "uhs.com", CNC: "centene.com", MRNA: "modernatx.com", REGN: "regeneron.com", VRTX: "vrtx.com", BIIB: "biogen.com",
   INCY: "incyte.com", ZTS: "zoetis.com", VTRS: "viatris.com", HSIC: "henryschein.com", ES: "eversource.com", ED: "conedison.com", PEG: "pseg.com",
-  WEC: "wecenergygroup.com", EVRG: "evergy.com", CNP: "centerpointenergy.com", NCL: "nclhltd.com" };
+  WEC: "wecenergygroup.com", EVRG: "evergy.com", CNP: "centerpointenergy.com", NCL: "nclhltd.com",
+  /* corrections after checking every icon */ "AMZN": "amazon.com", "META": "meta.com", "TSLA": "tesla.com", "BAC": "bankofamerica.com", "CAT": "caterpillar.com", "MRK": "merck.com", "PG": "pg.com", "PM": "pmi.com", "WFC": "wellsfargo.com", "PANW": "paloaltonetworks.com", "RTX": "rtx.com", "C": "citigroup.com", "TMO": "thermofisher.com", "APH": "amphenol.com", "NEM": "newmont.com", "BKNG": "bookingholdings.com", "CVS": "cvshealth.com", "SPGI": "spglobal.com", "VLO": "valero.com", "MPC": "marathonpetroleum.com", "LOW": "lowes.com", "PSX": "phillips66.com", "CEG": "constellationenergy.com", "PWR": "quantaservices.com", "ELV": "elevancehealth.com", "ICE": "ice.com", "WM": "wm.com", "UPS": "ups.com", "MMC": "marshmclennan.com", "AMT": "americantower.com", "CDNS": "cadence.com", "SPG": "simon.com", "EOG": "eogresources.com", "APO": "apollo.com", "ROST": "rossstores.com", "RCL": "royalcaribbeangroup.com", "TRGP": "targaresources.com", "AJG": "ajg.com", "URI": "unitedrentals.com", "COR": "cencora.com", "FANG": "diamondbackenergy.com", "D": "dominionenergy.com", "NDAQ": "nasdaq.com", "VST": "vistra.com", "WAB": "wabteccorp.com", "CARR": "carrier.com", "FERG": "ferguson.com", "ADM": "adm.com", "WAT": "waters.com", "IDXX": "idexx.com", "LYV": "livenationentertainment.com", "AXON": "axon.com", "ROP": "ropertech.com", "TKO": "tkogrp.com", "WEC": "wecenergygroup.com", "EQT": "eqt.com", "KMB": "kimberly-clark.com", "CCI": "crowncastle.com", "BIIB": "biogen.com", "DXCM": "dexcom.com", "PCG": "pgecorp.com", "EXR": "extraspace.com", "WTW": "wtwco.com", "KHC": "kraftheinzcompany.com", "TDY": "teledyne.com", "CTSH": "cognizant.com", "CPAY": "corpay.com", "WSM": "williams-sonoma.com", "SMCI": "supermicro.com", "OTIS": "otis.com", "CNP": "centerpointenergy.com", "JBHT": "jbhunt.com", "NRG": "nrg.com", "DRI": "darden.com", "TPR": "tapestry.com", "VRSK": "verisk.com", "L": "loews.com", "DLTR": "dollartree.com", "PHM": "pultegroup.com", "EXE": "expandenergy.com", "EIX": "edison.com", "CMS": "cmsenergy.com", "CF": "cfindustries.com", "LUV": "southwest.com", "FDXF": "fedex.com", "BBY": "bestbuy.com", "EVRG": "evergy.com", "ESS": "essexapartmenthomes.com", "GEN": "gendigital.com", "NDSN": "nordson.com", "LNT": "alliantenergy.com", "TSCO": "tractorsupply.com", "J": "jacobs.com", "RVTY": "revvity.com", "ALB": "albemarle.com", "SWKS": "skyworksinc.com", "LII": "lennox.com", "CSGP": "costar.com", "BAX": "baxter.com", "PSKY": "paramount.com", "BXP": "bxp.com", "GNRC": "generac.com", "UHS": "uhs.com", "APTV": "aptiv.com", "PODD": "insulet.com", "ARE": "are.com", "MOS": "mosaicco.com", "NCLH": "ncl.com", "CHRW": "chrobinson.com", "UNP": "up.com", "GLW": "corning.com", "DHR": "danaher.com", "COP": "conocophillips.com", "SNPS": "synopsys.com", "ALL": "allstate.com", "DVN": "devonenergy.com", "FAST": "fastenal.com", "AMP": "ameriprise.com", "ROK": "rockwellautomation.com", "STLD": "steeldynamics.com", "ATO": "atmosenergy.com", "CHD": "churchdwight.com", "NVR": "nvrinc.com", "WYNN": "wynnresorts.com", "AVGO": "broadcom.com", "CDW": "cdw.com", "VMRK": "vivmark.com", "STZ": "cbrands.com", "BRO": "bbinsurance.com", "GPC": "genpt.com", "MTD": "mt.com", "CINF": "cinfin.com", "FFIV": "f5.com", "HPQ": "hp.com" };

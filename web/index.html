@@ -178,6 +178,10 @@
 <section id="globe" class="tab">
   <div class="row">
     <aside class="controls">
+      <h3>View</h3>
+      <label><input type="radio" name="mapView" value="3d" checked> 3D globe</label>
+      <label><input type="radio" name="mapView" value="2d"> Flat map</label>
+      <p class="hint" id="webglNote"></p>
       <h3>Colour the countries by</h3>
       <select id="globeMetric">
         <option value="co2_per_capita_t">CO2 per person (tonnes a year)</option>
@@ -193,7 +197,7 @@
       <p class="hint">Drag to turn the globe. Scroll to zoom. Click a country for its numbers and the S&amp;P 500 companies based there. Click a logo to open the company on the Explore tab.</p>
       <p class="hint" id="globeNote"></p>
     </aside>
-    <div id="globeWrap"><div id="globeDiv"></div></div>
+    <div id="globeWrap"><div id="globeDiv"></div><svg id="flatMap" class="hidden"></svg></div>
     <aside id="countryCard" class="card"><p class="hint">Click a country.</p></aside>
   </div>
   <footer class="sources">

@@ -87,17 +87,27 @@ for t, (y, r) in best.items():
 print(f"Report NLP scores: matched {len(best)}")
 
 
+DSTOP = {"inc", "corp", "corporation", "company", "co", "plc", "ltd", "group", "holdings", "incorporated", "limited", "the", "and", "of",
+         "international", "technologies", "technology", "industries", "energy", "financial", "services", "global", "systems", "solutions",
+         "health", "healthcare", "communications", "resources", "properties", "trust", "partners", "capital", "products", "brands", "foods",
+         "worldwide", "sciences", "materials", "stores", "realty", "power", "electric", "american", "general", "united", "national", "first", "new"}
+def domain_plausible(domain, name, ticker):
+    toks = [w for w in re.sub(r"[^a-z0-9 ]", " ", name.lower()).split() if len(w) >= 3 and w not in DSTOP]
+    host = domain.split(".")[0].replace("-", "")
+    return any(w[:4] in host for w in toks) or any(host[:4] in w for w in toks if len(host) >= 4) or ticker.lower() == host
+
 # ---------- 4b. Global Corporate ESG and Financial Dataset (Kaggle mrbossjaysrb; Yahoo/Sustainalytics-style fields) ----------
 CTR6 = ["Controversies.Environment", "Controversies.Social", "Controversies.Customers", "Controversies.Human Rights & Community",
         "Controversies.Labor Rights & Supply Chain", "Controversies.Governance"]
 SEV = {"Green": 0, "Yellow": 1, "Orange": 2, "Red": 3}
-n = 0
+n = 0; seen_corp = set()
 for r in csv.DictReader(open(T("Global Corporate ESG and Financial Dataset.csv")), delimiter=";"):
-    c = by_tick.get(norm_tick(r.get("ticker") or ""))
-    if not c or c.get("logo_domain"): continue
-    n += 1
+    tk = norm_tick(r.get("ticker") or ""); c = by_tick.get(tk)
+    if not c or tk in seen_corp: continue
+    seen_corp.add(tk); n += 1
     nz = lambda v: None if v in ("", "null", None) else v
     c["logo_domain"] = nz(r["domain"])
+    if c["logo_domain"] and not domain_plausible(c["logo_domain"], c["name"], c["ticker"]): c["logo_domain"] = None   # dataset column is often a different company
     c["altman_z"] = num(nz(r["altman_score"]))
     c["piotroski_f"] = num(nz(r["piotroski_score"]))
     c["esg_risk_yahoo"] = num(nz(r["esg"]))
