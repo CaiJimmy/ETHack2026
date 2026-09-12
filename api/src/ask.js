@@ -43,6 +43,7 @@ Company emissions may be from different years and boundaries. gap is delivered m
 Use default limit 5 unless requested, never exceed 20; if more requested explain the limit. Prefer one tool for simple lookups. For decision or comparison questions, combine at most three useful tools, such as ranking companies then benchmarking the sector. Do not repeat the same tool call. Use dashboard context and recent history only to resolve references such as “these”, “here”, or “that company”.`;
 
 async function generate(env, system, data, schema, fetcher) {
+    system += '\nFormat the answer as 2–4 short paragraphs, separated by actual newline characters (a blank line between paragraphs). Put the finding, interpretation, and next verification step in separate paragraphs when relevant. Encode newlines correctly in the JSON string. Do not return one dense paragraph or literal backslash-n text.';
     const model = env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
     if (!/^[a-zA-Z0-9.-]+$/.test(model)) throw new AskError('Invalid model configuration', 503);
     let response;
