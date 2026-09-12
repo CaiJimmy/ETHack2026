@@ -1,0 +1,26 @@
+# data
+pandas
+numpy
+scipy
+pyarrow
+duckdb
+openpyxl
+lxml
+requests
+rapidfuzz          # facility/parent-name -> ticker entity matching
+tqdm
+
+# modelling
+scikit-learn
+statsmodels
+
+# sourcing
+kaggle>=1.8.0      # access-token auth (~/.kaggle/access_token)
+kagglehub>=0.4.1
+yfinance
+
+# output
+matplotlib
+plotly
+python-pptx        # deck generation
+playwright         # scripted site recording for the demo GIF

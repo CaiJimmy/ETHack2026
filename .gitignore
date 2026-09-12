@@ -1,0 +1,26 @@
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# nix
+result
+result-*
+
+# raw + intermediate data: rebuilt by the pipeline, never committed
+data/raw/
+data/interim/
+*.parquet
+*.zip
+
+# node / site build
+node_modules/
+site/dist/
+
+# credentials
+.env
+kaggle.json
+
+# scratch
+*.log
+.DS_Store
