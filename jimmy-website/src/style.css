@@ -24,3 +24,44 @@
 @media(max-width:850px){.workspace{grid-template-columns:1fr}.insight-panel{position:fixed;grid-row:auto}.panel-body:has(.assistant-welcome){display:block}.assistant-welcome{display:block}.panel-footer{display:block}}
 @media(max-width:550px){.app{padding-bottom:78px}.insight-panel{right:12px;bottom:12px;width:calc(100vw - 24px);max-height:min(610px,calc(100dvh - 24px));border-radius:14px}.insight-panel.collapsed{width:235px}.panel-heading{height:62px;min-height:62px}.panel-body{padding:17px}.assistant-prompts{padding-left:11px;padding-right:11px}.assistant-input{padding:10px 11px 8px}}
 .brief-meta{display:flex;gap:8px;align-items:center;margin:-3px 0 15px;font-size:10px;color:#84918d}.brief-meta>span{border:1px solid #dde5df;border-radius:12px;padding:4px 7px}.confidence{font-weight:600;text-transform:capitalize}.confidence.high{color:#397152;background:#edf6ed}.confidence.medium{color:#8b692d;background:#faf5e7}.confidence.low{color:#a05b45;background:#fbefe9}.brief-list{margin:0;padding-left:18px;color:#536a60;font-size:12px;line-height:1.65}.brief-list li+li{margin-top:8px}.brief-list.actions{color:#344e43}.answer-content .brief-list+.answer-text{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}.follow-ups{display:grid;gap:6px;margin:18px 0}.follow-ups h4{margin:0 0 3px}.follow-ups button{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;border:1px solid #dfe7df;border-radius:7px;background:#f8fbf6;padding:9px 10px;font-size:11px;color:#4f6c59}.follow-ups button:hover{background:#edf4e7}
+
+/* GreenRank Modern Hackathon Styles */
+.app{max-width:1920px;margin:0 auto;padding-bottom:30px;background:#f1f4f2;min-height:100vh}
+.workspace{padding:18px 24px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.greenrank-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:#0f1e24;border-bottom:1px solid #23363f;color:#f1f5f4;position:sticky;top:0;z-index:800}
+.brand-group{display:flex;align-items:center;gap:10px}
+.brand-mark{background:#23434a;color:var(--lime);font-family:Manrope,sans-serif;font-weight:800;font-size:13px;letter-spacing:.5px;padding:4px 8px;border-radius:6px;border:1px solid #3c626b;box-shadow:0 1px 4px #0003}
+.brand-text{display:flex;flex-direction:column}
+.brand-name{font-family:Manrope,sans-serif;font-size:15px;font-weight:750;color:#fff;letter-spacing:-.3px;line-height:1.1}
+.brand-tag{font-size:9px;font-weight:500;color:#7e949c;letter-spacing:.5px}
+.nav-tabs{display:flex;align-items:center;gap:5px;background:#172a32;padding:3px 4px;border-radius:8px;border:1px solid #243943}
+.nav-tabs button{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:#92a7af;padding:6px 12px;border-radius:6px;transition:all .15s ease;height:32px;border-bottom:none}
+.nav-tabs button:hover{color:#e5f0ec;background:#1e353f}
+.nav-tabs button.active{color:#0d2127;background:var(--lime);font-weight:650}
+.nav-actions{display:flex;align-items:center;gap:16px}
+.data-counts{display:flex;align-items:center;gap:6px;font-size:11px;color:#8da2aa;font-variant-numeric:tabular-nums}
+.data-counts strong{color:#e2ede8}
+.data-counts .sep{color:#4b626c}
+.assistant-btn{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:#1a313a;border:1px solid #2e4a55;color:var(--lime);padding:6px 11px;border-radius:6px;transition:all .15s ease}
+.assistant-btn:hover,.assistant-btn.active{background:#25424e;border-color:#436a79;color:#e8ffd0}
+.finding-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 20px;background:#14242c;color:#e3ebe8;border-bottom:1px solid #233740}
+.finding-main{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.finding-badge{font-size:9px;font-weight:800;letter-spacing:1.2px;color:var(--lime);text-transform:uppercase}
+.finding-main p{font-size:13px;line-height:1.55;color:#cbd8d4}
+.finding-main strong{color:#fff;font-weight:600}
+.finding-metrics{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.finding-stat{display:flex;flex-direction:column;background:#0e1a20;border:1px solid #1f333c;border-radius:6px;padding:7px 12px;min-width:100px}
+.finding-stat span{font-size:10px;color:#849ca4;white-space:nowrap}
+.finding-stat strong{font-family:Manrope,sans-serif;font-size:16px;font-weight:700;color:#f0f6f4;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:4px}
+.finding-stat strong small{font-size:9px;font-weight:400;color:#849ca4}
+.finding-stat.highlight strong{color:var(--lime)}
+.finding-stat.alert strong{color:#f7a072}
+.assistant-idle{padding:10px 2px}
+.idle-badge{font-size:9px;letter-spacing:1px;font-weight:700;background:#edf5ea;color:#3b6b47;padding:3px 6px;border-radius:4px;display:inline-block;margin-bottom:8px}
+.assistant-idle h3{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.prompt-label{font-size:10px;letter-spacing:1px;font-weight:700;color:#7b8e88;margin:18px 0 8px}
+.idle-prompts{display:grid;gap:6px}
+.idle-prompts button{display:flex;align-items:start;gap:8px;text-align:left;background:#f8faf6;border:1px solid #dce6db;border-radius:6px;padding:9px 11px;font-size:12px;color:#274737;line-height:1.45;transition:all .15s ease}
+.idle-prompts button:hover{background:#eaf3e5;border-color:#bcd2b6}
+.idle-prompts button svg{margin-top:2px;color:#588258}
+@media(max-width:950px){.greenrank-nav{height:auto;padding:10px 16px;flex-wrap:wrap;gap:10px}.nav-tabs{order:3;width:100%;justify-content:space-between;overflow-x:auto}.nav-tabs button{padding:6px 8px;font-size:11px;white-space:nowrap}.finding-banner{flex-direction:column;align-items:flex-start;padding:12px 16px}.finding-metrics{width:100%;overflow-x:auto;justify-content:flex-start}.workspace{padding:10px 12px}}
