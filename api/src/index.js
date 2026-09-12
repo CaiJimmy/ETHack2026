@@ -66,8 +66,57 @@ export function plumeQuery(p) {
     }
     return { sql: `SELECT plume_id, plume_latitude, plume_longitude, observed_at_utc, country, region, place, ipcc_sector, gas, emission_auto, emission_uncertainty_auto, bounds_west, bounds_south, bounds_east, bounds_north, platform, provider FROM plume_observations ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY ${sort === 'rate' ? 'emission_auto' : 'observed_at_utc'} DESC, plume_id ASC LIMIT ? OFFSET ?`, values: [...values, limit + 1, offset], limit, offset };
 }
+export function benchmarkQuery(p) {
+    validate(p, ['sector', 'ticker', 'metric', 'limit', 'offset']);
+    const { limit, offset } = page(p), where = [], values = [];
+    const metrics = { gap: 'gap_pct_yr', emissions: 'scope1_t', risk: 'd_ev_pct_of_ev' };
+    const metric = p.get('metric') || 'gap', column = metrics[metric];
+    if (!column) fail('Invalid metric');
+    if (p.has('sector')) { where.push('gics_sector = ?'); values.push(p.get('sector')); }
+    if (p.has('ticker')) {
+        const ticker = p.get('ticker').toUpperCase();
+        if (!/^[A-Z0-9.-]{1,15}$/.test(ticker)) fail('Invalid ticker');
+        where.push('ticker = ?'); values.push(ticker);
+    }
+    return { sql: `WITH ranked AS (
+        SELECT *, AVG(${column}) OVER (PARTITION BY gics_sector) AS sector_average,
+          COUNT(${column}) OVER (PARTITION BY gics_sector) AS sector_peer_count,
+          100.0 * PERCENT_RANK() OVER (PARTITION BY gics_sector ORDER BY ${column}) AS sector_percentile
+        FROM company_screening WHERE ${column} IS NOT NULL
+      ) SELECT *, ? AS benchmark_metric FROM ranked ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
+      ORDER BY ${column} DESC, ticker ASC LIMIT ? OFFSET ?`, values: [metric, ...values, limit + 1, offset], limit, offset };
+}
+export function hotspotQuery(p) {
+    validate(p, ['gas', 'country', 'region', 'start', 'end', 'min_rate', 'min_observations', 'sort', 'limit', 'offset']);
+    const { limit, offset } = page(p), where = [], values = [];
+    const gas = p.get('gas');
+    if (!['CH4', 'CO2'].includes(gas)) fail('gas must be CH4 or CO2');
+    where.push('gas = ?'); values.push(gas);
+    for (const key of ['country', 'region']) if (p.has(key)) { where.push(`${key} = ?`); values.push(p.get(key)); }
+    const start = date(p, 'start'), end = date(p, 'end');
+    if (start && end && start >= end) fail('end must be after start (end is exclusive)');
+    if (start) { where.push('observed_at_utc >= ?'); values.push(start); }
+    if (end) { where.push('observed_at_utc < ?'); values.push(end); }
+    if (p.has('min_rate')) { where.push('emission_auto >= ?'); values.push(number(p, 'min_rate', null, 0, 1e15)); }
+    const minimum = number(p, 'min_observations', 2, 2, 1000, true);
+    const sort = p.get('sort') || 'count';
+    if (!['count', 'rate'].includes(sort)) fail('Invalid sort');
+    return { sql: `SELECT gas || ':' || printf('%.1f', ROUND(plume_latitude,1)) || ':' || printf('%.1f', ROUND(plume_longitude,1)) AS plume_id,
+        ROUND(plume_latitude,1) AS plume_latitude, ROUND(plume_longitude,1) AS plume_longitude,
+        MAX(country) AS country, MAX(region) AS region, COALESCE(MAX(place), MAX(region), MAX(country), 'Hotspot') AS place,
+        gas, COUNT(*) AS observation_count, COUNT(emission_auto) AS quantified_count,
+        MAX(emission_auto) AS emission_auto, AVG(emission_auto) AS average_emission_rate,
+        MIN(observed_at_utc) AS first_observed_at, MAX(observed_at_utc) AS observed_at_utc,
+        'Approximately 0.1 degree grid; observations are not unique facilities' AS aggregation_basis,
+        'Carbon Mapper' AS provider
+      FROM plume_observations WHERE ${where.join(' AND ')}
+      GROUP BY gas, ROUND(plume_latitude,1), ROUND(plume_longitude,1) HAVING COUNT(*) >= ?
+      ORDER BY ${sort === 'rate' ? 'emission_auto' : 'observation_count'} DESC, plume_id ASC LIMIT ? OFFSET ?`, values: [...values, minimum, limit + 1, offset], limit, offset };
+}
 const companyNotes = ['Primary listings only in screening results.', 'Reporting years and emissions boundaries vary.', 'Risk values are stored scenario estimates, not predictions.'];
 const plumeNotes = ['Rows are observations, not unique facilities.', 'NULL rates mean unquantified, not zero.', 'Rates are kg of the specified gas/hour, not annual emissions.', 'Bounds enclose plume imagery; ownership is not established.'];
+const benchmarkNotes = ['Percentiles and averages compare companies only with peers in the same GICS sector that have the selected metric.', 'A high gap percentile means reductions are slower relative to the stated promise.', ...companyNotes.slice(1)];
+const hotspotNotes = ['A hotspot groups observations whose coordinates round to the same 0.1° cell (about 11 km north-south); it is not a facility or ownership attribution.', 'Repeated observations may cover the same event on different dates or passes.', ...plumeNotes.slice(1)];
 async function list(db, query, notes, source) {
     const result = await db.prepare(query.sql).bind(...query.values).all();
     const more = result.results.length > query.limit;
@@ -105,6 +154,8 @@ const worker = {
             }
             if (url.pathname === '/api/companies') return reply(await list(env.DB, companyQuery(url.searchParams), companyNotes, 'company_screening'));
             if (url.pathname === '/api/plumes') return reply(await list(env.DB, plumeQuery(url.searchParams), plumeNotes, 'plume_observations'));
+            if (url.pathname === '/api/insights/company-benchmarks') return reply(await list(env.DB, benchmarkQuery(url.searchParams), benchmarkNotes, 'company_screening + sector window functions'));
+            if (url.pathname === '/api/insights/hotspots') return reply(await list(env.DB, hotspotQuery(url.searchParams), hotspotNotes, 'plume_observations grouped to 0.1 degree cells'));
             const match = url.pathname.match(/^\/api\/companies\/([^/]+)$/);
             if (match) {
                 validate(url.searchParams, []);

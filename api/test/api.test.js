@@ -47,6 +47,20 @@ test('plume ranked query agrees with independent source SQL', async () => {
     const expected = sqlite.prepare("SELECT plume_id FROM plume_observations WHERE gas='CH4' AND country='United States' AND region='Texas' AND emission_auto IS NOT NULL ORDER BY emission_auto DESC,plume_id LIMIT 5").all();
     assert.equal(data.length, 5); assert.deepEqual(data.map(r => r.plume_id), expected.map(r => r.plume_id));
 });
+test('company benchmark returns verified same-sector context', async () => {
+    const { data, notes } = await (await call('/api/insights/company-benchmarks?metric=gap&sector=Utilities&limit=5')).json();
+    assert.equal(data.length, 5);
+    assert.ok(data.every(r => r.gics_sector === 'Utilities' && r.benchmark_metric === 'gap' && r.sector_peer_count > 1));
+    assert.ok(data.every(r => r.sector_percentile >= 0 && r.sector_percentile <= 100));
+    assert.ok(notes.some(n => n.includes('same GICS sector')));
+});
+test('persistent hotspots are repeated grid observations with date spans', async () => {
+    const { data, notes } = await (await call('/api/insights/hotspots?gas=CH4&min_observations=3&sort=count&limit=5')).json();
+    assert.ok(data.length > 0);
+    assert.ok(data.every(r => r.gas === 'CH4' && r.observation_count >= 3 && r.first_observed_at <= r.observed_at_utc));
+    assert.ok(data.every((r, i) => !i || data[i - 1].observation_count >= r.observation_count));
+    assert.ok(notes.some(n => n.includes('0.1° cell')));
+});
 test('antimeridian viewport excludes central longitudes', async () => {
     const { data } = await (await call('/api/plumes?west=170&east=-170&south=-90&north=90')).json();
     assert.ok(data.every(r => r.plume_longitude >= 170 || r.plume_longitude <= -170));

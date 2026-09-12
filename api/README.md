@@ -2,6 +2,8 @@
 
 Worker configured for the existing `climate-evidence` D1 database with binding `DB`. All database operations are read-only. `/api/ask` uses Gemini for query planning and evidence-based explanation.
 
+Gemini uses native function calling with a fixed allowlist. The Worker validates the selected function arguments, executes its own read-only endpoint, and sends verified evidence back for the conclusion. Gemini never receives arbitrary SQL or unrestricted network access.
+
 ## Local setup
 
 ```sh
