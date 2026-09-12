@@ -1,0 +1,123 @@
+{
+  "lane": "entity_resolution",
+  "script": "src/match_parents.py",
+  "generated_at": "2026-09-12T13:32:06.895740+00:00",
+  "network_io": "none; every input is an artifact another lane fetched and attested",
+  "method": {
+    "normalisation": [
+      "parenthetical annotations dropped before keying",
+      "key_strict = the GHGRP lane's parent_key (upper, & -> AND, punctuation dropped, legal-form and geography words dropped, whitespace removed)",
+      "key_med = same but only legal-form words dropped, so it lines up with the universe lane's name_to_ticker keys"
+    ],
+    "tiers": [
+      "manual override",
+      "index/SEC registrant and former names",
+      "universe name_to_ticker (includes 218 SEC former registrant names)",
+      "Violation Tracker subsidiary names",
+      "rapidfuzz fuzzy"
+    ],
+    "fuzzy": {
+      "scorer": "rapidfuzz token_set_ratio",
+      "threshold": 90,
+      "guards": [
+        "first significant token must match exactly",
+        "every differing token must be a generic corporate tail word",
+        "candidate must resolve to exactly one company"
+      ],
+      "why": "token_set_ratio alone returns 100 for any subset, which on this data means OLD DOMINION ELECTRIC COOPERATIVE matches Old Dominion Freight Line and PORTLAND GENERAL ELECTRIC matches General Electric"
+    },
+    "share_classes": "hits that differ only by share class collapse to the primary listing; anything else ambiguous is left unmatched and counted",
+    "fund_owners": {
+      "tickers": [
+        "APO",
+        "ARES",
+        "BAC",
+        "BLK",
+        "BX",
+        "C",
+        "GS",
+        "JPM",
+        "KKR",
+        "MS",
+        "WFC"
+      ],
+      "rule": "excluded from every automatic route. Where EPA names one of these as a facility parent the tonnes are left unattributed, because the asset sits in a managed fund rather than on the manager's own income statement. Berkshire Hathaway is deliberately not on the list: Berkshire Hathaway Energy is consolidated in its 10-K."
+    },
+    "camd": "ORIS -> GHGRP facility (crosswalk, one facility per ORIS) -> GHGRP parent ownership from the latest reporting year not in the future; fallback to the CAMD owner string only where CAMD names a single owner"
+  },
+  "inputs": [
+    {
+      "name": "universe",
+      "path": "data/interim/universe.parquet",
+      "bytes": 66296,
+      "sha256": "e22a57a79ae4bf56ab4487043383e1510f3c5d963710daa74703e1670216ffb4"
+    },
+    {
+      "name": "ticker_aliases",
+      "path": "data/interim/ticker_aliases.json",
+      "bytes": 95053,
+      "sha256": "70dd53e0c3b5ffa5ad9a5b777be5524ef24d82f1b522a3dfd33691696eb6d96a"
+    },
+    {
+      "name": "violations_aliases",
+      "path": "data/interim/violations_aliases.json",
+      "bytes": 181802,
+      "sha256": "6ee874278334c0e3e38cf9a267b0a535fbc7050a3a048fdf669660134e09cf1c"
+    },
+    {
+      "name": "ghgrp_facilities",
+      "path": "data/interim/ghgrp_facilities.parquet",
+      "bytes": 6010663,
+      "sha256": "68f0131dbe819dfda6520a68db2af69d406007a436f044a58c41fcfc9df5d681"
+    },
+    {
+      "name": "ghgrp_parent_year",
+      "path": "data/interim/ghgrp_parent_year.parquet",
+      "bytes": 1293118,
+      "sha256": "ce8b382cae8bb941919958d02db67fd37d9d1ef0acc52192d3752ab47549d956"
+    },
+    {
+      "name": "camd_unit_year",
+      "path": "data/interim/camd_unit_year.parquet",
+      "bytes": 4846966,
+      "sha256": "324ac2e79bae6fe0f481e5346d6eb2eb7e45916ca8885315d2efc16f76e27929"
+    },
+    {
+      "name": "oris_crosswalk",
+      "path": "data/interim/oris_ghgrp_crosswalk.parquet",
+      "bytes": 80937,
+      "sha256": "397867e3be40370321267de8b0881f11b386416db0fd41639b200197390f160f"
+    }
+  ],
+  "outputs": {
+    "parent_ticker_map.parquet": {
+      "bytes": 522631,
+      "sha256": "e7682e6446a93b3bf59438af395495b610584df39cd58f07be68515f3bf828e3"
+    },
+    "emissions_by_ticker.parquet": {
+      "bytes": 53876,
+      "sha256": "af525508ef8db7ab0e873a5485a5b09d542cb6a6c487f930a1a8cffa5714e040"
+    },
+    "unmatched_top_emitters.csv": {
+      "bytes": 744867,
+      "sha256": "fb1d758831e67f113a757bc3e4d745b4cd6982328478932d98ceae3fa2472e44"
+    }
+  },
+  "licence": {
+    "epa_ghgrp_camd": "US federal government work, public domain (17 U.S.C. 105). Derived numbers may be published with attribution to EPA.",
+    "sec_and_index": "SEC data is public domain; the constituents list is ODC-PDDL-1.0. Derived numbers may be published.",
+    "violation_tracker": "Subsidiary-name aliases are derived from Violation Tracker (Good Jobs First) record-level pages and are used here only as an internal join key. We may publish per-company aggregates with the credit line 'Violation Tracker, Good Jobs First' but must not republish the record-level table."
+  },
+  "redistribution": "Every number this lane emits is derived from public-domain EPA and SEC filings and may be published. The alias strings borrowed from Violation Tracker are an internal join key and are not republished; only the ticker they resolve to is carried forward.",
+  "coverage": {
+    "ghgrp_ry2023_total_tonnes": 2696541385.89052,
+    "tickers_matched_any_parent": 147,
+    "tickers_ghgrp_2023_nonzero": 128,
+    "ghgrp_2023_tonnes_matched": 1208524008.745223,
+    "ghgrp_2023_share_matched_pct": 44.81755833857205,
+    "camd_2025_total_tonnes": 1483363412.5542965,
+    "camd_2025_tonnes_attributed": 801644835.2060473,
+    "camd_2025_share_attributed_pct": 54.04237615822308,
+    "tickers_covered": 146
+  }
+}

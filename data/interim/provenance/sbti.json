@@ -1,0 +1,20 @@
+[
+ {
+  "bytes": 2303760,
+  "http_status": 200,
+  "licence": "Website terms of use permit retrieving and storing content for research and other non-commercial use, provided the Science Based Targets initiative is credited as the source with a link to the relevant page.",
+  "redistribution": "Derived numbers may be published for non-commercial research with attribution to the Science Based Targets initiative and a link to sciencebasedtargets.org/target-dashboard. The raw targets-excel.xlsx is not rehosted.",
+  "retrieved_at": "2026-09-12T12:07:04+00:00",
+  "sha256": "ea137df9deb25a41f629794125f0414b17484f1ef9f5fd111465c2616ea4d012",
+  "url": "https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx"
+ },
+ {
+  "bytes": 5698821,
+  "http_status": 200,
+  "licence": "Website terms of use permit retrieving and storing content for research and other non-commercial use, provided the Science Based Targets initiative is credited as the source with a link to the relevant page.",
+  "redistribution": "Derived numbers may be published for non-commercial research with attribution to the Science Based Targets initiative and a link to sciencebasedtargets.org/target-dashboard. The raw targets-excel.xlsx is not rehosted.",
+  "retrieved_at": "2026-09-12T12:07:06+00:00",
+  "sha256": "f1fbd95a85ea6fbc35ca84589fb22668dad7a805266827209598754b42b91825",
+  "url": "https://files.sciencebasedtargets.org/production/files/targets-excel.xlsx"
+ }
+]

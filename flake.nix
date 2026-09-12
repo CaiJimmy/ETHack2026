@@ -39,6 +39,9 @@
             export UV_PYTHON="${pkgs.python312}/bin/python3.12"
             export UV_PYTHON_DOWNLOADS=never
             [ -d .venv ] && export PATH="$PWD/.venv/bin:$PATH"
+            # API keys live in .env, which is gitignored. Sourced here so no script
+            # has to know where they came from and none of them end up in a commit.
+            [ -f .env ] && set -a && . ./.env && set +a
             echo "ETHack2026 — python $(python3 --version 2>&1 | cut -d' ' -f2), uv $(uv --version 2>&1 | cut -d' ' -f2), node $(node --version)"
           '';
         };

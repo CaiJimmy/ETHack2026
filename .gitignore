@@ -7,11 +7,10 @@ __pycache__/
 result
 result-*
 
-# raw + intermediate data: rebuilt by the pipeline, never committed
+# Raw HTTP caches: 2 GB and rebuildable. Every fetch script is idempotent, so
+# `nix develop --command .venv/bin/python src/fetch_*.py` repopulates data/raw/
+# from scratch. Some of it also carries no redistribution grant (Yahoo prices).
 data/raw/
-data/interim/
-*.parquet
-*.zip
 
 # node / site build
 node_modules/

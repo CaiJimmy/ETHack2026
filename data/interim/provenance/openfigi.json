@@ -1,0 +1,12 @@
+[
+ {
+  "bytes": 59580,
+  "http_status": 200,
+  "licence": "OpenFIGI mapping API, free and usable without an API key.",
+  "note": "POST endpoint, 10 ISINs per request at one request every 2.6s; 965 ISINs in the cumulative cache. sha256 is of that cache file.",
+  "redistribution": "We publish only the ISIN-to-ticker mapping needed for the join, attributed to OpenFIGI.",
+  "retrieved_at": "2026-09-12T12:11:53+00:00",
+  "sha256": "7baf87588fe940ba7572bd88557c13ac1015a34c1a7e7350928645ca909047e1",
+  "url": "https://api.openfigi.com/v3/mapping"
+ }
+]
