@@ -34,6 +34,24 @@ test('Gemini function call can select a deterministic benchmark API', async () =
     assert.equal(result.status, 'ok'); assert.equal(result.visualization.type, 'company_table');
     assert.equal(result.evidence[0].data.sector_peer_count, 20);
 });
+test('Gemini can combine multiple validated APIs into a decision brief', async () => {
+    let turn = 0;
+    const fetcher = async () => {
+        turn++;
+        if (turn === 1) return Response.json({ candidates: [{ finishReason: 'STOP', content: { parts: [
+            { functionCall: { id: 'call-1', name: 'list_companies', args: { sector: 'Utilities', sort: 'gap', limit: 2 } } },
+            { functionCall: { id: 'call-2', name: 'benchmark_companies', args: { sector: 'Utilities', metric: 'gap', limit: 2 } } },
+        ] } }] });
+        return Response.json({ candidates: [{ finishReason: 'STOP', content: { parts: [{ text: JSON.stringify({ answer: 'A is a priority [A]; its peer position is also elevated [A:company_benchmarks].', evidence_ids: ['A', 'A:company_benchmarks'], headline: 'One utility stands out', findings: ['A has the largest retrieved gap [A].'], recommended_actions: ['Review A’s transition plan.'], confidence: 'medium', follow_up_questions: ['Show A’s full evidence.'] }) }] } }] });
+    };
+    const execute = async path => path.startsWith('/api/companies?')
+        ? Response.json({ data: [{ ticker: 'A', company_name: 'A Corp', gics_sector: 'Utilities', gap_pct_yr: 4 }], notes: ['Company note'], source: 'companies', page: {} })
+        : Response.json({ data: [{ ticker: 'A', company_name: 'A Corp', gics_sector: 'Utilities', gap_pct_yr: 4, sector_percentile: 95 }], notes: ['Benchmark note'], source: 'benchmark', page: {} });
+    const result = await answerQuestion({ question: 'Who should we engage?', context: { view: 'companies' }, history: [] }, env, execute, fetcher);
+    assert.deepEqual(result.tool_calls, ['companies', 'company_benchmarks']);
+    assert.equal(result.evidence.length, 2); assert.equal(result.brief.confidence, 'medium');
+    assert.equal(result.visualization.type, 'company_table');
+});
 test('unsupported ownership question executes no database query', async () => {
     const r = await answerQuestion('Who owns this plume?', env, () => assert.fail(), model({ operation: 'unsupported', filters: [], tickers: [], message: 'No verified ownership links are available.' }));
     assert.equal(r.status, 'needs_clarification'); assert.equal(r.visualization, null);
