@@ -17,12 +17,35 @@ for r in csv.DictReader(open(T("SP 500 ESG Risk Ratings.csv"))):
         m = re.match(r"(.+?),\s*([A-Z]{2})\s+\d{5}", lines[-1])
         if m: hq[t] = (m.group(1), m.group(2), "United States"); continue
         hq[t] = (lines[-2] if len(lines) > 2 else lines[-1], "", lines[-1])
+# Companies missing from both snapshots (index additions, spin-offs, renames). City, state, country; checked by hand Sep 2026.
+MANUAL = {
+    "PLTR": ("Denver", "CO", "United States"), "DELL": ("Round Rock", "TX", "United States"), "SNDK": ("Milpitas", "CA", "United States"),
+    "CRWD": ("Austin", "TX", "United States"), "MRVL": ("Santa Clara", "CA", "United States"), "BNY": ("New York", "NY", "United States"),
+    "APP": ("Palo Alto", "CA", "United States"), "HOOD": ("Menlo Park", "CA", "United States"), "VRT": ("Westerville", "OH", "United States"),
+    "KKR": ("New York", "NY", "United States"), "DASH": ("San Francisco", "CA", "United States"), "LITE": ("San Jose", "CA", "United States"),
+    "DDOG": ("New York", "NY", "United States"), "CVNA": ("Tempe", "AZ", "United States"), "APO": ("New York", "NY", "United States"),
+    "COHR": ("Saxonburg", "PA", "United States"), "NXP": ("Eindhoven", "", "Netherlands"), "FIX": ("Houston", "TX", "United States"),
+    "CRH": ("Dublin", "", "Ireland"), "HONA": ("Phoenix", "AZ", "United States"), "CIEN": ("Hanover", "MD", "United States"),
+    "XYZ": ("Oakland", "CA", "United States"), "COIN": ("San Francisco", "CA", "United States"), "WDAY": ("Pleasanton", "CA", "United States"),
+    "ARES": ("Los Angeles", "CA", "United States"), "FERG": ("Newport News", "VA", "United States"), "FLEX": ("Austin", "TX", "United States"),
+    "VEEV": ("Pleasanton", "CA", "United States"), "IBKR": ("Greenwich", "CT", "United States"), "TKO": ("New York", "NY", "United States"),
+    "EME": ("Norwalk", "CT", "United States"), "RDDT": ("San Francisco", "CA", "United States"), "FISV": ("Milwaukee", "WI", "United States"),
+    "ECHO": ("Englewood", "CO", "United States"), "WSM": ("San Francisco", "CA", "United States"), "Q": ("Wilmington", "DE", "United States"),
+    "TPL": ("Dallas", "TX", "United States"), "CASY": ("Ankeny", "IA", "United States"), "SW": ("Dublin", "", "Ireland"),
+    "EXE": ("Oklahoma City", "OK", "United States"), "FDXF": ("Memphis", "TN", "United States"), "ERIE": ("Erie", "PA", "United States"),
+    "LII": ("Richardson", "TX", "United States"), "GDDY": ("Tempe", "AZ", "United States"), "BF.B": ("Louisville", "KY", "United States"),
+    "PSKY": ("New York", "NY", "United States"), "TTD": ("Ventura", "CA", "United States"),
+}   # VMRK ("Vivmark Residential") is an OCR artefact with no known company; it stays unplaced.
+for t, v in MANUAL.items(): hq.setdefault(t, v)
+# Nominatim returns the county centroid for some city names; pin those to the city itself.
+FIX = {"Santa Clara|CA|United States": [37.3541132, -121.955174]}
 spine = [r for r in csv.DictReader(open(os.path.join(ROOT, "data", "sp500_ocr.csv")))]
 tickers = [nt(r["Ticker"]) for r in spine]
 print(f"HQ known for {sum(1 for t in tickers if t in hq)} of {len(tickers)}")
 
 cache_p = os.path.join(ROOT, "data", "hq_geocode.json")
 cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
+cache.update(FIX)
 keys = sorted({hq[t] for t in tickers if t in hq})
 for i, (city, state, country) in enumerate(keys):
     k = "|".join((city, state, country))

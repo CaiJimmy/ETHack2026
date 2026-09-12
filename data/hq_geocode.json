@@ -852,8 +852,8 @@
 -121.9544387
 ],
 "Santa Clara|CA|United States": [
-37.2333253,
--121.6846349
+37.3541132,
+-121.955174
 ],
 "Santa Clara, CA 95054||United States": [
 37.3541132,
@@ -1050,5 +1050,57 @@
 "Zurich, 8050||Switzerland": [
 47.3744489,
 8.5410422
+],
+"Ankeny|IA|United States": [
+41.7320796,
+-93.605092
+],
+"Eindhoven||Netherlands": [
+51.4392648,
+5.478633
+],
+"Englewood|CO|United States": [
+39.6482059,
+-104.9879641
+],
+"Erie|PA|United States": [
+42.1294712,
+-80.0852695
+],
+"Hanover|MD|United States": [
+39.1928853,
+-76.7241371
+],
+"Los Angeles|CA|United States": [
+34.0536909,
+-118.242766
+],
+"Newport News|VA|United States": [
+36.9775016,
+-76.42977
+],
+"Pleasanton|CA|United States": [
+37.6624312,
+-121.8746789
+],
+"Richardson|TX|United States": [
+32.9481789,
+-96.7297206
+],
+"Round Rock|TX|United States": [
+30.5085915,
+-97.6788056
+],
+"Saxonburg|PA|United States": [
+40.7506014,
+-79.8141177
+],
+"Ventura|CA|United States": [
+34.4458248,
+-119.0779359
+],
+"Westerville|OH|United States": [
+40.126139,
+-82.9295287
 ]
 }
