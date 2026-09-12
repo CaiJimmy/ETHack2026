@@ -1,0 +1,4 @@
+.venv/
+tmp/
+.DS_Store
+data/hq_build.log
