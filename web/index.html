@@ -13,111 +13,248 @@
     <button data-tab="explore" class="active">Explore</button>
     <button data-tab="fund">Net-Zero Fund</button>
     <button data-tab="quiz">Quiz</button>
-    <button data-tab="methods">Methods</button>
+    <button data-tab="globe">World Map</button>
+    <button data-tab="methods">Methods &amp; Sources</button>
   </nav>
-  <span class="badge">synthetic data</span>
+  <span class="badge" id="dataBadge">loading…</span>
 </header>
 
-<!-- ---------- EXPLORE ---------- -->
+<!-- ================= EXPLORE ================= -->
 <section id="explore" class="tab active">
-  <aside class="controls">
-    <label>Sector
-      <select id="sectorFilter"><option value="">All sectors</option></select>
-    </label>
-    <label>X axis
-      <select id="xAxis">
-        <option value="marketCapB">Market cap ($B)</option>
-        <option value="return5y">5-year return (%)</option>
-        <option value="pe">P/E</option>
-        <option value="ghgIntensity">GHG intensity (tCO2e/$M)</option>
-        <option value="revenueB">Revenue ($B)</option>
-      </select>
-    </label>
-    <label>Log X <input type="checkbox" id="logX" checked></label>
-    <h3>Pillar weights</h3>
-    <label>Environment <span id="wEv">50</span>%<input type="range" id="wE" min="0" max="100" value="50"></label>
-    <label>Social <span id="wSv">25</span>%<input type="range" id="wS" min="0" max="100" value="25"></label>
-    <label>Governance <span id="wGv">25</span>%<input type="range" id="wG" min="0" max="100" value="25"></label>
-    <label>Missing-data penalty <span id="penv">10</span> pts<input type="range" id="pen" min="0" max="30" value="10"></label>
-    <p class="hint">Scores are sector-relative percentiles. Drag the weights: the ranking changes. There is no single "true" rank.</p>
-  </aside>
-  <div class="chartwrap"><svg id="scatter"></svg></div>
-  <aside id="card" class="card"><p class="hint">Click a logo for its score card.</p></aside>
-</section>
-
-<!-- ---------- FUND ---------- -->
-<section id="fund" class="tab">
-  <aside class="controls">
-    <h3>$1B under a net-zero shock</h3>
-    <label>Shadow carbon price $<span id="cpv">150</span>/t<input type="range" id="cp" min="0" max="500" step="10" value="150"></label>
-    <label>Portfolio intensity cap: <span id="capv">50</span>% below index<input type="range" id="cap" min="0" max="90" step="5" value="50"></label>
-    <label>Tilt strength <span id="tiltv">1.0</span><input type="range" id="tilt" min="0" max="3" step="0.1" value="1"></label>
-    <p class="hint">Start from market-cap weights. Each company's EBIT is hit by carbon price × Scope 1+2. Weights tilt away from the hit, then high-intensity names are trimmed until the cap holds.</p>
-    <div id="fundStats"></div>
-  </aside>
-  <div class="fundmain">
-    <h3>Sector tilt vs index</h3>
-    <div id="sectorTilt"></div>
-    <h3>Largest positions</h3>
-    <table id="fundTable"><thead><tr><th>Company</th><th>Index</th><th>Fund</th><th>EBIT hit</th></tr></thead><tbody></tbody></table>
-    <h3>Dropped first</h3>
-    <div id="dropped"></div>
-  </div>
-</section>
-
-<!-- ---------- QUIZ ---------- -->
-<section id="quiz" class="tab">
-  <div class="quizbox">
-    <p id="qText"></p>
-    <div class="choices">
-      <button class="choice" id="c0"></button>
-      <span>vs</span>
-      <button class="choice" id="c1"></button>
+  <div class="row">
+    <aside class="controls">
+      <h3>Find a company</h3>
+      <input id="search" list="tickers" placeholder="Type a name or ticker">
+      <datalist id="tickers"></datalist>
+      <h3>View</h3>
+      <label><input type="radio" name="view" value="scatter" checked> Scatter chart</label>
+      <label><input type="radio" name="view" value="treemap"> Map of the index (treemap)</label>
+      <label id="sizeWrap" class="hidden">Box size
+        <select id="sizeKey"><option value="market_cap_b">Market value</option><option value="revenue_b">Revenue</option><option value="ghgrp_scope1_mt">Direct CO2 from US sites</option></select>
+      </label>
+      <h3>Filter</h3>
+      <label>Sector <select id="sectorFilter"><option value="">All sectors</option></select></label>
+      <label>Horizontal axis
+        <select id="xAxis">
+          <option value="market_cap_b">Market value ($ billion)</option>
+          <option value="revenue_b">Revenue ($ billion)</option>
+          <option value="ebitda_b">EBITDA ($ billion)</option>
+          <option value="employees">Employees</option>
+          <option value="ghgrp_scope1_mt">Direct CO2 from US sites (million tonnes)</option>
+          <option value="ghg_intensity_t_per_musd">CO2 per $1M revenue (tonnes)</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="logX" checked> Log scale on the horizontal axis</label>
+      <h3>How much each pillar counts</h3>
+      <p class="hint">Move a slider. The chart updates. The order of the companies changes. There is no single correct order.</p>
+      <label>Environment <b id="wEv">50</b>%<input type="range" id="wE" min="0" max="100" value="50"></label>
+      <label>Social <b id="wSv">25</b>%<input type="range" id="wS" min="0" max="100" value="25"></label>
+      <label>Governance <b id="wGv">25</b>%<input type="range" id="wG" min="0" max="100" value="25"></label>
+      <label>Financial resilience <b id="wFv">25</b>%<input type="range" id="wF" min="0" max="100" value="25"></label>
+      <p class="hint" id="coverage"></p>
+    </aside>
+    <div class="chartwrap">
+      <div class="charthead" id="charthead">Sustainability score (0 = worst in sector, 100 = best in sector). Click a logo to see the details.</div>
+      <svg id="scatter"></svg>
     </div>
-    <div id="reveal" class="reveal hidden"></div>
-    <button id="next" class="hidden">Next →</button>
-    <p class="score">Score: <span id="qScore">0</span> / <span id="qTotal">0</span></p>
+    <aside id="card" class="card"><p class="hint">Click a logo, or type a name in the search box.</p></aside>
   </div>
-  <aside class="controls">
-    <h3>Perception gap</h3>
-    <p class="hint">Companies people guess are greener than they are (all players, this browser).</p>
-    <div id="gap"></div>
-  </aside>
+  <footer class="sources">
+    <h3>Sources for this tab</h3>
+    <ul id="exploreSources"></ul>
+    <h3>Words used here</h3>
+    <dl>
+      <dt>Market value</dt><dd>The price of one share multiplied by the number of shares. It tells you what the whole company is worth on the stock market.</dd>
+      <dt>Revenue</dt><dd>All the money a company gets from sales in one year, before any costs.</dd>
+      <dt>EBITDA</dt><dd>Earnings before interest, taxes, depreciation and amortisation. It is the profit from normal operations before financing and accounting costs. We use it to see how much profit a carbon cost can remove.</dd>
+      <dt>ESG risk score</dt><dd>A score from Sustainalytics. It measures how much of a company's environmental, social and governance risk is not managed. A low score is good. Higher than 40 is "severe".</dd>
+      <dt>Direct CO2 emissions</dt><dd>Greenhouse gases that come out of the company's own sites, for example power plants and refineries. This is "Scope 1". The EPA only counts US sites that release more than 25,000 tonnes a year.</dd>
+      <dt>Altman Z-score</dt><dd>A formula from a company's balance sheet that predicts bankruptcy risk. Below 1.8 is the danger zone. Above 3 is safe. It does not work well for banks.</dd>
+      <dt>Piotroski F-score</dt><dd>Nine yes/no checks of financial strength, for example "profit went up" and "debt went down". 9 is the best.</dd>
+      <dt>Implied temperature</dt><dd>If every company had this company's emission plan, this is how much the planet would warm. 1.5 °C is the Paris goal.</dd>
+      <dt>Controversy flags</dt><dd>Six topics: environment, social, customers, human rights, labour, governance. A flag is any colour other than green. 0 flags is best.</dd>
+      <dt>Sector percentile</dt><dd>Where a company is in its sector on one metric. 100 means it is the best in the sector. 0 means it is the worst.</dd>
+    </dl>
+  </footer>
 </section>
 
-<!-- ---------- METHODS ---------- -->
+<!-- ================= FUND ================= -->
+<section id="fund" class="tab">
+  <div class="row">
+    <aside class="controls">
+      <h3>The scenario</h3>
+      <p class="hint">Tomorrow the world agrees to reach net zero fast. Carbon gets a price. You manage $1 billion. The controls below set the rules of your fund.</p>
+      <label>Carbon price: $<b id="cpv">150</b> per tonne of CO2
+        <input type="range" id="cp" min="0" max="500" step="10" value="150">
+        <span class="hint">Each company pays this price for every tonne it releases. The EU price in 2025 was about $80. Many net-zero models use $150 to $250.</span>
+      </label>
+      <label>Emission limit: <b id="capv">50</b>% below the index
+        <input type="range" id="cap" min="0" max="90" step="5" value="50">
+        <span class="hint">The fund must release this much less CO2 per dollar than the S&amp;P 500 as a whole.</span>
+      </label>
+      <label><input type="checkbox" id="needTarget"> Only hold companies with a public decarbonisation target
+        <span class="hint">Companies without a target get zero weight. Companies with no data on this are kept.</span>
+      </label>
+      <label>How strongly to avoid carbon cost: <b id="tiltv">1.0</b>
+        <input type="range" id="tilt" min="0" max="3" step="0.1" value="1">
+        <span class="hint">0 means you ignore the carbon cost. 3 means you cut a company almost fully when carbon takes a large part of its profit.</span>
+      </label>
+    </aside>
+    <div class="fundmain">
+      <div class="steps">
+        <h3>How the fund is built</h3>
+        <ol>
+          <li><b>Start with the index.</b> Each company gets the same weight as in the S&amp;P 500. A big company gets a big weight.</li>
+          <li><b>Add the carbon cost.</b> Carbon price × direct emissions = a yearly cost. We compare that cost to the company's profit (EBITDA). This gives "profit at risk".</li>
+          <li><b>Move money away from risk.</b> A company with high profit at risk gets a smaller weight. The slider "How strongly" sets how much smaller.</li>
+          <li><b>Apply the emission limit.</b> If the fund still releases too much CO2, we halve the weight of the dirtiest company. We repeat this until the limit holds.</li>
+        </ol>
+      </div>
+      <h3>Result</h3>
+      <div id="fundStats" class="stats"></div>
+      <h3>Which sectors gain and lose weight</h3>
+      <p class="hint">Green = the fund holds more of this sector than the index. Red = less.</p>
+      <div id="sectorTilt"></div>
+      <h3>The 15 largest positions</h3>
+      <table id="fundTable"><thead><tr><th>Company</th><th>Weight in index</th><th>Weight in fund</th><th>Profit at risk</th></tr></thead><tbody></tbody></table>
+      <h3>Companies cut by 90% or more</h3>
+      <div id="dropped"></div>
+      <h3>Money in dollars</h3>
+      <div id="dollars" class="hint"></div>
+    </div>
+  </div>
+  <footer class="sources">
+    <h3>What the model does not know</h3>
+    <ul>
+      <li>Emissions come from US sites only, and only sites above 25,000 tonnes a year. A company with no such site gets a carbon cost of zero. This is a gap, not a fact. Banks and software companies have emissions in their supply chain that we do not count.</li>
+      <li>We assume the company pays the full carbon cost. In reality some of it goes to customers as higher prices.</li>
+      <li>"Active share" is a simple stand-in for tracking error.</li>
+    </ul>
+    <h3>Sources for this tab</h3>
+    <ul id="fundSources"></ul>
+    <h3>Words used here</h3>
+    <dl>
+      <dt>Index</dt><dd>The S&amp;P 500: the 500 largest listed US companies. A fund that copies the index holds every company in proportion to its market value.</dd>
+      <dt>Weight</dt><dd>The share of the fund's money in one company. 2% weight of $1 billion is $20 million.</dd>
+      <dt>Carbon price</dt><dd>A cost per tonne of CO2. Governments set it with a tax or a permit market.</dd>
+      <dt>EBITDA</dt><dd>Profit from operations, before interest, taxes, depreciation and amortisation. If EBITDA is not known, we use 15% of revenue.</dd>
+      <dt>Profit at risk</dt><dd>Yearly carbon cost divided by EBITDA. 30% means the carbon price would take 30% of the profit. We cap it at 100%.</dd>
+      <dt>Emission intensity</dt><dd>Tonnes of CO2 for each $1 million of revenue. It lets you compare a small company with a big one.</dd>
+      <dt>Active share</dt><dd>How different the fund is from the index, from 0% (identical) to 100% (nothing in common).</dd>
+    </dl>
+  </footer>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz" class="tab">
+  <div class="row">
+    <div class="quizbox">
+      <p class="hint" id="qProgress"></p>
+      <p id="qText"></p>
+      <div class="choices">
+        <button class="choice" id="c0"></button>
+        <span>or</span>
+        <button class="choice" id="c1"></button>
+      </div>
+      <div id="reveal" class="reveal hidden"></div>
+      <button id="next" class="hidden">Next question</button>
+      <div id="finish" class="hidden"><p id="finalText"></p><button id="restart">Play again</button></div>
+    </div>
+    <aside class="controls">
+      <h3>About the quiz</h3>
+      <p class="hint">Ten questions about companies you know. Each answer is one real number from the data. Many answers are not what most people expect.</p>
+      <p class="hint">After you answer, you see both values, a short explanation, and the source.</p>
+      <h3>The ten questions</h3>
+      <ol id="qList" class="hint"></ol>
+    </aside>
+  </div>
+  <footer class="sources">
+    <h3>Sources for this tab</h3>
+    <ul id="quizSources"></ul>
+  </footer>
+</section>
+
+<!-- ================= GLOBE ================= -->
+<section id="globe" class="tab">
+  <div class="row">
+    <aside class="controls">
+      <h3>View</h3>
+      <label><input type="radio" name="mapView" value="3d" checked> 3D globe</label>
+      <label><input type="radio" name="mapView" value="2d"> Flat map</label>
+      <p class="hint" id="webglNote"></p>
+      <h3>Colour the countries by</h3>
+      <select id="globeMetric">
+        <option value="co2_per_capita_t">CO2 per person (tonnes a year)</option>
+        <option value="co2_mt">CO2 total (million tonnes a year)</option>
+        <option value="renew_elec_pct">Renewable electricity (% of output)</option>
+        <option value="elec_access_pct">Access to electricity (% of people)</option>
+        <option value="gdp_pc">GDP per person (US$)</option>
+        <option value="life_exp">Life expectancy (years)</option>
+      </select>
+      <div id="globeLegend" class="legend"></div>
+      <h3>Company head offices</h3>
+      <label>Show the <b id="topNv">60</b> largest companies<input type="range" id="topN" min="0" max="500" step="10" value="60"></label>
+      <p class="hint">Drag to turn the globe. Scroll to zoom. Click a country for its numbers and the S&amp;P 500 companies based there. Click a logo to open the company on the Explore tab.</p>
+      <p class="hint" id="globeNote"></p>
+      <details><summary class="hint">Debug info (send this if the map does not work)</summary><pre id="diag" class="diag"></pre></details>
+    </aside>
+    <div id="globeWrap"><div id="globeFail" class="banner hidden"></div><div id="globeDiv"></div><svg id="flatMap" class="hidden"></svg></div>
+    <aside id="countryCard" class="card"><p class="hint">Click a country.</p></aside>
+  </div>
+  <footer class="sources">
+    <h3>Sources for this tab</h3>
+    <ul id="globeSources"></ul>
+    <h3>Words used here</h3>
+    <dl>
+      <dt>CO2 per person</dt><dd>All CO2 the country releases in a year, divided by its population. Production-based: it counts what is made in the country, not what the country imports.</dd>
+      <dt>Renewable electricity</dt><dd>The share of electricity that comes from wind, sun, water, and other renewable sources.</dd>
+      <dt>GDP per person</dt><dd>The value of everything a country produces in a year, divided by its population.</dd>
+      <dt>Head office</dt><dd>The city where the company has its main office. We place each logo there. It does not show where the company's factories or emissions are.</dd>
+    </dl>
+  </footer>
+</section>
+
+<!-- ================= METHODS ================= -->
 <section id="methods" class="tab prose">
-  <h2>What we mean by sustainability</h2>
-  <p>The ability of a company to keep operating in a world that prices carbon, enforces labour and safety law, and holds boards accountable. We measure it on three pillars and always relative to sector peers.</p>
-  <h2>Indicators</h2>
-  <table>
-    <tr><th>Pillar</th><th>Metric</th><th>Direction</th><th>Intended source</th></tr>
-    <tr><td>E</td><td>GHG intensity (Scope 1+2 / revenue)</td><td>lower is better</td><td>EPA GHGRP, 10-K, CSR reports</td></tr>
-    <tr><td>E</td><td>Renewable electricity share</td><td>higher</td><td>CSR reports, CDP</td></tr>
-    <tr><td>E</td><td>Water intensity</td><td>lower</td><td>CSR reports</td></tr>
-    <tr><td>E</td><td>Scope 3 reported; net-zero target year</td><td>yes / earlier</td><td>CSR reports, SBTi</td></tr>
-    <tr><td>S</td><td>Injury rate (TRIR)</td><td>lower</td><td>OSHA, CSR reports</td></tr>
-    <tr><td>S</td><td>Fines & penalties</td><td>lower</td><td>Violation Tracker</td></tr>
-    <tr><td>S</td><td>Gender pay gap</td><td>lower</td><td>CSR reports</td></tr>
-    <tr><td>G</td><td>Board independence</td><td>higher</td><td>DEF 14A proxy</td></tr>
-    <tr><td>G</td><td>CEO pay ratio</td><td>lower</td><td>DEF 14A proxy</td></tr>
-    <tr><td>G</td><td>Climate risk discussed in proxy</td><td>yes</td><td>DEF 14A proxy</td></tr>
-  </table>
-  <h2>Scoring</h2>
+  <h2>What we mean by "sustainable"</h2>
+  <p>A company is sustainable when it can keep its business in a world that puts a price on carbon, enforces labour and safety law, and holds the board responsible. We measure this in three pillars: Environment, Social, Governance. We always compare a company with the other companies in its sector. A bank and a power company cannot be compared on emissions.</p>
+
+  <h2>The companies</h2>
+  <p>The 500 companies in the S&amp;P 500 index as of September 2026. The list comes from a market screener. It has a few OCR errors in company names. Three companies have two share classes; we keep one row for each company.</p>
+
+  <h2>The metrics and where each one comes from</h2>
+  <table id="metricTable"><thead><tr><th>Pillar</th><th>Metric</th><th>Good direction</th><th>Source</th><th>Companies with data</th></tr></thead><tbody></tbody></table>
+
+  <h2>How the score is made</h2>
   <ol>
-    <li>Each metric → percentile rank within GICS sector (0–100). Reverse for "bad" metrics.</li>
-    <li>Missing value → excluded from the pillar mean and a fixed penalty is subtracted. We never impute the median.</li>
-    <li>Pillar score = mean of its metric ranks. Composite = user-weighted mean of pillars.</li>
+    <li>For each metric, we rank the company against the other companies in its sector. The result is a percentile from 0 to 100. We flip the scale for metrics where low is good.</li>
+    <li>Each pillar score is the average of the percentiles in that pillar. A missing metric is left out. It is not replaced with an average.</li>
+    <li>The total score is the weighted average of the three pillars. You set the weights with the sliders.</li>
+    <li>A company with no data in any pillar has no score. The Explore tab shows how many companies this affects.</li>
   </ol>
-  <h2>Limitations (honest list)</h2>
+
+  <h2>Why we chose these sources</h2>
   <ul>
-    <li><b>All metric values on this page are synthetic.</b> The pipeline, schema and scoring are real; the numbers are seeded random draws calibrated per sector.</li>
-    <li>Sector-relative ranking hides that a "best-in-class" utility still emits far more than a bank.</li>
-    <li>Scope 3 is where most emissions sit for financials and retailers, and it is the least reported.</li>
-    <li>The fund model ignores pass-through of carbon costs to customers, and uses active share as a stand-in for tracking error.</li>
+    <li><b>EPA GHGRP</b> is the only large, free, audited, facility-level emissions dataset. Companies must report by law. It covers US sites above 25,000 tonnes a year. We only use <i>direct</i> emissions. The EPA file also lists "supplier" quantities (fuel sold to others). Those are not emissions from the site, and we exclude them.</li>
+    <li><b>Sustainalytics ESG Risk</b> is a well-known rating. A free copy for the S&amp;P 500 is on Kaggle. It gives the Social and Governance pillars, which have no free raw data source.</li>
+    <li><b>Global Corporate ESG and Financial Dataset</b> (Kaggle) adds the fourth pillar, financial resilience (Altman Z, Piotroski F), plus each company's decarbonisation target, implied temperature and six controversy flags. Its "involvement" screens (coal, weapons, tobacco) are empty for 9 in 10 companies, so we do not use them.</li>
+    <li><b>Yahoo Finance</b> gives profit (EBITDA) and employees, which we need for the fund model. It also gives the head-office city, which we place on the globe with OpenStreetMap.</li>
+    <li><b>World Sustainability Dataset</b> (World Bank and Our World in Data, via Kaggle) gives the country numbers on the World Map: CO2, renewable electricity, GDP, life expectancy. The latest year is 2018.</li>
   </ul>
+
+  <h2>Limits you should know</h2>
+  <ul>
+    <li>Sector ranking hides one fact: the best power company still releases much more CO2 than the worst bank.</li>
+    <li>Emissions in the supply chain (Scope 3) are not counted. For banks and retailers this is where most emissions are.</li>
+    <li>The Sustainalytics copy is from 2024. The market data is from 2025 and 2026. The emissions are from 2023.</li>
+    <li>A Kaggle dataset of sustainability-report scores was also available. Its scores copy the Sustainalytics numbers, so we do not use it as a second source.</li>
+    <li>Matching EPA parent companies to tickers uses company names. We checked every match by hand; the list is in the repository.</li>
+  </ul>
+  <h2>All sources</h2>
+  <ul id="allSources"></ul>
 </section>
 
+<script src="lib/globe.gl.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
