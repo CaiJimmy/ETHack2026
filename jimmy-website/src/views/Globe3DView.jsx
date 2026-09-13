@@ -10,7 +10,9 @@ import {
   Map as MapIcon,
   Building2,
   Sliders,
-  Sparkles
+  Sparkles,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { fmt, compact, logoTicker } from '../utils/formatters';
 import { sectorColors } from '../constants';
@@ -130,6 +132,59 @@ export function Globe3DView({
   const [topCount, setTopCount] = useState(15);
   const [hqMetric, setHqMetric] = useState('emissions'); // 'emissions' | 'market_cap'
   const [hoveredCompany, setHoveredCompany] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    if (!document.fullscreenElement && !isFullscreen) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {
+          setIsFullscreen(true);
+        });
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else {
+        setIsFullscreen(true);
+      }
+    } else {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const isFs = Boolean(
+        document.fullscreenElement === containerRef.current ||
+        document.webkitFullscreenElement === containerRef.current
+      );
+      setIsFullscreen(isFs);
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    const onKey = (e) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isFullscreen]);
 
   // Top companies sorted by metric and geocoded with cluster dispersion
   const processedTopCompanies = useMemo(() => {
@@ -673,8 +728,8 @@ export function Globe3DView({
       canvas.style.width = `${cssW}px`;
       canvas.style.height = `${cssH}px`;
 
-      // Auto-fit radius to screen with generous proportion
-      const fitR = Math.min(270, Math.max(180, Math.floor(Math.min(cssW, cssH) * 0.38)));
+      // Auto-fit radius to screen with generous proportion (scales dynamically in fullscreen)
+      const fitR = Math.max(180, Math.floor(Math.min(cssW, cssH) * 0.38));
       stateRef.current.radius = fitR;
       stateRef.current.targetRadius = fitR;
       stateRef.current.dpr = dpr;
@@ -931,7 +986,7 @@ export function Globe3DView({
   }
 
   return (
-    <div className="globe-shell" ref={containerRef}>
+    <div className={`globe-shell ${isFullscreen ? 'is-fullscreen' : ''}`} ref={containerRef}>
       <canvas
         ref={canvasRef}
         className="globe-canvas"
@@ -981,6 +1036,16 @@ export function Globe3DView({
         >
           <Building2 size={12} />
           <span>HQ Logos: {showHqLogos ? 'ON' : 'OFF'}</span>
+        </button>
+
+        <button
+          type="button"
+          className={`dimension-switch-btn ${isFullscreen ? 'active-fullscreen-btn' : ''}`}
+          onClick={toggleFullscreen}
+          title={isFullscreen ? 'Exit Full Screen' : 'Make Map Full Screen'}
+        >
+          {isFullscreen ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
+          <span>{isFullscreen ? 'Exit Full Screen' : 'Full Screen'}</span>
         </button>
 
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
@@ -1114,6 +1179,14 @@ export function Globe3DView({
           }}
         >
           <Focus size={16} />
+        </button>
+        <button
+          type="button"
+          title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          onClick={toggleFullscreen}
+        >
+          {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
         </button>
       </div>
 

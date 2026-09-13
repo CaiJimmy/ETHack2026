@@ -13,7 +13,9 @@ import {
   Layers,
   Compass,
   Map as MapIcon,
-  Globe2
+  Globe2,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { Metric } from '../components/Metric';
 import { fmt, compact } from '../utils/formatters';
@@ -47,7 +49,63 @@ export function MapView({
   const [mode, setMode] = useState('telemetry'); // 'telemetry' | 'cluster'
   const [localSeverity, setLocalSeverity] = useState('all');
   const [hovered, setHovered] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   select.current = onSelect;
+
+  const toggleFullscreen = () => {
+    const shell = shellRef.current;
+    if (!shell) return;
+
+    if (!document.fullscreenElement && !isFullscreen) {
+      if (shell.requestFullscreen) {
+        shell.requestFullscreen().catch(() => {
+          setIsFullscreen(true);
+        });
+      } else if (shell.webkitRequestFullscreen) {
+        shell.webkitRequestFullscreen();
+      } else {
+        setIsFullscreen(true);
+      }
+    } else {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const isFs = Boolean(
+        document.fullscreenElement === shellRef.current ||
+        document.webkitFullscreenElement === shellRef.current
+      );
+      setIsFullscreen(isFs);
+      setTimeout(() => {
+        map.current?.invalidateSize();
+      }, 50);
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    const onKey = (e) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isFullscreen]);
 
   const currentSeverity = setSeverity ? severity : localSeverity;
   const updateSeverity = setSeverity || setLocalSeverity;
@@ -434,7 +492,7 @@ export function MapView({
   }, [fitKey]);
 
   return (
-    <div className="map-shell" ref={shellRef}>
+    <div className={`map-shell ${isFullscreen ? 'is-fullscreen' : ''}`} ref={shellRef}>
       <div ref={el} className="map" aria-label="Global map of observed greenhouse gas plumes" />
 
       {/* Basin Jump Pills */}
@@ -467,6 +525,16 @@ export function MapView({
             <span>3D Globe</span>
           </button>
         )}
+
+        <button
+          type="button"
+          className={`dimension-switch-btn ${isFullscreen ? 'active-fullscreen-btn' : ''}`}
+          onClick={toggleFullscreen}
+          title={isFullscreen ? 'Exit Full Screen' : 'Make Map Full Screen'}
+        >
+          {isFullscreen ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
+          <span>{isFullscreen ? 'Exit Full Screen' : 'Full Screen'}</span>
+        </button>
 
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
           <button
@@ -527,6 +595,13 @@ export function MapView({
         </button>
         <button title="Fit results" aria-label="Fit results" onClick={fit}>
           <Focus size={18} />
+        </button>
+        <button
+          title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          onClick={toggleFullscreen}
+        >
+          {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
         </button>
       </div>
 

@@ -3,7 +3,7 @@ import companies from './quizData.json';
 const fmt = (v, d = 1) => v.toLocaleString('en-US', { maximumFractionDigits: d });
 const pct = v => (v >= 0 ? '+' : '') + fmt(v, 1) + '%';
 const SRC = {
-  epa:  { name: "US EPA Greenhouse Gas Reporting Program (GHGRP), direct emissions 2019–2023, matched to parent companies by ownership share", url: "https://www.epa.gov/ghgreporting/data-sets" },
+  epa:  { name: "US EPA Greenhouse Gas Reporting Program (GHGRP), direct emissions 2019-2023, matched to parent companies by ownership share", url: "https://www.epa.gov/ghgreporting/data-sets" },
   sust: { name: "Sustainalytics ESG Risk Ratings for the S&P 500, 2024 copy on Kaggle", url: "https://www.kaggle.com/datasets/pritish509/s-and-p-500-esg-risk-ratings" },
   yf:   { name: "Yahoo Finance company snapshot (EBITDA, employees), 2025, bundled in the open-source climate-credit-risk-analyzer", url: "https://huggingface.co/spaces/SubramaniMokkala/climate-credit-risk-analyzer" },
   world: { name: "World Sustainability Dataset (World Bank WDI and Our World in Data, via Kaggle), latest year per metric, up to 2018", url: "https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset" },

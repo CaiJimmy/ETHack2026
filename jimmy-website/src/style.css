@@ -1549,9 +1549,27 @@ tbody tr:hover {
   padding-left: 10px;
 }
 
-/* Active state for HQ Logos button */
-.dimension-switch-btn.active-logo-toggle {
-  background: rgba(56, 189, 248, 0.15);
+/* Fullscreen mode for Map and 3D Globe */
+.map-shell.is-fullscreen,
+.globe-shell.is-fullscreen,
+.map-shell:fullscreen,
+.globe-shell:fullscreen,
+.map-shell:-webkit-full-screen,
+.globe-shell:-webkit-full-screen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  z-index: 99999 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Active state for HQ Logos and Fullscreen buttons */
+.dimension-switch-btn.active-logo-toggle,
+.dimension-switch-btn.active-fullscreen-btn {
+  background: rgba(56, 189, 248, 0.18);
   border-color: #38bdf8;
   color: #38bdf8;
 }
