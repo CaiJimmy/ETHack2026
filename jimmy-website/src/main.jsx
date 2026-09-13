@@ -2,14 +2,14 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import L from 'leaflet';
 import Supercluster from 'supercluster';
-import { ArrowUpRight, ArrowRight, ArrowDown, Search, Globe2, Building2, Sparkles, X, Plus, Minus, Focus, Layers3, ChevronRight, ExternalLink, Info, SlidersHorizontal, LoaderCircle, RotateCcw, List, ScatterChart, Crosshair, PanelsTopLeft, AlertCircle } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, ArrowDown, Search, Globe2, Building2, Sparkles, X, Plus, Minus, Focus, Layers3, ChevronLeft, ChevronRight, ExternalLink, Info, SlidersHorizontal, LoaderCircle, RotateCcw, List, ScatterChart, Crosshair, PanelsTopLeft, AlertCircle } from 'lucide-react';
 import { hierarchy, treemap, treemapSquarify } from 'd3-hierarchy';
 import 'leaflet/dist/leaflet.css';
 import './style.css';
 
 const fmt = (n, digits=0) => n == null ? 'Not available' : Number(n).toLocaleString('en-US',{maximumFractionDigits:digits});
-const compact = n => n == null ? '—' : new Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(n);
-const pct = n => n == null ? '—' : `${n > 0 ? '+' : ''}${fmt(n,1)}%`;
+const compact = n => n == null ? 'N/A' : new Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(n);
+const pct = n => n == null ? 'N/A' : `${n > 0 ? '+' : ''}${fmt(n,1)}%`;
 const logoTicker = ticker => ticker?.replaceAll('.', '-');
 function CompanyLogo({company,size='medium',onDark=false}) {
   const [failed,setFailed]=useState(false);
@@ -107,8 +107,7 @@ function EvidenceDrawer({item,onClose,onAsk}){
       {showScore&&<section id="score-explanation" className="score-explanation" aria-label="Company score explanation">
         <h3>How this company is scored</h3>
         <p className="micro">This is a relative climate assessment under our methodology. A higher percentile is better; rank 1 is best.</p>
-        <div className="drawer-metrics"><Metric label="Stored climate percentile" value={a.our_percentile==null?'Unavailable':fmt(a.our_percentile,0)} unit={a.our_percentile==null?'':'/ 100'}/><Metric label="Median rank" value={fmt(a.rank_median)}/></div>
-        <dl><dt>Rank range · 5th–95th</dt><dd>{fmt(a.rank_p05)}–{fmt(a.rank_p95)}</dd><dt>Evidence coverage</dt><dd>{a.coverage_tier||'Unavailable'}</dd></dl>
+        <dl><dt>Rank range (5th to 95th)</dt><dd>{fmt(a.rank_p05)} to {fmt(a.rank_p95)}</dd><dt>Evidence coverage</dt><dd>{a.coverage_tier||'Unavailable'}</dd></dl>
         <h3>Four assessment areas</h3>
         <ol className="score-method">
           <li><strong>Physical emissions and progress</strong><p>Measured Scope 1 emissions per revenue and the fitted annual emissions trend. Lower intensity and falling emissions improve performance.</p></li>
@@ -124,9 +123,9 @@ function EvidenceDrawer({item,onClose,onAsk}){
       <div className="drawer-metrics"><Metric label="Direct emissions · Scope 1" value={compact(e.scope1_t)} unit="tCO₂e"/><Metric label="Reporting year" value={e.scope1_year||'Unknown'}/></div>
       <h3>Emissions coverage</h3><dl><dt>Scope 2 · purchased energy</dt><dd>{e.scope2_market_t==null?'Not available':`${fmt(e.scope2_market_t)} tCO₂e · ${e.scope2_year||'year unknown'}`}</dd><dt>Scope 2 basis</dt><dd>{e.scope2_basis||'Not available'}</dd><dt>Scope 3 · value chain</dt><dd>{e.scope3_total_t==null?'Not available':`${fmt(e.scope3_total_t)} tCO₂e · ${e.scope3_year||'year unknown'}`}</dd></dl>
       <h3>Promises & progress</h3><div className="rate-comparison"><div><span>Promised annual change</span><strong>{pct(e.promised_pct_yr)}</strong></div><div><span>Measured annual change</span><strong>{pct(e.delivered_pct_yr)}</strong></div><div className="gap-row"><span>Annual shortfall</span><strong>{e.gap_pct_yr==null?'Unknown':`${fmt(e.gap_pct_yr,1)} pp`}</strong></div></div>
-      <p className="micro">Negative change means falling emissions. Measured window: {e.delivered_year_start||'—'}–{e.delivered_year_end||'—'}. Corporate targets and US facility measurements may cover different boundaries.</p>
+      <p className="micro">Negative change means falling emissions. Measured window: {e.delivered_year_start||'N/A'} to {e.delivered_year_end||'N/A'}. Corporate targets and US facility measurements may cover different boundaries.</p>
       <h3>Stored carbon-cost scenario</h3><Metric label="Modeled enterprise-value impact" value={a.d_ev_pct_of_ev==null?'Not available':`${fmt(a.d_ev_pct_of_ev,1)}%`}/>
-      <dl><dt>Carbon price</dt><dd>{a.price_sector_usd_per_t==null?'Loading / unavailable':`$${fmt(a.price_sector_usd_per_t,2)}/t`}</dd><dt>Customer pass-through</dt><dd>{a.passthrough_pct==null?'Loading / unavailable':`${a.passthrough_pct}% (assumed)`}</dd><dt>Rank interval (5th–95th)</dt><dd>{fmt(a.rank_p05)}–{fmt(a.rank_p95)}</dd><dt>Coverage tier</dt><dd>{a.coverage_tier||'Unknown'}</dd><dt>Scope 1 basis</dt><dd>{e.scope1_basis?.replaceAll('_',' ')||'Unknown'}</dd></dl>
+      <dl><dt>Carbon price</dt><dd>{a.price_sector_usd_per_t==null?'Loading / unavailable':`$${fmt(a.price_sector_usd_per_t,2)}/t`}</dd><dt>Customer pass-through</dt><dd>{a.passthrough_pct==null?'Loading / unavailable':`${a.passthrough_pct}% (assumed)`}</dd><dt>Rank interval (5th to 95th)</dt><dd>{fmt(a.rank_p05)} to {fmt(a.rank_p95)}</dd><dt>Coverage tier</dt><dd>{a.coverage_tier||'Unknown'}</dd><dt>Scope 1 basis</dt><dd>{e.scope1_basis?.replaceAll('_',' ')||'Unknown'}</dd></dl>
       <div className="notice"><Info size={17}/><p>Scenario results depend on assumptions. They are not forecasts of investment losses. Missing data is not zero emissions.</p></div>
       <button className="primary full" onClick={()=>{onClose();onAsk(`Investigate ${item.ticker}: what should I know before trusting its climate score? Retrieve its detailed company evidence and, where supported, compare its target gap with sector peers. State the strongest supported finding, the supporting records, reasons for caution, and the specific evidence to verify next. Check reporting periods and boundaries, target basis, missing data, and rank uncertainty. Distinguish measured facts from modeled estimates and interpretation. Do not infer misconduct or invent score contributions. If a comparison is unavailable, explain that limitation.`);}}><Sparkles size={16}/> Investigate this company</button>
       <p className="micro">Compare evidence, identify limitations, and find what to verify next.</p>
@@ -197,11 +196,60 @@ function CompanyTreemap({rows,onSelect,onSector}){
   </div>;
 }
 
+function Pagination({page,totalPages,totalItems,pageSize,onPageChange,onPageSizeChange}){
+  const start=totalItems===0?0:(page-1)*pageSize+1;
+  const end=Math.min(page*pageSize,totalItems);
+
+  const pages=useMemo(()=>{
+    if(totalPages<=7)return Array.from({length:totalPages},(_,i)=>i+1);
+    const set=new Set([1,totalPages,page,page-1,page+1]);
+    const sorted=[...set].filter(p=>p>=1&&p<=totalPages).sort((a,b)=>a-b);
+    const result=[];
+    for(let i=0;i<sorted.length;i++){
+      if(i>0&&sorted[i]-sorted[i-1]>1){
+        result.push(sorted[i]-sorted[i-1]===2?sorted[i-1]+1:'dots');
+      }
+      result.push(sorted[i]);
+    }
+    return result;
+  },[page,totalPages]);
+
+  return <div className="pagination-bar" aria-label="Company pagination">
+    <div className="pagination-info">
+      <span>Showing <strong>{fmt(start)}-{fmt(end)}</strong> of <strong>{fmt(totalItems)}</strong> companies</span>
+      <label className="page-size-selector">
+        <span>Rows:</span>
+        <select value={pageSize} onChange={e=>onPageSizeChange(Number(e.target.value))}>
+          <option value={15}>15</option>
+          <option value={25}>25</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+        </select>
+      </label>
+    </div>
+
+    <div className="pagination-controls">
+      <button className="pagination-btn" disabled={page<=1} onClick={()=>onPageChange(page-1)} aria-label="Previous page">
+        <ChevronLeft size={14}/><span>Previous</span>
+      </button>
+
+      <div className="pagination-pages">
+        {pages.map((p,i)=>p==='dots'?<span key={`dots-${i}`} className="page-num dots">...</span>:<button key={p} className={`page-num ${p===page?'active':''}`} onClick={()=>onPageChange(p)} aria-current={p===page?'page':undefined}>{p}</button>)}
+      </div>
+
+      <button className="pagination-btn" disabled={page>=totalPages} onClick={()=>onPageChange(page+1)} aria-label="Next page">
+        <span>Next</span><ChevronRight size={14}/>
+      </button>
+    </div>
+  </div>;
+}
+
 function App(){
   const [snapshot,setSnapshot]=useState(null),[loadError,setLoadError]=useState('');
   const [view,setView]=useState('treemap'),[filters,setFilters]=useState(initialFilters),[cf,setCf]=useState(companyFiltersDefault);
   const [selected,setSelected]=useState(null),[fitKey,setFitKey]=useState(0),[assistantOpen,setAssistantOpen]=useState(false);
   const [question,setQuestion]=useState(''),[busy,setBusy]=useState(false),[answer,setAnswer]=useState(null),[askError,setAskError]=useState(''),[activeResult,setActiveResult]=useState(null),[visibleCount,setVisibleCount]=useState(30),[history,setHistory]=useState([]);
+  const [companyPage,setCompanyPage]=useState(1),[pageSize,setPageSize]=useState(25);
   const input=useRef(), requestNumber=useRef(0);
 
   useEffect(()=>{fetch('/data/snapshot.json').then(r=>{if(!r.ok)throw Error('Could not load the browse dataset.');return r.json();}).then(setSnapshot).catch(e=>setLoadError(e.message));},[]);
@@ -218,13 +266,19 @@ function App(){
     return [...rows].sort((a,b)=>key?(b[key]??-Infinity)-(a[key]??-Infinity):a.company_name.localeCompare(b.company_name));
   },[snapshot,cf,activeResult]);
 
+  const totalPages=Math.max(1,Math.ceil(companies.length/pageSize));
+  const validPage=Math.min(companyPage,totalPages);
+  const pagedCompanies=useMemo(()=>{
+    return companies.slice((validPage-1)*pageSize,validPage*pageSize);
+  },[companies,validPage,pageSize]);
+
   const rankedPlumes=useMemo(()=>[...plumes].sort((a,b)=>(b.emission_auto??-Infinity)-(a.emission_auto??-Infinity)),[plumes]);
   const countries=useMemo(()=>[...new Set((snapshot?.plumes||[]).map(r=>r.country).filter(Boolean))].sort(),[snapshot]);
   const sectors=useMemo(()=>[...new Set((snapshot?.plumes||[]).map(r=>r.ipcc_sector).filter(Boolean))].sort(),[snapshot]);
   const companySectors=useMemo(()=>[...new Set((snapshot?.companies||[]).map(r=>r.gics_sector))].sort(),[snapshot]);
 
   function updateFilter(k,v){setActiveResult(null);setFilters(f=>({...f,[k]:v}));setVisibleCount(30);}
-  function updateCompany(k,v){setActiveResult(null);setCf(f=>({...f,[k]:v}));setVisibleCount(30);}
+  function updateCompany(k,v){setActiveResult(null);setCf(f=>({...f,[k]:v}));setVisibleCount(30);setCompanyPage(1);}
   function selectEvidence(e){const d=e.data;setSelected(d.listing?{...d.listing,...d.emissions,...d.assessments}:d);}
 
   async function ask(text){
@@ -242,9 +296,9 @@ function App(){
       if(body.visualization?.type==='map'){
         setView('map');setActiveResult({type:'map',rows:visualEvidence.map(e=>e.data),filters:body.visualization.filters});setFitKey(k=>k+1);
       }else if(body.visualization?.type==='company_table'){
-        setView('table');setActiveResult({type:'company_table',rows:visualEvidence.map(e=>e.data),filters:body.visualization.filters});
+        setView('table');setActiveResult({type:'company_table',rows:visualEvidence.map(e=>e.data),filters:body.visualization.filters});setCompanyPage(1);
       }else if(body.visualization?.type==='company_details'){
-        setView('table');setActiveResult({type:'company_table',rows:visualEvidence.map(e=>({...e.data.listing,...e.data.emissions,...e.data.assessments})),filters:{tickers:visualEvidence.map(e=>e.id).join(', ')}});
+        setView('table');setActiveResult({type:'company_table',rows:visualEvidence.map(e=>({...e.data.listing,...e.data.emissions,...e.data.assessments})),filters:{tickers:visualEvidence.map(e=>e.id).join(', ')}});setCompanyPage(1);
       }
     }catch(e){setAskError(e.name==='TimeoutError'?'The answer took too long. Try again or explore the data using filters.':e.message);}
     finally{if(current===requestNumber.current)setBusy(false);}
@@ -275,7 +329,7 @@ function App(){
         <button role="tab" aria-selected={view==='map'} className={view==='map'?'active':''} onClick={()=>{setView('map');setVisibleCount(30);}}>
           <Globe2 size={16}/><span>Plume Atlas</span>
         </button>
-        <button role="tab" aria-selected={view==='table'} className={view==='table'?'active':''} onClick={()=>{setView('table');setVisibleCount(30);}}>
+        <button role="tab" aria-selected={view==='table'} className={view==='table'?'active':''} onClick={()=>{setView('table');setVisibleCount(30);setCompanyPage(1);}}>
           <List size={16}/><span>Company Screener</span>
         </button>
       </nav>
@@ -346,7 +400,7 @@ function App(){
           {view==='map'?<><Field label="Gas"><select value={filters.gas} onChange={e=>updateFilter('gas',e.target.value)}><option value="CH4">Methane · CH₄</option><option value="CO2">Carbon dioxide · CO₂</option></select></Field><Field label="Location"><select value={filters.country} onChange={e=>updateFilter('country',e.target.value)}><option value="">Worldwide</option>{countries.map(c=><option key={c}>{c}</option>)}</select></Field><Field label="Sector"><select value={filters.sector} onChange={e=>updateFilter('sector',e.target.value)}><option value="">All sectors</option>{sectors.map(s=><option key={s}>{s}</option>)}</select></Field><details className="more-filters"><summary><SlidersHorizontal size={16}/><span>More</span></summary><div><Field label="From (inclusive)"><input type="date" value={filters.start} onChange={e=>updateFilter('start',e.target.value)}/></Field><Field label="To (inclusive)"><input type="date" value={filters.end} onChange={e=>updateFilter('end',e.target.value)}/></Field><Field label="Minimum rate · kg/h"><input type="number" min="0" value={filters.minRate} placeholder="Any rate" onChange={e=>updateFilter('minRate',e.target.value)}/></Field></div></details></>:<><Field label="Sector"><select value={cf.sector} onChange={e=>updateCompany('sector',e.target.value)}><option value="">All sectors</option>{companySectors.map(s=><option key={s}>{s}</option>)}</select></Field><Field label="Company"><input placeholder="Name or ticker" value={cf.search} onChange={e=>updateCompany('search',e.target.value)}/></Field><Field label="Sort by"><select value={cf.sort} onChange={e=>updateCompany('sort',e.target.value)}><option value="gap">Largest target gap</option><option value="emissions">Largest Scope 1</option><option value="risk">Scenario impact</option><option value="name">Company name</option></select></Field><Field label="Minimum gap · pp/yr"><input type="number" placeholder="Any gap" value={cf.minGap} onChange={e=>updateCompany('minGap',e.target.value)}/></Field></>}
         </div>}
 
-        {loadError?<div className="empty-state" role="alert"><AlertCircle/><h3>Could not load the dataset</h3><p>{loadError}</p><button className="secondary" onClick={()=>window.location.reload()}>Try again</button></div>:!snapshot?<div className="empty-state"><LoaderCircle className="spin"/><h3>Loading GreenRank database</h3><p>Preparing 500 company records and 12,936 satellite plume observations…</p></div>:view==='map'?<>
+        {loadError?<div className="empty-state" role="alert"><AlertCircle/><h3>Could not load the dataset</h3><p>{loadError}</p><button className="secondary" onClick={()=>window.location.reload()}>Try again</button></div>:!snapshot?<div className="empty-state"><LoaderCircle className="spin"/><h3>Loading GreenRank database</h3><p>Preparing 500 company records and 12,936 satellite plume observations...</p></div>:view==='map'?<>
           <MapView records={plumes} onSelect={setSelected} selection={selected} fitKey={fitKey}/>
           <div className="map-stats"><Metric label="Observations in selection" value={fmt(plumes.length)}/><Metric label="With a quantified rate" value={fmt(plumes.filter(r=>r.emission_auto!=null).length)}/><Metric label="Countries represented" value={new Set(plumes.map(r=>r.country).filter(Boolean)).size}/></div>
           <div className="observation-list"><div className="section-heading"><h3>Ranked Point-Source Observations</h3><span>Largest rates first <ArrowDown size={13}/></span></div>{!plumes.length?<div className="empty-state"><Search/><h3>No matching observations</h3><p>Try a wider date range or another location.</p></div>:rankedPlumes.slice(0,visibleCount).map((r,i)=><button className="observation-row" key={r.plume_id} onClick={()=>setSelected(r)}><span className="row-number">{String(i+1).padStart(2,'0')}</span><span className="location-icon"><Crosshair size={17}/></span><span className="row-main"><strong>{r.place||r.region||'Observation'}</strong><small>{r.country||'Unknown location'} · {r.ipcc_sector||'Sector unknown'}</small></span><span className="row-date">{r.observed_at_utc.slice(0,10)}</span><span className="row-rate"><strong>{r.emission_auto==null?'Unquantified':fmt(r.emission_auto)}</strong><small>kg {r.gas}/h</small></span><ChevronRight size={16}/></button>)}{plumes.length>visibleCount&&<button className="load-more" onClick={()=>setVisibleCount(n=>n+30)}>Show 30 more observations <Plus size={14}/></button>}</div>
@@ -356,7 +410,9 @@ function App(){
           <CompanyChart rows={companies} onSelect={setSelected}/>
           <div className="notice"><Info size={16}/><p>Dots represent companies with verified targets and historical reporting windows. A positive gap indicates annual progress is trailing the pledged target rate.</p></div>
         </div>:<div className="company-surface">
-          <div className="table-scroll"><table><thead><tr><th>Company</th><th>Scope 1 <small>tCO₂e · year</small></th><th>Promised <small>% / year</small></th><th>Measured <small>% / year</small></th><th>Gap <small>pp / year</small></th><th>Coverage</th></tr></thead><tbody>{companies.slice(0,visibleCount).map(r=><tr key={r.ticker} onClick={()=>setSelected(r)}><td><button className="company-name" onClick={ev=>{ev.stopPropagation();setSelected(r);}}><CompanyLogo company={r}/><span><strong>{r.company_name}</strong><small>{r.ticker} · {r.gics_sector}</small></span></button></td><td>{compact(r.scope1_t)}<small>{r.scope1_year||'Unknown year'}</small></td><td>{pct(r.promised_pct_yr)}</td><td>{pct(r.delivered_pct_yr)}</td><td><span className={r.gap_pct_yr==null?'':r.gap_pct_yr>0?'gap-badge':'gap-badge good'}>{r.gap_pct_yr==null?'—':`${r.gap_pct_yr>0?'+':''}${fmt(r.gap_pct_yr,1)}`}</span></td><td><span className={`coverage ${r.coverage_tier}`}>{r.coverage_tier}</span></td></tr>)}</tbody></table></div>{!companies.length&&<div className="empty-state"><Search/><h3>No matching companies</h3><p>Adjust the search or sector filter.</p></div>}{companies.length>visibleCount&&<button className="load-more" onClick={()=>setVisibleCount(n=>n+30)}>Show 30 more companies <Plus size={14}/></button>}
+          <div className="table-scroll"><table><thead><tr><th>Company</th><th>Scope 1 <small>tCO₂e · year</small></th><th>Promised <small>% / year</small></th><th>Measured <small>% / year</small></th><th>Gap <small>pp / year</small></th><th>Coverage</th></tr></thead><tbody>{pagedCompanies.map(r=><tr key={r.ticker} onClick={()=>setSelected(r)}><td><button className="company-name" onClick={ev=>{ev.stopPropagation();setSelected(r);}}><CompanyLogo company={r}/><span><strong>{r.company_name}</strong><small>{r.ticker} · {r.gics_sector}</small></span></button></td><td>{compact(r.scope1_t)}<small>{r.scope1_year||'Unknown year'}</small></td><td>{pct(r.promised_pct_yr)}</td><td>{pct(r.delivered_pct_yr)}</td><td><span className={r.gap_pct_yr==null?'':r.gap_pct_yr>0?'gap-badge':'gap-badge good'}>{r.gap_pct_yr==null?'N/A':`${r.gap_pct_yr>0?'+':''}${fmt(r.gap_pct_yr,1)}`}</span></td><td><span className={`coverage ${r.coverage_tier}`}>{r.coverage_tier}</span></td></tr>)}</tbody></table></div>
+          {!companies.length&&<div className="empty-state"><Search/><h3>No matching companies</h3><p>Adjust the search or sector filter.</p></div>}
+          {companies.length>0&&<Pagination page={validPage} totalPages={totalPages} totalItems={companies.length} pageSize={pageSize} onPageChange={p=>setCompanyPage(p)} onPageSizeChange={s=>{setPageSize(s);setCompanyPage(1);}}/>}
           <div className="notice"><Info size={16}/><p>A positive gap means slower reductions than promised. Reporting periods and boundaries vary; missing figures remain unknown.</p></div>
         </div>}
 
@@ -383,8 +439,19 @@ function App(){
 
       {assistantOpen&&<>
         <div className="panel-body" aria-live="polite">
-          {busy?<div className="working-state"><LoaderCircle className="spin" size={26}/><p>Querying dataset & cross-referencing records…</p></div>:askError?<div className="assistant-error"><AlertCircle size={24}/><h3>Query could not be completed</h3><p>{askError}</p><button className="secondary" onClick={()=>ask(question)}><RotateCcw size={14}/>Try again</button></div>:answer?<div className="answer-content">
-            <div className="eyebrow">{answer.status==='needs_clarification'?'MORE CONTEXT NEEDED':answer.status==='data_only'?'RECORDS RETRIEVED':'DECISION BRIEF'}</div>
+          {busy?<div className="working-timeline">
+            <div className="timeline-header"><LoaderCircle className="spin" size={14}/><span>Running analytical query</span></div>
+            <div className="timeline-stages">
+              <div className="timeline-stage active"><span className="stage-pill thinking">Thinking</span><span className="stage-text">Parsing intent and spatial parameters</span></div>
+              <div className="timeline-stage"><span className="stage-pill grep">Grepping</span><span className="stage-text">Scanning 500 companies and 12,936 plumes</span></div>
+              <div className="timeline-stage"><span className="stage-pill read">Reading</span><span className="stage-text">Cross-referencing SEC disclosures and EPA GHGRP</span></div>
+              <div className="timeline-stage"><span className="stage-pill edit">Auditing</span><span className="stage-text">Verifying target gaps and rank intervals</span></div>
+            </div>
+          </div>:askError?<div className="assistant-error"><AlertCircle size={24}/><h3>Query could not be completed</h3><p>{askError}</p><button className="secondary" onClick={()=>ask(question)}><RotateCcw size={14}/>Try again</button></div>:answer?<div className="answer-content">
+            <div className="answer-header">
+              <span className="stage-pill done">Done</span>
+              <span className="eyebrow">{answer.status==='needs_clarification'?'MORE CONTEXT NEEDED':answer.status==='data_only'?'RECORDS RETRIEVED':'DECISION BRIEF'}</span>
+            </div>
             <h3>{answer.brief?.headline|| (answer.status==='no_results'?'No matching evidence':answer.status==='needs_clarification'?'A limit in the evidence':`${answer.evidence.length} records retrieved`)}</h3>
             {answer.brief&&<><div className="brief-meta"><span className={`confidence ${answer.brief.confidence}`}>{answer.brief.confidence} confidence</span>{answer.tool_calls?.length>0&&<span>{answer.tool_calls.length} analyses</span>}</div><h4>Key findings</h4><ul className="brief-list">{answer.brief.findings.map((finding,i)=><li key={i}>{answerText(finding)}</li>)}</ul><h4>Recommended actions</h4><ol className="brief-list actions">{answer.brief.recommended_actions.map((action,i)=><li key={i}>{action}</li>)}</ol></>}
             <div className="answer-text">{answerText()}</div>

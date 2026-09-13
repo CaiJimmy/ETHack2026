@@ -1,4 +1,4 @@
-# Fieldwork — first MVP
+# GreenRank: Auditable Climate Intelligence
 
 Independent React/Vite frontend, created from scratch. Teammates' experimental frontends are untouched.
 
