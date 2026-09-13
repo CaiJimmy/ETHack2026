@@ -19,6 +19,7 @@ import { fmt, compact, logoTicker } from '../utils/formatters';
 import { sectorColors } from '../constants';
 import { CompanyLogo } from '../components/CompanyLogo';
 import hqMap from '../constants/hq.json';
+import worldBorders from '../constants/world_borders.json';
 
 const logoCache = new Map();
 
@@ -62,33 +63,177 @@ const BASINS = [
   { name: 'Appalachian', lat: 40.2, lon: -80.2, zoomR: 250 }
 ];
 
-// Simplified continent boundary polygons [longitude, latitude]
-const CONTINENT_POLYGONS = [
-  // North America
-  [[-168,66],[-165,60],[-150,59],[-136,56],[-124,49],[-123,38],[-117,32],[-106,23],[-97,16],[-83,9],[-77,8],[-80,18],[-82,23],[-80,25],[-75,35],[-71,43],[-60,46],[-65,58],[-76,63],[-85,68],[-95,70],[-120,70],[-140,70],[-168,66]],
-  // Mexico & Gulf Coast
-  [[-97,18],[-90,20],[-88,21],[-82,25],[-80,28],[-81,31],[-85,30],[-90,30],[-95,29],[-97,26],[-97,18]],
-  // South America
-  [[-77,8],[-75,12],[-60,9],[-50,0],[-35,-5],[-35,-10],[-40,-22],[-50,-30],[-55,-40],[-65,-55],[-75,-50],[-72,-40],[-70,-30],[-75,-15],[-80,-2],[-77,8]],
-  // Europe
-  [[-10,36],[-9,43],[0,44],[5,44],[10,55],[8,58],[15,56],[22,60],[28,71],[20,70],[15,65],[12,61],[5,62],[5,53],[0,49],[-5,48],[-10,36]],
-  // Scandinavia
-  [[5,58],[10,58],[18,60],[25,65],[30,71],[25,71],[15,68],[10,63],[5,58]],
-  // Eurasia
-  [[25,70],[40,68],[60,70],[80,72],[100,75],[120,74],[140,70],[170,68],[180,65],[170,60],[140,50],[130,42],[122,30],[115,22],[105,10],[100,3],[98,10],[80,15],[70,22],[60,25],[50,28],[45,15],[35,32],[28,40],[25,45],[30,55],[25,70]],
-  // India
-  [[68,24],[73,18],[78,8],[80,13],[88,21],[88,26],[78,28],[68,24]],
-  // Africa
-  [[-17,15],[-17,21],[-5,36],[10,37],[25,32],[32,30],[42,12],[51,10],[45,-12],[35,-25],[28,-34],[18,-34],[12,-15],[8,4],[-12,6],[-17,15]],
-  // Australia
-  [[114,-22],[120,-34],[135,-35],[145,-38],[152,-28],[148,-18],[140,-12],[130,-14],[120,-16],[114,-22]],
-  // Greenland
-  [[-50,60],[-40,60],[-25,70],[-20,80],[-40,83],[-55,75],[-50,60]],
-  // British Isles
-  [[-5,50],[2,51],[0,58],[-4,58],[-5,50]],
-  // Japan
-  [[130,32],[135,35],[141,43],[140,36],[130,32]]
-];
+// Draw vector polyline on sphere with horizon limb clipping
+function drawPolyline(ctx, points, rLon, rLat, R, cx, cy) {
+  let isDrawing = false;
+  let prevPt = null;
+  let prevCoord = null;
+
+  for (let i = 0; i < points.length; i++) {
+    const coord = points[i];
+    const currPt = projectSpherical(coord[0], coord[1], rLon, rLat, R, cx, cy);
+
+    if (i === 0) {
+      if (currPt.z > 0) {
+        ctx.moveTo(currPt.x, currPt.y);
+        isDrawing = true;
+      }
+    } else {
+      // Avoid antimeridian cross-screen jump
+      const dLonRaw = Math.abs(coord[1] - prevCoord[1]);
+      if (dLonRaw > 180) {
+        if (currPt.z > 0) {
+          ctx.moveTo(currPt.x, currPt.y);
+          isDrawing = true;
+        } else {
+          isDrawing = false;
+        }
+      } else if (prevPt.z > 0 && currPt.z > 0) {
+        if (!isDrawing) {
+          ctx.moveTo(prevPt.x, prevPt.y);
+          isDrawing = true;
+        }
+        ctx.lineTo(currPt.x, currPt.y);
+      } else if (prevPt.z > 0 && currPt.z <= 0) {
+        const t = prevPt.z / (prevPt.z - currPt.z);
+        const latH = prevCoord[0] + (coord[0] - prevCoord[0]) * t;
+        let dLon = coord[1] - prevCoord[1];
+        if (dLon > 180) dLon -= 360;
+        else if (dLon < -180) dLon += 360;
+        const lonH = prevCoord[1] + dLon * t;
+        const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+        if (isDrawing) ctx.lineTo(ptH.x, ptH.y);
+        isDrawing = false;
+      } else if (prevPt.z <= 0 && currPt.z > 0) {
+        const t = currPt.z / (currPt.z - prevPt.z);
+        const latH = coord[0] + (prevCoord[0] - coord[0]) * t;
+        let dLon = prevCoord[1] - coord[1];
+        if (dLon > 180) dLon -= 360;
+        else if (dLon < -180) dLon += 360;
+        const lonH = coord[1] + dLon * t;
+        const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+        ctx.moveTo(ptH.x, ptH.y);
+        ctx.lineTo(currPt.x, currPt.y);
+        isDrawing = true;
+      } else {
+        isDrawing = false;
+      }
+    }
+    prevPt = currPt;
+    prevCoord = coord;
+  }
+}
+
+// Draw land polygon ring with horizon limb clipping
+function drawLandRing(ctx, ring, rLon, rLat, R, cx, cy) {
+  if (!ring || ring.length < 3) return;
+
+  let frontCount = 0;
+  for (let i = 0; i < ring.length; i++) {
+    const pt = projectSpherical(ring[i][0], ring[i][1], rLon, rLat, R, cx, cy);
+    if (pt.z > 0) frontCount++;
+  }
+  if (frontCount === 0) return;
+
+  // Fully visible polygon: standard fast path
+  if (frontCount === ring.length) {
+    ctx.beginPath();
+    for (let i = 0; i < ring.length; i++) {
+      const pt = projectSpherical(ring[i][0], ring[i][1], rLon, rLat, R, cx, cy);
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    return;
+  }
+
+  // Partially visible polygon: track transitions and close with short directional arc along limb
+  ctx.beginPath();
+  let firstEntryPt = null;
+  let lastExitPt = null;
+  let currentExitPt = null;
+  let isDrawing = false;
+
+  const len = ring.length;
+  let prevCoord = ring[0];
+  let prevPt = projectSpherical(prevCoord[0], prevCoord[1], rLon, rLat, R, cx, cy);
+
+  for (let i = 1; i <= len; i++) {
+    const coord = ring[i % len];
+    const currPt = projectSpherical(coord[0], coord[1], rLon, rLat, R, cx, cy);
+
+    // Skip antimeridian jump
+    const dLonRaw = Math.abs(coord[1] - prevCoord[1]);
+    if (dLonRaw > 180) {
+      prevPt = currPt;
+      prevCoord = coord;
+      isDrawing = false;
+      continue;
+    }
+
+    if (prevPt.z > 0 && currPt.z > 0) {
+      if (!isDrawing) {
+        ctx.moveTo(prevPt.x, prevPt.y);
+        isDrawing = true;
+      }
+      ctx.lineTo(currPt.x, currPt.y);
+    } else if (prevPt.z > 0 && currPt.z <= 0) {
+      const t = prevPt.z / (prevPt.z - currPt.z);
+      const latH = prevCoord[0] + (coord[0] - prevCoord[0]) * t;
+      let dLon = coord[1] - prevCoord[1];
+      if (dLon > 180) dLon -= 360;
+      else if (dLon < -180) dLon += 360;
+      const lonH = prevCoord[1] + dLon * t;
+      const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+      if (isDrawing) {
+        ctx.lineTo(ptH.x, ptH.y);
+      }
+      currentExitPt = ptH;
+      lastExitPt = ptH;
+      isDrawing = false;
+    } else if (prevPt.z <= 0 && currPt.z > 0) {
+      const t = currPt.z / (currPt.z - prevPt.z);
+      const latH = coord[0] + (prevCoord[0] - coord[0]) * t;
+      let dLon = prevCoord[1] - coord[1];
+      if (dLon > 180) dLon -= 360;
+      else if (dLon < -180) dLon += 360;
+      const lonH = coord[1] + dLon * t;
+      const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+
+      if (!firstEntryPt) firstEntryPt = ptH;
+
+      if (currentExitPt) {
+        const a1 = Math.atan2(currentExitPt.y - cy, currentExitPt.x - cx);
+        const a2 = Math.atan2(ptH.y - cy, ptH.x - cx);
+        let d = a2 - a1;
+        while (d < -Math.PI) d += Math.PI * 2;
+        while (d > Math.PI) d -= Math.PI * 2;
+        ctx.arc(cx, cy, R, a1, a2, d < 0);
+        currentExitPt = null;
+      } else {
+        ctx.moveTo(ptH.x, ptH.y);
+      }
+      ctx.lineTo(currPt.x, currPt.y);
+      isDrawing = true;
+    }
+
+    prevPt = currPt;
+    prevCoord = coord;
+  }
+
+  if (lastExitPt && firstEntryPt && lastExitPt !== firstEntryPt) {
+    const a1 = Math.atan2(lastExitPt.y - cy, lastExitPt.x - cx);
+    const a2 = Math.atan2(firstEntryPt.y - cy, firstEntryPt.x - cx);
+    let d = a2 - a1;
+    while (d < -Math.PI) d += Math.PI * 2;
+    while (d > Math.PI) d -= Math.PI * 2;
+    ctx.arc(cx, cy, R, a1, a2, d < 0);
+  }
+
+  ctx.closePath();
+  ctx.fill();
+}
 
 // Project spherical lat/lon to 2D screen coordinate with rotation
 function projectSpherical(lat, lon, rotLon, rotLat, R, cx, cy) {
@@ -419,50 +564,52 @@ export function Globe3DView({
         ctx.stroke();
       }
 
-      // 5. Draw Continents
-      ctx.fillStyle = 'rgba(25, 41, 56, 0.78)';
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.28)';
-      ctx.lineWidth = 1;
-
-      for (let p = 0; p < CONTINENT_POLYGONS.length; p++) {
-        const poly = CONTINENT_POLYGONS[p];
-        ctx.beginPath();
-        let started = false;
-
-        for (let i = 0; i < poly.length; i++) {
-          const [lon1, lat1] = poly[i];
-          const [lon2, lat2] = poly[(i + 1) % poly.length];
-
-          // Interpolate 3 segments per edge for smooth spherical arc
-          for (let step = 0; step <= 2; step++) {
-            const t = step / 2;
-            const curLon = lon1 + (lon2 - lon1) * t;
-            const curLat = lat1 + (lat2 - lat1) * t;
-            const pt = projectSpherical(curLat, curLon, rLon, rLat, R, cx, cy);
-
-            if (pt.z > -0.2) {
-              if (!started) {
-                ctx.moveTo(pt.x, pt.y);
-                started = true;
-              } else {
-                ctx.lineTo(pt.x, pt.y);
-              }
-            } else {
-              started = false;
-            }
-          }
+      // 5. Draw Continents & Well-Defined World Boundaries
+      // 5a. Continent landmass fills
+      ctx.fillStyle = 'rgba(23, 38, 51, 0.88)';
+      if (worldBorders && worldBorders.land) {
+        for (let p = 0; p < worldBorders.land.length; p++) {
+          drawLandRing(ctx, worldBorders.land[p], rLon, rLat, R, cx, cy);
         }
-        ctx.fill();
-        ctx.stroke();
       }
 
-      // Antarctica south cap
-      ctx.beginPath();
-      for (let lon = -180; lon <= 180; lon += 12) {
-        const pt = projectSpherical(-72, lon, rLon, rLat, R, cx, cy);
-        if (pt.z > -0.2) ctx.lineTo(pt.x, pt.y);
+      // 5b. Internal Country Borders (well defined diplomatic boundaries between sovereign states)
+      if (worldBorders && worldBorders.borders) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.46)';
+        ctx.lineWidth = 0.85;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        for (let i = 0; i < worldBorders.borders.length; i++) {
+          drawPolyline(ctx, worldBorders.borders[i], rLon, rLat, R, cx, cy);
+        }
+        ctx.stroke();
+        ctx.restore();
       }
-      ctx.fillStyle = 'rgba(30, 48, 65, 0.7)';
+
+      // 5c. Continental Coastlines (well defined luminous continent perimeters & islands)
+      if (worldBorders && worldBorders.coastlines) {
+        ctx.save();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.25;
+        ctx.shadowColor = 'rgba(56, 189, 248, 0.45)';
+        ctx.shadowBlur = 4;
+        ctx.beginPath();
+        for (let i = 0; i < worldBorders.coastlines.length; i++) {
+          drawPolyline(ctx, worldBorders.coastlines[i], rLon, rLat, R, cx, cy);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 5d. Atmospheric Terminator & Rim Light (planetary spherical depth)
+      const rimGrad = ctx.createRadialGradient(cx, cy, R * 0.86, cx, cy, R);
+      rimGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      rimGrad.addColorStop(0.85, 'rgba(56, 189, 248, 0.12)');
+      rimGrad.addColorStop(1, 'rgba(56, 189, 248, 0.35)');
+      ctx.fillStyle = rimGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fill();
 
       // 6. Draw Methane Plumes (Micro-Scatter on 3D Globe)
