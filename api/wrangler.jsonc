@@ -5,7 +5,7 @@
   "workers_dev": true,
   "vars": {
     "GEMINI_MODEL": "gemini-3.1-flash-lite",
-    "ALLOWED_ORIGINS": "http://localhost:8000,http://localhost:5173,http://127.0.0.1:8000"
+    "ALLOWED_ORIGINS": "http://localhost:8000,http://localhost:5173,http://127.0.0.1:8000,https://ethack.tyrolize.ch,https://ethack.tyrolize.ch/"
   },
   "ratelimits": [{ "name": "AI_RATE_LIMITER", "namespace_id": "618468", "simple": { "limit": 10, "period": 60 } }],
   "d1_databases": [{

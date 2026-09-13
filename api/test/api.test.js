@@ -7,7 +7,7 @@ import worker from '../src/index.js';
 const sqlite = new DatabaseSync(':memory:');
 sqlite.exec(readFileSync(new URL('../../data/d1/import.sql', import.meta.url), 'utf8'));
 const env = {
-    ALLOWED_ORIGINS: 'http://localhost:8000', DB: {
+    ALLOWED_ORIGINS: 'http://localhost:8000,https://ethack.tyrolize.ch/', DB: {
         prepare(sql) {
             const stmt = sqlite.prepare(sql);
             const bound = (values) => ({
@@ -79,6 +79,10 @@ test('CORS and methods', async () => {
     assert.equal((await call('/api/companies', { headers: { Origin: 'https://unknown.example' } })).status, 403);
     const r = await call('/api/companies', { method: 'OPTIONS', headers: { Origin: 'http://localhost:8000' } });
     assert.equal(r.status, 204); assert.equal(r.headers.get('Access-Control-Allow-Origin'), 'http://localhost:8000');
+    const ethack1 = await call('/api/companies', { method: 'OPTIONS', headers: { Origin: 'https://ethack.tyrolize.ch' } });
+    assert.equal(ethack1.status, 204); assert.equal(ethack1.headers.get('Access-Control-Allow-Origin'), 'https://ethack.tyrolize.ch');
+    const ethack2 = await call('/api/companies', { method: 'OPTIONS', headers: { Origin: 'https://ethack.tyrolize.ch/' } });
+    assert.equal(ethack2.status, 204); assert.equal(ethack2.headers.get('Access-Control-Allow-Origin'), 'https://ethack.tyrolize.ch/');
 });
 test('database errors do not leak SQL', async () => {
     const response = await worker.fetch(new Request('https://api.example/api/health'), { DB: { prepare() { throw Error('secret SQL'); } } });

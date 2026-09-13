@@ -125,9 +125,10 @@ async function list(db, query, notes, source) {
 const worker = {
     async fetch(request, env) {
         const url = new URL(request.url), origin = request.headers.get('Origin');
-        const allowed = (env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim());
+        const allowed = (env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim().replace(/\/+$/, ''));
+        const normalizedOrigin = origin ? origin.replace(/\/+$/, '') : null;
         const headers = { 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff' };
-        if (origin && (origin === url.origin || allowed.includes(origin))) {
+        if (origin && (origin === url.origin || allowed.includes(normalizedOrigin))) {
             headers['Access-Control-Allow-Origin'] = origin;
             headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
             headers['Access-Control-Allow-Headers'] = 'Content-Type';

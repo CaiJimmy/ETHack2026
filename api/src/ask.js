@@ -46,7 +46,7 @@ Company emissions may be from different years and boundaries. gap is delivered m
 Use default limit 5 unless requested, never exceed 20; if more requested explain the limit. Prefer one tool for simple lookups. For decision or comparison questions, combine at most three useful tools, such as ranking companies then benchmarking the sector. Do not repeat the same tool call. Use dashboard context and recent history only to resolve references such as “these”, “here”, or “that company”.`;
 
 async function generate(env, system, data, schema, fetcher) {
-    system += '\nFormat the answer as 2–4 short paragraphs, separated by actual newline characters (a blank line between paragraphs). Put the finding, interpretation, and next verification step in separate paragraphs when relevant. Encode newlines correctly in the JSON string. Do not return one dense paragraph or literal backslash-n text.';
+    system += '\nFormat the answer as 2-4 short paragraphs, separated by actual newline characters (a blank line between paragraphs). Put the finding, interpretation, and next verification step in separate paragraphs when relevant. Encode newlines correctly in the JSON string. Do not return one dense paragraph or literal backslash-n text.';
     const model = env.GEMINI_MODEL || 'gemini-3.8-flash';
     if (!/^[a-zA-Z0-9.-]+$/.test(model)) throw new AskError('Invalid model configuration', 503);
     let response;
@@ -113,7 +113,7 @@ export async function readQuestion(request) {
     for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
     let body;
     try { body = JSON.parse(new TextDecoder().decode(bytes)); } catch { throw new AskError('Invalid JSON'); }
-    if (!body || Array.isArray(body) || typeof body !== 'object' || Object.keys(body).some(k => !['question', 'context', 'history'].includes(k)) || typeof body.question !== 'string' || !body.question.trim() || body.question.length > 1000) throw new AskError('Provide a question string of 1–1000 characters with optional context and history');
+    if (!body || Array.isArray(body) || typeof body !== 'object' || Object.keys(body).some(k => !['question', 'context', 'history'].includes(k)) || typeof body.question !== 'string' || !body.question.trim() || body.question.length > 1000) throw new AskError('Provide a question string of 1-1000 characters with optional context and history');
     if (body.context != null && (Array.isArray(body.context) || typeof body.context !== 'object' || JSON.stringify(body.context).length > 3000)) throw new AskError('Invalid dashboard context');
     if (body.history != null && (!Array.isArray(body.history) || body.history.length > 6 || body.history.some(turn => !turn || !['user', 'assistant'].includes(turn.role) || typeof turn.text !== 'string' || turn.text.length > 1000))) throw new AskError('Invalid conversation history');
     return { question: body.question.trim(), context: body.context || {}, history: body.history || [] };
@@ -152,7 +152,7 @@ export async function answerQuestion(input, env, execute, fetcher = fetch) {
             if (plan.tickers.length) throw new AskError('Invalid listing selection', 502);
             if (!params.has('limit')) params.set('limit', '5');
             const limit = Number(params.get('limit'));
-            if (!Number.isInteger(limit) || limit < 1 || limit > 20) throw new AskError('AI result limit must be 1–20', 502);
+            if (!Number.isInteger(limit) || limit < 1 || limit > 20) throw new AskError('AI result limit must be 1-20', 502);
             const endpoint = plan.operation === 'company_benchmarks' ? 'insights/company-benchmarks' : plan.operation === 'hotspots' ? 'insights/hotspots' : plan.operation;
             nextPaths = [`/api/${endpoint}?${params}`];
         }
