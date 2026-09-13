@@ -195,7 +195,11 @@ export default function App() {
         }}
       />
 
-      <main className={`workspace ${selected ? 'has-sidebar' : ''}`}>
+      <main
+        className={`workspace ${selected ? 'has-evidence' : ''} ${
+          assistantOpen ? 'has-assistant' : ''
+        } ${selected || assistantOpen ? 'has-sidebar' : ''}`}
+      >
         <section className="explorer" aria-label="Data explorer">
           <FilterBar
             view={view}
@@ -280,22 +284,25 @@ export default function App() {
             onAsk={ask}
           />
         )}
+
+        {assistantOpen && (
+          <AssistantPanel
+            assistantOpen={assistantOpen}
+            setAssistantOpen={setAssistantOpen}
+            busy={busy}
+            askError={askError}
+            answer={answer}
+            question={question}
+            setQuestion={setQuestion}
+            ask={ask}
+            selectEvidence={selectEvidence}
+            input={input}
+            prompts={prompts}
+          />
+        )}
       </main>
 
       {quizOpen && <ClimateQuiz companies={snapshot?.companies || []} onClose={() => setQuizOpen(false)} onExplore={(nextView, company) => {setQuizOpen(false);setView(nextView);setActiveResult(null);setCf(companyFiltersDefault);setSelected(company || null);}} onAsk={text => {setQuizOpen(false);ask(text);}} />}
-      <AssistantPanel
-        assistantOpen={assistantOpen}
-        setAssistantOpen={setAssistantOpen}
-        busy={busy}
-        askError={askError}
-        answer={answer}
-        question={question}
-        setQuestion={setQuestion}
-        ask={ask}
-        selectEvidence={selectEvidence}
-        input={input}
-        prompts={prompts}
-      />
     </div>
   );
 }

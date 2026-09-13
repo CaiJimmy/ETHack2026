@@ -200,7 +200,6 @@ export function EvidenceDrawer({ item, onClose, onAsk }) {
             <button
               className="primary full"
               onClick={() => {
-                onClose();
                 onAsk(`Investigate ${item.ticker}: what should I know before trusting its climate score? Retrieve its detailed company evidence and, where supported, compare its target gap with sector peers. State the strongest supported finding, the supporting records, reasons for caution, and the specific evidence to verify next. Check reporting periods and boundaries, target basis, missing data, and rank uncertainty. Distinguish measured facts from modeled estimates and interpretation. Do not infer misconduct or invent score contributions. If a comparison is unavailable, explain that limitation.`);
               }}
             >

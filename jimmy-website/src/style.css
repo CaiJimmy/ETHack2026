@@ -305,7 +305,7 @@ input, select, textarea {
 }
 
 /* -------------------------------------------------------------
-   Workspace Grid (Main Explorer & Push Evidence Sidebar)
+   Workspace Grid (Main Explorer & Push Evidence/Assistant Sidebars)
    ------------------------------------------------------------- */
 .workspace {
   padding: 20px 28px;
@@ -316,8 +316,17 @@ input, select, textarea {
   flex: 1;
 }
 
-.workspace.has-sidebar {
-  grid-template-columns: minmax(0, 1fr) 480px;
+.workspace.has-evidence:not(.has-assistant),
+.workspace.has-sidebar:not(.has-assistant) {
+  grid-template-columns: minmax(0, 1fr) 460px;
+}
+
+.workspace.has-assistant:not(.has-evidence) {
+  grid-template-columns: minmax(0, 1fr) 440px;
+}
+
+.workspace.has-evidence.has-assistant {
+  grid-template-columns: minmax(0, 1fr) 420px 420px;
 }
 
 .explorer {
@@ -1705,23 +1714,20 @@ tbody tr:hover {
 }
 
 /* -------------------------------------------------------------
-   AI Query Assistant (Cursor Docked Window & Timeline Stages)
+   AI Query Assistant (Sidebar Push Panel & Timeline Stages)
    ------------------------------------------------------------- */
 .insight-panel {
-  position: fixed;
-  z-index: 900;
-  right: 28px;
-  bottom: 24px;
-  top: auto;
-  width: min(440px, calc(100vw - 36px));
-  max-height: min(660px, calc(100dvh - 48px));
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  position: sticky;
+  top: 68px;
+  height: calc(100vh - 88px);
+  max-height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
-  background: var(--surface-card);
-  border: 1px solid var(--line-strong);
-  border-radius: 12px;
-  box-shadow: 0 12px 36px rgba(38, 37, 30, 0.12);
   overflow: hidden;
+  animation: pushSidebarIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .panel-heading {
@@ -2220,6 +2226,12 @@ tbody tr:hover {
 /* -------------------------------------------------------------
    Responsive Breakpoints
    ------------------------------------------------------------- */
+@media (max-width: 1400px) {
+  .workspace.has-evidence.has-assistant {
+    grid-template-columns: minmax(0, 1fr) 370px 370px;
+  }
+}
+
 @media (max-width: 1100px) {
   .greenrank-nav {
     padding: 0 18px;
@@ -2227,8 +2239,15 @@ tbody tr:hover {
   .workspace {
     padding: 16px 18px;
   }
-  .workspace.has-sidebar {
+  .workspace.has-evidence:not(.has-assistant),
+  .workspace.has-sidebar:not(.has-assistant) {
     grid-template-columns: minmax(0, 1fr) 400px;
+  }
+  .workspace.has-assistant:not(.has-evidence) {
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+  .workspace.has-evidence.has-assistant {
+    grid-template-columns: minmax(0, 1fr) 320px 320px;
   }
 }
 
@@ -2245,7 +2264,9 @@ tbody tr:hover {
     justify-content: space-between;
     overflow-x: auto;
   }
-  .workspace.has-sidebar {
+  .workspace.has-sidebar,
+  .workspace.has-evidence,
+  .workspace.has-assistant {
     grid-template-columns: 1fr;
   }
   .evidence-sidebar {
@@ -2261,6 +2282,22 @@ tbody tr:hover {
     border-bottom: none;
     border-right: none;
     z-index: 850;
+    box-shadow: -8px 0 28px rgba(38, 37, 30, 0.1);
+  }
+  .insight-panel {
+    position: fixed;
+    top: 52px;
+    right: 0;
+    bottom: 0;
+    width: min(460px, 100vw);
+    height: auto;
+    max-height: calc(100vh - 52px);
+    border-radius: 0;
+    border-left: 1px solid var(--line);
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    z-index: 860;
     box-shadow: -8px 0 28px rgba(38, 37, 30, 0.1);
   }
   .finding-banner {
@@ -2304,11 +2341,6 @@ tbody tr:hover {
   .table-scroll {
     margin-left: -12px;
     margin-right: -12px;
-  }
-  .insight-panel {
-    right: 12px;
-    bottom: 12px;
-    width: calc(100vw - 24px);
   }
 }
 
