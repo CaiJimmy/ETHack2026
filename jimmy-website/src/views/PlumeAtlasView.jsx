@@ -15,7 +15,8 @@ import {
   Map as MapIcon,
   Globe2,
   Maximize2,
-  Minimize2
+  Minimize2,
+  ChevronDown
 } from 'lucide-react';
 import { Metric } from '../components/Metric';
 import { fmt, compact } from '../utils/formatters';
@@ -124,6 +125,9 @@ export function MapView({
   useEffect(() => {
     map.current = L.map(el.current, {
       zoomControl: false,
+      scrollWheelZoom: false,
+      zoomSnap: 0,
+      zoomDelta: 1,
       preferCanvas: true,
       minZoom: 1,
       maxZoom: 16,
@@ -181,34 +185,104 @@ export function MapView({
     };
   }, []);
 
-  // Intercept trackpad pinch gestures and wheel zoom in capture phase to prevent browser page zoom
+  // Smooth trackpad pinch-to-zoom, two-finger scroll, and mouse wheel zoom without page zoom
   useEffect(() => {
     const shell = shellRef.current;
     if (!shell) return;
 
-    const onWheel = (e) => {
-      // If ctrlKey or metaKey is set, it is a Mac trackpad pinch-to-zoom gesture or Ctrl+Wheel.
-      // Calling e.preventDefault() in capture phase stops the browser from zooming the webpage!
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
+    let rafId = null;
+    let accumulatedDelta = 0;
+    let targetPoint = null;
+
+    const commitWheelZoom = () => {
+      rafId = null;
+      if (!map.current || Math.abs(accumulatedDelta) < 0.0001 || !targetPoint) {
+        accumulatedDelta = 0;
+        return;
+      }
+      const currentZoom = map.current.getZoom();
+      const nextZoom = Math.max(1, Math.min(16, currentZoom + accumulatedDelta));
+      accumulatedDelta = 0;
+      if (Math.abs(nextZoom - currentZoom) > 0.0001) {
+        map.current.setZoomAround(targetPoint, nextZoom, { animate: false });
       }
     };
 
-    const onGesture = (e) => {
-      // Prevent Safari trackpad gesture page zooming
+    const onWheel = (e) => {
+      // Prevent browser page zooming (pinch ctrlKey) and vertical scrolling while cursor is over the map
       e.preventDefault();
+      e.stopPropagation();
+
+      if (!map.current || !el.current) return;
+
+      const rect = el.current.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      targetPoint = L.point(mouseX, mouseY);
+
+      let delta = 0;
+      if (e.ctrlKey || e.metaKey) {
+        // Trackpad pinch-to-zoom on Chrome, Firefox, Edge
+        // Negative deltaY is pinching out (zooming in), positive deltaY is pinching in (zooming out)
+        delta = -e.deltaY * 0.015;
+      } else {
+        // Touchpad two-finger scroll or physical mouse wheel
+        let dy = e.deltaY;
+        if (e.deltaMode === 1) dy *= 20;
+        else if (e.deltaMode === 2) dy *= 60;
+        delta = -dy * 0.003;
+      }
+
+      // Clamp delta per event to maintain fluid continuity
+      delta = Math.max(-0.5, Math.min(0.5, delta));
+      accumulatedDelta += delta;
+
+      if (!rafId) {
+        rafId = requestAnimationFrame(commitWheelZoom);
+      }
+    };
+
+    // Safari macOS trackpad gesture handling (gesturestart, gesturechange, gestureend)
+    let gestureStartZoom = 2;
+    let gestureCenterPoint = null;
+
+    const onGestureStart = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!map.current || !el.current) return;
+      gestureStartZoom = map.current.getZoom();
+      const rect = el.current.getBoundingClientRect();
+      gestureCenterPoint = L.point(e.clientX - rect.left, e.clientY - rect.top);
+    };
+
+    const onGestureChange = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!map.current || !gestureCenterPoint) return;
+
+      // e.scale: 1.0 is neutral, 2.0 is 2x zoom (+1 level in log2), 0.5 is 0.5x (-1 level in log2)
+      const zoomDiff = Math.log2(Math.max(0.1, e.scale));
+      const nextZoom = Math.max(1, Math.min(16, gestureStartZoom + zoomDiff));
+      map.current.setZoomAround(gestureCenterPoint, nextZoom, { animate: false });
+    };
+
+    const onGestureEnd = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      gestureCenterPoint = null;
     };
 
     shell.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    shell.addEventListener('gesturestart', onGesture, { passive: false, capture: true });
-    shell.addEventListener('gesturechange', onGesture, { passive: false, capture: true });
-    shell.addEventListener('gestureend', onGesture, { passive: false, capture: true });
+    shell.addEventListener('gesturestart', onGestureStart, { passive: false, capture: true });
+    shell.addEventListener('gesturechange', onGestureChange, { passive: false, capture: true });
+    shell.addEventListener('gestureend', onGestureEnd, { passive: false, capture: true });
 
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       shell.removeEventListener('wheel', onWheel, { capture: true });
-      shell.removeEventListener('gesturestart', onGesture, { capture: true });
-      shell.removeEventListener('gesturechange', onGesture, { capture: true });
-      shell.removeEventListener('gestureend', onGesture, { capture: true });
+      shell.removeEventListener('gesturestart', onGestureStart, { capture: true });
+      shell.removeEventListener('gesturechange', onGestureChange, { capture: true });
+      shell.removeEventListener('gestureend', onGestureEnd, { capture: true });
     };
   }, []);
 
@@ -495,24 +569,30 @@ export function MapView({
     <div className={`map-shell ${isFullscreen ? 'is-fullscreen' : ''}`} ref={shellRef}>
       <div ref={el} className="map" aria-label="Global map of observed greenhouse gas plumes" />
 
-      {/* Basin Jump Pills */}
-      <div className="basin-jump-bar" aria-label="Quick jump to key emission basins">
-        <span className="basin-jump-label">
-          <Compass size={11} /> Basins:
-        </span>
-        {BASINS.map(b => (
-          <button
-            key={b.name}
-            type="button"
-            className="basin-jump-btn"
-            onClick={() => map.current?.flyTo([b.lat, b.lon], b.zoom, { duration: 1 })}
-          >
-            {b.name}
-          </button>
-        ))}
+      {/* Basin Quick Jump Dropdown */}
+      <div className="basin-jump-bar">
+        <Compass size={12} className="basin-jump-icon" />
+        <select
+          className="basin-select"
+          aria-label="Jump to emission basin"
+          defaultValue=""
+          onChange={e => {
+            const b = BASINS.find(x => x.name === e.target.value);
+            if (b) map.current?.flyTo([b.lat, b.lon], b.zoom, { duration: 1 });
+            e.target.value = '';
+          }}
+        >
+          <option value="" disabled>Basins...</option>
+          {BASINS.map(b => (
+            <option key={b.name} value={b.name}>
+              {b.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={11} className="basin-chevron" />
       </div>
 
-      {/* Severity Filter, Mode Switcher & 3D Globe Toggle */}
+      {/* Top Actions: 3D Globe, Severity Filter & Display Mode */}
       <div className="map-top-actions">
         {setViewType && (
           <button
@@ -526,24 +606,14 @@ export function MapView({
           </button>
         )}
 
-        <button
-          type="button"
-          className={`dimension-switch-btn ${isFullscreen ? 'active-fullscreen-btn' : ''}`}
-          onClick={toggleFullscreen}
-          title={isFullscreen ? 'Exit Full Screen' : 'Make Map Full Screen'}
-        >
-          {isFullscreen ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
-          <span>{isFullscreen ? 'Exit Full Screen' : 'Full Screen'}</span>
-        </button>
-
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
           <button
             type="button"
             className={currentSeverity === 'all' ? 'active' : ''}
             onClick={() => updateSeverity('all')}
-            title="Show all observations"
+            title={`All ${compact(records.length)} observations`}
           >
-            All ({compact(records.length)})
+            All
           </button>
           <button
             type="button"
@@ -551,7 +621,7 @@ export function MapView({
             onClick={() => updateSeverity('severe')}
             title="Filter to rates > 1,000 kg/h"
           >
-            &gt; 1k kg/h
+            &gt; 1k
           </button>
           <button
             type="button"
@@ -559,7 +629,7 @@ export function MapView({
             onClick={() => updateSeverity('super')}
             title="Filter to super-emitters > 2,500 kg/h"
           >
-            Super-Emitters
+            Super
           </button>
         </div>
 

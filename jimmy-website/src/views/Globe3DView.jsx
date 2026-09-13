@@ -12,7 +12,8 @@ import {
   Sliders,
   Sparkles,
   Maximize2,
-  Minimize2
+  Minimize2,
+  ChevronDown
 } from 'lucide-react';
 import { fmt, compact, logoTicker } from '../utils/formatters';
 import { sectorColors } from '../constants';
@@ -895,14 +896,21 @@ export function Globe3DView({
       e.stopPropagation();
 
       const s = stateRef.current;
+      const baseR = Math.max(180, Math.floor(Math.min(s.width || 800, s.height || 500) * 0.38));
+      const minR = Math.max(90, Math.floor(baseR * 0.4));
+      const maxR = Math.max(500, Math.floor(baseR * 2.5));
+
       if (e.ctrlKey || e.metaKey) {
         // Trackpad pinch-to-zoom on macOS Chrome or Firefox
-        const zoomStep = -e.deltaY * 0.9;
-        s.targetRadius = Math.max(140, Math.min(380, s.targetRadius + zoomStep));
+        const zoomStep = -e.deltaY * 0.8;
+        s.targetRadius = Math.max(minR, Math.min(maxR, s.targetRadius + zoomStep));
       } else {
-        // Standard mouse wheel or two-finger scroll
-        const zoomStep = e.deltaY > 0 ? -22 : 22;
-        s.targetRadius = Math.max(140, Math.min(380, s.targetRadius + zoomStep));
+        // Standard mouse wheel or two-finger trackpad scroll
+        let dy = e.deltaY;
+        if (e.deltaMode === 1) dy *= 20;
+        else if (e.deltaMode === 2) dy *= 60;
+        const zoomStep = -dy * 0.35;
+        s.targetRadius = Math.max(minR, Math.min(maxR, s.targetRadius + zoomStep));
       }
     };
 
@@ -916,9 +924,13 @@ export function Globe3DView({
     const onGestureChange = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const newR = Math.max(140, Math.min(380, gestureStartRadius * e.scale));
-      stateRef.current.radius = newR;
-      stateRef.current.targetRadius = newR;
+      const s = stateRef.current;
+      const baseR = Math.max(180, Math.floor(Math.min(s.width || 800, s.height || 500) * 0.38));
+      const minR = Math.max(90, Math.floor(baseR * 0.4));
+      const maxR = Math.max(500, Math.floor(baseR * 2.5));
+      const newR = Math.max(minR, Math.min(maxR, gestureStartRadius * e.scale));
+      s.radius = newR;
+      s.targetRadius = newR;
     };
 
     const onGestureEnd = (e) => {
@@ -997,24 +1009,30 @@ export function Globe3DView({
         onClick={handleClick}
       />
 
-      {/* Basin Jump Bar */}
-      <div className="basin-jump-bar" aria-label="3D Globe Basin Shortcuts">
-        <span className="basin-jump-label">
-          <Compass size={11} /> 3D Basins:
-        </span>
-        {BASINS.map(b => (
-          <button
-            key={b.name}
-            type="button"
-            className="basin-jump-btn"
-            onClick={() => jumpToBasin(b)}
-          >
-            {b.name}
-          </button>
-        ))}
+      {/* Basin Quick Jump Dropdown */}
+      <div className="basin-jump-bar">
+        <Compass size={12} className="basin-jump-icon" />
+        <select
+          className="basin-select"
+          aria-label="Jump to emission basin"
+          defaultValue=""
+          onChange={e => {
+            const b = BASINS.find(x => x.name === e.target.value);
+            if (b) jumpToBasin(b);
+            e.target.value = '';
+          }}
+        >
+          <option value="" disabled>Basins...</option>
+          {BASINS.map(b => (
+            <option key={b.name} value={b.name}>
+              {b.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={11} className="basin-chevron" />
       </div>
 
-      {/* Top Severity Filter, 2D/3D Switcher & HQ Logos Toggle */}
+      {/* Top Actions: 2D Map Switcher, HQ Logos Toggle & Severity Filter */}
       <div className="map-top-actions">
         {setViewType && (
           <button
@@ -1032,20 +1050,10 @@ export function Globe3DView({
           type="button"
           className={`dimension-switch-btn ${showHqLogos ? 'active-logo-toggle' : ''}`}
           onClick={() => setShowHqLogos(v => !v)}
-          title="Toggle Company Headquarters Logos on 3D Earth"
+          title="Toggle Company Headquarters Logos"
         >
           <Building2 size={12} />
-          <span>HQ Logos: {showHqLogos ? 'ON' : 'OFF'}</span>
-        </button>
-
-        <button
-          type="button"
-          className={`dimension-switch-btn ${isFullscreen ? 'active-fullscreen-btn' : ''}`}
-          onClick={toggleFullscreen}
-          title={isFullscreen ? 'Exit Full Screen' : 'Make Map Full Screen'}
-        >
-          {isFullscreen ? <Minimize2 size={12} /> : <Maximize2 size={12} />}
-          <span>{isFullscreen ? 'Exit Full Screen' : 'Full Screen'}</span>
+          <span>HQ Logos</span>
         </button>
 
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
@@ -1053,9 +1061,9 @@ export function Globe3DView({
             type="button"
             className={severity === 'all' ? 'active' : ''}
             onClick={() => setSeverity('all')}
-            title="Show all observations"
+            title={`All ${compact(records.length)} observations`}
           >
-            All ({compact(records.length)})
+            All
           </button>
           <button
             type="button"
@@ -1063,7 +1071,7 @@ export function Globe3DView({
             onClick={() => setSeverity('severe')}
             title="Filter to rates > 1,000 kg/h"
           >
-            &gt; 1k kg/h
+            &gt; 1k
           </button>
           <button
             type="button"
@@ -1071,7 +1079,7 @@ export function Globe3DView({
             onClick={() => setSeverity('super')}
             title="Filter to super-emitters > 2,500 kg/h"
           >
-            Super-Emitters
+            Super
           </button>
         </div>
       </div>

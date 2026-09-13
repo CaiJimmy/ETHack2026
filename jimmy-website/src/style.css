@@ -1232,8 +1232,9 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 9px;
-  border-radius: 4px;
+  padding: 0 8px;
+  height: 30px;
+  border-radius: 6px;
   background: rgba(17, 24, 28, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid #2e3e48;
@@ -1243,6 +1244,7 @@ tbody tr:hover {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .dimension-switch-btn:hover {
@@ -1281,77 +1283,85 @@ tbody tr:hover {
   font-size: 12px;
 }
 
-/* Basin Jump Pills */
+/* Basin Quick Jump Pill */
 .basin-jump-bar {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 14px;
+  left: 14px;
   z-index: 400;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(17, 24, 28, 0.88);
-  backdrop-filter: blur(8px);
+  background: rgba(17, 24, 28, 0.92);
+  backdrop-filter: blur(10px);
   border: 1px solid #2e3e48;
   border-radius: 6px;
-  padding: 4px 8px;
-  flex-wrap: wrap;
+  padding: 0 8px;
+  height: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.basin-jump-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #8da4af;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-right: 4px;
+.basin-jump-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
 }
 
-.basin-jump-btn {
+.basin-select {
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   color: #cbd5e1;
   font-family: var(--font-mono);
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  outline: none;
+  padding-right: 2px;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-.basin-jump-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #38bdf8;
+.basin-select:hover {
   color: #ffffff;
+}
+
+.basin-select option {
+  background: #11181c;
+  color: #f7f7f4;
+}
+
+.basin-chevron {
+  color: #8da4af;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 /* Map Top Actions: Severity Filter & Mode Switcher */
 .map-top-actions {
   position: absolute;
-  top: 16px;
-  right: 60px;
+  top: 14px;
+  right: 54px;
   z-index: 400;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .severity-filter {
   display: flex;
+  align-items: center;
+  height: 30px;
   background: rgba(17, 24, 28, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid #2e3e48;
   border-radius: 6px;
   overflow: hidden;
-  padding: 3px;
-  gap: 3px;
+  padding: 2px;
+  gap: 2px;
 }
 
 .severity-filter button {
-  padding: 5px 8px;
+  padding: 3px 8px;
+  height: 100%;
   border-radius: 4px;
   background: transparent;
   color: #8da4af;
@@ -1377,20 +1387,23 @@ tbody tr:hover {
 
 .map-mode-toggle {
   display: flex;
+  align-items: center;
+  height: 30px;
   background: rgba(17, 24, 28, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid #2e3e48;
   border-radius: 6px;
   overflow: hidden;
-  padding: 3px;
-  gap: 3px;
+  padding: 2px;
+  gap: 2px;
 }
 
 .map-mode-toggle button {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 9px;
+  gap: 4px;
+  padding: 3px 8px;
+  height: 100%;
   border-radius: 4px;
   background: transparent;
   color: #8da4af;
@@ -1400,6 +1413,7 @@ tbody tr:hover {
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .map-mode-toggle button:hover {
