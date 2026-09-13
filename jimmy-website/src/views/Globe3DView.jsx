@@ -7,9 +7,50 @@ import {
   Play,
   Pause,
   Compass,
-  Map
+  Map as MapIcon,
+  Building2,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
-import { fmt, compact } from '../utils/formatters';
+import { fmt, compact, logoTicker } from '../utils/formatters';
+import { sectorColors } from '../constants';
+import { CompanyLogo } from '../components/CompanyLogo';
+import hqMap from '../constants/hq.json';
+
+const logoCache = new Map();
+
+function getCompanyLogo(ticker) {
+  if (!ticker) return null;
+  const key = logoTicker(ticker);
+  let entry = logoCache.get(key);
+  if (!entry) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    entry = { img, loaded: false, failed: false };
+    img.onload = () => {
+      entry.loaded = true;
+    };
+    img.onerror = () => {
+      entry.failed = true;
+    };
+    img.src = `https://images.financialmodelingprep.com/symbol/${encodeURIComponent(key)}.png`;
+    logoCache.set(key, entry);
+  }
+  return entry;
+}
+
+function getCompanyHq(ticker) {
+  if (!ticker) return null;
+  const t = ticker.toUpperCase().trim();
+  if (hqMap[t]) return hqMap[t];
+  const tDash = t.replace(/\./g, '-');
+  if (hqMap[tDash]) return hqMap[tDash];
+  const tDot = t.replace(/-/g, '.');
+  if (hqMap[tDot]) return hqMap[tDot];
+  if (t === 'MRSH') return hqMap['MMC'];
+  if (t === 'NXPI') return hqMap['NXP'];
+  return null;
+}
 
 const BASINS = [
   { name: 'Permian Basin (USA)', lat: 31.8, lon: -102.3, zoomR: 240 },
@@ -74,6 +115,7 @@ function projectSpherical(lat, lon, rotLon, rotLat, R, cx, cy) {
 
 export function Globe3DView({
   records,
+  companies = [],
   selection,
   onSelect,
   severity,
@@ -83,6 +125,61 @@ export function Globe3DView({
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const [showHqLogos, setShowHqLogos] = useState(true);
+  const [topCount, setTopCount] = useState(15);
+  const [hqMetric, setHqMetric] = useState('emissions'); // 'emissions' | 'market_cap'
+  const [hoveredCompany, setHoveredCompany] = useState(null);
+
+  // Top companies sorted by metric and geocoded with cluster dispersion
+  const processedTopCompanies = useMemo(() => {
+    if (!showHqLogos || !companies || companies.length === 0) return [];
+
+    const sorted = [...companies].sort((a, b) => {
+      if (hqMetric === 'emissions') {
+        return (b.scope1_t ?? -Infinity) - (a.scope1_t ?? -Infinity);
+      }
+      return (b.market_cap_musd ?? -Infinity) - (a.market_cap_musd ?? -Infinity);
+    });
+
+    const list = [];
+    const coordCounts = new Map();
+
+    for (let i = 0; i < sorted.length; i++) {
+      if (list.length >= topCount) break;
+      const c = sorted[i];
+      const hq = getCompanyHq(c.ticker);
+      if (!hq || hq.lat == null || hq.lon == null) continue;
+
+      // Trigger logo preload
+      getCompanyLogo(c.ticker);
+
+      const coordKey = `${hq.lat.toFixed(2)},${hq.lon.toFixed(2)}`;
+      const count = coordCounts.get(coordKey) || 0;
+      coordCounts.set(coordKey, count + 1);
+
+      let dispLat = hq.lat;
+      let dispLon = hq.lon;
+      if (count > 0) {
+        const angle = count * 2.4;
+        const radius = 0.9 * Math.sqrt(count);
+        dispLat += Math.sin(angle) * radius;
+        dispLon += (Math.cos(angle) * radius) / Math.cos((hq.lat * Math.PI) / 180 || 1);
+      }
+
+      list.push({
+        ...c,
+        hq,
+        lat: dispLat,
+        lon: dispLon,
+        baseLat: hq.lat,
+        baseLon: hq.lon,
+        rank: list.length + 1
+      });
+    }
+
+    return list;
+  }, [companies, showHqLogos, topCount, hqMetric]);
 
   // Refs for animation & drag interaction
   const stateRef = useRef({
@@ -99,20 +196,35 @@ export function Globe3DView({
     hovered: null,
     dpr: 1,
     width: 800,
-    height: 500
+    height: 500,
+    showHqLogos: true,
+    topCompanies: [],
+    hoveredCompany: null,
+    hqMetric: 'emissions'
   });
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [hovered, setHovered] = useState(null);
 
   stateRef.current.autoRotate = autoRotate;
+  stateRef.current.showHqLogos = showHqLogos;
+  stateRef.current.topCompanies = processedTopCompanies;
+  stateRef.current.hoveredCompany = hoveredCompany;
+  stateRef.current.hqMetric = hqMetric;
 
-  // When external selection changes, smoothly rotate to selected plume
+  // When external selection changes, smoothly rotate to selected plume or company
   useEffect(() => {
     if (selection?.plume_id) {
       stateRef.current.targetRotLon = selection.plume_longitude;
       stateRef.current.targetRotLat = selection.plume_latitude;
       stateRef.current.targetRadius = Math.max(stateRef.current.radius, 240);
+    } else if (selection?.ticker) {
+      const hq = getCompanyHq(selection.ticker);
+      if (hq) {
+        stateRef.current.targetRotLon = hq.lon;
+        stateRef.current.targetRotLat = hq.lat;
+        stateRef.current.targetRadius = Math.max(stateRef.current.radius, 240);
+      }
     }
   }, [selection]);
 
@@ -415,6 +527,125 @@ export function Globe3DView({
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.stroke();
 
+      // 9. Company HQ Logos (when enabled)
+      const sHq = s.showHqLogos;
+      const topComps = s.topCompanies || [];
+      if (sHq && topComps.length > 0) {
+        const visibleHqs = [];
+        const elevatedR = R * 1.055;
+
+        for (let i = 0; i < topComps.length; i++) {
+          const c = topComps[i];
+          const surfPt = projectSpherical(c.baseLat, c.baseLon, rLon, rLat, R, cx, cy);
+          const pinPt = projectSpherical(c.lat, c.lon, rLon, rLat, elevatedR, cx, cy);
+
+          // Cull backside if pin is on far side of Earth
+          if (pinPt.z > 0.05) {
+            visibleHqs.push({
+              company: c,
+              surfPt,
+              pinPt,
+              z: pinPt.z
+            });
+          }
+        }
+
+        // Sort back-to-front so closer foreground logos render over background ones
+        visibleHqs.sort((a, b) => a.z - b.z);
+
+        for (let i = 0; i < visibleHqs.length; i++) {
+          const { company: c, surfPt, pinPt, z } = visibleHqs[i];
+          const isHovered = s.hoveredCompany?.company?.ticker === c.ticker;
+          const sectorColor = sectorColors[c.gics_sector] || '#38bdf8';
+          const depthScale = Math.max(0.68, Math.min(1.22, 0.72 + z * 0.45));
+          const badgeR = Math.round((isHovered ? 16 : 12.5) * depthScale);
+
+          // 1. Surface anchor beacon dot
+          ctx.beginPath();
+          ctx.arc(surfPt.x, surfPt.y, 2.2 * depthScale, 0, Math.PI * 2);
+          ctx.fillStyle = sectorColor;
+          ctx.fill();
+
+          // 2. Surface anchor halo ring
+          ctx.beginPath();
+          ctx.arc(surfPt.x, surfPt.y, 5 * depthScale, 0, Math.PI * 2);
+          ctx.strokeStyle = `${sectorColor}55`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // 3. Hairline stem connecting surface to floating logo badge
+          ctx.beginPath();
+          ctx.moveTo(surfPt.x, surfPt.y);
+          ctx.lineTo(pinPt.x, pinPt.y);
+          ctx.strokeStyle = isHovered ? 'rgba(56, 189, 248, 0.95)' : 'rgba(255, 255, 255, 0.45)';
+          ctx.lineWidth = isHovered ? 1.8 : 1;
+          ctx.stroke();
+
+          // 4. Outer badge border with glow
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(pinPt.x, pinPt.y, badgeR + 2, 0, Math.PI * 2);
+          ctx.fillStyle = isHovered ? '#38bdf8' : sectorColor;
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+          ctx.shadowBlur = isHovered ? 10 : 5;
+          ctx.fill();
+
+          // 5. Inner circular white disc
+          ctx.beginPath();
+          ctx.arc(pinPt.x, pinPt.y, badgeR, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+
+          // 6. Draw logo image if loaded
+          const entry = getCompanyLogo(c.ticker);
+          if (entry && entry.loaded && !entry.failed) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(pinPt.x, pinPt.y, badgeR - 1, 0, Math.PI * 2);
+            ctx.clip();
+            const pad = 2;
+            const logoW = (badgeR - pad) * 2;
+            ctx.drawImage(entry.img, pinPt.x - badgeR + pad, pinPt.y - badgeR + pad, logoW, logoW);
+            ctx.restore();
+          } else {
+            // Ticker monogram fallback
+            ctx.fillStyle = '#0f172a';
+            ctx.font = `700 ${Math.max(8, Math.round(9 * depthScale))}px var(--font-mono, monospace)`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(c.ticker.slice(0, 4), pinPt.x, pinPt.y);
+          }
+          ctx.restore();
+
+          // 7. Hover ticker pill tag
+          if (isHovered) {
+            const label = c.ticker;
+            ctx.font = '600 10px var(--font-mono, monospace)';
+            const textW = ctx.measureText(label).width;
+            const pillW = textW + 12;
+            const pillH = 18;
+            const pillY = pinPt.y + badgeR + 5;
+
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+            ctx.beginPath();
+            if (ctx.roundRect) {
+              ctx.roundRect(pinPt.x - pillW / 2, pillY, pillW, pillH, 4);
+            } else {
+              ctx.rect(pinPt.x - pillW / 2, pillY, pillW, pillH);
+            }
+            ctx.fill();
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(label, pinPt.x, pillY + pillH / 2);
+          }
+        }
+      }
+
       animId = requestAnimationFrame(render);
     }
 
@@ -484,7 +715,35 @@ export function Globe3DView({
       return;
     }
 
-    // Hover telemetry detection
+    // 1. Company HQ logo hover detection
+    if (s.showHqLogos && s.topCompanies && s.topCompanies.length > 0) {
+      let closestCompany = null;
+      let minCompDist = 18;
+      const elevatedR = R * 1.055;
+
+      for (let i = 0; i < s.topCompanies.length; i++) {
+        const c = s.topCompanies[i];
+        const pinPt = projectSpherical(c.lat, c.lon, s.rotLon, s.rotLat, elevatedR, cx, cy);
+        if (pinPt.z <= 0.05) continue;
+
+        const dist = Math.hypot(pinPt.x - mouseX, pinPt.y - mouseY);
+        if (dist < minCompDist) {
+          minCompDist = dist;
+          closestCompany = { company: c, x: pinPt.x, y: pinPt.y, screenX: mouseX, screenY: mouseY };
+        }
+      }
+
+      if (closestCompany) {
+        setHoveredCompany(closestCompany);
+        setHovered(null);
+        canvas.style.cursor = 'pointer';
+        return;
+      } else {
+        setHoveredCompany(null);
+      }
+    }
+
+    // 2. Plume hover telemetry detection
     const cx = rect.width / 2;
     const cy = rect.height / 2;
     const R = s.radius;
@@ -512,6 +771,12 @@ export function Globe3DView({
     stateRef.current.isDragging = false;
   }
 
+  function handleMouseLeave() {
+    stateRef.current.isDragging = false;
+    setHovered(null);
+    setHoveredCompany(null);
+  }
+
   function handleClick(e) {
     const s = stateRef.current;
     const canvas = canvasRef.current;
@@ -524,6 +789,26 @@ export function Globe3DView({
     const cy = rect.height / 2;
     const R = s.radius;
 
+    // 1. Check click on company HQ pin first
+    if (s.showHqLogos && s.topCompanies && s.topCompanies.length > 0) {
+      const elevatedR = R * 1.055;
+      for (let i = 0; i < s.topCompanies.length; i++) {
+        const c = s.topCompanies[i];
+        const pinPt = projectSpherical(c.lat, c.lon, s.rotLon, s.rotLat, elevatedR, cx, cy);
+        if (pinPt.z <= 0.05) continue;
+
+        const dist = Math.hypot(pinPt.x - mouseX, pinPt.y - mouseY);
+        if (dist < 20) {
+          s.targetRotLon = c.hq.lon;
+          s.targetRotLat = c.hq.lat;
+          s.targetRadius = Math.max(s.radius, 240);
+          onSelect(c);
+          return;
+        }
+      }
+    }
+
+    // 2. Check click on plume record
     let closest = null;
     let minDist = 22;
 
@@ -674,7 +959,7 @@ export function Globe3DView({
         ))}
       </div>
 
-      {/* Top Severity Filter & 2D/3D Switcher */}
+      {/* Top Severity Filter, 2D/3D Switcher & HQ Logos Toggle */}
       <div className="map-top-actions">
         {setViewType && (
           <button
@@ -683,10 +968,20 @@ export function Globe3DView({
             onClick={() => setViewType('map')}
             title="Switch to 2D Flat Map"
           >
-            <Map size={12} />
+            <MapIcon size={12} />
             <span>2D Map</span>
           </button>
         )}
+
+        <button
+          type="button"
+          className={`dimension-switch-btn ${showHqLogos ? 'active-logo-toggle' : ''}`}
+          onClick={() => setShowHqLogos(v => !v)}
+          title="Toggle Company Headquarters Logos on 3D Earth"
+        >
+          <Building2 size={12} />
+          <span>HQ Logos: {showHqLogos ? 'ON' : 'OFF'}</span>
+        </button>
 
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
           <button
@@ -715,6 +1010,67 @@ export function Globe3DView({
           </button>
         </div>
       </div>
+
+      {/* Company HQ Logos Floating Control Panel */}
+      {showHqLogos && (
+        <div className="globe-hq-panel" aria-label="Company HQ Controls">
+          <div className="hq-panel-header">
+            <span className="hq-panel-title">
+              <Building2 size={12} /> Top {topCount} HQs
+            </span>
+            <span className="hq-panel-count">
+              {processedTopCompanies.length} visible
+            </span>
+          </div>
+
+          <div className="hq-slider-group">
+            <div className="hq-slider-labels">
+              <span>Show Top</span>
+              <strong>{topCount} companies</strong>
+            </div>
+            <input
+              type="range"
+              min="5"
+              max="50"
+              step="5"
+              value={topCount}
+              onChange={e => setTopCount(Number(e.target.value))}
+              aria-label="Number of top companies to show"
+            />
+            <div className="hq-preset-pills">
+              {[5, 10, 20, 30, 50].map(n => (
+                <button
+                  key={n}
+                  type="button"
+                  className={topCount === n ? 'active' : ''}
+                  onClick={() => setTopCount(n)}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="hq-metric-toggle" role="group" aria-label="Rank companies by">
+            <button
+              type="button"
+              className={hqMetric === 'emissions' ? 'active' : ''}
+              onClick={() => setHqMetric('emissions')}
+              title="Rank by Scope 1 Direct Emissions"
+            >
+              Emissions
+            </button>
+            <button
+              type="button"
+              className={hqMetric === 'market_cap' ? 'active' : ''}
+              onClick={() => setHqMetric('market_cap')}
+              title="Rank by Market Capitalization"
+            >
+              Market Cap
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 3D Navigation Controls */}
       <div className="globe-controls">
@@ -785,8 +1141,68 @@ export function Globe3DView({
         </div>
       )}
 
+      {/* Company HQ Tooltip */}
+      {hoveredCompany && (
+        <div
+          className="globe-company-tooltip"
+          style={{
+            left: `${Math.min(hoveredCompany.x + 16, (containerRef.current?.clientWidth || 800) - 270)}px`,
+            top: `${Math.max(14, Math.min(hoveredCompany.y - 48, (containerRef.current?.clientHeight || 500) - 160))}px`
+          }}
+        >
+          <div className="company-tooltip-header">
+            <CompanyLogo company={hoveredCompany.company} size="small" onDark />
+            <div className="company-tooltip-names">
+              <span className="company-tooltip-title">{hoveredCompany.company.company_name}</span>
+              <span className="company-tooltip-ticker">{hoveredCompany.company.ticker}</span>
+            </div>
+          </div>
+
+          <div className="company-tooltip-meta">
+            <span
+              className="sector-pill"
+              style={{
+                color: sectorColors[hoveredCompany.company.gics_sector] || '#38bdf8'
+              }}
+            >
+              {hoveredCompany.company.gics_sector}
+            </span>
+            <span className="location-pill">
+              {hoveredCompany.company.hq.city}
+              {hoveredCompany.company.hq.state ? `, ${hoveredCompany.company.hq.state}` : ''}
+              {hoveredCompany.company.hq.country && hoveredCompany.company.hq.country !== 'United States'
+                ? `, ${hoveredCompany.company.hq.country}`
+                : ''}
+            </span>
+          </div>
+
+          <div className="company-tooltip-stat">
+            <span className="stat-label">
+              {hqMetric === 'emissions' ? 'Scope 1 Emissions' : 'Market Cap'}
+            </span>
+            <strong className="stat-value">
+              {hqMetric === 'emissions'
+                ? hoveredCompany.company.scope1_t != null
+                  ? `${compact(hoveredCompany.company.scope1_t)} tCO2`
+                  : 'Unmeasured'
+                : hoveredCompany.company.market_cap_musd != null
+                ? `$${compact(hoveredCompany.company.market_cap_musd * 1000000)}`
+                : 'N/A'}
+            </strong>
+          </div>
+
+          <div className="company-tooltip-hint">Click to inspect company dossier</div>
+        </div>
+      )}
+
       {/* 3D Globe Legend */}
       <div className="map-legend">
+        {showHqLogos && (
+          <div className="legend-item">
+            <i className="dot-hq" />
+            <span>Company HQ ({topCount} displayed)</span>
+          </div>
+        )}
         <div className="legend-item">
           <i className="dot-cyan" />
           <span>&lt; 500 kg/h</span>
@@ -799,7 +1215,7 @@ export function Globe3DView({
           <i className="dot-orange" />
           <span>&gt; 2,500 kg/h Super-Emitter</span>
         </div>
-        <div className="legend-hint">Drag to orbit Earth · Scroll to zoom · Click to inspect</div>
+        <div className="legend-hint">Drag to orbit Earth · Scroll to zoom · Click pin to inspect</div>
       </div>
     </div>
   );

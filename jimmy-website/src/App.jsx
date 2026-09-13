@@ -236,6 +236,7 @@ export default function App() {
             <PlumeAtlasView
               plumes={plumes}
               rankedPlumes={rankedPlumes}
+              companies={snapshot?.companies || []}
               selected={selected}
               onSelect={setSelected}
               fitKey={fitKey}

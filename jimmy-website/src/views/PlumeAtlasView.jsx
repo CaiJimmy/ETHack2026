@@ -12,7 +12,7 @@ import {
   Radio,
   Layers,
   Compass,
-  Map,
+  Map as MapIcon,
   Globe2
 } from 'lucide-react';
 import { Metric } from '../components/Metric';
@@ -599,6 +599,7 @@ export function MapView({
 export function PlumeAtlasView({
   plumes,
   rankedPlumes,
+  companies = [],
   selected,
   onSelect,
   fitKey,
@@ -639,7 +640,7 @@ export function PlumeAtlasView({
             onClick={() => setViewType('map')}
             title="2D Flat Map View"
           >
-            <Map size={13} />
+            <MapIcon size={13} />
             <span>2D Atlas</span>
           </button>
           <button
@@ -657,6 +658,7 @@ export function PlumeAtlasView({
       {viewType === 'globe' ? (
         <Globe3DView
           records={plumes}
+          companies={companies}
           selection={selected}
           onSelect={onSelect}
           severity={severity}
