@@ -1119,20 +1119,136 @@ tbody tr:hover {
 }
 
 /* -------------------------------------------------------------
-   Plume Atlas Map
+   Plume Atlas Map & 3D Globe
    ------------------------------------------------------------- */
-.map-shell {
-  height: 480px;
+.map-shell,
+.globe-shell {
+  height: clamp(540px, 66vh, 680px);
   position: relative;
-  background: #11181c;
+  background: #0a0f14;
   isolation: isolate;
   border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  user-select: none;
+  overscroll-behavior: contain;
 }
 
 .map {
   height: 100%;
   background: #11181c;
   z-index: 0;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+.globe-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+.globe-canvas:active {
+  cursor: grabbing;
+}
+
+.globe-controls {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 400;
+  display: grid;
+  border: 1px solid #2e3e48;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.globe-controls button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: #19262f;
+  color: #d1dde3;
+  transition: background 0.15s ease, color 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.globe-controls button + button {
+  border-top: 1px solid #2e3e48;
+}
+
+.globe-controls button:hover {
+  background: #273b49;
+  color: #ffffff;
+}
+
+/* 2D Map / 3D Globe Dimension Switcher in finding-banner */
+.view-dimension-toggle {
+  display: flex;
+  background: var(--surface-card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 3px;
+  gap: 3px;
+  align-self: center;
+  margin-left: auto;
+}
+
+.view-dimension-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-dimension-toggle button:hover {
+  color: var(--ink);
+  background: var(--canvas-soft);
+}
+
+.view-dimension-toggle button.active {
+  background: var(--canvas);
+  color: var(--primary);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Dimension switch button in map/globe top bar */
+.dimension-switch-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 4px;
+  background: rgba(17, 24, 28, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid #2e3e48;
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dimension-switch-btn:hover {
+  background: #273b49;
+  border-color: #38bdf8;
+  color: #ffffff;
 }
 
 .map-heading {
@@ -2556,6 +2672,10 @@ tbody tr:hover {
   .table-scroll {
     margin-left: -12px;
     margin-right: -12px;
+  }
+  .map-shell,
+  .globe-shell {
+    height: 480px;
   }
 }
 

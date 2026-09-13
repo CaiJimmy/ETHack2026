@@ -11,10 +11,13 @@ import {
   ChevronRight,
   Radio,
   Layers,
-  Compass
+  Compass,
+  Map,
+  Globe2
 } from 'lucide-react';
 import { Metric } from '../components/Metric';
 import { fmt, compact } from '../utils/formatters';
+import { Globe3DView } from './Globe3DView';
 
 const BASINS = [
   { name: 'Permian Basin (USA)', lat: 31.8, lon: -102.3, zoom: 7 },
@@ -23,8 +26,18 @@ const BASINS = [
   { name: 'Appalachian', lat: 40.2, lon: -80.2, zoom: 7 }
 ];
 
-export function MapView({ records, onSelect, selection, fitKey }) {
+export function MapView({
+  records,
+  onSelect,
+  selection,
+  fitKey,
+  severity = 'all',
+  setSeverity,
+  viewType,
+  setViewType
+}) {
   const el = useRef(null),
+    shellRef = useRef(null),
     map = useRef(null),
     layer = useRef(null),
     scatterCanvas = useRef(null),
@@ -32,20 +45,23 @@ export function MapView({ records, onSelect, selection, fitKey }) {
     select = useRef(onSelect);
   const [tileError, setTileError] = useState(false);
   const [mode, setMode] = useState('telemetry'); // 'telemetry' | 'cluster'
-  const [severity, setSeverity] = useState('all'); // 'all' | 'severe' | 'super'
+  const [localSeverity, setLocalSeverity] = useState('all');
   const [hovered, setHovered] = useState(null);
   select.current = onSelect;
 
+  const currentSeverity = setSeverity ? severity : localSeverity;
+  const updateSeverity = setSeverity || setLocalSeverity;
+
   // Filter records based on selected severity threshold
   const activeRecords = useMemo(() => {
-    if (severity === 'super') {
+    if (currentSeverity === 'super') {
       return records.filter(r => r.emission_auto != null && r.emission_auto >= 2500);
     }
-    if (severity === 'severe') {
+    if (currentSeverity === 'severe') {
       return records.filter(r => r.emission_auto != null && r.emission_auto >= 1000);
     }
     return records;
-  }, [records, severity]);
+  }, [records, currentSeverity]);
 
   useEffect(() => {
     map.current = L.map(el.current, {
@@ -104,6 +120,37 @@ export function MapView({ records, onSelect, selection, fitKey }) {
         scatterCanvas.current.parentNode.removeChild(scatterCanvas.current);
       }
       map.current?.remove();
+    };
+  }, []);
+
+  // Intercept trackpad pinch gestures and wheel zoom in capture phase to prevent browser page zoom
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
+
+    const onWheel = (e) => {
+      // If ctrlKey or metaKey is set, it is a Mac trackpad pinch-to-zoom gesture or Ctrl+Wheel.
+      // Calling e.preventDefault() in capture phase stops the browser from zooming the webpage!
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+
+    const onGesture = (e) => {
+      // Prevent Safari trackpad gesture page zooming
+      e.preventDefault();
+    };
+
+    shell.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    shell.addEventListener('gesturestart', onGesture, { passive: false, capture: true });
+    shell.addEventListener('gesturechange', onGesture, { passive: false, capture: true });
+    shell.addEventListener('gestureend', onGesture, { passive: false, capture: true });
+
+    return () => {
+      shell.removeEventListener('wheel', onWheel, { capture: true });
+      shell.removeEventListener('gesturestart', onGesture, { capture: true });
+      shell.removeEventListener('gesturechange', onGesture, { capture: true });
+      shell.removeEventListener('gestureend', onGesture, { capture: true });
     };
   }, []);
 
@@ -387,7 +434,7 @@ export function MapView({ records, onSelect, selection, fitKey }) {
   }, [fitKey]);
 
   return (
-    <div className="map-shell">
+    <div className="map-shell" ref={shellRef}>
       <div ref={el} className="map" aria-label="Global map of observed greenhouse gas plumes" />
 
       {/* Basin Jump Pills */}
@@ -407,29 +454,41 @@ export function MapView({ records, onSelect, selection, fitKey }) {
         ))}
       </div>
 
-      {/* Severity Filter & Mode Switcher */}
+      {/* Severity Filter, Mode Switcher & 3D Globe Toggle */}
       <div className="map-top-actions">
+        {setViewType && (
+          <button
+            type="button"
+            className="dimension-switch-btn"
+            onClick={() => setViewType('globe')}
+            title="Switch to 3D Earth Globe"
+          >
+            <Globe2 size={12} />
+            <span>3D Globe</span>
+          </button>
+        )}
+
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
           <button
             type="button"
-            className={severity === 'all' ? 'active' : ''}
-            onClick={() => setSeverity('all')}
+            className={currentSeverity === 'all' ? 'active' : ''}
+            onClick={() => updateSeverity('all')}
             title="Show all observations"
           >
             All ({compact(records.length)})
           </button>
           <button
             type="button"
-            className={severity === 'severe' ? 'active' : ''}
-            onClick={() => setSeverity('severe')}
+            className={currentSeverity === 'severe' ? 'active' : ''}
+            onClick={() => updateSeverity('severe')}
             title="Filter to rates > 1,000 kg/h"
           >
             &gt; 1k kg/h
           </button>
           <button
             type="button"
-            className={severity === 'super' ? 'active' : ''}
-            onClick={() => setSeverity('super')}
+            className={currentSeverity === 'super' ? 'active' : ''}
+            onClick={() => updateSeverity('super')}
             title="Filter to super-emitters > 2,500 kg/h"
           >
             Super-Emitters
@@ -546,6 +605,8 @@ export function PlumeAtlasView({
   visibleCount,
   setVisibleCount
 }) {
+  const [viewType, setViewType] = useState('globe');
+  const [severity, setSeverity] = useState('all');
   const uniqueCountries = new Set(plumes.map(r => r.country).filter(Boolean)).size;
 
   return (
@@ -563,7 +624,7 @@ export function PlumeAtlasView({
             <strong>{fmt(plumes.length)}</strong>
           </div>
           <div className="finding-stat">
-            <span>Methane (CH₄)</span>
+            <span>Methane (CH4)</span>
             <strong>{fmt(plumes.filter(r => r.gas === 'CH4').length)}</strong>
           </div>
           <div className="finding-stat highlight">
@@ -571,9 +632,50 @@ export function PlumeAtlasView({
             <strong>{fmt(plumes.filter(r => r.emission_auto != null).length)}</strong>
           </div>
         </div>
+        <div className="view-dimension-toggle" role="group" aria-label="Atlas view projection">
+          <button
+            type="button"
+            className={viewType === 'map' ? 'active' : ''}
+            onClick={() => setViewType('map')}
+            title="2D Flat Map View"
+          >
+            <Map size={13} />
+            <span>2D Atlas</span>
+          </button>
+          <button
+            type="button"
+            className={viewType === 'globe' ? 'active' : ''}
+            onClick={() => setViewType('globe')}
+            title="Interactive 3D Earth Globe"
+          >
+            <Globe2 size={13} />
+            <span>3D Globe</span>
+          </button>
+        </div>
       </div>
 
-      <MapView records={plumes} onSelect={onSelect} selection={selected} fitKey={fitKey} />
+      {viewType === 'globe' ? (
+        <Globe3DView
+          records={plumes}
+          selection={selected}
+          onSelect={onSelect}
+          severity={severity}
+          setSeverity={setSeverity}
+          viewType={viewType}
+          setViewType={setViewType}
+        />
+      ) : (
+        <MapView
+          records={plumes}
+          onSelect={onSelect}
+          selection={selected}
+          fitKey={fitKey}
+          severity={severity}
+          setSeverity={setSeverity}
+          viewType={viewType}
+          setViewType={setViewType}
+        />
+      )}
 
       <div className="map-stats">
         <Metric label="Observations in selection" value={fmt(plumes.length)} />
