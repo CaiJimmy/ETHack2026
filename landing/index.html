@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%23f54e00%27/%3E%3Ctext x=%2716%27 y=%2722%27 text-anchor=%27middle%27 font-family=%27monospace%27 font-size=%2716%27 font-weight=%27700%27 fill=%27%23fff%27%3EP%3C/text%3E%3C/svg%3E">
+<title>ETHack 2026 — Team Penguins</title>
+<meta name="description" content="Sustainability in the S&P 500. ETHack 2026, Team Penguins.">
+<style>
+  :root{
+    --canvas:#f7f7f4; --ink:#26251e; --body:#5a5852; --muted:#807d72;
+    --line:#e6e5e0; --line-strong:#cfcdc4; --primary:#f54e00; --primary-soft:#fef0ea;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'JetBrains Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--canvas); color:var(--ink);
+    font:16px/1.55 var(--sans); -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center; padding:32px 24px;
+  }
+  main{width:100%; max-width:620px}
+
+  .year{
+    font-family:var(--mono); font-size:13px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--primary); margin:0 0 22px;
+  }
+  h1{
+    margin:0; font-size:clamp(40px,9vw,76px); line-height:1.02;
+    letter-spacing:-.03em; font-weight:700;
+  }
+  .team{
+    margin:14px 0 0; font-size:clamp(18px,3.6vw,23px); font-weight:500; color:var(--body);
+  }
+  .rule{height:1px; background:var(--line-strong); margin:34px 0 30px}
+  .sub{
+    margin:0; font-size:clamp(17px,3.4vw,21px); line-height:1.4; color:var(--ink); font-weight:500;
+  }
+  .note{margin:14px 0 0; font-size:15px; color:var(--muted); max-width:46ch}
+
+  .links{display:flex; flex-direction:column; gap:10px; margin-top:34px}
+  a.card{
+    display:flex; align-items:baseline; gap:12px; text-decoration:none; color:inherit;
+    padding:15px 17px; background:#fff; border:1px solid var(--line); border-radius:10px;
+    transition:border-color .14s ease, transform .14s ease;
+  }
+  a.card:hover,a.card:focus-visible{border-color:var(--primary); transform:translateY(-1px); outline:none}
+  a.card .name{font-weight:600; font-size:16px}
+  a.card .what{font-size:14px; color:var(--muted)}
+  a.card .go{margin-left:auto; font-family:var(--mono); font-size:14px; color:var(--primary)}
+  a.card.primary{background:var(--primary-soft); border-color:#f7c9b4}
+
+  footer{margin-top:36px; font-family:var(--mono); font-size:12px; color:var(--muted)}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--primary)}
+
+  @media (max-width:420px){ a.card{flex-wrap:wrap; gap:4px 12px} a.card .go{margin-left:0; width:100%} }
+</style>
+</head>
+<body>
+<main>
+  <p class="year">ETHack 2026</p>
+  <h1>Sustainability<br>in the S&amp;P&nbsp;500</h1>
+  <p class="team">Team Penguins</p>
+
+  <div class="rule"></div>
+
+  <p class="sub">Two indices over the same 500 companies, built from what they file.</p>
+  <p class="note">One follows the EU Paris-aligned rulebook. The other scores every company against its own sector. You can switch between them and watch the portfolio change.</p>
+
+  <div class="links">
+    <a class="card primary" href="/app/">
+      <span class="name">Open the tool</span>
+      <span class="what">500 companies, both indices</span>
+      <span class="go">&rarr;</span>
+    </a>
+    <a class="card" href="/filed/">
+      <span class="name">The method</span>
+      <span class="what">how the score is built, and what it cannot see</span>
+      <span class="go">&rarr;</span>
+    </a>
+  </div>
+
+  <footer>
+    <a href="https://github.com/CaiJimmy/ETHack2026">github.com/CaiJimmy/ETHack2026</a>
+  </footer>
+</main>
+</body>
+</html>
