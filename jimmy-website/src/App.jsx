@@ -11,6 +11,11 @@ import { TreemapView } from './views/TreemapView';
 import { PromisesChartView } from './views/PromisesChart';
 import { PlumeAtlasView } from './views/PlumeAtlasView';
 import { CompanyScreenerView } from './views/CompanyScreenerView';
+import { ParisView } from './views/ParisView';
+import { MethodsView } from './views/MethodsView';
+import { SourcesView } from './views/SourcesView';
+import { CompareView } from './views/CompareView';
+import { ExploreView } from './views/ExploreView';
 
 import { initialFilters, companyFiltersDefault, prompts } from './constants';
 
@@ -19,6 +24,7 @@ export default function App() {
   const [quizOpen, setQuizOpen] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [view, setView] = useState('treemap');
+  const [index, setIndex] = useState('ours');
   const [filters, setFilters] = useState(initialFilters);
   const [cf, setCf] = useState(companyFiltersDefault);
   const [selected, setSelected] = useState(null);
@@ -182,6 +188,8 @@ export default function App() {
   return (
     <div className="app">
       <Navbar
+        index={index}
+        setIndex={setIndex}
         view={view}
         onQuiz={() => setQuizOpen(true)}
         setView={setView}
@@ -201,7 +209,7 @@ export default function App() {
         } ${selected || assistantOpen ? 'has-sidebar' : ''}`}
       >
         <section className="explorer" aria-label="Data explorer">
-          <FilterBar
+          {view !== 'paris' && view !== 'methods' && view !== 'sources' && view !== 'compare' && view !== 'explore' && <FilterBar
             view={view}
             filters={filters}
             updateFilter={updateFilter}
@@ -215,7 +223,7 @@ export default function App() {
               setActiveResult(null);
               setVisibleCount(30);
             }}
-          />
+          />}
 
           {loadError ? (
             <div className="empty-state" role="alert">
@@ -243,10 +251,21 @@ export default function App() {
               visibleCount={visibleCount}
               setVisibleCount={setVisibleCount}
             />
+          ) : view === 'paris' ? (
+            <ParisView />
+          ) : view === 'methods' ? (
+            <MethodsView index={index} />
+          ) : view === 'sources' ? (
+            <SourcesView />
+          ) : view === 'compare' ? (
+            <CompareView />
+          ) : view === 'explore' ? (
+            <ExploreView />
           ) : view === 'treemap' ? (
             <TreemapView
               companies={companies}
               snapshot={snapshot}
+              index={index}
               onSelect={setSelected}
               onSector={sector => updateCompany('sector', sector)}
             />

@@ -27,8 +27,8 @@ OUT = os.path.join(ROOT, "jimmy-website", "public", "data", "paris.json")
 VARIANT = "pab_compliant"
 AUM_USD = 1e9
 
-# Article 12(1) in plain English. The threshold numbers are not written here, they are read
-# from pab_rules.json below, so they cannot drift from the regulation.
+# Article 12(1) in plain English. Every threshold number comes from pab_rules.json
+# below, so none of them can drift from the regulation.
 LABELS = {
     "Article 12(1)(a)": "Makers of cluster munitions, landmines and other banned weapons.",
     "Article 12(1)(b)": "Tobacco growers and manufacturers.",
@@ -51,11 +51,11 @@ SCORE_DEFINITION = (
 )
 SCORE_BOUND_NOTE = (
     "A company under the US mandatory reporting threshold is ranked on that threshold over its "
-    "enterprise value, which is a ceiling on its real intensity."
+    "enterprise value, so the figure is a ceiling on its intensity."
 )
 SCORE_REFERENCE_NOTE = (
     "The ranking runs against every company in the sector that has a number, barred ones included, "
-    "so the scale is the sector's real spread."
+    "so the scale is the full spread of the sector."
 )
 
 
