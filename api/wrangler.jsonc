@@ -1,0 +1,16 @@
+{
+  "name": "climate-evidence-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-12",
+  "workers_dev": true,
+  "vars": {
+    "GEMINI_MODEL": "gemini-3.1-flash-lite",
+    "ALLOWED_ORIGINS": "http://localhost:8000,http://localhost:5173,http://127.0.0.1:8000"
+  },
+  "ratelimits": [{ "name": "AI_RATE_LIMITER", "namespace_id": "618468", "simple": { "limit": 10, "period": 60 } }],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "climate-evidence",
+    "database_id": "a618f468-548d-4053-b46f-38cbf8f357e5"
+  }]
+}

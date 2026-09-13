@@ -8,7 +8,6 @@ import { EvidenceDrawer } from './components/EvidenceDrawer';
 import { AssistantPanel } from './components/AssistantPanel';
 
 import { TreemapView } from './views/TreemapView';
-import { ParisView } from './views/ParisView';
 import { PromisesChartView } from './views/PromisesChart';
 import { PlumeAtlasView } from './views/PlumeAtlasView';
 import { CompanyScreenerView } from './views/CompanyScreenerView';
@@ -20,7 +19,6 @@ export default function App() {
   const [quizOpen, setQuizOpen] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [view, setView] = useState('treemap');
-  const [index, setIndex] = useState('ours');
   const [filters, setFilters] = useState(initialFilters);
   const [cf, setCf] = useState(companyFiltersDefault);
   const [selected, setSelected] = useState(null);
@@ -184,8 +182,6 @@ export default function App() {
   return (
     <div className="app">
       <Navbar
-        index={index}
-        setIndex={setIndex}
         view={view}
         onQuiz={() => setQuizOpen(true)}
         setView={setView}
@@ -205,7 +201,7 @@ export default function App() {
         } ${selected || assistantOpen ? 'has-sidebar' : ''}`}
       >
         <section className="explorer" aria-label="Data explorer">
-          {view !== 'paris' && <FilterBar
+          <FilterBar
             view={view}
             filters={filters}
             updateFilter={updateFilter}
@@ -219,7 +215,7 @@ export default function App() {
               setActiveResult(null);
               setVisibleCount(30);
             }}
-          />}
+          />
 
           {loadError ? (
             <div className="empty-state" role="alert">
@@ -240,19 +236,17 @@ export default function App() {
             <PlumeAtlasView
               plumes={plumes}
               rankedPlumes={rankedPlumes}
+              companies={snapshot?.companies || []}
               selected={selected}
               onSelect={setSelected}
               fitKey={fitKey}
               visibleCount={visibleCount}
               setVisibleCount={setVisibleCount}
             />
-          ) : view === 'paris' ? (
-            <ParisView />
           ) : view === 'treemap' ? (
             <TreemapView
               companies={companies}
               snapshot={snapshot}
-              index={index}
               onSelect={setSelected}
               onSector={sector => updateCompany('sector', sector)}
             />

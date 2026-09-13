@@ -4,10 +4,8 @@ import { Info, Crosshair, ArrowUpRight } from 'lucide-react';
 import { CompanyLogo } from '../components/CompanyLogo';
 import { fmt, compact } from '../utils/formatters';
 import { sectorColors } from '../constants';
-import { useParisIndex, parisTile } from './ParisView';
 
-export function CompanyTreemap({ rows, onSelect, onSector, index = 'ours' }) {
-  const paris = useParisIndex();
+export function CompanyTreemap({ rows, onSelect, onSector }) {
   const [metric, setMetric] = useState('market_cap_musd');
   const [width, setWidth] = useState(800);
   const [hover, setHover] = useState(null);
@@ -80,9 +78,7 @@ export function CompanyTreemap({ rows, onSelect, onSector, index = 'ours' }) {
         {metric === 'market_cap_musd'
           ? 'Tile area represents company market capitalization.'
           : 'Tile area represents available Scope 1 emissions, combining different years and reporting boundaries.'}{' '}
-        {index === 'paris'
-          ? 'Colour is the Paris score, deeper orange for a higher Scope 1 intensity inside the sector, grey where no tonnage is filed. Hatched tiles are barred by Article 12, whatever their score.'
-          : 'Color identifies sector.'}
+        Color identifies sector.
       </p>
       <div
         ref={container}
@@ -118,17 +114,16 @@ export function CompanyTreemap({ rows, onSelect, onSector, index = 'ours' }) {
                 w = leaf.x1 - leaf.x0,
                 h = leaf.y1 - leaf.y0;
               if (w < 1 || h < 1) return null;
-              const pt = index === 'paris' ? parisTile(r, paris) : null;
               return (
                 <button
-                  className={`company-tile${pt?.barred ? ' barred' : ''}${pt?.light ? ' on-light' : ''}`}
+                  className="company-tile"
                   key={r.ticker}
                   style={{
                     left: leaf.x0,
                     top: leaf.y0,
                     width: w,
                     height: h,
-                    background: pt?.barred ? undefined : pt?.background || sectorColors[r.gics_sector] || '#64748b'
+                    background: sectorColors[r.gics_sector] || '#64748b'
                   }}
                   onMouseEnter={() => setHover(r)}
                   onMouseLeave={() => setHover(null)}
@@ -205,7 +200,7 @@ export function CompanyTreemap({ rows, onSelect, onSector, index = 'ours' }) {
   );
 }
 
-export function TreemapView({ companies, snapshot, onSelect, onSector, index = 'ours' }) {
+export function TreemapView({ companies, snapshot, onSelect, onSector }) {
   const mergedRows = useMemo(() => {
     return companies.map(r => ({
       ...(snapshot?.companies?.find(s => s.ticker === r.ticker) || {}),
@@ -239,7 +234,7 @@ export function TreemapView({ companies, snapshot, onSelect, onSector, index = '
       </div>
 
       <div className="company-surface">
-        <CompanyTreemap rows={mergedRows} onSelect={onSelect} onSector={onSector} index={index} />
+        <CompanyTreemap rows={mergedRows} onSelect={onSelect} onSector={onSector} />
       </div>
     </>
   );

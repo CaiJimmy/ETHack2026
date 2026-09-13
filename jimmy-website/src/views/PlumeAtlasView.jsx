@@ -11,10 +11,16 @@ import {
   ChevronRight,
   Radio,
   Layers,
-  Compass
+  Compass,
+  Map as MapIcon,
+  Globe2,
+  Maximize2,
+  Minimize2,
+  ChevronDown
 } from 'lucide-react';
 import { Metric } from '../components/Metric';
 import { fmt, compact } from '../utils/formatters';
+import { Globe3DView } from './Globe3DView';
 
 const BASINS = [
   { name: 'Permian Basin (USA)', lat: 31.8, lon: -102.3, zoom: 7 },
@@ -23,8 +29,18 @@ const BASINS = [
   { name: 'Appalachian', lat: 40.2, lon: -80.2, zoom: 7 }
 ];
 
-export function MapView({ records, onSelect, selection, fitKey }) {
+export function MapView({
+  records,
+  onSelect,
+  selection,
+  fitKey,
+  severity = 'all',
+  setSeverity,
+  viewType,
+  setViewType
+}) {
   const el = useRef(null),
+    shellRef = useRef(null),
     map = useRef(null),
     layer = useRef(null),
     scatterCanvas = useRef(null),
@@ -32,24 +48,86 @@ export function MapView({ records, onSelect, selection, fitKey }) {
     select = useRef(onSelect);
   const [tileError, setTileError] = useState(false);
   const [mode, setMode] = useState('telemetry'); // 'telemetry' | 'cluster'
-  const [severity, setSeverity] = useState('all'); // 'all' | 'severe' | 'super'
+  const [localSeverity, setLocalSeverity] = useState('all');
   const [hovered, setHovered] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   select.current = onSelect;
+
+  const toggleFullscreen = () => {
+    const shell = shellRef.current;
+    if (!shell) return;
+
+    if (!document.fullscreenElement && !isFullscreen) {
+      if (shell.requestFullscreen) {
+        shell.requestFullscreen().catch(() => {
+          setIsFullscreen(true);
+        });
+      } else if (shell.webkitRequestFullscreen) {
+        shell.webkitRequestFullscreen();
+      } else {
+        setIsFullscreen(true);
+      }
+    } else {
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const isFs = Boolean(
+        document.fullscreenElement === shellRef.current ||
+        document.webkitFullscreenElement === shellRef.current
+      );
+      setIsFullscreen(isFs);
+      setTimeout(() => {
+        map.current?.invalidateSize();
+      }, 50);
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    const onKey = (e) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isFullscreen]);
+
+  const currentSeverity = setSeverity ? severity : localSeverity;
+  const updateSeverity = setSeverity || setLocalSeverity;
 
   // Filter records based on selected severity threshold
   const activeRecords = useMemo(() => {
-    if (severity === 'super') {
+    if (currentSeverity === 'super') {
       return records.filter(r => r.emission_auto != null && r.emission_auto >= 2500);
     }
-    if (severity === 'severe') {
+    if (currentSeverity === 'severe') {
       return records.filter(r => r.emission_auto != null && r.emission_auto >= 1000);
     }
     return records;
-  }, [records, severity]);
+  }, [records, currentSeverity]);
 
   useEffect(() => {
     map.current = L.map(el.current, {
       zoomControl: false,
+      scrollWheelZoom: false,
+      zoomSnap: 0,
+      zoomDelta: 1,
       preferCanvas: true,
       minZoom: 1,
       maxZoom: 16,
@@ -104,6 +182,107 @@ export function MapView({ records, onSelect, selection, fitKey }) {
         scatterCanvas.current.parentNode.removeChild(scatterCanvas.current);
       }
       map.current?.remove();
+    };
+  }, []);
+
+  // Smooth trackpad pinch-to-zoom, two-finger scroll, and mouse wheel zoom without page zoom
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
+
+    let rafId = null;
+    let accumulatedDelta = 0;
+    let targetPoint = null;
+
+    const commitWheelZoom = () => {
+      rafId = null;
+      if (!map.current || Math.abs(accumulatedDelta) < 0.0001 || !targetPoint) {
+        accumulatedDelta = 0;
+        return;
+      }
+      const currentZoom = map.current.getZoom();
+      const nextZoom = Math.max(1, Math.min(16, currentZoom + accumulatedDelta));
+      accumulatedDelta = 0;
+      if (Math.abs(nextZoom - currentZoom) > 0.0001) {
+        map.current.setZoomAround(targetPoint, nextZoom, { animate: false });
+      }
+    };
+
+    const onWheel = (e) => {
+      // Prevent browser page zooming (pinch ctrlKey) and vertical scrolling while cursor is over the map
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!map.current || !el.current) return;
+
+      const rect = el.current.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      targetPoint = L.point(mouseX, mouseY);
+
+      let delta = 0;
+      if (e.ctrlKey || e.metaKey) {
+        // Trackpad pinch-to-zoom on Chrome, Firefox, Edge
+        // Negative deltaY is pinching out (zooming in), positive deltaY is pinching in (zooming out)
+        delta = -e.deltaY * 0.015;
+      } else {
+        // Touchpad two-finger scroll or physical mouse wheel
+        let dy = e.deltaY;
+        if (e.deltaMode === 1) dy *= 20;
+        else if (e.deltaMode === 2) dy *= 60;
+        delta = -dy * 0.003;
+      }
+
+      // Clamp delta per event to maintain fluid continuity
+      delta = Math.max(-0.5, Math.min(0.5, delta));
+      accumulatedDelta += delta;
+
+      if (!rafId) {
+        rafId = requestAnimationFrame(commitWheelZoom);
+      }
+    };
+
+    // Safari macOS trackpad gesture handling (gesturestart, gesturechange, gestureend)
+    let gestureStartZoom = 2;
+    let gestureCenterPoint = null;
+
+    const onGestureStart = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!map.current || !el.current) return;
+      gestureStartZoom = map.current.getZoom();
+      const rect = el.current.getBoundingClientRect();
+      gestureCenterPoint = L.point(e.clientX - rect.left, e.clientY - rect.top);
+    };
+
+    const onGestureChange = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!map.current || !gestureCenterPoint) return;
+
+      // e.scale: 1.0 is neutral, 2.0 is 2x zoom (+1 level in log2), 0.5 is 0.5x (-1 level in log2)
+      const zoomDiff = Math.log2(Math.max(0.1, e.scale));
+      const nextZoom = Math.max(1, Math.min(16, gestureStartZoom + zoomDiff));
+      map.current.setZoomAround(gestureCenterPoint, nextZoom, { animate: false });
+    };
+
+    const onGestureEnd = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      gestureCenterPoint = null;
+    };
+
+    shell.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    shell.addEventListener('gesturestart', onGestureStart, { passive: false, capture: true });
+    shell.addEventListener('gesturechange', onGestureChange, { passive: false, capture: true });
+    shell.addEventListener('gestureend', onGestureEnd, { passive: false, capture: true });
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      shell.removeEventListener('wheel', onWheel, { capture: true });
+      shell.removeEventListener('gesturestart', onGestureStart, { capture: true });
+      shell.removeEventListener('gesturechange', onGestureChange, { capture: true });
+      shell.removeEventListener('gestureend', onGestureEnd, { capture: true });
     };
   }, []);
 
@@ -387,52 +566,70 @@ export function MapView({ records, onSelect, selection, fitKey }) {
   }, [fitKey]);
 
   return (
-    <div className="map-shell">
+    <div className={`map-shell ${isFullscreen ? 'is-fullscreen' : ''}`} ref={shellRef}>
       <div ref={el} className="map" aria-label="Global map of observed greenhouse gas plumes" />
 
-      {/* Basin Jump Pills */}
-      <div className="basin-jump-bar" aria-label="Quick jump to key emission basins">
-        <span className="basin-jump-label">
-          <Compass size={11} /> Basins:
-        </span>
-        {BASINS.map(b => (
-          <button
-            key={b.name}
-            type="button"
-            className="basin-jump-btn"
-            onClick={() => map.current?.flyTo([b.lat, b.lon], b.zoom, { duration: 1 })}
-          >
-            {b.name}
-          </button>
-        ))}
+      {/* Basin Quick Jump Dropdown */}
+      <div className="basin-jump-bar">
+        <Compass size={12} className="basin-jump-icon" />
+        <select
+          className="basin-select"
+          aria-label="Jump to emission basin"
+          defaultValue=""
+          onChange={e => {
+            const b = BASINS.find(x => x.name === e.target.value);
+            if (b) map.current?.flyTo([b.lat, b.lon], b.zoom, { duration: 1 });
+            e.target.value = '';
+          }}
+        >
+          <option value="" disabled>Basins...</option>
+          {BASINS.map(b => (
+            <option key={b.name} value={b.name}>
+              {b.name}
+            </option>
+          ))}
+        </select>
+        <ChevronDown size={11} className="basin-chevron" />
       </div>
 
-      {/* Severity Filter & Mode Switcher */}
+      {/* Top Actions: 3D Globe, Severity Filter & Display Mode */}
       <div className="map-top-actions">
+        {setViewType && (
+          <button
+            type="button"
+            className="dimension-switch-btn"
+            onClick={() => setViewType('globe')}
+            title="Switch to 3D Earth Globe"
+          >
+            <Globe2 size={12} />
+            <span>3D Globe</span>
+          </button>
+        )}
+
         <div className="severity-filter" role="group" aria-label="Emission severity filter">
           <button
             type="button"
-            className={severity === 'all' ? 'active' : ''}
-            onClick={() => setSeverity('all')}
-            title="Show all observations"
+            className={currentSeverity === 'all' ? 'active' : ''}
+            onClick={() => updateSeverity('all')}
+            title={`All ${compact(records.length)} observations`}
           >
-            All ({compact(records.length)})
+            All
           </button>
           <button
             type="button"
-            className={severity === 'severe' ? 'active' : ''}
-            onClick={() => setSeverity('severe')}
+            className={currentSeverity === 'severe' ? 'active' : ''}
+            onClick={() => updateSeverity('severe')}
             title="Filter to rates > 1,000 kg/h"
           >
-            &gt; 1k kg/h
+            &gt; 1k
           </button>
           <button
             type="button"
-            className={severity === 'super' ? 'active' : ''}
-            onClick={() => setSeverity('super')}
+            className={currentSeverity === 'super' ? 'active' : ''}
+            onClick={() => updateSeverity('super')}
             title="Filter to super-emitters > 2,500 kg/h"
           >
-            Super-Emitters
+            Super
           </button>
         </div>
 
@@ -468,6 +665,13 @@ export function MapView({ records, onSelect, selection, fitKey }) {
         </button>
         <button title="Fit results" aria-label="Fit results" onClick={fit}>
           <Focus size={18} />
+        </button>
+        <button
+          title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+          onClick={toggleFullscreen}
+        >
+          {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
         </button>
       </div>
 
@@ -540,12 +744,15 @@ export function MapView({ records, onSelect, selection, fitKey }) {
 export function PlumeAtlasView({
   plumes,
   rankedPlumes,
+  companies = [],
   selected,
   onSelect,
   fitKey,
   visibleCount,
   setVisibleCount
 }) {
+  const [viewType, setViewType] = useState('globe');
+  const [severity, setSeverity] = useState('all');
   const uniqueCountries = new Set(plumes.map(r => r.country).filter(Boolean)).size;
 
   return (
@@ -563,7 +770,7 @@ export function PlumeAtlasView({
             <strong>{fmt(plumes.length)}</strong>
           </div>
           <div className="finding-stat">
-            <span>Methane (CH₄)</span>
+            <span>Methane (CH4)</span>
             <strong>{fmt(plumes.filter(r => r.gas === 'CH4').length)}</strong>
           </div>
           <div className="finding-stat highlight">
@@ -571,9 +778,51 @@ export function PlumeAtlasView({
             <strong>{fmt(plumes.filter(r => r.emission_auto != null).length)}</strong>
           </div>
         </div>
+        <div className="view-dimension-toggle" role="group" aria-label="Atlas view projection">
+          <button
+            type="button"
+            className={viewType === 'map' ? 'active' : ''}
+            onClick={() => setViewType('map')}
+            title="2D Flat Map View"
+          >
+            <MapIcon size={13} />
+            <span>2D Atlas</span>
+          </button>
+          <button
+            type="button"
+            className={viewType === 'globe' ? 'active' : ''}
+            onClick={() => setViewType('globe')}
+            title="Interactive 3D Earth Globe"
+          >
+            <Globe2 size={13} />
+            <span>3D Globe</span>
+          </button>
+        </div>
       </div>
 
-      <MapView records={plumes} onSelect={onSelect} selection={selected} fitKey={fitKey} />
+      {viewType === 'globe' ? (
+        <Globe3DView
+          records={plumes}
+          companies={companies}
+          selection={selected}
+          onSelect={onSelect}
+          severity={severity}
+          setSeverity={setSeverity}
+          viewType={viewType}
+          setViewType={setViewType}
+        />
+      ) : (
+        <MapView
+          records={plumes}
+          onSelect={onSelect}
+          selection={selected}
+          fitKey={fitKey}
+          severity={severity}
+          setSeverity={setSeverity}
+          viewType={viewType}
+          setViewType={setViewType}
+        />
+      )}
 
       <div className="map-stats">
         <Metric label="Observations in selection" value={fmt(plumes.length)} />

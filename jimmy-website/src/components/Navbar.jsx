@@ -1,9 +1,8 @@
 import React from 'react';
-import { PanelsTopLeft, ScatterChart, Globe2, List, Sparkles, Scale } from 'lucide-react';
+import { PanelsTopLeft, ScatterChart, Globe2, List, Sparkles } from 'lucide-react';
 import { fmt } from '../utils/formatters';
-import { IndexSwitch } from './IndexSwitch';
 
-export function Navbar({ index, setIndex, view, setView, companiesCount, plumesCount, assistantOpen, setAssistantOpen, onTabChange, onQuiz }) {
+export function Navbar({ view, setView, companiesCount, plumesCount, assistantOpen, setAssistantOpen, onTabChange, onQuiz }) {
   function handleSelect(tab) {
     setView(tab);
     if (onTabChange) onTabChange(tab);
@@ -20,15 +19,6 @@ export function Navbar({ index, setIndex, view, setView, companiesCount, plumesC
       </div>
 
       <nav className="nav-tabs" role="tablist" aria-label="Main navigation">
-        <button
-          role="tab"
-          aria-selected={view === 'paris'}
-          className={view === 'paris' ? 'active' : ''}
-          onClick={() => handleSelect('paris')}
-        >
-          <Scale size={16} />
-          <span>Paris Index</span>
-        </button>
         <button
           role="tab"
           aria-selected={view === 'treemap'}
@@ -68,7 +58,6 @@ export function Navbar({ index, setIndex, view, setView, companiesCount, plumesC
       </nav>
 
       <div className="nav-actions">
-        <IndexSwitch index={index} setIndex={setIndex} />
         <button className="assistant-btn" onClick={onQuiz}>Test your climate intuition</button>
         <div className="data-counts">
           <span><strong>{fmt(companiesCount)}</strong> companies</span>
