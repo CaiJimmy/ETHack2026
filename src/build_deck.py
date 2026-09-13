@@ -830,8 +830,8 @@ def verify(path: str):
     prs = Presentation(path)
     errs, warns = [], []
 
-    if len(prs.slides) != 6:
-        errs.append(f"slide count is {len(prs.slides)}, expected 6 (5 + appendix)")
+    if len(prs.slides) != 7:
+        errs.append(f"slide count is {len(prs.slides)}, expected 7 (5 + appendix + the link)")
 
     w_in = prs.slide_width / 914400
     h_in = prs.slide_height / 914400
@@ -927,6 +927,48 @@ def verify(path: str):
     return not errs
 
 
+def slide_qr(prs):
+    """Closing slide: the link, as a code a judge can point a phone at."""
+    s = new_slide(prs, "B")
+
+    kick = [Para("OPEN IT", 14, "mono", False, ACCENT, 1.30, spc=90)]
+    textbox(s, MX, 0.46, 8.0, block_height(kick, 8.0), kick, label="B kicker")
+
+    head = [Para("ethack.tyrolize.ch/app", 40, "mono", True, INK, 1.18)]
+    hh = block_height(head, CW)
+    textbox(s, MX, 0.96, CW, hh, head, label="B headline")
+
+    top = 0.96 + hh + 0.42
+    left_w = 6.30
+
+    body = [
+        Para("All 500 companies, both indices, on any phone.", 22, "sans", False, INK, 1.34,
+             space_after=20),
+        Para("Every figure traces to the filing it came from. The code and the data that built "
+             "it are in the repository.", 18, "sans", False, INK2, 1.34, space_after=18),
+        Para("github.com/CaiJimmy/ETHack2026", 16, "mono", False, INK3, 1.40),
+    ]
+    bh = block_height(body, left_w)
+    textbox(s, MX, top + (CONTENT_BOTTOM - top - bh) / 2, left_w, bh, body, label="B body")
+
+    # A QR wants a quiet zone and square pixels; segno already wrote both, so it
+    # is placed contain-fit with no crop.
+    side = min(CONTENT_BOTTOM - top, 3.9)
+    picture(s, os.path.join(IMG, "qr_app.png"),
+            SLIDE_W - MX - side, top + (CONTENT_BOTTOM - top - side) / 2,
+            side, side, fit="contain", align="r")
+
+    notes(s, [
+        ("Closing slide. Leave it up while questions run; the code is the answer to "
+         "'can we see it'.", 12, False),
+        ("The link is the React app with both indices. The vanilla site the demo recorded "
+         "is at the same host without /app.", 12, False),
+        ("If anyone scans it during the talk, that is a good sign. Do not narrate it.", 12, False),
+    ])
+    source_line(s, "Static site, no backend. Served from a 2 vCPU virtual machine behind Caddy. "
+                   "The repository rebuilds every number from source.", "B")
+
+
 # ---------------------------------------------------------------- main
 def main():
     prs = Presentation()
@@ -939,6 +981,7 @@ def main():
     slide_4(prs)
     slide_5(prs)
     slide_a(prs)
+    slide_qr(prs)
 
     prs.save(OUT)
     print(f"wrote {OUT}")
