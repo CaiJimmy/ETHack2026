@@ -12,7 +12,7 @@ export function Navbar({ index, setIndex, view, setView, companiesCount, plumesC
   return (
     <header className="greenrank-nav">
       <div className="brand-group">
-        <span className="brand-mark">GR</span>
+        <img className="brand-mark" src="greenrank-mark.png" alt="" width="30" height="30" />
         <div className="brand-text">
           <span className="brand-name">GreenRank</span>
           <span className="brand-tag">S&P 500 & Plume Evidence</span>

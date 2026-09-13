@@ -179,26 +179,11 @@ input, select, textarea {
 }
 
 .brand-mark {
-  background: var(--ink);
-  color: #ffffff;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  padding: 4px 7px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.brand-mark::after {
-  content: '';
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  background: var(--primary);
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-text {
