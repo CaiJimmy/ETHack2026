@@ -23,7 +23,7 @@ export function EvidenceDrawer({ item, onClose, onAsk }) {
     const controller = new AbortController();
     setDetails(null);
     setError('');
-    fetch(`/api/companies/${encodeURIComponent(item.ticker)}`, { signal: controller.signal })
+    fetch(`https://climate-evidence-api.jimmycai.workers.dev/api/companies/${encodeURIComponent(item.ticker)}`, { signal: controller.signal })
       .then(async r => {
         const b = await r.json();
         if (!r.ok) throw Error(b.error);
