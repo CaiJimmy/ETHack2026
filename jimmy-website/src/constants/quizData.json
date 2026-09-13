@@ -1,0 +1,189 @@
+[
+  {
+    "ticker": "NVDA",
+    "name": "NVIDIA Corporation",
+    "revenue_b": 302.97,
+    "employees": 29600.0,
+    "esg_risk_total": 13.6,
+    "controversy_score": 2.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "GOOGL",
+    "name": "Alphabet Inc.",
+    "revenue_b": 445.87,
+    "employees": 180895.0,
+    "esg_risk_total": 24.2,
+    "controversy_score": 4.0,
+    "ghgrp_scope1_mt": 0.0159,
+    "ghgrp_trend_5y_pct": -20.7,
+    "ghg_intensity_t_per_musd": 0.0
+  },
+  {
+    "ticker": "AMZN",
+    "name": "Amazon.com, Inc.",
+    "revenue_b": 775.68,
+    "employees": 1525000.0,
+    "esg_risk_total": 30.6,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "META",
+    "name": "Meta Platforms, Inc.",
+    "revenue_b": 228.25,
+    "employees": 69329.0,
+    "esg_risk_total": 34.1,
+    "controversy_score": 4.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "TSLA",
+    "name": "Tesla, Inc.",
+    "revenue_b": 103.62,
+    "employees": 140473.0,
+    "esg_risk_total": 25.2,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": 0.0805,
+    "ghgrp_trend_5y_pct": 241.0,
+    "ghg_intensity_t_per_musd": 0.8
+  },
+  {
+    "ticker": "BRK.B",
+    "name": "Berkshire Hathaway Inc.",
+    "revenue_b": 384.69,
+    "employees": 396500.0,
+    "esg_risk_total": 20.7,
+    "controversy_score": 1.0,
+    "ghgrp_scope1_mt": 53.0838,
+    "ghgrp_trend_5y_pct": -17.6,
+    "ghg_intensity_t_per_musd": 138.0
+  },
+  {
+    "ticker": "WMT",
+    "name": "Walmart Inc.",
+    "revenue_b": 735.84,
+    "employees": 2100000.0,
+    "esg_risk_total": 25.3,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "XOM",
+    "name": "ExxonMobil Holdings Corporation",
+    "revenue_b": 361.06,
+    "employees": 62000.0,
+    "esg_risk_total": 41.6,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": 37.8824,
+    "ghgrp_trend_5y_pct": 4.3,
+    "ghg_intensity_t_per_musd": 104.9
+  },
+  {
+    "ticker": "CVX",
+    "name": "Chevron Corporation",
+    "revenue_b": 209.38,
+    "employees": 45600.0,
+    "esg_risk_total": 36.6,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": 21.5606,
+    "ghgrp_trend_5y_pct": -14.2,
+    "ghg_intensity_t_per_musd": 103.0
+  },
+  {
+    "ticker": "PEP",
+    "name": "PepsiCo, Inc.",
+    "revenue_b": 96.9,
+    "employees": 318000.0,
+    "esg_risk_total": 22.1,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": 0.3179,
+    "ghgrp_trend_5y_pct": 25.7,
+    "ghg_intensity_t_per_musd": 3.3
+  },
+  {
+    "ticker": "MCD",
+    "name": "McDonald's Corporation",
+    "revenue_b": 27.7,
+    "employees": 100000.0,
+    "esg_risk_total": 26.0,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "NEE",
+    "name": "NextEra Energy, Inc.",
+    "revenue_b": 28.7,
+    "employees": 16800.0,
+    "esg_risk_total": 23.3,
+    "controversy_score": 2.0,
+    "ghgrp_scope1_mt": 42.8676,
+    "ghgrp_trend_5y_pct": -0.4,
+    "ghg_intensity_t_per_musd": 1493.6
+  },
+  {
+    "ticker": "CVS",
+    "name": "CVS Health Corporation",
+    "revenue_b": 412.65,
+    "employees": 219000.0,
+    "esg_risk_total": 22.0,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "SBUX",
+    "name": "Starbucks Corporation",
+    "revenue_b": 38.34,
+    "employees": 381000.0,
+    "esg_risk_total": 24.7,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": null,
+    "ghgrp_trend_5y_pct": null,
+    "ghg_intensity_t_per_musd": null
+  },
+  {
+    "ticker": "DUK",
+    "name": "Duke Energy Corporation",
+    "revenue_b": 32.8,
+    "employees": 27037.0,
+    "esg_risk_total": 27.0,
+    "controversy_score": 2.0,
+    "ghgrp_scope1_mt": 72.7761,
+    "ghgrp_trend_5y_pct": -15.3,
+    "ghg_intensity_t_per_musd": 2218.8
+  },
+  {
+    "ticker": "MMM",
+    "name": "3M Company",
+    "revenue_b": 25.18,
+    "employees": 85000.0,
+    "esg_risk_total": 37.3,
+    "controversy_score": 5.0,
+    "ghgrp_scope1_mt": 1.0071,
+    "ghgrp_trend_5y_pct": -16.9,
+    "ghg_intensity_t_per_musd": 40.0
+  },
+  {
+    "ticker": "F",
+    "name": "Ford Motor Company",
+    "revenue_b": 187.97,
+    "employees": 177000.0,
+    "esg_risk_total": 22.4,
+    "controversy_score": 3.0,
+    "ghgrp_scope1_mt": 0.4976,
+    "ghgrp_trend_5y_pct": -20.4,
+    "ghg_intensity_t_per_musd": 2.6
+  }
+]

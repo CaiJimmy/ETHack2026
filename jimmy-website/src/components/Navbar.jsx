@@ -2,7 +2,7 @@ import React from 'react';
 import { PanelsTopLeft, ScatterChart, Globe2, List, Sparkles } from 'lucide-react';
 import { fmt } from '../utils/formatters';
 
-export function Navbar({ view, setView, companiesCount, plumesCount, assistantOpen, setAssistantOpen, onTabChange }) {
+export function Navbar({ view, setView, companiesCount, plumesCount, assistantOpen, setAssistantOpen, onTabChange, onQuiz }) {
   function handleSelect(tab) {
     setView(tab);
     if (onTabChange) onTabChange(tab);
@@ -58,6 +58,7 @@ export function Navbar({ view, setView, companiesCount, plumesCount, assistantOp
       </nav>
 
       <div className="nav-actions">
+        <button className="assistant-btn" onClick={onQuiz}>Test your climate intuition</button>
         <div className="data-counts">
           <span><strong>{fmt(companiesCount)}</strong> companies</span>
           <span className="sep">·</span>

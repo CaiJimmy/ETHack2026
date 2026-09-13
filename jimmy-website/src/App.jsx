@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, LoaderCircle } from 'lucide-react';
 
 import { Navbar } from './components/Navbar';
+import { ClimateQuiz } from './components/ClimateQuiz';
 import { FilterBar } from './components/FilterBar';
 import { EvidenceDrawer } from './components/EvidenceDrawer';
 import { AssistantPanel } from './components/AssistantPanel';
@@ -15,6 +16,7 @@ import { initialFilters, companyFiltersDefault, prompts } from './constants';
 
 export default function App() {
   const [snapshot, setSnapshot] = useState(null);
+  const [quizOpen, setQuizOpen] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [view, setView] = useState('treemap');
   const [filters, setFilters] = useState(initialFilters);
@@ -181,6 +183,7 @@ export default function App() {
     <div className="app">
       <Navbar
         view={view}
+        onQuiz={() => setQuizOpen(true)}
         setView={setView}
         companiesCount={companies.length}
         plumesCount={plumes.length}
@@ -279,6 +282,7 @@ export default function App() {
         )}
       </main>
 
+      {quizOpen && <ClimateQuiz companies={snapshot?.companies || []} onClose={() => setQuizOpen(false)} onExplore={(nextView, company) => {setQuizOpen(false);setView(nextView);setActiveResult(null);setCf(companyFiltersDefault);setSelected(company || null);}} onAsk={text => {setQuizOpen(false);ask(text);}} />}
       <AssistantPanel
         assistantOpen={assistantOpen}
         setAssistantOpen={setAssistantOpen}
