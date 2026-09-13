@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Sparkles,
   X,
@@ -24,6 +24,22 @@ export function AssistantPanel({
   prompts
 }) {
   if (!assistantOpen) return null;
+
+  useEffect(() => {
+    if (input?.current) {
+      input.current.style.height = 'auto';
+      input.current.style.height = `${Math.min(input.current.scrollHeight, 160)}px`;
+    }
+  }, [question, assistantOpen, input]);
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!busy && question.trim()) {
+        ask(question);
+      }
+    }
+  }
 
   function renderAnswerText(text = answer?.answer) {
     if (!text) return null;
@@ -238,10 +254,11 @@ export function AssistantPanel({
               id="assistant-question"
               value={question}
               onChange={e => setQuestion(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="e.g. Largest methane plumes in Texas, or utility target gaps..."
               maxLength={1000}
               disabled={busy}
-              rows="2"
+              rows={1}
             />
             <button
               className="primary"
