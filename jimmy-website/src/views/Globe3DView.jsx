@@ -79,7 +79,16 @@ function drawPolyline(ctx, points, rLon, rLat, R, cx, cy) {
         isDrawing = true;
       }
     } else {
-      if (prevPt.z > 0 && currPt.z > 0) {
+      // Avoid antimeridian cross-screen jump
+      const dLonRaw = Math.abs(coord[1] - prevCoord[1]);
+      if (dLonRaw > 180) {
+        if (currPt.z > 0) {
+          ctx.moveTo(currPt.x, currPt.y);
+          isDrawing = true;
+        } else {
+          isDrawing = false;
+        }
+      } else if (prevPt.z > 0 && currPt.z > 0) {
         if (!isDrawing) {
           ctx.moveTo(prevPt.x, prevPt.y);
           isDrawing = true;
@@ -119,17 +128,16 @@ function drawPolyline(ctx, points, rLon, rLat, R, cx, cy) {
 function drawLandRing(ctx, ring, rLon, rLat, R, cx, cy) {
   if (!ring || ring.length < 3) return;
 
-  let anyFront = false;
-  let allFront = true;
+  let frontCount = 0;
   for (let i = 0; i < ring.length; i++) {
     const pt = projectSpherical(ring[i][0], ring[i][1], rLon, rLat, R, cx, cy);
-    if (pt.z > 0) anyFront = true;
-    else allFront = false;
+    if (pt.z > 0) frontCount++;
   }
-  if (!anyFront) return;
+  if (frontCount === 0) return;
 
-  ctx.beginPath();
-  if (allFront) {
+  // Fully visible polygon: standard fast path
+  if (frontCount === ring.length) {
+    ctx.beginPath();
     for (let i = 0; i < ring.length; i++) {
       const pt = projectSpherical(ring[i][0], ring[i][1], rLon, rLat, R, cx, cy);
       if (i === 0) ctx.moveTo(pt.x, pt.y);
@@ -140,62 +148,89 @@ function drawLandRing(ctx, ring, rLon, rLat, R, cx, cy) {
     return;
   }
 
+  // Partially visible polygon: track transitions and close with short directional arc along limb
+  ctx.beginPath();
+  let firstEntryPt = null;
+  let lastExitPt = null;
+  let currentExitPt = null;
   let isDrawing = false;
-  let prevPt = null;
-  let prevCoord = null;
-  let horizonExitPt = null;
 
-  for (let i = 0; i < ring.length; i++) {
-    const coord = ring[i];
+  const len = ring.length;
+  let prevCoord = ring[0];
+  let prevPt = projectSpherical(prevCoord[0], prevCoord[1], rLon, rLat, R, cx, cy);
+
+  for (let i = 1; i <= len; i++) {
+    const coord = ring[i % len];
     const currPt = projectSpherical(coord[0], coord[1], rLon, rLat, R, cx, cy);
 
-    if (i === 0) {
-      if (currPt.z > 0) {
-        ctx.moveTo(currPt.x, currPt.y);
-        isDrawing = true;
-      }
-    } else {
-      if (prevPt.z > 0 && currPt.z > 0) {
-        if (!isDrawing) {
-          ctx.moveTo(prevPt.x, prevPt.y);
-          isDrawing = true;
-        }
-        ctx.lineTo(currPt.x, currPt.y);
-      } else if (prevPt.z > 0 && currPt.z <= 0) {
-        const t = prevPt.z / (prevPt.z - currPt.z);
-        const latH = prevCoord[0] + (coord[0] - prevCoord[0]) * t;
-        let dLon = coord[1] - prevCoord[1];
-        if (dLon > 180) dLon -= 360;
-        else if (dLon < -180) dLon += 360;
-        const lonH = prevCoord[1] + dLon * t;
-        const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
-        if (isDrawing) ctx.lineTo(ptH.x, ptH.y);
-        horizonExitPt = ptH;
-        isDrawing = false;
-      } else if (prevPt.z <= 0 && currPt.z > 0) {
-        const t = currPt.z / (currPt.z - prevPt.z);
-        const latH = coord[0] + (prevCoord[0] - coord[0]) * t;
-        let dLon = prevCoord[1] - coord[1];
-        if (dLon > 180) dLon -= 360;
-        else if (dLon < -180) dLon += 360;
-        const lonH = coord[1] + dLon * t;
-        const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
-
-        if (horizonExitPt) {
-          const a1 = Math.atan2(horizonExitPt.y - cy, horizonExitPt.x - cx);
-          const a2 = Math.atan2(ptH.y - cy, ptH.x - cx);
-          ctx.arc(cx, cy, R, a1, a2);
-          horizonExitPt = null;
-        } else {
-          ctx.moveTo(ptH.x, ptH.y);
-        }
-        ctx.lineTo(currPt.x, currPt.y);
-        isDrawing = true;
-      }
+    // Skip antimeridian jump
+    const dLonRaw = Math.abs(coord[1] - prevCoord[1]);
+    if (dLonRaw > 180) {
+      prevPt = currPt;
+      prevCoord = coord;
+      isDrawing = false;
+      continue;
     }
+
+    if (prevPt.z > 0 && currPt.z > 0) {
+      if (!isDrawing) {
+        ctx.moveTo(prevPt.x, prevPt.y);
+        isDrawing = true;
+      }
+      ctx.lineTo(currPt.x, currPt.y);
+    } else if (prevPt.z > 0 && currPt.z <= 0) {
+      const t = prevPt.z / (prevPt.z - currPt.z);
+      const latH = prevCoord[0] + (coord[0] - prevCoord[0]) * t;
+      let dLon = coord[1] - prevCoord[1];
+      if (dLon > 180) dLon -= 360;
+      else if (dLon < -180) dLon += 360;
+      const lonH = prevCoord[1] + dLon * t;
+      const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+      if (isDrawing) {
+        ctx.lineTo(ptH.x, ptH.y);
+      }
+      currentExitPt = ptH;
+      lastExitPt = ptH;
+      isDrawing = false;
+    } else if (prevPt.z <= 0 && currPt.z > 0) {
+      const t = currPt.z / (currPt.z - prevPt.z);
+      const latH = coord[0] + (prevCoord[0] - coord[0]) * t;
+      let dLon = prevCoord[1] - coord[1];
+      if (dLon > 180) dLon -= 360;
+      else if (dLon < -180) dLon += 360;
+      const lonH = coord[1] + dLon * t;
+      const ptH = projectSpherical(latH, lonH, rLon, rLat, R, cx, cy);
+
+      if (!firstEntryPt) firstEntryPt = ptH;
+
+      if (currentExitPt) {
+        const a1 = Math.atan2(currentExitPt.y - cy, currentExitPt.x - cx);
+        const a2 = Math.atan2(ptH.y - cy, ptH.x - cx);
+        let d = a2 - a1;
+        while (d < -Math.PI) d += Math.PI * 2;
+        while (d > Math.PI) d -= Math.PI * 2;
+        ctx.arc(cx, cy, R, a1, a2, d < 0);
+        currentExitPt = null;
+      } else {
+        ctx.moveTo(ptH.x, ptH.y);
+      }
+      ctx.lineTo(currPt.x, currPt.y);
+      isDrawing = true;
+    }
+
     prevPt = currPt;
     prevCoord = coord;
   }
+
+  if (lastExitPt && firstEntryPt && lastExitPt !== firstEntryPt) {
+    const a1 = Math.atan2(lastExitPt.y - cy, lastExitPt.x - cx);
+    const a2 = Math.atan2(firstEntryPt.y - cy, firstEntryPt.x - cx);
+    let d = a2 - a1;
+    while (d < -Math.PI) d += Math.PI * 2;
+    while (d > Math.PI) d -= Math.PI * 2;
+    ctx.arc(cx, cy, R, a1, a2, d < 0);
+  }
+
   ctx.closePath();
   ctx.fill();
 }
