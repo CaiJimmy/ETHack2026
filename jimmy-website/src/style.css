@@ -1165,10 +1165,142 @@ tbody tr:hover {
   font-size: 12px;
 }
 
+/* Basin Jump Pills */
+.basin-jump-bar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(17, 24, 28, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid #2e3e48;
+  border-radius: 6px;
+  padding: 4px 8px;
+  flex-wrap: wrap;
+}
+
+.basin-jump-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #8da4af;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.basin-jump-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.basin-jump-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Map Top Actions: Severity Filter & Mode Switcher */
+.map-top-actions {
+  position: absolute;
+  top: 16px;
+  right: 60px;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.severity-filter {
+  display: flex;
+  background: rgba(17, 24, 28, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid #2e3e48;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 3px;
+  gap: 3px;
+}
+
+.severity-filter button {
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: transparent;
+  color: #8da4af;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.severity-filter button:hover {
+  color: #f7f7f4;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.severity-filter button.active {
+  background: var(--surface-card);
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.map-mode-toggle {
+  display: flex;
+  background: rgba(17, 24, 28, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid #2e3e48;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 3px;
+  gap: 3px;
+}
+
+.map-mode-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 4px;
+  background: transparent;
+  color: #8da4af;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-mode-toggle button:hover {
+  color: #f7f7f4;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.map-mode-toggle button.active {
+  background: var(--surface-card);
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 .map-controls {
   position: absolute;
   right: 16px;
-  top: 20px;
+  top: 16px;
   z-index: 400;
   display: grid;
   border: 1px solid #2e3e48;
@@ -1194,6 +1326,54 @@ tbody tr:hover {
   background: #273b49;
 }
 
+/* Hover Telemetry Tooltip Badge */
+.map-telemetry-tooltip {
+  position: absolute;
+  z-index: 500;
+  pointer-events: none;
+  background: rgba(17, 24, 28, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid #38bdf8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #f7f7f4;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+.tooltip-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #38bdf8;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.tooltip-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tooltip-meta strong {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.tooltip-meta small {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
 .map-legend {
   position: absolute;
   left: 16px;
@@ -1206,16 +1386,51 @@ tbody tr:hover {
   padding: 8px 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  align-items: center;
+  gap: 12px;
   font-family: var(--font-mono);
   font-size: 10px;
   color: #d1dde3;
 }
 
-.map-legend > div {
+.legend-item {
   display: flex;
-  gap: 6px;
   align-items: center;
+  gap: 6px;
+}
+
+.dot-cyan, .dot-amber, .dot-orange {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.dot-cyan {
+  width: 6px;
+  height: 6px;
+  background: #38bdf8;
+  box-shadow: 0 0 4px #38bdf8;
+}
+
+.dot-amber {
+  width: 7px;
+  height: 7px;
+  background: #facc15;
+  box-shadow: 0 0 5px #facc15;
+}
+
+.dot-orange {
+  width: 9px;
+  height: 9px;
+  background: #f54e00;
+  box-shadow: 0 0 6px #f54e00;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.legend-hint {
+  color: #64748b;
+  font-size: 9px;
+  border-left: 1px solid #2e3e48;
+  padding-left: 10px;
 }
 
 .legend-dot {
