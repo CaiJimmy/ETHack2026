@@ -143,6 +143,17 @@ export function AssistantPanel({
                   </>
                 )}
                 <div className="answer-text">{renderAnswerText()}</div>
+                {answer.web_research && <section aria-label="Web research">
+                  <h4>Web research · external sources</h4>
+                  <p className="answer-text">{answer.web_research.answer}</p>
+                  {answer.web_research.supports?.map((support, i) => <p key={i}><small>{support.segment?.text} {support.groundingChunkIndices?.map(index => {
+                    const source = answer.web_research.sources.find(s => s.id === index + 1);
+                    return source ? <a key={index} href={source.url} target="_blank" rel="noreferrer"> [{source.id}]</a> : null;
+                  })}</small></p>)}
+                  <ul>{answer.web_research.sources?.map(source => <li key={source.id}><a href={source.url} target="_blank" rel="noreferrer">[{source.id}] {source.title}</a></li>)}</ul>
+                  {answer.web_research.retrieved_at && <small>Retrieved {new Date(answer.web_research.retrieved_at).toLocaleString()}. Web findings do not change company scores.</small>}
+                  {answer.web_research.search_suggestions && <iframe title="Google Search suggestions" sandbox="allow-popups allow-popups-to-escape-sandbox" referrerPolicy="no-referrer" srcDoc={answer.web_research.search_suggestions} style={{width:'100%',border:0}} />}
+                </section>}
                 {answer.evidence?.length > 0 && (
                   <>
                     <h4>Supporting evidence</h4>
