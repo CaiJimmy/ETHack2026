@@ -37,11 +37,11 @@ five pitches today and knows what a portfolio is. "Company value" on the slide,
 time to read it.
 
 **Every source line is one line.** They exist so a judge can go and check us,
-which is worth real points, and a paragraph at the foot of a slide is read by
+which is worth points, and a paragraph at the foot of a slide is read by
 nobody. So each one names the regulation, the dataset or the file in the repo
 and stops: `docs/entity_resolution_audit.md` beats three sentences describing
 the audit. `source_line()` measures the string against the content width in the
-real face and raises if it wraps.
+rendered face and raises if it wraps.
 
 ---
 
@@ -94,7 +94,7 @@ company` beneath in 19pt. The measured value is 312.5; the big figure reads 312
 and the source line carries the exact number and what the band is (5th to 95th
 percentile of the 10,000 draws).
 
-**Headline.** There is no one ranking. Ours included.
+**Headline.** There is no one ranking, ours included.
 
 `identified` is the econometrics word and it is what the speaker says. On the
 screen it reads as "we have not found one yet", which is the opposite of the
@@ -280,7 +280,7 @@ emissions figure the law requires. We never invent one, and we never call it
 zero` beneath. `no mandatory tonnage` is the repo's phrase and it is two nouns a
 judge does not own; the caption says the same thing in the law's own effect.
 
-The number changed from `181`. Both are real and they are different lanes.
+The number changed from `181`. Both are correct and they are different lanes.
 `181 of 500` carry no Scope 1 from **any** source, mandatory, voluntary or
 modelled: that is the allocation lane, and it is the number in the demo caption.
 `361 of 500` carry no **mandatory** tonnage: that is the score lane, 88 tiered
@@ -354,7 +354,7 @@ the one that stayed: the 361 are **a declared category, never a zero**.
 Not part of the 2:30 and the kicker says so: `APPENDIX   Q&A BACKUP   NOT PART
 OF THE 2:30`, in `--accent` mono. Do not advance to it during the pitch.
 
-**Headline.** Water is a second axis, not a restatement of carbon.
+**Headline.** Water is a second axis, and carbon does not predict it.
 
 **The number, in words first.** `Carbon explains 0.3% of the water ranking.` at
 20pt, and the statistic under it at 16pt mono in `--accent`:

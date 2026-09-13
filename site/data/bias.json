@@ -871,7 +871,7 @@
  ],
  "chart": {
   "id": "disclosure",
-  "title": "Their score pays for disclosure. Ours does not.",
+  "title": "Their score pays for disclosure. Ours pays for filed tonnes.",
   "subtitle": "Each point is one S&P 500 company. Percentiles are shown as points from the company's own GICS sector mean, because that is how a rating is used.",
   "points_field": "points",
   "x": {

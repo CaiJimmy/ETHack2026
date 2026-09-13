@@ -10,7 +10,7 @@ Choose your own dataset, justify the choice, and show it is suitable for the cha
 
 **Bonus:** Tomorrow, the world commits to reaching net-zero emissions as fast as possible. You manage a $1B fund. How do you allocate your portfolio under this scenario, and why?
 
-## Judging Criteria
+## Judging criteria
 
 | Criterion | Question |
 |---|---|

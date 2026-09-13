@@ -474,6 +474,21 @@ svg text { font-family: var(--font-mono); fill: var(--ink-3); font-size: var(--f
 .u-mt4 { margin-top: var(--s4); }
 .u-row { display: flex; gap: var(--s5); flex-wrap: wrap; }
 
+/* ---------- one scroller, six uses ----------
+   Some things are genuinely wider than a phone: a 944px table of quoted
+   regulation, the provenance ledger, the Brinson waterfall, the coverage
+   chain. They keep every column and every row and scroll inside their own
+   box, so the page never scrolls sideways and nothing is dropped to make
+   something fit. */
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.scroll-x > .tbl { width: auto; min-width: 100%; }
+.pf-plot { overflow-x: auto; max-width: 100%; }
+.cv-chain { overflow-x: auto; }
+
+/* "sustainability ranking" is one idea and one accent, so it holds together
+   while the line has anywhere else to break. Below 900 it does not. */
+.hero h1 .nb { white-space: nowrap; }
+
 /* The recording frame is 1280 wide, where 1040 of measure fills the content
    area exactly. On a 1920 projector that same 1040 leaves a third of the
    screen empty to the right, so the column takes some of it back. The charts
@@ -601,3 +616,146 @@ svg text { font-family: var(--font-mono); fill: var(--ink-3); font-size: var(--f
   cursor: pointer;
 }
 .dr-go:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ===================================================================
+   NARROWER THAN THE RECORDING FRAME
+   Three max-width blocks, appended last so they win on source order.
+   Above 1080 nothing here fires: the 1280x720 frame and the 1560 rule
+   are untouched.
+
+   ranks.js, portfolio.js and coverage.js write their grids into a
+   <style> injected at runtime, which lands after this file. The rules
+   that have to beat that carry !important. That is the reason, and the
+   only reason, any !important appears below.
+
+   Nothing is deleted at any width. What does not fit either stacks,
+   or scrolls inside .scroll-x, or moves into the disclosure it was
+   already in.
+   =================================================================== */
+
+/* ---------- 1080 and below ----------
+   A panel head is a title on the left and its n on the right, and the n is
+   nowrap because a count that breaks across two lines is not a count. In a
+   317px panel that leaves the title 96px and one word a line, so the n takes
+   its own line instead. It only wraps where it does not fit. */
+@media (max-width: 1080px) {
+  .panel-head { flex-wrap: wrap; }
+}
+
+/* ---------- 900 and below: every two-up collapses, the figures shrink ----------
+   Chosen from the chart floors. #saydo-chart and #rk-chart floor at 420px,
+   and beside a 340px card with a 24px gap that wants 784px of measure,
+   which is a 912px viewport. */
+@media (max-width: 900px) {
+  :root { --fs-fig: 40px; --fs-h1: 32px; --fs-h2: 23px; }
+  .stat-fig .unit, .stat-fig .of { font-size: 22px; }
+  /* one rule for every width: three up at 1280, two on a tablet, one on a phone */
+  .stat-row { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--s5); }
+  .hero h1 .nb { white-space: normal; }
+
+  .saydo-grid { grid-template-columns: minmax(0, 1fr); }
+  /* the card's 604px floor exists to stop a hover swap moving the page. Under
+     the chart instead of beside it, that floor is only empty space. */
+  .card { min-height: 0; }
+  .card-trio { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); }
+  .states { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s3); }
+
+  #ranks .rk-grid    { grid-template-columns: minmax(0,1fr) !important; }
+  #ranks .card       { min-height: 0 !important; }
+  #ranks .rk-two     { grid-template-columns: minmax(0,1fr) !important; }
+  #ranks .rk-par     { grid-template-columns: minmax(0,1fr) !important; }
+  #ranks .dm-list    { grid-template-columns: minmax(0,1fr) !important; }
+  #ranks .rk-pill    { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+  #ranks #rk-weights { max-width: none !important; }
+  #ranks .sob-row, #ranks .sob-rest,
+  #ranks .wa-row     { grid-template-columns: minmax(0,1fr) minmax(0,2fr) 48px !important; }
+  #ranks .cb-row, #ranks .cb-head {
+                       grid-template-columns: minmax(0,1.4fr) minmax(0,1fr) 52px 60px !important; }
+
+  .pf-row2       { grid-template-columns: minmax(0,1fr) !important; }
+  .pf-excl-grid  { grid-template-columns: minmax(0,1fr) !important; }
+  .pf-pick       { grid-template-columns: repeat(auto-fit, minmax(210px,1fr)) !important; }
+  .pf-tiles      { grid-template-columns: repeat(auto-fit, minmax(140px,1fr)) !important; }
+  .pf-mandate    { flex-wrap: wrap; gap: var(--s4) !important; }
+  .pf-mandate-kv { grid-template-columns: repeat(auto-fit, minmax(140px,1fr)) !important; }
+  .pf-sec        { grid-template-columns: minmax(0,96px)  minmax(0,1fr) 62px !important; }
+  .pf-te-row     { grid-template-columns: minmax(0,120px) minmax(0,1fr) 52px !important; }
+  .pf-sch        { grid-template-columns: minmax(0,140px) minmax(0,1fr) 48px !important; }
+  /* the waterfall is evidence, so it keeps every bar and scrolls sideways
+     inside .pf-plot rather than scaling its 14px labels down to 4.8px */
+  .pf-plot > svg#pf-wf { width: 720px !important; min-width: 720px; height: 306px; }
+  /* 97.4% at 76px beside a 64ch paragraph is a two-column flex row. In a
+     308px box it gave the prose 104px, one word a line. */
+  .pf-verdict     { flex-wrap: wrap !important; gap: var(--s3) !important;
+                    align-items: baseline !important; }
+  .pf-verdict-fig { font-size: 56px !important; }
+  .pf-verdict-txt { max-width: none !important; font-size: var(--fs-body) !important; }
+
+  .cv-two        { grid-template-columns: minmax(0,1fr) !important; }
+  .cv-ind        { grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important;
+                   gap: var(--s2) var(--s4) !important; }
+  .cv-classnotes { grid-template-columns: minmax(0,1fr) !important; }
+  .cv-limit > summary { grid-template-columns: minmax(0,1fr) !important; gap: var(--s2) !important; }
+  .cv-chain-row  { grid-template-columns: minmax(0,1fr) !important; gap: var(--s2) !important; }
+  .cv-fork       { grid-template-columns: minmax(0,1fr) !important; }
+  .cv-node, .cv-arrowbox { min-width: 0 !important; }
+  .cv-ex-row     { grid-template-columns: minmax(0,1fr) auto !important; }
+}
+
+/* ---------- 640 and below: the phone ----------
+   The trigger is set so a 768 tablet in portrait keeps the 48px rail and
+   the ordinary padding. */
+@media (max-width: 640px) {
+  :root { --pad-x: 16px; --fs-fig: 34px; --fs-h1: 27px; --fs-h2: 21px; --maxw: 100%; }
+
+  /* The rail becomes a 44px top bar. Hover does not exist here, so the open
+     state cannot be a hover state: the six numbers and their labels scroll
+     sideways inside the bar instead, and every one is a tap target. */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; width: auto; height: 44px;
+    flex-direction: row; align-items: center; padding: 0 0 0 12px;
+    border-right: 0; border-bottom: 1px solid var(--rule);
+    overflow-x: auto; overflow-y: hidden;
+  }
+  .nav.is-open, .nav:focus-within, .nav:hover { width: auto; }
+  .brand { padding: 0 12px 0 0; font-size: 17px; flex: none; }
+  .nav-t { opacity: 1; }
+  .nav-list { display: flex; flex: 1 1 auto; }
+  .nav-list a {
+    padding: 0 10px; line-height: 44px;
+    border-left: 0; border-bottom: 2px solid transparent;
+  }
+  .nav-list a.is-active {
+    border-left-color: transparent; border-bottom-color: var(--accent); background: none;
+  }
+  .nav-tail, .nav-x { display: none; }
+  .nav-drawer {
+    margin: 0 8px 0 0; width: auto !important; flex: none; padding: 4px 8px;
+  }
+  .nav-drawer .nav-t { display: none; }
+  .main { margin-left: 0; padding-top: 44px; }
+  .section { scroll-margin-top: 44px; }
+
+  .panel-n, .dd .dd-n { white-space: normal; }
+  .drawer { width: 100%; max-width: 100%; }
+
+  .cv-cells  { grid-template-columns: repeat(30, 1fr) !important; }
+  .cv-ind    { grid-template-columns: minmax(0,1fr) !important; }
+  .cv-filter { flex-wrap: wrap; }
+
+  /* A bar track of minmax(0,1fr) beside a fixed 176px label computes to
+     exactly 0px in a 310px box, so today the bar these rows exist to show
+     is simply not drawn. It goes on its own row instead. */
+  #ranks .rk-seg { width: auto !important; flex-wrap: wrap; }
+  #ranks .sob-row, #ranks .sob-rest, #ranks .wa-row {
+    grid-template-columns: minmax(0,1fr) 48px !important; }
+  #ranks .sob-row > :nth-child(2), #ranks .sob-rest > :nth-child(2),
+  #ranks .wa-row  > :nth-child(2) { grid-column: 1 / -1; order: 3; }
+  #ranks .cb-row, #ranks .cb-head { grid-template-columns: minmax(0,1fr) 52px 56px !important; }
+  /* the only thing dropped at any width: .cb-row's bar is a redundant redraw
+     of the two numeric columns beside it, both of which stay */
+  #ranks .cb-row > :nth-child(2), #ranks .cb-head > :nth-child(2) { display: none; }
+  .pf-sec, .pf-te-row, .pf-sch { grid-template-columns: minmax(0,1fr) 56px !important; }
+  .pf-sec > :nth-child(2), .pf-te-row > :nth-child(2), .pf-sch > :nth-child(2) {
+    grid-column: 1 / -1; order: 3; }
+}

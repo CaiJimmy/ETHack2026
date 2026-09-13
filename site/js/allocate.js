@@ -1,6 +1,6 @@
 /* Allocate $1bn: the control surface.
 
-   One screen that answers the bonus question. Set a carbon price assumption on
+   One screen: the whole index, priced. Set a carbon price assumption on
    the left, read the index in the middle, read the $1bn advice on the right.
    Every number is recomputed in the browser from data/penalty.json, which
    carries per-company coefficients precisely so no server is involved.
@@ -405,7 +405,7 @@
     if (worstW > 1e-5) ok = false;
     var msg = 'allocate.js model check: value at risk to ' + worstV.toExponential(1) +
       ' relative, weights to ' + worstW.toExponential(1) + ' of a weight';
-    if (ok) console.log(msg); else console.error(msg + ' -- OUTSIDE reference.browser_tolerance');
+    if (ok) console.log(msg); else console.error(msg + ': OUTSIDE reference.browser_tolerance');
     S = keep;
   }
 
@@ -558,6 +558,7 @@
      and at rest all eleven read the same number. */
   function buildLeft() {
     var col = colShell('What you assume', '');
+    col.classList.add('al-col--assume');
     dom.leftN = col.querySelector('.al-col-n');
     var wrap = FILED.el('div', { class: 'ac-wrap' });
     col.appendChild(wrap);
@@ -740,6 +741,7 @@
 
   function buildMid() {
     var col = colShell('The index', 'n=<b>500</b>, sized by market cap');
+    col.classList.add('al-col--index');
     var tog = FILED.el('div', { class: 'al-toggle' }, [
       FILED.el('button', { class: 'is-on', type: 'button', text: 'Carbon',
         onclick: function () { setColor('carbon'); } }),
@@ -747,6 +749,22 @@
         onclick: function () { setColor('water'); } })
     ]);
     dom.colorBtns = tog.children;
+    /* Half the index is a five-pixel tile on a phone, so "click any company"
+       is only true for the large caps unless there is a lookup. This is it. */
+    var find = FILED.el('input', {
+      class: 'tm-find', type: 'search', placeholder: 'ticker',
+      'aria-label': 'find a company',
+      oninput: function () {
+        var q = this.value.trim().toUpperCase();
+        this.classList.remove('is-miss');
+        if (!q) { closeCard(); return; }
+        for (var i = 0; i < N; i++) {
+          if (C[i].t === q) { drawCard(i); return; }
+        }
+        this.classList.add('is-miss');
+      }
+    });
+    col.querySelector('.al-col-head').appendChild(find);
     col.querySelector('.al-col-head').appendChild(tog);
 
     var wrap = FILED.el('div', { class: 'tm-wrap' });
@@ -776,6 +794,9 @@
     col.insertBefore(keys, col.querySelector('.tm-wrap'));
 
     col.appendChild(FILED.el('div', { class: 'tm-foot' }, [
+      FILED.el('span', { html: '<b>Click a company</b> for its filed tonnes and its carbon bill. ' }),
+      FILED.el('span', { class: 'tm-small-note', html:
+        'A tile under about 30 pixels carries no logo. Type a ticker to reach the small ones. ' }),
       FILED.el('span', { html: '<b>An exposure model, not a forecast.</b> It prices ' +
         'a carbon bill against filings that exist. It predicts nothing.' })
     ]));
@@ -813,7 +834,7 @@
   /* ---------- right: the advice ---------- */
 
   function buildRight() {
-    var col = colShell('What you hold', '<b>$1bn</b>');
+    var col = colShell('What you hold', 'if you ran <b>$1bn</b>');
     col.classList.add('al-col--advice');
     dom.avHeld = FILED.el('div', { class: 'av-fig' });
     col.appendChild(dom.avHeld);

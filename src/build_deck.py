@@ -7,7 +7,7 @@ Nothing here computes a number; this file only sets type and places pictures.
 
 Run:  nix develop --command .venv/bin/python src/build_deck.py
 
-The layout is measured, not eyeballed. Every text box is wrapped with the real
+The layout is measured. Every text box is wrapped with the rendered
 font metrics of the face the deck declares, and the build fails if a block does
 not fit the space it was given. That is the only way a slide cannot silently
 overflow between here and a projector.
@@ -88,7 +88,7 @@ def width_pt(text: str, kind: str, bold: bool, size_pt: float) -> float:
 
 
 def wrap(text: str, kind: str, bold: bool, size_pt: float, box_w_in: float) -> list[str]:
-    """Greedy wrap with the real face, the way a renderer does it."""
+    """Greedy wrap with the rendered face, the way a renderer does it."""
     limit = box_w_in * 72.0
     lines: list[str] = []
     for hard in text.split("\n"):
@@ -230,7 +230,7 @@ def furniture(slide, number: str):
 def source_line(slide, text: str, number: str, width=CW, x=MX, bottom=SRC_BOTTOM):
     """The 8pt provenance line, and it has to be exactly one line.
 
-    A judge who notices primary sources is worth real points, so every slide
+    A judge who notices primary sources is worth points, so every slide
     keeps one. A judge who sees a paragraph at the foot of a slide reads none of
     it, so the rule is one line: name the regulation, the dataset or the file in
     the repo, and let that document restate itself. The build fails if a line
@@ -382,7 +382,7 @@ def slide_2(prs):
     # "identified" is an econometrics word, and a judge reads it as "we have not
     # found one yet", which is the opposite of the claim. The spoken line keeps
     # the term of art; the slide says it in one syllable.
-    head = [Para("There is no one ranking. Ours included.", 36, "sans", True, INK, 1.16)]
+    head = [Para("There is no one ranking, ours included.", 36, "sans", True, INK, 1.16)]
     head_w = 6.33
     hh = block_height(head, head_w)
     textbox(s, MX, band_bottom - hh, head_w, hh, head, label="02 headline")
@@ -424,11 +424,11 @@ def slide_2(prs):
         ("SAY:", 12, True),
         ("We built FILED from mandatory filings only: EPA facility emissions, SEC financials. Then "
          "we tried to break it. Ten thousand runs over every defensible choice at once. The median "
-         "company's rank band is 312 places wide out of 500. There is no identified ranking. Ours "
+         "company's rank band is 312 places wide out of 500. There is no identified ranking, ours "
          "included. The weights everyone argues about are six percent of that. Missing data is "
          "twenty.", 16, True),
         ("", 11, False),
-        ("STAGE: pause after \"ours included\". That sentence is what separates us from the five "
+        ("STAGE: pause after \"ours included\". That clause is what separates us from the five "
          "pitches before ours, and it needs air.", 11, False),
         ("", 11, False),
         ("WORDING: the slide reads \"There is no one ranking\" and you say \"no identified "
@@ -491,7 +491,7 @@ def slide_3(prs):
         ("Click the video to start it. Start it on the word \"live\".", 11, False),
         ("", 11, False),
         ("SAY over the opening frames  [0:48 - 0:51]:", 12, True),
-        ("The bonus question, live. Watch the price. Then watch the weights.", 16, True),
+        ("The bonus question, live. Watch the price, then watch the weights.", 16, True),
         ("", 11, False),
         ("[0:51 - 1:08]  SILENT. HANDS STILL. Seventeen seconds, the longest silence in the "
          "talk and the one that earns the rest of it. The interface says it in its own words: "
@@ -509,7 +509,7 @@ def slide_3(prs):
         ("", 11, False),
         ("[1:22 - 1:38]  SILENT TO THE END. Sixteen seconds of the rank wall, the Paris-aligned "
          "waterfall and the coverage tiers, with no voice on them. Everything from 1:22 has "
-         "already been said out loud. A demo that has to be explained is not a demo.",
+         "already been said out loud. Let the recording carry the last sixteen seconds.",
          12, True),
         ("", 11, False),
         ("IF THE VIDEO DOES NOT PLAY:", 12, True),
@@ -599,7 +599,7 @@ def slide_4(prs):
 
     # The second mono line used to read "at lambda 120, an active share of
     # 70.5%, still 82.3% reallocation". Nobody in the room can read lambda 120.
-    # It is a robustness answer and it lives in slides/qa.md, where it is asked.
+    # It answers a hard follow-up and it lives in slides/qa.md, where it is asked.
 
     picture(s, os.path.join(IMG, "04_pab_waterfall_plain.png"),
             MX + left_w + 0.45, top, CW - left_w - 0.45, chart_bottom - top, align="r")
@@ -613,7 +613,7 @@ def slide_4(prs):
         ("The official answer is the EU Paris-Aligned Benchmark. We built it, article by article. "
          "97.4 percent of its carbon cut is reallocation, not companies cutting. [Article 6 "
          "invites you to overweight nineteen companies cutting seven percent a year. Article 12 "
-         "bans nine of them.] It is a screen, not a strategy.", 16, True),
+         "bans nine of them.] The rulebook reshuffles the index you hold.", 16, True),
         ("", 11, False),
         ("CUT LINE: if you are behind at 1:38, drop the bracketed pair. It costs 8 seconds and "
          "nothing else, and the slide still carries it in print.", 12, True),
@@ -721,7 +721,7 @@ def slide_5(prs):
         ("What we cannot see. US facilities only, above 25,000 tonnes. Twenty-five companies hold "
          "more emissions abroad than we measure here. EPA data stops at 2023. 139 of 500 carry a "
          "measured tonne. We impute nothing for the other 361. That costs us. In our index, being "
-         "measurable makes your rank worse. That is the price of not making things up.", 16, True),
+         "measurable makes your rank worse. We take that cost rather than invent a number.", 16, True),
         ("", 11, False),
         ("STOP. Do not add \"thank you, any questions\". Let the last sentence sit.", 12, True),
         ("", 11, False),
@@ -756,7 +756,7 @@ def slide_a(prs):
                  ACCENT, 1.30, spc=90)]
     textbox(s, MX, 0.46, 8.0, block_height(kick, 8.0), kick, label="A kicker")
 
-    head = [Para("Water is a second axis, not a restatement of carbon.", 30, "sans",
+    head = [Para("Water is a second axis, and carbon does not predict it.", 30, "sans",
                  True, INK, 1.18)]
     hh = block_height(head, CW)
     textbox(s, MX, 0.96, CW, hh, head, label="A headline")
@@ -801,7 +801,7 @@ def slide_a(prs):
         ("", 11, False),
         ("Use it only if asked why water is not in the score.", 11, False),
         ("", 11, False),
-        ("ANSWER: because it is a second axis, not a restatement. Spearman 0.058, p=0.51, n=135, "
+        ("ANSWER: because carbon does not predict it. Spearman 0.058, p=0.51, n=135, "
          "so carbon explains 0.3 percent of the water ranking. 57.3 percent of US semiconductor "
          "reporting facilities sit in High or Extremely High stress while the sector is near the "
          "clean end on carbon. Broadcom and Evergy are the pair: Evergy is the most carbon-intense "

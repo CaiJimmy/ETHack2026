@@ -419,7 +419,7 @@
       ]));
     });
     t.appendChild(tb);
-    p.appendChild(t);
+    p.appendChild(F.el('div', { class: 'scroll-x' }, t));
 
     p.appendChild(F.el('div', { class: 'note u-mt4', id: 'pf-art7-note' }));
     return p;
@@ -450,7 +450,7 @@
       th('Change (bp)')
     ])));
     t.appendChild(F.el('tbody', { id: 'pf-hold-body' }));
-    p.appendChild(t);
+    p.appendChild(F.el('div', { class: 'scroll-x' }, t));
     p.appendChild(F.el('div', { class: 'note u-mt4', id: 'pf-hold-note' }));
     return p;
   }
@@ -487,7 +487,7 @@
       ]));
     });
     t.appendChild(tb);
-    grid.appendChild(F.el('div', {}, [t,
+    grid.appendChild(F.el('div', {}, [F.el('div', { class: 'scroll-x' }, t),
       F.el('div', { class: 'note u-mt4', text:
         D.meta.power_test_note.replace('revenue_exclusions.parquet',
           'the revenue screen') }),
@@ -548,7 +548,7 @@
 
   function revealPanel() {
     var p = F.el('div', { class: 'panel pf-reveal' });
-    p.appendChild(panelHead('Where the carbon cut actually comes from',
+    p.appendChild(panelHead('Where the carbon cut comes from',
       'We split the fall in carbon intensity into the part companies delivered and the ' +
       'part the manager bought by changing who they own.',
       'base <b>' + D.meta.base_year + '</b> to <b>' + D.meta.latest_year + '</b>'));
@@ -723,7 +723,7 @@
       th('Book', 'left'), th('Kept'), th('Share of what companies delivered')
     ])));
     t.appendChild(F.el('tbody', { id: 'pf-keep-body' }));
-    b.appendChild(t);
+    b.appendChild(F.el('div', { class: 'scroll-x' }, t));
     b.appendChild(F.el('div', { class: 'note u-mt4', id: 'pf-keep-note' }));
     row.appendChild(b);
     return row;
@@ -849,7 +849,7 @@
     setText('pf-art7-note',
       'Article 7 is the one we will not mark as passed. Any book meets a 7% a year trajectory on paper by ' +
       'selling more of the index every year, which is what the ' + D.article7.path[key].length +
-      ' year path in this file does. What the companies in this book actually deliver is ' +
+      ' year path in this file does. What the companies in this book deliver is ' +
       fmt.rate(org.delivered_pct_yr) + ', measured over the ' + fmt.share(org.weight_covered, 1) +
       ' of book weight that has a filed emissions trend. The index itself delivers ' +
       fmt.rate(D.article7.index_delivered_pct_yr) + '. Article 6 counts ' +

@@ -404,7 +404,7 @@
   /* ---------------- glossary ----------------
      A dozen terms that have to stay because they are the words the regulation
      and the filings use. Dotted underline in the default paint, definition on
-     hover, focus and tap. A tooltip nobody can see is not disclosure. */
+     hover, focus and tap. A tooltip nobody can see discloses nothing. */
 
   var GLOSS = {
     'EVIC': 'Enterprise value including cash: equity plus debt, what it costs to buy the whole company.',
@@ -414,7 +414,7 @@
     'tracking error': 'How far a fund’s returns drift from the index it is measured against.',
     'value at risk': 'Here it means the share of a company’s value a carbon bill would destroy. Not the finance term of art.',
     'coverage tier': 'Which of three states a company’s emissions record is in: measured by the EPA, self-reported only, or nothing mandatory at all.',
-    'say-do gap': 'The cut a company promised each year, minus the cut its EPA-measured emissions actually show.',
+    'say-do gap': 'The cut a company promised each year, minus the cut its EPA-measured emissions show.',
     'sub-threshold': 'Under the 25 000 tonne reporting floor, so the figure we use is an upper bound.',
     'high impact sectors': 'The heavy-emitting industries the EU regulation names, mining, manufacturing, power, transport and the rest.',
     'NGFS': 'Network for Greening the Financial System: the central banks’ standard set of climate scenarios.',

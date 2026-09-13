@@ -1,7 +1,7 @@
 # FILED: spoken script
 
 Hard stop 3:00. Timed at **130 words per minute**, the rate a nervous presenter
-actually hits, not the 150 a rehearsal in your own head suggests.
+hits, not the 150 a rehearsal in your own head suggests.
 
 | | |
 |---|---|
@@ -21,7 +21,7 @@ Even at 120 wpm this lands at 159 s, still 21 seconds inside the hard stop. At
 bracketed pair in beat 4: it costs 8.8 seconds and nothing else, and the slide
 still carries it in print.
 
-Five slides. One idea each.
+Five slides, one idea each.
 
 ---
 
@@ -61,13 +61,13 @@ Land it. The first number out of your mouth is about companies, not method.
 > We built FILED from mandatory filings only: EPA facility emissions, SEC
 > financials. Then we tried to break it. Ten thousand runs over every defensible
 > choice at once. The median company's rank band is 312 places wide out of 500.
-> There is no identified ranking. Ours included. The weights everyone argues
+> There is no identified ranking, ours included. The weights everyone argues
 > about are six percent of that. Missing data is twenty.
 
-Stage: pause after "ours included". That sentence is what separates us from the
+Stage: pause after "ours included". That clause is what separates us from the
 five pitches before ours, and it needs air.
 
-Stage: the slide reads **"There is no one ranking. Ours included."** and you say
+Stage: the slide reads **"There is no one ranking, ours included."** and you say
 "no identified ranking". Same claim, and the screen glosses the term of art for
 a judge who only reads it. Say "one" instead if you prefer the two to match
 exactly; it is the same syllable count and the timing does not move.
@@ -100,7 +100,7 @@ copy is the caption. Nothing needs to be burned in.
 
 **[0:48 to 0:51]  spoken over the opening frames**
 
-> The bonus question, live. Watch the price. Then watch the weights.
+> The bonus question, live. Watch the price, then watch the weights.
 
 **[0:51 to 1:08]  SILENT. Hands still.** Seventeen seconds, the longest silence
 in the talk and the one that earns the rest of it. This is the whole argument
@@ -114,8 +114,8 @@ missing-data switch moves the money. Do not talk over it.
 > treated and 123 million dollars moves.
 
 **[1:22 to 1:38]  SILENT to the end.** Sixteen seconds of the rank wall, the
-Paris-aligned waterfall and the coverage tiers, with no voice on them. A demo
-that has to be explained is not a demo.
+Paris-aligned waterfall and the coverage tiers, with no voice on them. Let the
+recording carry them.
 
 Stage: the recording opens at Current Policies, 22 a tonne, and goes to Net Zero
 2050 at 0:03. That puts 284 on the slider, which is the level the spoken "284
@@ -145,7 +145,8 @@ before the session. A demo that will not start costs more than any slide.
 > The official answer is the EU Paris-Aligned Benchmark. We built it, article by
 > article. 97.4 percent of its carbon cut is reallocation, not companies
 > cutting. [Article 6 invites you to overweight nineteen companies cutting seven
-> percent a year. Article 12 bans nine of them.] It is a screen, not a strategy.
+> percent a year. Article 12 bans nine of them.] The rulebook reshuffles the
+> index you hold.
 
 Stage: the bracketed pair is the cut line if you are behind the clock. Losing it
 costs 8 seconds and the slide's mono line still carries it in print.
@@ -166,8 +167,8 @@ apology. Same pace as everything else. Do not soften your voice.
 > What we cannot see. US facilities only, above 25,000 tonnes. Twenty-five
 > companies hold more emissions abroad than we measure here. EPA data stops at
 > 2023. 139 of 500 carry a measured tonne. We impute nothing for the other 361.
-> That costs us. In our index, being measurable makes your rank worse. That is
-> the price of not making things up.
+> That costs us. In our index, being measurable makes your rank worse. We take
+> that cost rather than invent a number.
 
 Stop. Do not add "thank you, any questions". Let the last sentence sit.
 

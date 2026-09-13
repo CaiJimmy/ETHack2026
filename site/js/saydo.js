@@ -94,7 +94,7 @@
     set('stat-pab-sub',
       'A $' + fmt.compact(D.portfolio.meta.aum_usd, 0) + ' Paris-aligned fund finances ' +
       fmt.share(pab.cut_vs_universe, 1) + ' fewer tonnes per dollar than the index. Selling the ' +
-      'highest-emitting sectors does ' + fmt.share(reallocShare, 1) + ' of that. Companies actually cutting ' +
+      'highest-emitting sectors does ' + fmt.share(reallocShare, 1) + ' of that. Companies cutting ' +
       'emissions do ' + fmt.share(improveShare, 1) + '.');
     set('stat-pab-src', 'built from EU 2020/1818, article by article');
 
@@ -161,9 +161,12 @@
     var host = document.getElementById('saydo-chart');
     host.innerHTML = '';
 
-    var W = Math.max(420, host.clientWidth || 628);
-    var H = 424;
-    var M = { t: 18, r: 16, b: 66, l: 58 };
+    /* The floor used to be 420, which is wider than a phone, so the chart
+       pushed the page sideways instead of redrawing into it. */
+    var W = Math.max(280, host.clientWidth || 628);
+    var narrow = W < 420;
+    var H = narrow ? 330 : 424;
+    var M = narrow ? { t: 14, r: 10, b: 56, l: 40 } : { t: 18, r: 16, b: 66, l: 58 };
     var px0 = M.l, px1 = W - M.r, py0 = H - M.b, py1 = M.t;
 
     var fx = frameOf(plotted.map(function (c) { return c.promised; }));

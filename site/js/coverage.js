@@ -493,9 +493,9 @@
     if (!host) return;
     host.innerHTML = '';
 
-    var W = Math.max(320, host.clientWidth || 450);
+    var W = Math.max(260, host.clientWidth || 450);
     var H = 288;
-    var M = { t: 12, r: 10, b: 52, l: 58 };
+    var M = { t: 12, r: 10, b: 52, l: W < 360 ? 40 : 58 };
     var px0 = M.l, px1 = W - M.r, py0 = H - M.b, py1 = M.t;
 
     var x = F.scale([0, 1], [px0, px1]);
@@ -853,7 +853,10 @@
           '<td class="t-name cv-led-use">' + r.use + '</td>' +
           '</tr>';
       }).join('') + '</tbody>';
-    panel.appendChild(tbl);
+    /* every column stays: the source and class columns are the ledger */
+    var tblWrap = el('div', 'scroll-x');
+    tblWrap.appendChild(tbl);
+    panel.appendChild(tblWrap);
 
     var legend = el('div', 'cv-classnotes');
     legend.innerHTML = classes.map(function (c) {

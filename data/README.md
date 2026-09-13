@@ -2,7 +2,7 @@
 
 Everything here is built by the scripts in `src/`. No file was edited by hand.
 
-## What is committed and what is not
+## What the repo holds and what it rebuilds
 
 `data/interim/` is committed. It holds the derived tables, 38 MB, and it is what the scoring and site
 code reads.
@@ -148,10 +148,10 @@ when nobody spoke.
 | `validation_summary.json` | | every number quoted in `docs/coverage_and_validation.md` |
 | `camd_share_verification.json` | | the 2025 CAMD national total against EPA's own aggregation, the stack test, and the S&P 500 share |
 
-## Coverage, stated honestly
+## Coverage
 
-Measured, not asserted. Every row is printed by `src/validate_coverage.py` and the full table with
-one row per layer is in `coverage_summary.parquet`. Counts are listings out of 503.
+Every count below is printed by `src/validate_coverage.py`, and the full table with one row per
+layer is in `coverage_summary.parquet`. Counts are listings out of 503.
 
 | layer | covered | note |
 |---|---|---|
@@ -294,7 +294,7 @@ head offices are in the five boroughs, which is NYCW at 393 g/kWh. NYC and Long 
 hand-assigned. Every other multi-subregion state was checked and its dominant subregion is also where
 its head offices are.
 
-**The `nopperl` emission-report ids carry an exchange prefix and it is load-bearing.** LSE_BA is BAE
+**The `nopperl` emission-report ids carry an exchange prefix that decides the match.** LSE_BA is BAE
 Systems, not Boeing. ASX_DOW is Downer, not Dow. TSX_T is Telus, not AT&T. Ignoring the prefix adds
 131 false-positive rows. Restricting to NASDAQ, NYSE and OTC gives 101 S&P tickers.
 

@@ -421,10 +421,14 @@
     host.innerHTML = '';
 
     var N = state.rows.length;
-    var W = Math.max(420, host.clientWidth || 598);
+    /* The floor is 280, not 420, so the wall redraws into a phone rather than
+       pushing the page sideways. H is untouched: 500 rows stay 500 rows, and
+       the only thing a narrow screen loses is x-axis resolution. */
+    var W = Math.max(280, host.clientWidth || 598);
+    var narrow = W < 420;
     /* One row must land on one whole pixel or the bands antialias into the
        plot ground and the wall reads as noise. 500 rows + the margins. */
-    var M = { t: 30, r: 14, b: 44, l: 30 };
+    var M = { t: 30, r: 14, b: 44, l: narrow ? 8 : 30 };
     var H = M.t + M.b + Math.max(350, N);
     var px0 = M.l, px1 = W - M.r, py0 = M.t, py1 = H - M.b;
     var plotH = py1 - py0;
@@ -449,16 +453,21 @@
     }));
 
     F.axisX(svg, x, {
-      y: py1, values: [1, 100, 200, 300, 400, N], grid: [py0, py1],
+      y: py1, values: narrow ? [1, 250, N] : [1, 100, 200, 300, 400, N], grid: [py0, py1],
       fmt: function (v) { return fmt.int(v); },
       label: 'rank inside the S&P 500, 1 is best'
     });
 
-    svg.appendChild(F.svg('text', {
-      transform: 'translate(13,' + ((py0 + py1) / 2) + ') rotate(-90)',
-      'text-anchor': 'middle', class: 'axis-label',
-      text: fmt.int(N) + ' companies, ordered by median rank'
-    }));
+    /* The rotated label costs 30px of left margin. Below 420 the plot needs
+       that more than it needs the words, and the same words are already in the
+       .rk-note directly under the chart, so nothing is lost by dropping it. */
+    if (!narrow) {
+      svg.appendChild(F.svg('text', {
+        transform: 'translate(13,' + ((py0 + py1) / 2) + ') rotate(-90)',
+        'text-anchor': 'middle', class: 'axis-label',
+        text: fmt.int(N) + ' companies, ordered by median rank'
+      }));
+    }
 
     /* the median band width, drawn at the same scale as the bands under it,
        so the headline figure is a length the eye can check */
@@ -994,7 +1003,8 @@
       '" class="tick-label" text-anchor="end">one pillar does all the work</text>');
     return '<div class="u-mt4"><div class="panel-sub" style="margin-bottom:4px">' +
       'The distance between the weights we state and the weights that move the rank' +
-      '</div><svg width="' + w + '" height="' + h + '" role="img" ' +
+      '</div><svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" ' +
+      'preserveAspectRatio="xMinYMid meet" role="img" ' +
       'aria-label="distance between stated and effective weights">' + parts.join('') +
       '</svg></div>';
   }
@@ -1111,8 +1121,8 @@
       '<div class="panel-sub" style="margin:4px 0 6px 0">' +
       'Probability that the row company ranks above the column company, top ' + n +
       ' by median rank</div>' +
-      '<svg width="' + w + '" height="' + h + '" role="img" aria-label="head to head ' +
-      'probabilities among the top ' + n + '">' + parts.join('') + '</svg>' +
+      '<div class="scroll-x"><svg width="' + w + '" height="' + h + '" role="img" aria-label="head to head ' +
+      'probabilities among the top ' + n + '">' + parts.join('') + '</svg></div>' +
       '<div class="legend u-mt4">' +
         '<span class="legend-item"><span class="swatch swatch--sq" style="background:var(--cool)"></span>row ranks above</span>' +
         '<span class="legend-item"><span class="swatch swatch--sq" style="background:var(--accent)"></span>column ranks above</span>' +

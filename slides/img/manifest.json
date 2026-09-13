@@ -28,7 +28,7 @@
       1707
     ],
     "aspect": 1.19,
-    "kb": 274,
+    "kb": 272,
     "shows": "The Brinson decomposition of the PAB book's intensity cut. Every step prints its level and its signed share: improvement 20.5%, reallocation 97.4%, selection -0.1%, interaction -17.8%. The closing paragraph that reads the cross term aloud is hidden, because outline.md and script.md both forbid that sentence."
   },
   {
@@ -44,7 +44,7 @@
       1478
     ],
     "aspect": 1.37,
-    "kb": 203,
+    "kb": 202,
     "shows": "The same waterfall without the 76px 97.4% block, for a slide that already sets 97.4% at 96pt."
   },
   {
@@ -110,16 +110,5 @@
     "aspect": 1.29,
     "kb": 355,
     "shows": "The scatter alone, no section title: plot, legend, and the size key that states n = 108 plotted. outline.md's 'one scatter, nothing else'."
-  },
-  {
-    "file": "slides/img/02b_sobol_bars_plain.png",
-    "slide": 2,
-    "css_px": [
-      820,
-      592
-    ],
-    "scale": 3,
-    "kb": 214,
-    "shows": "The same variance panel as 02b_sobol_bars, with every row label rewritten in plain language for the deck. Numbers, bars and n are the site's own, painted by the site's own JS."
   }
 ]

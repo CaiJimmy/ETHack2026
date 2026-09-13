@@ -571,7 +571,7 @@ def draw_disclosure_chart(df, regs, path):
         ax.text(0.03, 0.04, _fit_label(r), transform=ax.transAxes, fontsize=9, va="bottom")
         _frame(ax, "share of the voluntary disclosure checklist filed (%)")
     axes[0].set_ylabel("percentile, points from the sector mean", fontsize=9)
-    fig.suptitle("Their score pays for disclosure. Ours does not.", x=0.008, ha="left",
+    fig.suptitle("Their score pays for disclosure. Ours pays for filed tonnes.", x=0.008, ha="left",
                  fontsize=13, fontweight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.94))
     fig.savefig(path, dpi=200)
@@ -745,7 +745,7 @@ def main():
         size_quintiles=quintiles,
         chart=dict(
             id="disclosure",
-            title="Their score pays for disclosure. Ours does not.",
+            title="Their score pays for disclosure. Ours pays for filed tonnes.",
             subtitle=("Each point is one S&P 500 company. Percentiles are shown as points from the "
                       "company's own GICS sector mean, because that is how a rating is used."),
             points_field="points",

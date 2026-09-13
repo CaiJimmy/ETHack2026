@@ -231,6 +231,18 @@
 .al-toggle button + button { border-left: 1px solid var(--rule-2); }
 .al-toggle button.is-on { background: var(--bg-2); color: var(--ink); }
 
+/* Ticker lookup. The tiles under 30px carry no logo and the smaller half of
+   the index is under 8px on a phone, so this is the path to the ones a finger
+   cannot hit. Same look as #rk-search in section 04. */
+.tm-find {
+  flex: none; width: 88px; font-family: var(--font-mono); font-size: 11px;
+  background: var(--bg-sunk); border: 1px solid var(--rule-2); color: var(--ink);
+  padding: 1px 5px; min-width: 0;
+}
+.tm-find::placeholder { color: var(--ink-3); }
+.tm-find:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+.tm-find.is-miss { border-color: var(--accent); color: var(--accent); }
+
 /* the pinned company card, over the treemap, the site's card pattern at
    one-screen size */
 .tm-card {
@@ -351,3 +363,71 @@
 .al-col--advice { overflow-y: auto; }
 .al-col--advice::-webkit-scrollbar { width: 6px; }
 .al-col--advice::-webkit-scrollbar-thumb { background: var(--rule-2); }
+
+/* ---------- the small-tile note ----------
+   True only on a phone, so it is only said on a phone. The 640 block below
+   turns it on. */
+.tm-small-note { display: none; }
+
+/* ===================================================================
+   NARROWER THAN THE RECORDING FRAME
+
+   These live in this file, not in app.css, because app.css is loaded
+   first: an #allocate or .al-* rule written there would lose the tie to
+   the rules above. Above 1080 none of this fires.
+   =================================================================== */
+
+/* ---------- 1080 and below: the control surface stops being three columns ----------
+   The one-screen constraint exists for a 1280x720 recording frame. Below that
+   frame it only clips: at 390 the middle track computes to 0px, so the map is
+   not small, it is gone. 100vh is also the wrong number on mobile Safari,
+   where it counts the URL bar.
+
+   The map goes full width on the first row and the two side columns sit under
+   it, so the treemap, which is the entry point, is the first thing on screen. */
+@media (max-width: 1080px) {
+  #allocate {
+    height: auto; min-height: 0; overflow: visible;
+    padding: var(--s4) var(--s4) var(--s5);
+  }
+  #allocate-body { display: block; }
+  .al-top { flex-wrap: wrap; }
+  .al-title { white-space: normal; flex: 1 1 auto; min-width: 0; }
+
+  .al-grid {
+    grid-template-columns: 268px minmax(0, 1fr);
+    grid-template-areas: "map map" "ctl adv";
+    gap: var(--s3); min-height: 0;
+  }
+  .al-col--index  { grid-area: map; }
+  .al-col--assume { grid-area: ctl; }
+  .al-col--advice { grid-area: adv; overflow-y: visible; }
+  .al-col { overflow: visible; }
+  .ac-wrap { overflow: visible; }
+  .tm-wrap { min-height: 420px; }
+  .al-spacer { display: none; }
+  /* the foot no longer has to open upward over a map, because the page scrolls */
+  .dd--up .dd-body {
+    position: static; box-shadow: none; background: var(--bg-1);
+  }
+}
+
+/* ---------- 640 and below: the phone ---------- */
+@media (max-width: 640px) {
+  #allocate { scroll-margin-top: 44px; }
+  .al-grid { grid-template-columns: minmax(0,1fr); grid-template-areas: "map" "ctl" "adv"; }
+  .al-col-head { flex-wrap: wrap; }
+  .al-col-t { white-space: normal; }
+  .al-col-n { white-space: normal; text-align: left; }
+  /* At 342px the average tile is 14px square and the smaller half of the index
+     is under 8px, which no finger can hit. 320px of map is still a legible
+     heat map of the index, and the ticker box in the header is the way to
+     the tiles a tap cannot reach. */
+  .tm-wrap { min-height: 320px; }
+  .tm-card { left: 6px; right: 6px; width: auto; }
+  .tm-keys { flex-wrap: wrap; gap: 6px 12px; }
+  .tm-small-note { display: inline; }
+  .av-lists { grid-template-columns: minmax(0,1fr); }
+  .al-foot-body { flex-wrap: wrap; }
+  .al-foot-body span { flex: 1 1 200px; }
+}
