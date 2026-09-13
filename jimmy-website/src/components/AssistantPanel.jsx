@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Sparkles,
-  Minus,
+  X,
   LoaderCircle,
   AlertCircle,
   RotateCcw,
@@ -23,6 +23,8 @@ export function AssistantPanel({
   input,
   prompts
 }) {
+  if (!assistantOpen) return null;
+
   function renderAnswerText(text = answer?.answer) {
     if (!text) return null;
     const ids = new Map((answer?.evidence || []).map(e => [e.id, e]));
@@ -40,9 +42,9 @@ export function AssistantPanel({
   }
 
   return (
-    <aside className={`insight-panel ${assistantOpen ? 'open' : 'collapsed'}`} aria-label="Dataset query assistant">
+    <aside className="insight-panel" aria-label="Dataset query assistant">
       <div className="panel-heading">
-        <button className="assistant-title" onClick={() => setAssistantOpen(v => !v)} aria-expanded={assistantOpen}>
+        <div className="assistant-title">
           <span className="assistant-status">
             <Sparkles size={16} />
           </span>
@@ -50,19 +52,17 @@ export function AssistantPanel({
             Data Query Assistant
             <small>Natural-language query</small>
           </span>
-        </button>
+        </div>
         <button
-          className="icon-button assistant-toggle"
-          onClick={() => setAssistantOpen(v => !v)}
-          aria-label={assistantOpen ? 'Minimize assistant' : 'Open assistant'}
+          className="icon-button"
+          onClick={() => setAssistantOpen(false)}
+          aria-label="Close assistant"
         >
-          {assistantOpen ? <Minus size={16} /> : <Sparkles size={16} />}
+          <X size={16} />
         </button>
       </div>
 
-      {assistantOpen && (
-        <>
-          <div className="panel-body" aria-live="polite">
+      <div className="panel-body" aria-live="polite">
             {busy ? (
               <div className="working-timeline">
                 <div className="timeline-header">
@@ -240,8 +240,6 @@ export function AssistantPanel({
               {busy ? <LoaderCircle className="spin" size={17} /> : <ArrowUpRight size={17} />}
             </button>
           </form>
-        </>
-      )}
     </aside>
   );
 }

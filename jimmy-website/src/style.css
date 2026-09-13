@@ -1724,10 +1724,6 @@ tbody tr:hover {
   overflow: hidden;
 }
 
-.insight-panel.collapsed {
-  width: 280px;
-}
-
 .panel-heading {
   height: 52px;
   min-height: 52px;
